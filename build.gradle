@@ -46,7 +46,7 @@ dependencies {
     The following dependency is required to perform JUnit tests, as for example HelloWorldTest.
     Since it is a `testCompile` dependency, it will not be part of the final product, only during testing.
      */
-    testImplementation("org.junit.jupiter:junit-jupiter:5.+")
+    testImplementation('org.junit.jupiter:junit-jupiter:5.10.0')
 }
 
 test {
