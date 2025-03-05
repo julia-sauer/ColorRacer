@@ -1,4 +1,6 @@
-public class Dice
+import java.util.Arrays;
+
+public class Dice {
 public static String[] roll() {
     String[] colors = new String[6];
     for (int i = 0; i < 6; i++) {
@@ -23,11 +25,12 @@ public static String[] roll() {
         if (ceiled == 6) {
             colors[i] = "blue";
         }
-        System.out.println(Arrays.toString(colors); //Zur Überprüfung
-        return colors;
     }
+    System.out.println(Arrays.toString(colors)); //Zur Überprüfung
+    return colors;
 }
 
 public static void main(String[] args) {
     roll();
+}
 }
