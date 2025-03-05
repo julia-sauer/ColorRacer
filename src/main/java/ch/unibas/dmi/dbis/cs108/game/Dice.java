@@ -1,4 +1,7 @@
+package ch.unibas.dmi.dbis.cs108.game;
+
 import java.util.Arrays;
+
 
 public class Dice {
 public static String[] roll() {
