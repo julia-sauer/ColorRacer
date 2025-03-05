@@ -14,7 +14,7 @@ Julia]]></description>
         <option id="filter.dueTodayTasks" value="false"/>
         <option id="filter.overdueTasks" value="false"/>
         <option id="filter.inProgressTodayTasks" value="false"/>
-        <timeline><![CDATA[10,9]]></timeline>
+        <timeline><![CDATA[9,10]]></timeline>
         <option id="color.recent"><![CDATA[#33ffff #006666 #ffff00]]></option>
     </view>
     <view id="resource-table">
@@ -75,6 +75,16 @@ Mockup]]></notes>
             <depend id="15" type="2" difference="0" hardness="Strong"/>
             <depend id="16" type="2" difference="0" hardness="Strong"/>
         </task>
+        <task id="36" uid="ca38a39018bb425e8e8283b0d9eb1677" name="Grundkonzept des Spielfeldes" meeting="false" start="2025-03-10" duration="7" complete="0" expand="true">
+            <depend id="39" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="37" uid="ae4c431792ad41e087b403f669a5afa9" name="Code zum Bewegen" meeting="false" start="2025-03-10" duration="7" complete="0" expand="true">
+            <depend id="39" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="38" uid="9aa890b3be5547a3a1ae6fd4882c6351" name="Würfelcode" meeting="false" start="2025-03-10" duration="7" complete="0" expand="true">
+            <depend id="39" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="39" uid="3e0931862d6b4656abff3b7af2d22fe7" name="Zusammenführen des Codes" meeting="false" start="2025-03-17" duration="5" complete="0" expand="true"/>
         <task id="21" uid="5112d7c03a1d463eb7aac2f56cfa3935" name="Finish outline of the game" meeting="false" start="2025-03-24" duration="8" complete="0" expand="true">
             <notes><![CDATA[The main logic of the game and its fundamental mechanics are present and the game is playable.]]></notes>
         </task>
