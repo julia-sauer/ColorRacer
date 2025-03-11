@@ -1,0 +1,51 @@
+
+Funktionalität von Client und Server
+
+Die Funktionalität des Clients:
+
+	- join() :
+Ermöglicht einem neuen Spieler, dem Spiel beizutreten.
+
+	- strt() :
+Ermöglicht es dem Host eine neue Spielrunde zu starten, wenn alle Spieler bereit sind.
+
+	- roll() :
+Der Spieler würfelt sechs Würfel mit verschiedenen Farben. Die zurückgegebenen Farben bestimmen die möglichen Bewegungsoptionen.
+
+	- chos() :
+Der Spieler wählt ein Feld basierend auf einer gewürfelten Farbe.
+
+	- move() : 
+Diese Funktion bewegt den Spieler basierend auf der gewählten Farbe von den gewürfelten Optionen. Sie überprüft, ob der Zug erlaubt ist und aktualisiert die Spielerposition.
+
+	- stat() :
+Zeigt den aktuellen Spielstatus an, einschließlich der Positionen aller Spieler. Zeigt auch an welcher Spieler dran ist.
+
+	- chat() :
+Ermöglicht den Spielern, im Spiel miteinander zu kommunizieren.
+
+	- fini() :
+Beendet das Spiel für den aktuellen Spieler. Falls das Ziel erreicht wurde, deklariert es den Gewinner.
+
+	- quit() :
+Ermöglicht es dem Spieler das Spiel zu verlassen und trennt die Verbindung zum Server.
+
+
+Server Funktionalität: 
+
+Im Multiplayer-Spiel Color Racer soll der Server:
+	- Das Spiel Starten können, sobald vier Spieler das Spiel betreten haben 
+	- Einen neuen Spieler zur aktuellen Spielrunde hinzufügen können und vergibt eine eindeutige Spieler-ID
+	- Die Spielstände speichern (Positionen der Spieler, aktuelle Würfelergebnisse, Spielregeln)
+	- Spielablauf koordinieren (beachten der Reihenfolge der Spieler)
+	- Aktionen der Spieler überprüfen (zum Beispiel ob ein Feld wählbar ist oder ob ein Zug erlaubt ist)
+	- Die Kommunikation zwischen Client und Server steuern (Spieler können beitreten, Nachrichten können gesendet werden)
+	- Mit einem Befehl sechs Würfel auf einmal Würfeln können und soll die gewürfelten Farben an den Client zurücksenden 
+	- Prüfen anhand von den gewürfelten Farben welche Felder der*die Spieler*in auswählen kann und ob die Reihenfolge der gewählten Felder gewährleistet ist 
+	- Sicherstellen, dass keine Blockadefelder betreten werden können
+	- Den Spielzug Bestätigen oder verweigern und anhand von der Angabe des Spielers, dass alle gewünschten Felder gewählt wurden, den Spielzug der nächsten Person übergeben (in einer festen Reihenfolge)
+	- Die Position von den Spielenden aktualisieren und anzeigen, den aktuellen Status speichern und an alle Clients senden 
+	- Nachrichten zwischen Spielern weiterleiten (Chat-Funktion)
+	- Überprüfen ob ein*eine Spieler*in das Ziel erreicht hat, der* die Gewinner*in erhält keinen weiteren Spielzug 
+	- Spieler aus der Runde entfernen können
+Das Spiel beenden können, die Endergebnisse speichern und eine Nachricht zur Auswertung an alle Spieler senden
