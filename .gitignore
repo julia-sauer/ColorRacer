@@ -1,0 +1,104 @@
+######################################
+# OS-specific files                  #
+######################################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.nfs*
+
+######################################
+# Java / Build System                #
+######################################
+
+# Java compiled class files
+*.class
+*.jar
+*.war
+*.ear
+
+# Java logs and crash reports
+*.log
+hs_err_pid*
+replay_pid*
+
+# Java temporary files
+*.ctxt
+*.ser
+
+######################################
+# Gradle-specific files              #
+######################################
+
+# Gradle wrapper files
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+
+# Gradle dependency cache (often large and unnecessary)
+.gradle/caches/
+.gradle/wrapper/
+
+# Gradle logs
+gradle.log
+
+######################################
+# IntelliJ IDEA-specific files       #
+######################################
+
+# IntelliJ project files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# IntelliJ module files
+.idea_modules/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries/
+.idea/shelf/
+
+# Exclude build output directories
+out/
+
+# Exclude all .class files (compiled Java)
+bin/
+
+######################################
+# Other common files                 #
+######################################
+
+# Logs
+*.log
+logs/
+
+# Personal configuration files
+*.sublime-workspace
+*.swp
+*.bak
+*.tmp
+
+# Compressed archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Distribution Packages
+*.deb
+*.rpm
+*.msi
+*.pkg
