@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: ch.unibas.dmi.dbis.cs108.example.HelloWorld
+
