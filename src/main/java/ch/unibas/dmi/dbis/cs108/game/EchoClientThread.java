@@ -24,7 +24,7 @@ public class EchoClientThread implements Runnable {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            String message;
+            /**String message;
             while ((message = reader.readLine()) != null) {
                 System.out.println("Empfangen: " + message);
                 if (message.equalsIgnoreCase("QUIT")) {
@@ -39,7 +39,7 @@ public class EchoClientThread implements Runnable {
                     return;
                 }
                 writer.println(message); //Echo back normal message
-            }
+            }**/
 
             int c;
             while((c = in.read()) != -1){
