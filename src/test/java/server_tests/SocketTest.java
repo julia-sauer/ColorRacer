@@ -5,7 +5,7 @@ import java.io.*;
 public class SocketTest {
     public static void main(String[] args){
         try{
-            Socket sock = new Socket(args[0], 13);
+            Socket sock = new Socket(args[0], 8090);
             InputStream in = sock.getInputStream();
             int len;
             byte[] b = new byte[100];
