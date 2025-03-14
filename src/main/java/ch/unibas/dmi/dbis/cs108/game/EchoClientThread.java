@@ -1,9 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.game;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class EchoClientThread implements Runnable {
@@ -24,6 +21,25 @@ public class EchoClientThread implements Runnable {
 
             System.out.println("Client " + name + " verbunden.");
             writer.println("Hey Homie! Willkommen auf dem Server!");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            String message;
+            while ((message = reader.readLine()) != null) {
+                System.out.println("Empfangen: " + message);
+                if (message.equalsIgnoreCase("QUIT")) {
+                    writer.println("Verbindung wird beendet...");
+                    socket.close();
+                    EchoServer.ClientDisconnected();
+
+                    if (EchoServer.getActiveClientCount() == 0) {
+                        System.out.println("Letzter Client hat QUIT gesendet. Server wird heruntergefahren");
+                        EchoServer.shutdownServer();
+                    }
+                    return;
+                }
+                writer.println(message); //Echo back normal message
+            }
 
             int c;
             while((c = in.read()) != -1){
