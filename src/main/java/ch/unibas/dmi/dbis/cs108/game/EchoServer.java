@@ -42,7 +42,8 @@ public class EchoServer {
     public static void ClientDisconnected() {
         int remainingClients = activeClients.decrementAndGet();
         System.out.println("One client disconnected. Active clients: " + remainingClients);
-        if (remainingClients == 0 && !running) {
+        if (remainingClients == 0) {
+            running = false;
             shutdownServer();
         }
     }
