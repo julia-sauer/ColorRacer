@@ -37,55 +37,5 @@ public class EchoClient {
     }
 }
 
-class InThread implements Runnable {
-    InputStream in;
-    public InThread(InputStream in) {
-        this.in = in;
-    }
-    public void run() {
-        int len;
-        byte[] b = new byte[100];
-        try {
-            while (true) {
-                if ((len=in.read(b)) == -1) {
-                    break;
-                }
-                System.out.write(b, 0, len);
-            }
-        }
-        catch (IOException e) {
-            System.err.println(e.toString());
-        }
-    }
 
-}
-
-class EchoClientThread implements Runnable {
-    private int name;
-    private Socket socket;
-
-    public EchoClientThread(int name, Socket socket) { //constructor
-        this.name = name;
-        this.socket = socket;
-    }
-    public void run() {
-        String msg = "EchoServer: Verbindung " + name;
-        System.out.println(msg + " hergestellt");
-        try {
-            InputStream in = socket.getInputStream();
-            OutputStream out = socket.getOutputStream();
-            out.write(("cs108:" + msg + "\r\n").getBytes());
-            int c;
-            while((c = in.read()) != -1){
-                out.write((char) c);
-                System.out.print((char) c);
-            }
-            System.out.println("Terminate " + name);
-            socket.close();
-        }
-        catch (IOException e) {
-            System.err.println(e.toString());
-        }
-    }
-}
 
