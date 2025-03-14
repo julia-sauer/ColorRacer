@@ -7,25 +7,28 @@ public class EchoServer {
     private static final int maxClient = 4;
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
+    private static volatile boolean running = true;
 
     public static void main(String[] args) {
         try {
             echod = new ServerSocket(8090);
             System.out.println("Warte auf Port 8090...");
 
-            while (true) {
+            while (running) {
                 if (activeClients.get() < maxClient) {
                     Socket socket = echod.accept();
                     System.out.println("Client verbunden: " + socket.getInetAddress());
+
                     activeClients.incrementAndGet(); //Increase count when Client connects
+
                     EchoClientThread eC = new EchoClientThread((activeClients.get()), socket);
                     Thread eCT = new Thread(eC);
                     eCT.start();
                 }
 
-                if (activeClients.get() == 0) {
+                if (activeClients.get() == 0 && !running) {
                     System.out.println("All Clients are disconnected. Server is being closed.");
-                    echod.close();
+                    shutdownServer();
                     break;
                 }
                 Thread.sleep(500);
@@ -39,6 +42,9 @@ public class EchoServer {
     public static void ClientDisconnected() {
         int remainingClients = activeClients.decrementAndGet();
         System.out.println("One client disconnected. Active clients: " + remainingClients);
+        if (remainingClients == 0 && !running) {
+            shutdownServer();
+        }
     }
 
     public static int getActiveClientCount() {
@@ -48,6 +54,7 @@ public class EchoServer {
     public static void shutdownServer() {
         try {
             System.out.println("Server wird heruntergefahren...");
+            running = false;
             echod.close();
             System.exit(0);
         } catch (IOException e) {
