@@ -13,13 +13,12 @@ public class EchoServer {
             System.out.println("Warte auf Port 8090...");
             ServerSocket echod = new ServerSocket(8090);
 
-
             while (true) {
                 if (activeClients.get() < maxClient) {
                     Socket socket = echod.accept();
                     System.out.println("Client verbunden: " + socket.getInetAddress());
                     activeClients.incrementAndGet(); //Increase count when Client connects
-                    EchoClientThread eC = new EchoClientThread((activeClients.get()+1), socket);
+                    EchoClientThread eC = new EchoClientThread((activeClients.get()), socket);
                     Thread eCT = new Thread(eC);
                     eCT.start();
                 }
@@ -40,5 +39,19 @@ public class EchoServer {
     public static void ClientDisconnected() {
         int remainingClients = activeClients.decrementAndGet();
         System.out.println("One client disconnected. Active clients: " + remainingClients);
+    }
+
+    public static int getActiveClientCount() {
+        return activeClients.get();
+    }
+
+    public static void shutdownServer() {
+        try {
+            System.out.println("Server wird heruntergefahren...");
+            echod.close();
+            System.exit(0);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
