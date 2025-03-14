@@ -1,41 +1,44 @@
 package ch.unibas.dmi.dbis.cs108.game;
 import java.net.*;
 import java.io.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EchoServer {
+    private static final int maxClient = 4;
+    private static final AtomicInteger activeClients = new AtomicInteger(0);
+    private static ServerSocket echod;
+
     public static void main(String[] args) {
-        int cnt = 0;
-        int maxCnt = 4;
         try {
             System.out.println("Warte auf Port 8090...");
             ServerSocket echod = new ServerSocket(8090);
-            while(cnt <= maxCnt) {
-                Socket socket = echod.accept();
-                EchoClientThread eC = new EchoClientThread(++cnt, socket);
-                Thread eCT = new Thread(eC);
-                eCT.start();
+
+
+            while (true) {
+                if (activeClients.get() < maxClient) {
+                    Socket socket = echod.accept();
+                    System.out.println("Client verbunden: " + socket.getInetAddress());
+                    activeClients.incrementAndGet(); //Increase count when Client connects
+                    EchoClientThread eC = new EchoClientThread((activeClients.get()+1), socket);
+                    Thread eCT = new Thread(eC);
+                    eCT.start();
+                }
+
+                if (activeClients.get() == 0) {
+                    System.out.println("All Clients are disconnected. Server is being closed.");
+                    echod.close();
+                    break;
+                }
+                Thread.sleep(500);
             }
 
-            System.out.println("Verbindung hergestellt");
-
-            InputStream in = socket.getInputStream();
-            OutputStream out = socket.getOutputStream();
-
-            PrintWriter writer = new PrintWriter(out, true);
-            writer.print("Hey Homie! Willkommen auf dem Server!");
-
-            int c;
-            while ((c = in.read()) != -1) {
-                out.write((char) c);
-                System.out.println((char) c);
-            }
-            System.out.println("Verbindung beendet");
-            socket.close();
-            echod.close();
-        }
-        catch (IOException e) {
-            System.err.println(e.toString());
+        } catch (IOException | InterruptedException e) {
+            System.err.println(e.getMessage());
             System.exit(1);
         }
+    }
+    public static void ClientDisconnected() {
+        int remainingClients = activeClients.decrementAndGet();
+        System.out.println("One client disconnected. Active clients: " + remainingClients);
     }
 }
