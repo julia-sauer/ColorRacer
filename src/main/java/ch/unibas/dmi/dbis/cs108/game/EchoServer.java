@@ -10,8 +10,8 @@ public class EchoServer {
 
     public static void main(String[] args) {
         try {
+            echod = new ServerSocket(8090);
             System.out.println("Warte auf Port 8090...");
-            ServerSocket echod = new ServerSocket(8090);
 
             while (true) {
                 if (activeClients.get() < maxClient) {
