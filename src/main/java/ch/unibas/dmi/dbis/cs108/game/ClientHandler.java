@@ -3,7 +3,7 @@ package ch.unibas.dmi.dbis.cs108.game;
 import java.io.*;
 import java.net.*;
 
-public class ClientHandler {
+public class ClientHandler implements Runnable {
     private Socket socket;
     private PrintWriter writer;
     private String clientName;
@@ -12,7 +12,6 @@ public class ClientHandler {
         this.socket = socket;
     }
 
-    @Override
     public void run() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
