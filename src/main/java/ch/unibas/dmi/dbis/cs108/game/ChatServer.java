@@ -12,7 +12,7 @@ public class ChatServer {
     private static ServerSocket echod;
     private static boolean running = true;
 
-    public static void main (String[] args) {
+    public static void startChatServer () {
         try {
             echod = new ServerSocket(PORT);
             System.out.println("ChatServer läuft auf Port: " + PORT + "...");
