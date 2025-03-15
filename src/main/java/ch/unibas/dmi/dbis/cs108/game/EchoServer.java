@@ -11,6 +11,8 @@ public class EchoServer {
 
     public static void main(String[] args) {
         try {
+            Thread chatServerThread = new Thread(ChatServer::startChatServer);
+            chatServerThread.start();
             echod = new ServerSocket(8090);
             System.out.println("Warte auf Port 8090...");
 
@@ -57,6 +59,7 @@ public class EchoServer {
             System.out.println("Server wird heruntergefahren...");
             running = false;
             echod.close();
+            ChatServer.shutdownServer();
             System.exit(0);
         } catch (IOException e) {
             System.err.println(e.getMessage());
