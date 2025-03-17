@@ -33,6 +33,27 @@ public class ChatServer {
     }
 
     public static void broadcastMessage(String message, ClientHandler sender) {
+        message = message.trim(); // Remove unnecessary spaces
+
+        //  Reject empty messages
+        if (message.isEmpty()) {
+            sender.sendMessage("ERROR: Message cannot be empty.");
+            return;
+        }
+
+        //  Validate allowed characters (prevent SQL injection, special control characters)
+        if (!message.matches("[A-Za-z0-9_?!.,:;()\\- ]+")) {
+            sender.sendMessage("ERROR: Invalid characters in message.");
+            return;
+        }
+
+        //  Prevent overly long messages (spam prevention)
+        if (message.length() > 500) {
+            sender.sendMessage("ERROR: Message is too long (max 500 characters).");
+            return;
+        }
+
+        // Send validated message to all clients
         for (ClientHandler client : clients) {
             if (client != sender) {
                 client.sendMessage(message);
@@ -40,9 +61,10 @@ public class ChatServer {
         }
     }
 
+
     public static void removeClient(ClientHandler client) {
         clients.remove(client);
-        System.out.println("Ein Cient hat sich getrennt. Aktive Clients: " + clients.size());
+        System.out.println("Ein Client hat sich getrennt. Aktive Clients: " + clients.size());
 
         if (clients.isEmpty()) {
             System.out.println("Alle Clients haben sich getrennt. Server wird heruntergefahren!");
