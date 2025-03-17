@@ -4,33 +4,55 @@ import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NicknameManager {
-    private static final ConcurrentHashMap<Socket, String> clientNicknames = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, String> clientNicknames = new ConcurrentHashMap<>();
 
-    // Setzt den Nickname basierend auf dem System-Benutzernamen
+    // Generate a default nickname based on the system username
     public static String generateDefaultNickname() {
-        return System.getProperty("user.name", "User"); // Holt den System-Benutzernamen
+        return System.getProperty("user.name", "User"); // Gets system username
     }
 
-    // Nickname setzen
+    // Check if a nickname is already in use
+    public static boolean isNicknameTaken(String nickname) {
+        return clientNicknames.containsValue(nickname);
+    }
+
+    // Validate nickname format
+    public static boolean isValidNickname(String nickname) {
+        return nickname.matches("[A-Za-z0-9_-]{3,15}"); // Only letters, numbers, '-', and '_'
+    }
+
+    // Set nickname for a client
     public static void setNickname(Socket socket, String nickname) {
-        clientNicknames.put(socket, nickname);
+        if (!isValidNickname(nickname)) {
+            throw new IllegalArgumentException("Invalid nickname. Only letters, numbers, '-', and '_' are allowed.");
+        }
+        if (isNicknameTaken(nickname)) {
+            throw new IllegalArgumentException("Nickname already in use!");
+        }
+        clientNicknames.put(socket.toString(), nickname);
     }
 
-    // Nickname abrufen
+    // Get nickname of a client
     public static String getNickname(Socket socket) {
-        return clientNicknames.getOrDefault(socket, "Unbekannt");
+        return clientNicknames.getOrDefault(socket.toString(), "Unbekannt");
     }
 
-    // Nickname ändern
+    // Change a client's nickname
     public static void changeNickname(Socket socket, String newNickname) {
-        if (clientNicknames.containsKey(socket)) {
-            clientNicknames.put(socket, newNickname);
+        if (!isValidNickname(newNickname)) {
+            throw new IllegalArgumentException("Invalid nickname format.");
+        }
+        if (isNicknameTaken(newNickname)) {
+            throw new IllegalArgumentException("Nickname already in use!");
+        }
+        if (clientNicknames.containsKey(socket.toString())) {
+            clientNicknames.put(socket.toString(), newNickname);
         }
     }
 
-    // Client entfernen
+    // Remove a client from the nickname list
     public static void removeClient(Socket socket) {
-        clientNicknames.remove(socket);
+        clientNicknames.remove(socket.toString());
     }
 }
 
