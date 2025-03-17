@@ -1,11 +1,12 @@
 package ch.unibas.dmi.dbis.cs108.game;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class InThread implements Runnable {
     InputStream in;
-    public InThread(InputStream in) {
+    public InThread(BufferedReader in) {
         this.in = in;
     }
     public void run() {
