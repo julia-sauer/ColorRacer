@@ -30,19 +30,19 @@ public class EchoClientThread implements Runnable {
             while ((message = reader.readLine()) != null) {
                 message = message.trim();
 
-                // 🚨 Reject empty messages
+                //  Reject empty messages
                 if (message.isEmpty()) {
                     writer.println("ERROR: Nachricht darf nicht leer sein.");
                     continue;
                 }
 
-                // 🚨 Validate allowed characters
+                //  Validate allowed characters
                 if (!message.matches("[A-Za-z0-9_?!.,:;()\\- ]+")) {
                     writer.println("ERROR: Ungültige Zeichen in der Nachricht.");
                     continue;
                 }
 
-                // 🚨 Prevent overly long messages
+                //  Prevent overly long messages
                 if (message.length() > 500) {
                     writer.println("ERROR: Nachricht zu lang (max 500 Zeichen).");
                     continue;

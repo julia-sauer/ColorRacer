@@ -42,13 +42,23 @@ public class EchoServer {
         }
     }
     public static void ClientDisconnected() {
-        int remainingClients = activeClients.decrementAndGet();
+        int remainingClients = activeClients.updateAndGet(count -> Math.max(0, count - 1));
         System.out.println("One client disconnected. Active clients: " + remainingClients);
+
         if (remainingClients == 0) {
-            running = false;
-            shutdownServer();
+            System.out.println("Waiting 60 seconds for new clients...");
+            new Thread(() -> {
+                try {
+                    Thread.sleep(60000);
+                    if (activeClients.get() == 0) {
+                        System.out.println("No new clients connected. Shutting down.");
+                        shutdownServer();
+                    }
+                } catch (InterruptedException ignored) {}
+            }).start();
         }
     }
+
 
     public static int getActiveClientCount() {
         return activeClients.get();
