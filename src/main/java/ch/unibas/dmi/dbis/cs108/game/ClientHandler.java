@@ -2,6 +2,7 @@ package ch.unibas.dmi.dbis.cs108.game;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
@@ -14,9 +15,9 @@ public class ClientHandler implements Runnable {
 
     public void run() {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            this.writer = writer;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            this.writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+
 
             // Nickname vorschlagen (basierend auf System-Benutzername)**
             String suggestedNickname = System.getProperty("user.name", "User"); // Holt den System-Benutzernamen
@@ -28,7 +29,11 @@ public class ClientHandler implements Runnable {
             if (clientName.isEmpty()) {
                 clientName = suggestedNickname; // Falls leer, den Vorschlag übernehmen
             }
-
+            // Ensure nickname contains only safe characters
+            if (!clientName.matches("[A-Za-z0-9_-]{3,15}")) {
+                writer.println("ERROR: Invalid nickname. Use only letters, numbers, '-' and '_'. No spaces allowed.");
+                clientName = suggestedNickname; // Default to system username
+            }
             // Nickname im NicknameManager speichern**
             NicknameManager.setNickname(socket, clientName);
             System.out.println(clientName + " hat sich verbunden.");
@@ -48,26 +53,51 @@ public class ClientHandler implements Runnable {
                     clientName = newNickname; // Aktualisiere den lokalen Namen
                     continue;
                 }
-
+               //  Message Validation (Add Here!)
+                if (!message.matches("[A-Za-z0-9_?!.,:;()\\-]+")) {
+                    writer.println("ERROR: Invalid characters in message.");
+                    continue; // Skip invalid messages
+                }
+                if (message.length() > 500) {
+                    writer.println("ERROR: Message too long.");
+                    continue;
+                }
                 // Aktuellen Nickname für Nachrichten verwenden**
                 String currentNickname = NicknameManager.getNickname(socket);
                 ChatServer.broadcastMessage(currentNickname + ": " + message, this);
             }
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            //  Notify the client before disconnecting
+            if (writer != null) {
+                writer.println("ERROR: A network error occurred. Please reconnect.");
+            }
+            //  Log the error on the server side
+            System.err.println("Client connection error (" + (clientName != null ? clientName : "Unknown") + "): " + e.getMessage());
+
+
+
         } finally {
             try {
-                socket.close();
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                // Log socket closure errors (but don't crash)
+                System.err.println("Error closing socket for " + clientName + ": " + e.getMessage());
             }
 
-            // nickname entfernen, wenn der Client verlässt**
+            // Remove the client properly after disconnecting
             ChatServer.removeClient(this);
             NicknameManager.removeClient(socket);
         }
+
     }
+
     public void sendMessage(String message) {
-        writer.println(message);
+        if (writer != null) {
+            writer.println(message);
+        } else {
+            System.err.println("Error: Attempted to send a message, but writer is null.");
+        }
     }
 }
