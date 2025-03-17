@@ -1,28 +1,32 @@
 package ch.unibas.dmi.dbis.cs108.game;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class InThread implements Runnable {
-    InputStream in;
-    public InThread(BufferedReader in) {
-        this.in = in;
+    private final BufferedReader reader; //  Use only BufferedReader
+
+    // Constructor for InputStream (Main Use Case)
+    public InThread(InputStream in) {
+        this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
+
+    // Constructor for BufferedReader (Alternative)
+    public InThread(BufferedReader reader) {
+        this.reader = reader;
+    }
+
     public void run() {
-        int len;
-        byte[] b = new byte[100];
         try {
-            while (true) {
-                if ((len=in.read(b)) == -1) {
-                    break;
-                }
-                System.out.write(b, 0, len);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line); // ✅ Properly handles UTF-8 messages
             }
-        }
-        catch (IOException e) {
-            System.err.println(e.toString());
+        } catch (IOException e) {
+            System.err.println("Error reading input stream: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
+
 
