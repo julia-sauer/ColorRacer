@@ -15,7 +15,7 @@ public class ChatServer {
     public static void startChatServer () {
         try {
             echod = new ServerSocket(PORT);
-            System.out.println("ChatServer läuft auf Port: " + PORT + "...");
+            System.out.println("ChatServer runs on port: " + PORT + "...");
 
             while (running) {
                 if (clients.size() < MAX_CLIENTS) {
@@ -64,10 +64,10 @@ public class ChatServer {
 
     public static void removeClient(ClientHandler client) {
         clients.remove(client);
-        System.out.println("Ein Client hat sich getrennt. Aktive Clients: " + clients.size());
+        System.out.println("A client has disconnected. Active clients: " + clients.size());
 
         if (clients.isEmpty()) {
-            System.out.println("Alle Clients haben sich getrennt. Server wird heruntergefahren!");
+            System.out.println("All clients have disconnected. Server is shutting down!");
             shutdownServer();
         }
     }
