@@ -82,7 +82,7 @@ public class EchoClient {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Verbindung verloren.");
+            System.err.println("Connection lost.");
         } finally {
             try {
                 sock.close();
@@ -98,7 +98,7 @@ public class EchoClient {
             @Override
             public void run() {
                 if (System.currentTimeMillis() - lastPongTime > TIMEOUT) {
-                    System.err.println("Server antwortet nicht. Verbindung wird getrennt.");
+                    System.err.println("Server does not answer. Connection closed.");
                     try {
                         sock.close();
                     } catch (IOException e) {
