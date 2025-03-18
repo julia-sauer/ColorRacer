@@ -68,7 +68,7 @@ public class EchoServer {
         int remainingClients = activeClients.updateAndGet(count -> Math.max(0, count - 1));
         System.out.println("A client has disconnected. Active clients: " + remainingClients);
 
-        if (remainingClients == 0) {
+        if (activeClients.get() == 0) {
             System.out.println("Wait 60 seconds for new clients...");
             new Thread(() -> {
                 try {
