@@ -8,6 +8,7 @@ import java.util.concurrent.*;
 public class ClientHandler implements Runnable {
     private Socket socket;
     private PrintWriter writer;
+    private BufferedReader reader;
     private String clientName;
     private volatile boolean running = true;
     private ScheduledExecutorService pingScheduler;
@@ -115,6 +116,18 @@ public class ClientHandler implements Runnable {
                 awaitingPong = true; // Warten auf PONG
             }
         }, 5, 5, TimeUnit.SECONDS);
+    }
+
+    public boolean sendPing() {
+        try {
+            writer.println("PING");
+            socket.setSoTimeout(3000); // Timeout auf 3 Sekunden setzen
+            String response = reader.readLine();
+            socket.setSoTimeout(0); // Timeout zurücksetzen
+            return "PONG".equalsIgnoreCase(response);
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public void sendMessage(String message) {
