@@ -18,7 +18,7 @@ public class EchoServer {
             chatServerThread.start();
 
             echod = new ServerSocket(8090);
-            System.out.println("Warte auf Port 8090...");
+            System.out.println("Waiting for port 8090...");
 
             // Starte einen Scheduler, der regelmäßig PING an Clients sendet
             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -27,7 +27,7 @@ public class EchoServer {
             while (running) {
                 if (activeClients.get() < maxClient) {
                     Socket socket = echod.accept();
-                    System.out.println("Client verbunden: " + socket.getInetAddress());
+                    System.out.println("Client connected: " + socket.getInetAddress());
 
                     activeClients.incrementAndGet(); // Erhöhe die Anzahl aktiver Clients
 
@@ -41,7 +41,7 @@ public class EchoServer {
                 }
 
                 if (activeClients.get() == 0 && !running) {
-                    System.out.println("Alle Clients sind getrennt. Server wird heruntergefahren.");
+                    System.out.println("All clients are disconnected. Server is shutting down.");
                     shutdownServer();
                     break;
                 }
@@ -49,16 +49,16 @@ public class EchoServer {
             }
 
         } catch (IOException | InterruptedException e) {
-            System.err.println("Fehler: " + e.getMessage());
+            System.err.println("ERROR: " + e.getMessage());
             System.exit(1);
         }
     }
 
     private static void pingClients() {
-        System.out.println("Sende PING an alle Clients...");
+        System.out.println("Send PING to all clients...");
         for (ClientHandler client : clients) {
             if (!client.sendPing()) {
-                System.out.println("Client antwortet nicht, Verbindung wird getrennt...");
+                System.out.println("Client does not answer, connection lost...");
                 clients.remove(client);
             }
         }
@@ -66,15 +66,15 @@ public class EchoServer {
 
     public static void ClientDisconnected() { // Methode, die aufgerufen wird, wenn ein Client sich trennt
         int remainingClients = activeClients.updateAndGet(count -> Math.max(0, count - 1));
-        System.out.println("Ein Client hat sich getrennt. Aktive Clients: " + remainingClients);
+        System.out.println("A client has disconnected. Active clients: " + remainingClients);
 
         if (remainingClients == 0) {
-            System.out.println("Warte 60 Sekunden auf neue Clients...");
+            System.out.println("Wait 60 seconds for new clients...");
             new Thread(() -> {
                 try {
                     Thread.sleep(60000);
                     if (activeClients.get() == 0) {
-                        System.out.println("Keine neuen Clients. Server wird heruntergefahren.");
+                        System.out.println("No new clients. Server is shutting down.");
                         shutdownServer();
                     }
                 } catch (InterruptedException ignored) {}
@@ -89,13 +89,13 @@ public class EchoServer {
 
     public static void shutdownServer() {
         try {
-            System.out.println("Server wird heruntergefahren...");
+            System.out.println("Server is shutting down...");
             running = false;
             echod.close();
             ChatServer.shutdownServer();
             System.exit(0);
         } catch (IOException e) {
-            System.err.println("Fehler beim Herunterfahren des Servers: " + e.getMessage());
+            System.err.println("Error with with closing the server: " + e.getMessage());
         }
     }
 }
