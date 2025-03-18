@@ -14,8 +14,8 @@ public class EchoClientThread implements Runnable {
     }
 
     public void run() {
-        String msg = "EchoServer: Verbindung " + name;
-        System.out.println(msg + " hergestellt");
+        String msg = "EchoServer: Connection " + name;
+        System.out.println(msg + " established");
 
         try {
             InputStream in = socket.getInputStream();
@@ -23,8 +23,8 @@ public class EchoClientThread implements Runnable {
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
 
-            System.out.println("Client " + name + " verbunden.");
-            writer.println("Hey Homie! Willkommen auf dem Server!");
+            System.out.println("Client " + name + " connected.");
+            writer.println("Hey Homie! Welcome to our server!");
 
             String message;
             while ((message = reader.readLine()) != null) {
@@ -32,33 +32,33 @@ public class EchoClientThread implements Runnable {
 
                 //  Reject empty messages
                 if (message.isEmpty()) {
-                    writer.println("ERROR: Nachricht darf nicht leer sein.");
+                    writer.println("ERROR: Message is empty.");
                     continue;
                 }
 
                 //  Validate allowed characters
                 if (!message.matches("[A-Za-z0-9_?!.,:;()\\- ]+")) {
-                    writer.println("ERROR: Ungültige Zeichen in der Nachricht.");
+                    writer.println("ERROR: Invalid symbols.");
                     continue;
                 }
 
                 //  Prevent overly long messages
                 if (message.length() > 500) {
-                    writer.println("ERROR: Nachricht zu lang (max 500 Zeichen).");
+                    writer.println("ERROR: Message too long (max 500 symbols).");
                     continue;
                 }
 
-                System.out.println("Empfangen: " + message);
+                System.out.println("Received: " + message);
                 writer.println(message); // Echo back validated message
 
                 // Handle QUIT command
                 if (message.equalsIgnoreCase("QUIT")) {
-                    writer.println("Verbindung wird beendet...");
+                    writer.println("Connection closed...");
                     socket.close();
                     EchoServer.ClientDisconnected();
 
                     if (EchoServer.getActiveClientCount() == 0) {
-                        System.out.println("Letzter Client hat QUIT gesendet. Server wird heruntergefahren");
+                        System.out.println("Last client sent QUIT. Server is closing");
                         EchoServer.shutdownServer();
                     }
                     return;
@@ -66,7 +66,7 @@ public class EchoClientThread implements Runnable {
             }
 
         } catch (IOException e) {
-            System.err.println("Fehler beim Client " + name + ": " + e.getMessage());
+            System.err.println("Error with client " + name + ": " + e.getMessage());
 
         } finally {
             try {
@@ -74,9 +74,9 @@ public class EchoClientThread implements Runnable {
                     socket.close();
                 }
             } catch (IOException e) {
-                System.err.println("Fehler beim Schliessen des Sockets für Client " + name + ": " + e.getMessage());
+                System.err.println("Error with closing the socket for client " + name + ": " + e.getMessage());
             }
-            EchoServer.ClientDisconnected(); // Notify Server that client left
+            EchoServer.ClientDisconnected(); // Meldet dem Server, dass ein Client die Verbindung getrennt hat
         }
     }
 }
