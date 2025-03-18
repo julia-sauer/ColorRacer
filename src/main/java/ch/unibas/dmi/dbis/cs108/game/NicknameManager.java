@@ -34,7 +34,7 @@ public class NicknameManager {
 
     // Get nickname of a client
     public static String getNickname(Socket socket) {
-        return clientNicknames.getOrDefault(socket.toString(), "Unbekannt");
+        return clientNicknames.getOrDefault(socket.toString(), "Unknown");
     }
 
     // Change a client's nickname
