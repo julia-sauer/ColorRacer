@@ -76,10 +76,10 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             //  Benachrichtige den Client vor dem Trennen der Verbindung
             if (writer != null) {
-                writer.println("ERROR: A network problem has occurred . Bitte verbinde erneut.");
+                writer.println("ERROR: A network problem has occurred . Please reconnect.");
             }
             //  Log the error on the server side
-            System.err.println("Client-Verbindung verloren (" + (clientName != null ? clientName : "Unbekannt") + "): " + e.getMessage());
+            System.err.println("Client connection error (" + (clientName != null ? clientName : "Unknown") + "): " + e.getMessage());
 
 
 
@@ -90,7 +90,7 @@ public class ClientHandler implements Runnable {
                 }
             } catch (IOException e) {
                 // Log socket closure errors (but don't crash)
-                System.err.println("Fehler beim Verlassen von " + clientName + ": " + e.getMessage());
+                System.err.println("Error closing socket for " + clientName + ": " + e.getMessage());
             }
 
             // Remove the client properly after disconnecting
@@ -105,7 +105,7 @@ public class ClientHandler implements Runnable {
         pingScheduler = Executors.newScheduledThreadPool(1);
         pingScheduler.scheduleAtFixedRate(() -> {
             if (awaitingPong) { // Falls keine Antwort vom letzten Ping kam → Verbindung verloren
-                System.out.println("Client " + clientName + " antwortet nicht. Verbindung wird getrennt...");
+                System.out.println("Client " + clientName + " does not answer. Connection is disconnected...");
                 try {
                     socket.close();
                 } catch (IOException e) {
@@ -134,7 +134,7 @@ public class ClientHandler implements Runnable {
         if (writer != null) {
             writer.println(message);
         } else {
-            System.err.println("Fehler: Konnte Nachricht nicht senden, da der Writer null ist.");
+            System.err.println("ERROR: Could not send message because the writer is null.");
         }
     }
 }
