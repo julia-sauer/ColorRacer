@@ -64,8 +64,7 @@ public class EchoServer {
         }
     }
 
-    public static void ClientDisconnected(ClientHandler client) { // Methode, die aufgerufen wird, wenn ein Client sich trennt
-        clients.remove(client);
+    public static void ClientDisconnected() { // Methode, die aufgerufen wird, wenn ein Client sich trennt
         int remainingClients = activeClients.updateAndGet(count -> Math.max(0, count - 1));
         System.out.println("Ein Client hat sich getrennt. Aktive Clients: " + remainingClients);
 
