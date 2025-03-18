@@ -3,11 +3,15 @@ package ch.unibas.dmi.dbis.cs108.game;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.*;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
     private PrintWriter writer;
     private String clientName;
+    private volatile boolean running = true;
+    private ScheduledExecutorService pingScheduler;
+    private volatile boolean awaitingPong = false; // Kontrolliert, ob auf eine PONG-Antwort gewartet wird
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -19,33 +23,35 @@ public class ClientHandler implements Runnable {
             this.writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
 
 
-            // Nickname vorschlagen (basierend auf System-Benutzername)**
+            // Nickname vorschlagen (basierend auf System-Benutzername)
             String suggestedNickname = System.getProperty("user.name", "User"); // Holt den System-Benutzernamen
             writer.println("Vorgeschlagener Nickname: " + suggestedNickname);
             writer.println("Drücke ENTER, um den Namen zu übernehmen oder gib einen neuen ein:");
 
-            // Benutzer wählt Nickname**
+            // Benutzer wählt Nickname
             clientName = reader.readLine().trim();
             if (clientName.isEmpty()) {
                 clientName = suggestedNickname; // Falls leer, den Vorschlag übernehmen
             }
-            // Ensure nickname contains only safe characters
+            // Versichert, dass Nickname nur aus sicheren Zeichen besteht
             if (!clientName.matches("[A-Za-z0-9_-]{3,15}")) {
-                writer.println("ERROR: Invalid nickname. Use only letters, numbers, '-' and '_'. No spaces allowed.");
+                writer.println("Fehler: Ungültiger Nickname. Benutze nur Buchstaben, Zahlen, '-' und '_'. Leerzeichen sind nicht erlaubt.");
                 clientName = suggestedNickname; // Default to system username
             }
-            // Nickname im NicknameManager speichern**
+            // Nickname im NicknameManager speichern
             NicknameManager.setNickname(socket, clientName);
             System.out.println(clientName + " hat sich verbunden.");
             ChatServer.broadcastMessage(clientName + " ist dem Chat beigetreten!", this);
 
+            startPingScheduler(); // Starte den Ping-Mechanismus
+
             String message;
-            while ((message = reader.readLine()) != null) {
+            while (running && (message = reader.readLine()) != null) {
                 if (message.equalsIgnoreCase("QUIT")) {
                     break;
                 }
 
-                // Nickname ändern**
+                // Nickname ändern
                 if (message.startsWith("/nick "))                {
                     String newNickname = message.substring(6).trim();
                     NicknameManager.changeNickname(socket, newNickname);
@@ -55,24 +61,24 @@ public class ClientHandler implements Runnable {
                 }
                //  Message Validation (Add Here!)
                 if (!message.matches("[A-Za-z0-9_?!.,:;()\\-]+")) {
-                    writer.println("ERROR: Invalid characters in message.");
-                    continue; // Skip invalid messages
+                    writer.println("Fehler: Ungültige Zeichen in der Nachricht.");
+                    continue; // Überspringt ungültige Nachrichten
                 }
                 if (message.length() > 500) {
-                    writer.println("ERROR: Message too long.");
+                    writer.println("Fehler: Nachricht zu lange.");
                     continue;
                 }
-                // Aktuellen Nickname für Nachrichten verwenden**
+                // Aktuellen Nickname für Nachrichten verwenden
                 String currentNickname = NicknameManager.getNickname(socket);
                 ChatServer.broadcastMessage(currentNickname + ": " + message, this);
             }
         } catch (IOException e) {
-            //  Notify the client before disconnecting
+            //  Benachrichtige den Client vor dem Trennen der Verbindung
             if (writer != null) {
-                writer.println("ERROR: A network error occurred. Please reconnect.");
+                writer.println("Fehler: Ein Netzwerk-Problem ist entstanden. Bitte verbinde erneut.");
             }
             //  Log the error on the server side
-            System.err.println("Client connection error (" + (clientName != null ? clientName : "Unknown") + "): " + e.getMessage());
+            System.err.println("Client-Verbindung verloren (" + (clientName != null ? clientName : "Unbekannt") + "): " + e.getMessage());
 
 
 
@@ -83,7 +89,7 @@ public class ClientHandler implements Runnable {
                 }
             } catch (IOException e) {
                 // Log socket closure errors (but don't crash)
-                System.err.println("Error closing socket for " + clientName + ": " + e.getMessage());
+                System.err.println("Fehler beim Verlassen von " + clientName + ": " + e.getMessage());
             }
 
             // Remove the client properly after disconnecting
@@ -93,11 +99,29 @@ public class ClientHandler implements Runnable {
 
     }
 
+    // Starte das Ping-System, das alle 5 Sekunden einen Ping sendet
+    private void startPingScheduler() {
+        pingScheduler = Executors.newScheduledThreadPool(1);
+        pingScheduler.scheduleAtFixedRate(() -> {
+            if (awaitingPong) { // Falls keine Antwort vom letzten Ping kam → Verbindung verloren
+                System.out.println("Client " + clientName + " antwortet nicht. Verbindung wird getrennt...");
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                sendMessage("PING");
+                awaitingPong = true; // Warten auf PONG
+            }
+        }, 5, 5, TimeUnit.SECONDS);
+    }
+
     public void sendMessage(String message) {
         if (writer != null) {
             writer.println(message);
         } else {
-            System.err.println("Error: Attempted to send a message, but writer is null.");
+            System.err.println("Fehler: Konnte Nachricht nicht senden, da der Writer null ist.");
         }
     }
 }
