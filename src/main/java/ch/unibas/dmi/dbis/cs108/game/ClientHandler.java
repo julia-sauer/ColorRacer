@@ -26,8 +26,8 @@ public class ClientHandler implements Runnable {
 
             // Nickname vorschlagen (basierend auf System-Benutzername)
             String suggestedNickname = System.getProperty("user.name", "User"); // Holt den System-Benutzernamen
-            writer.println("Vorgeschlagener Nickname: " + suggestedNickname);
-            writer.println("Drücke ENTER, um den Namen zu übernehmen oder gib einen neuen ein:");
+            writer.println("Suggested nickname: " + suggestedNickname);
+            writer.println("Press ENTER, to take the suggested nickname or type in a new one:");
 
             // Benutzer wählt Nickname
             clientName = reader.readLine().trim();
@@ -36,13 +36,13 @@ public class ClientHandler implements Runnable {
             }
             // Versichert, dass Nickname nur aus sicheren Zeichen besteht
             if (!clientName.matches("[A-Za-z0-9_-]{3,15}")) {
-                writer.println("Fehler: Ungültiger Nickname. Benutze nur Buchstaben, Zahlen, '-' und '_'. Leerzeichen sind nicht erlaubt.");
+                writer.println("ERROR: Invalid nickname. Use only letters, numbers, '-' and '_'. Spaces are not allowed.");
                 clientName = suggestedNickname; // Default to system username
             }
             // Nickname im NicknameManager speichern
             NicknameManager.setNickname(socket, clientName);
-            System.out.println(clientName + " hat sich verbunden.");
-            ChatServer.broadcastMessage(clientName + " ist dem Chat beigetreten!", this);
+            System.out.println(clientName + " has joined.");
+            ChatServer.broadcastMessage(clientName + " has joined the chat!", this);
 
             startPingScheduler(); // Starte den Ping-Mechanismus
 
@@ -56,17 +56,17 @@ public class ClientHandler implements Runnable {
                 if (message.startsWith("/nick "))                {
                     String newNickname = message.substring(6).trim();
                     NicknameManager.changeNickname(socket, newNickname);
-                    writer.println("Dein neuer Nickname ist: " + newNickname);
+                    writer.println("Your new nickname is: " + newNickname);
                     clientName = newNickname; // Aktualisiere den lokalen Namen
                     continue;
                 }
                //  Message Validation (Add Here!)
                 if (!message.matches("[A-Za-z0-9_?!.,:;()\\-]+")) {
-                    writer.println("Fehler: Ungültige Zeichen in der Nachricht.");
+                    writer.println("ERROR: Invalid symbols in message.");
                     continue; // Überspringt ungültige Nachrichten
                 }
                 if (message.length() > 500) {
-                    writer.println("Fehler: Nachricht zu lange.");
+                    writer.println("ERROR: message too long.");
                     continue;
                 }
                 // Aktuellen Nickname für Nachrichten verwenden
@@ -76,7 +76,7 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             //  Benachrichtige den Client vor dem Trennen der Verbindung
             if (writer != null) {
-                writer.println("Fehler: Ein Netzwerk-Problem ist entstanden. Bitte verbinde erneut.");
+                writer.println("ERROR: A network problem has occurred . Bitte verbinde erneut.");
             }
             //  Log the error on the server side
             System.err.println("Client-Verbindung verloren (" + (clientName != null ? clientName : "Unbekannt") + "): " + e.getMessage());

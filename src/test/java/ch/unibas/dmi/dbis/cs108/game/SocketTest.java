@@ -1,4 +1,4 @@
-package server_tests;
+package ch.unibas.dmi.dbis.cs108.game;
 import java.net.*;
 import java.io.*;
 
