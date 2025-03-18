@@ -105,7 +105,7 @@ public class ClientHandler implements Runnable {
         pingScheduler = Executors.newScheduledThreadPool(1);
         pingScheduler.scheduleAtFixedRate(() -> {
             if (awaitingPong) { // Falls keine Antwort vom letzten Ping kam → Verbindung verloren
-                System.out.println("Client " + clientName + " does not answer. Connection is disconnected...");
+                System.out.println("Client " + clientName + " does not answer. Connection closed...");
                 try {
                     socket.close();
                 } catch (IOException e) {
