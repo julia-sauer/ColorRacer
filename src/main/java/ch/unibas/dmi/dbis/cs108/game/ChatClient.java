@@ -27,7 +27,7 @@ public class ChatClient {
                         System.out.println(serverMessage);
                     }
                 } catch (IOException e) {
-                    System.out.println("Verbindung zum Server verloren.");
+                    System.out.println("Connection to server is lost");
                     System.exit(0); // Exit program when connection is lost
                 }
             });
@@ -64,7 +64,7 @@ public class ChatClient {
             }
 
         } catch (IOException e) {
-            System.err.println("Fehler: " + e.getMessage());
+            System.err.println("ERROR: " + e.getMessage());
         }
     }
 }
