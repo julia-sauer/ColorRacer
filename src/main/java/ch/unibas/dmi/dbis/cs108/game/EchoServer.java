@@ -65,8 +65,7 @@ public class EchoServer {
     }
 
     public static void ClientDisconnected() { // Methode, die aufgerufen wird, wenn ein Client sich trennt
-        int remainingClients = activeClients.updateAndGet(count -> Math.max(0, count - 1));
-        System.out.println("A client has disconnected. Active clients: " + remainingClients);
+        System.out.println("A client has disconnected. Active clients: " + activeClients.get());
 
         if (activeClients.get() == 0) {
             System.out.println("Wait 60 seconds for new clients...");
