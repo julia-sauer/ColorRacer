@@ -4,8 +4,11 @@ import java.io.*;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class Server {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final int maxClient = 4;
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static final Set<ClientHandler> clients = ConcurrentHashMap.newKeySet();
