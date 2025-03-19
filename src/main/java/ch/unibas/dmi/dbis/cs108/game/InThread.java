@@ -20,7 +20,7 @@ public class InThread implements Runnable {
         try {
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line); // ✅ Properly handles UTF-8 messages
+                System.out.println(line); // Properly handles UTF-8 messages
             }
         } catch (IOException e) {
             System.err.println("Error reading input stream: " + e.getMessage());
