@@ -55,11 +55,11 @@ public class EchoClientThread implements Runnable {
                 if (message.equalsIgnoreCase("QUIT")) {
                     writer.println("Connection closed...");
                     socket.close();
-                    EchoServer.ClientDisconnected();
+                    Server.ClientDisconnected();
 
-                    if (EchoServer.getActiveClientCount() == 0) {
+                    if (Server.getActiveClientCount() == 0) {
                         System.out.println("Last client sent QUIT. Server is closing");
-                        EchoServer.shutdownServer();
+                        Server.shutdownServer();
                     }
                     return;
                 }
@@ -76,7 +76,7 @@ public class EchoClientThread implements Runnable {
             } catch (IOException e) {
                 System.err.println("Error with closing the socket for client " + name + ": " + e.getMessage());
             }
-            EchoServer.ClientDisconnected(); // Meldet dem Server, dass ein Client die Verbindung getrennt hat
+            Server.ClientDisconnected(); // Meldet dem Server, dass ein Client die Verbindung getrennt hat
         }
     }
 }
