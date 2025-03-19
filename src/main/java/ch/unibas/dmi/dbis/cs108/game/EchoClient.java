@@ -22,6 +22,10 @@ public class EchoClient {
             writer = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(), StandardCharsets.UTF_8), true);
             BufferedReader console = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 
+            //Start thread to listen for incoming messages (including PONG)
+            new Thread(EchoClient::listenForMessages).start();
+
+
             // Starte Thread zum Empfangen von Nachrichten
             InThread th = new InThread(reader);
             Thread iT = new Thread(th);
