@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class EchoServer {
+public class Server {
     private static final int maxClient = 4;
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static final Set<ClientHandler> clients = ConcurrentHashMap.newKeySet();
@@ -22,7 +22,7 @@ public class EchoServer {
 
             // Starte einen Scheduler, der regelmäßig PING an Clients sendet
             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            scheduler.scheduleAtFixedRate(EchoServer::pingClients, 5, 5, TimeUnit.SECONDS);
+            scheduler.scheduleAtFixedRate(Server::pingClients, 5, 5, TimeUnit.SECONDS);
 
             while (running) {
                 if (activeClients.get() < maxClient) {
