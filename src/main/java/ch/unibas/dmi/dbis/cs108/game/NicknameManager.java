@@ -19,7 +19,7 @@ public class NicknameManager {
 
     // Validate nickname format
     public static boolean isValidNickname(String nickname) {
-        return nickname.matches("[A-Za-z0-9_-]{3,15}") && !nickname.equals("Ping"); // Only letters, numbers, '-', and '_'
+        return nickname.matches("[A-Za-z0-9_-]{3,15}") && !nickname.equals("PING"); // Only letters, numbers, '-', and '_'
     }
 
     // Set nickname for a client
