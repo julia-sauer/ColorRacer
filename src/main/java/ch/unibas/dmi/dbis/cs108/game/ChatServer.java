@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class ChatServer {
-    private static final int PORT = 8090;
+    private static final int PORT = 8091;
     private static final int MAX_CLIENTS = 4;
     private static final Set<ClientHandler> clients = ConcurrentHashMap.newKeySet();
     private static ServerSocket echod;
