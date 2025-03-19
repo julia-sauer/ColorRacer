@@ -52,7 +52,7 @@ public class Server {
             }
 
         } catch (IOException | InterruptedException e) {
-            System.err.println("ERROR: " + e.getMessage());
+            LOGGER.error("ERROR: " + e.getMessage());
             System.exit(1);
         }
     }
@@ -97,7 +97,7 @@ public class Server {
             ChatServer.shutdownServer();
             System.exit(0);
         } catch (IOException e) {
-            System.err.println("Error with with closing the server: " + e.getMessage());
+            LOGGER.error("Error with with closing the server: " + e.getMessage());
         }
     }
 }
