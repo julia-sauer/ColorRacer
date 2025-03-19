@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NicknameManager {
     private static final ConcurrentHashMap<String, String> clientNicknames = new ConcurrentHashMap<>();
 
+
     // Generate a default nickname based on the system username
     public static String generateDefaultNickname() {
         return System.getProperty("user.name", "User"); // Gets system username
@@ -18,7 +19,7 @@ public class NicknameManager {
 
     // Validate nickname format
     public static boolean isValidNickname(String nickname) {
-        return nickname.matches("[A-Za-z0-9_-]{3,15}"); // Only letters, numbers, '-', and '_'
+        return nickname.matches("[A-Za-z0-9_-]{3,15}") && !nickname.equals("Ping"); // Only letters, numbers, '-', and '_'
     }
 
     // Set nickname for a client
