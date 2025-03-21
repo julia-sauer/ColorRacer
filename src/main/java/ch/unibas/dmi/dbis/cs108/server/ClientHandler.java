@@ -17,7 +17,7 @@ public class ClientHandler implements Runnable {
             InputStream in = clientSocket.getInputStream();
             OutputStream out = clientSocket.getOutputStream();
 
-            String welcomeMsg = "Welcome to the Server!"; //Willkommensnachricht
+            String welcomeMsg = "Welcome to the Server!\n"; //Willkommensnachricht
             out.write(welcomeMsg.getBytes());
 
             int c;
