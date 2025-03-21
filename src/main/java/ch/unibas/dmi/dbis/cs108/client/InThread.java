@@ -5,6 +5,9 @@ import java.io.*;
 /**
  * Eine lauffähige Klasse, die Daten aus einem InputStream liest und sie in die Standardausgabe schreibt.
  * Diese Klasse soll in einem separaten Thread verwendet werden, um kontinuierlich von einem Netzwerksocket zu lesen.
+ *
+ * @author julia
+ * @since 21.03.2025
  */
 class InThread implements Runnable {
     private InputStream in;
