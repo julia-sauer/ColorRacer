@@ -10,6 +10,27 @@ package ch.unibas.dmi.dbis.cs108.network;
 public enum Command {
 
     /**
+     * Alle enum-Konstanten werden hier Definiert
+     */
+    JOIN,
+    VELO,
+    RADY,
+    STRT,
+    RSTT,
+    QUIT,
+    QCNF,
+    ROLL,
+    CHOS,
+    MOVE,
+    STAT,
+    CHAT,
+    NICK,
+    PING,
+    PONG;
+
+    public static final String SEPARATOR = " "; // blank space als Separator
+
+    /**
      * Gibt den Befehl "JOIN" aus.
      */
     public static void JOIN() {
