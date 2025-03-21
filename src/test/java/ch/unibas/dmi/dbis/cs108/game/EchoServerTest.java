@@ -19,7 +19,7 @@ public class EchoServerTest {
     static void startServer() {
         serverThread = Executors.newSingleThreadExecutor();
         serverThread.submit(() -> {
-            EchoServer.main(new String[]{});
+            Server.main(new String[]{});
         });
 
         try {
@@ -29,7 +29,7 @@ public class EchoServerTest {
 
     @AfterAll
     static void stopServer() {
-        EchoServer.shutdownServer();
+        Server.shutdownServer();
         serverThread.shutdown();
     }
 

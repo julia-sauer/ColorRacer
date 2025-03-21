@@ -1,4 +1,30 @@
-# README
+# Color Racer
+Color Racer is a project which aims to implement a turnbased boardgame.This Project is a part of the CS-108 Spring Semester at Basel university.
+It is a Java-based multiplayer chat and game server that allows up to 4 clients to connect, chat, and play together. Built with Java networking, threading, and robust error handling.
+The goal of the
+
+### technologies used
+Backend built on Java
+Build system implemented in Gradle
+Logging: Log4j
+
+### Setup & Installation
+
+
+### How to Play
+
+
+### Project Structure
+
+
+
+
+
+
+
+
+
+# READMEOLD
 This is a readme file. It typically includes some information about your project. 
 For more information about readmes, you can either [read a guide](https://github.com/18F/open-source-guide/blob/18f-pages/pages/making-readmes-readable.md) or have a look at the readmes of popular open-source projects such as [Swift by Apple](https://github.com/apple/swift) or [Tensorflow](https://github.com/tensorflow/tensorflow).
 
@@ -7,3 +33,7 @@ However, there are platform-specific flavors, so for this project, you can make 
 You can also tag people using @username and reference issues using '#1', where 1 is the issue number. For more features, consult the linked Gitlab syntax guide. 
 
 If you don't like reading documentation, [here's a cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+
+
+
+

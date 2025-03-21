@@ -35,7 +35,7 @@ public class ClientHandler implements Runnable {
                 clientName = suggestedNickname; // Falls leer, den Vorschlag übernehmen
             }
             // Versichert, dass Nickname nur aus sicheren Zeichen besteht
-            if (!clientName.matches("[A-Za-z0-9_-]{3,15}")) {
+           else if (!clientName.matches("[A-Za-z0-9_-]{3,15}")) {
                 writer.println("ERROR: Invalid nickname. Use only letters, numbers, '-' and '_'. Spaces are not allowed.");
                 clientName = suggestedNickname; // Default to system username
             }

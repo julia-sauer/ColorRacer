@@ -4,11 +4,11 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-public class EchoClientThread implements Runnable {
+public class ClientThread implements Runnable {
     private int name;
     private Socket socket;
 
-    public EchoClientThread(int name, Socket socket) { // Constructor
+    public ClientThread(int name, Socket socket) { // Constructor
         this.name = name;
         this.socket = socket;
     }
