@@ -22,17 +22,16 @@ public class Server {
      * @param args
      */
     public static void main(String[] args) {
-        int cnt = 0;
         try {
             System.out.println("Waiting for port 8090...");
             echod = new ServerSocket(8090);
 
             while (true) {
                 Socket clientSocket = echod.accept();
-                System.out.println("Connection established");
+                System.out.println("Connection established for Client: " + activeClients.get());
                 activeClients.incrementAndGet();
 
-                ClientHandler cH = new ClientHandler(++cnt, clientSocket);
+                ClientHandler cH = new ClientHandler(activeClients.get(), clientSocket);
                 Thread cHT = new Thread(cH);
                 cHT.start();
             }
@@ -45,6 +44,7 @@ public class Server {
 
     public static void ClientDisconnected() {
         activeClients.decrementAndGet();
+        System.out.println("Remaining Clients: " + activeClients.get());
 
         if(activeClients.get() == 0) {
             System.out.println("Wait 60 seconds for new clients...");
