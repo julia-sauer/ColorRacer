@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
-    private static final int maxClients = 4;
+    private static ServerSocket echod;
     /**
      * Startet einen Server, der auf Verbindungen wartet und stellt Netzwerkverbindung
      * von Client zu Server dar.
@@ -25,19 +25,48 @@ public class Server {
         int cnt = 0;
         try {
             System.out.println("Waiting for port 8090...");
-            ServerSocket echod = new ServerSocket(8090);
+            echod = new ServerSocket(8090);
 
             while (true) {
                 Socket clientSocket = echod.accept();
                 System.out.println("Connection established");
+                activeClients.incrementAndGet();
+
                 ClientHandler cH = new ClientHandler(++cnt, clientSocket);
                 Thread cHT = new Thread(cH);
                 cHT.start();
             }
-            
+
         } catch (IOException e) {
             System.err.println(e.toString());
             System.exit(1);
+        }
+    }
+
+    public static void ClientDisconnected() {
+        activeClients.decrementAndGet();
+
+        if(activeClients.get() == 0) {
+            System.out.println("Wait 60 seconds for new clients...");
+            new Thread(() -> {
+                try {
+                    Thread.sleep(60000);
+                    if (activeClients.get() == 0) {
+                        System.out.println("No new clients. Server is shutting down.");
+                        shutdownServer();
+                    }
+                } catch (InterruptedException ignored) {}
+            }).start();
+        }
+    }
+
+    public static void shutdownServer() {
+        try {
+            echod.close();
+            System.exit(0);
+        }
+        catch (IOException e) {
+            System.err.println("Fehler beim Schliessen des Servers: " + e.getMessage());
         }
     }
 }
