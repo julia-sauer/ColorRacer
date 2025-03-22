@@ -7,29 +7,28 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Die Klasse ProtocolWriterClient wandelt die Spieler Eingaben
- * (die im Terminal von den Spieler*innen eingegeben werden kann)
- * in die entsprechenden Protokollbefehle um, die in den Commands definiert sind
- * und sendet sie wenn nötig an den Server weiter.
- * Die Spieleingabe und die Umwandlung in das entsprechende Protokollbefehl aufgelistet:
- * connect -> JOIN
- * leave -> QUIT
- * message -> CHAT
- * nicknamechange -> NICK
+ * Die Klasse {@code ProtocolWriterClient} wandelt die Spieler Eingaben in die entsprechenden
+ * Protokollbefehle um, die in den Commands definiert sind und sendet sie wenn nötig an den Server weiter.
+ *
+ * <p>Spielereingaben und zugehörige Protokollbefehle:
+ *  * <ul>
+ *  *     <li>{@code connect} → {@code JOIN}</li>
+ *  *     <li>{@code leave} → {@code QUIT}</li>
+ *  *     <li>{@code message} → {@code CHAT}</li>
+ *  *     <li>{@code nicknamechange} → {@code NICK}</li>
+ *  * </ul>
  * <p>
- * Diese Klasse verwedet die UFT-8-Kodierung, um eine Plattforübergreifende (Windwos, Linux und Mac) Kommunikaton sicherzustellen.
+ * Diese Klasse verwedet die UFT-8-Kodierung, um eine Plattforübergreifende Kommunikaton sicherzustellen.
  */
 public class ProtocolWriterClient {
     /**
-     * Writer zum Senden von Nachrichten über die Netzwerkverbindung.
-     * Wird verwendet, um Protokollbefehle (zB. CHAT) an den Server zu übermitteln.
-     * Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
+     * Der {@code PrintWriter} zum Senden von Nachrichten über die Netzwerkverbindung.
+     * Dieser Writer schreibt Protokollbefehle (z.B. {@code CHAT}) in UTF-8 an den Server.
      */
-    private final PrintWriter writer;
+    private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
 
     /**
-     * Erstellt eine neue Instaz des protocolWriterClient
-     * Konstruktor: Intialisiert den Writer mit UFT-8.
+     * Konstruktor: Intialisiert den {@code PrintWriter} mit UFT-8.
      * @param outputStream der OutputStream, an den die Nachrichten gesendet werden sollen.
      * @throws IOException wenn ein Fehler beim Erstellen des PrintWriters auftritt.
      *
@@ -39,22 +38,24 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Die Methode sendChat verarbeitet eine Benutzereingabe für eine Chat-Nachricht.
-     * Diese Methode formatiert die Nachricht entsprechend dem Netzwerkprotokoll
-     * und sendet sie an den Server. Die Nachricht darf nicht länger als 500 Zeichen sein.
+     * Die Methode {@code sendChat} wird für den Chat verwendet.
+     * Sie wandelt eine vom Spieler eingegebene Chatnachricht (zB. {@code message Hallo!}) in einen gültigen
+     * Protokollbefehl des Formats {@code CHAT <message>} um und sendet sie an den Server.
      * <p>
-     * Beispiel: Gibt ein Spieler im Terminal "message Hallo!" ein,
-     * wird daraus die Netzwerkzeile "CHAT Hallo!", die an den Server übertragen wird.
-     *
      * @param message Die Nachricht, die vom Benutzer eingegeben wurde.
      * @author anasv
      * @since 22.03.25
      */
     public void sendChat(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            System.out.println("Nachricht ist leer!");
+            return;
+        }
         if (message.length() > 500){
             System.out.println("Message is too long");
             return;
         }
         writer.println(Command.CHAT.name() + Command.SEPARATOR + message); // Sendet die Nachricht im Format "CHAT <message>" an den Server
+        writer.flush(); // Sicherstellen, dass Nachricht sofort gesendet wird
     }
 }
