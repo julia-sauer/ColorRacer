@@ -2,7 +2,6 @@ package ch.unibas.dmi.dbis.cs108.client;
 
 import java.io.*;
 import java.net.Socket;
-import ch.unibas.dmi.dbis.cs108.network.Command;
 
 /**
  * Eine Klasse, die auf PING-Nachrichten vom Server hört und PONG-Antworten sendet.
@@ -31,20 +30,21 @@ class PongThread implements Runnable {
         try {
             InputStream in = clientSocket.getInputStream();
             OutputStream out = clientSocket.getOutputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
             while (running) {
                 // Auf PING warten
                 long startTime = System.currentTimeMillis();
 
                 while (System.currentTimeMillis() - startTime < 15000) {
-                    if (in.available() > 0) {
-                        String response = readCommand(in);
-                        if (Command.PING.name().equals(response)) {
-                            System.out.println(response);
-                            sendCommand(out, Command.PONG.name()); //Senden von Pong
+                    // Wait for a PING message or timeout
+                    if (reader.ready()) {
+                        String message = reader.readLine();
+                        if (message != null && "PING".equals(message.trim())) {
+                            System.out.println("PING received");
+                            sendCommand(out, "PONG");
                             System.out.println("PONG sent");
-                            startTime = System.currentTimeMillis(); //Restart the time setter
-                            break; //Pong empfangen, Schleife wird verlassen
+                            startTime = System.currentTimeMillis(); // Reset the timer
                         }
                     }
                 }
