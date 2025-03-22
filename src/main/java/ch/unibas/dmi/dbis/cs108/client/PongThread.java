@@ -1,6 +1,5 @@
 package ch.unibas.dmi.dbis.cs108.client;
 
-import ch.unibas.dmi.dbis.cs108.network.Command;
 import java.io.*;
 import java.net.Socket;
 
@@ -34,18 +33,20 @@ class PongThread implements Runnable {
 
             while (running) {
                 // Auf PING warten
+                sendCommand(out, Command.PONG.name()); //Senden von Pong
                 long startTime = System.currentTimeMillis();
 
-                while (System.currentTimeMillis() - startTime < 6000) {
+                while (System.currentTimeMillis() - startTime < 15000) {
                     if (in.available() > 0) {
                         String response = readCommand(in);
                         if (Command.PING.name().equals(response)) {
+                            startTime = System.currentTimeMillis(); //Restart the time setter
                             break; //Pong empfangen, Schleife wird verlassen
                         }
                     }
                 }
                 sendCommand(out, Command.PONG.name()); //Senden von Pong
-                if (System.currentTimeMillis() - startTime >= 6000) {
+                if (System.currentTimeMillis() - startTime >= 15000) {
                     System.out.println("Server lost connection.");
                     running = false;
                     clientSocket.close();
