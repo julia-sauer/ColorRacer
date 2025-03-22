@@ -18,7 +18,7 @@ public class Server {
      * und gibt genau das Gleiche zurück (out.write).
      * Wenn Client Verbindung beendet geht es aus while-Schleife, dann wir Verbindung zu Client beendet
      * (socket.close) dann wird Server geschlossen (echod.close).
-     * @param args
+     * @author Jana
      */
     public static void main(String[] args) {
         try {
