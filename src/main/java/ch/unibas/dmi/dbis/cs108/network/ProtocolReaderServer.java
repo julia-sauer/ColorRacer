@@ -127,6 +127,15 @@ public class ProtocolReaderServer {
             }
         }
     }
+    public static String readCommand(InputStream in) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            return reader.readLine();
+        } catch (IOException e) {
+            System.out.println("Error in reading command");
+            return null; // Gibt null zurück, wenn ein Fehler auftritt
+        }
+    }
 }
     
 
