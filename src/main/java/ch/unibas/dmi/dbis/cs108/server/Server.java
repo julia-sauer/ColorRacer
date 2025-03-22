@@ -28,6 +28,7 @@ public class Server {
             while (true) {
                 Socket clientSocket = echod.accept();
                 activeClients.incrementAndGet();
+                int userId = addNewUser("Client" + activeClients.get()); // Änderung: Aufruf der neuen Methode
                 System.out.println("Connection established for Client: " + activeClients.get());
 
                 ClientHandler cH = new ClientHandler(activeClients.get(), clientSocket);
@@ -40,7 +41,14 @@ public class Server {
             System.exit(1);
         }
     }
-
+    /**
+     * Fügt einen neuen Benutzer zur Benutzerliste hinzu.
+     * @param userName Der Name des neuen Benutzers.
+     * @return Die eindeutige Benutzer-ID.
+     */
+    public static int addNewUser(String userName) { // Neue Methode
+        return UserList.addUser(userName);
+    }
     public static void ClientDisconnected() {
         activeClients.decrementAndGet();
         System.out.println("Remaining Clients: " + activeClients.get());
