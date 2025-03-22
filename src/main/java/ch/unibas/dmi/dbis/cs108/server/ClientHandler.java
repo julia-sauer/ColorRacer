@@ -43,8 +43,10 @@ public class ClientHandler implements Runnable {
     /**
      * Entfernt einen Benutzer aus der Benutzerliste.
      * @param clientNumber Die ID des zu entfernenden Benutzers.
+     * @author milo
      */
     private void removeUser(int clientNumber) {
+
         UserList.removeUser(clientNumber);
     }
 }

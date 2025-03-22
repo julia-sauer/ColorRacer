@@ -45,10 +45,13 @@ public class Server {
      * Fügt einen neuen Benutzer zur Benutzerliste hinzu.
      * @param userName Der Name des neuen Benutzers.
      * @return Die eindeutige Benutzer-ID.
+     * @author milo
      */
     public static int addNewUser(String userName) { // Neue Methode
+
         return UserList.addUser(userName);
     }
+
     public static void ClientDisconnected() {
         activeClients.decrementAndGet();
         System.out.println("Remaining Clients: " + activeClients.get());
