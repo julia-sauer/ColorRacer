@@ -1,8 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -42,9 +40,10 @@ public class ProtocolWriterServer {
      * @author Jana
      */
     public static void sendCommand(OutputStream out, String command) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
         try {
-            out.write((command + Command.SEPARATOR).getBytes());
-            out.flush();
+            writer.write(command + Command.SEPARATOR);
+            writer.flush();
             System.out.println(command + " sent");
         } catch (IOException e) {
             System.err.println("Error, Could not send Command");
