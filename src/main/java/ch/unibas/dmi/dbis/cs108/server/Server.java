@@ -14,7 +14,6 @@ public class Server {
      * ServerSocket erstellt einen Server (hier: echod) der auf Port 8090 läuft.
      * echod.accept(); wartet bis sich Client verbindet.
      * Sobald sich ein Client verbunden hat wird "Connection established" ausgegeben.
-     *
      * while-Schleife: Solange bis Client Verbindung beendet. Speichert was von Client kommt in c
      * und gibt genau das Gleiche zurück (out.write).
      * Wenn Client Verbindung beendet geht es aus while-Schleife, dann wir Verbindung zu Client beendet
@@ -30,7 +29,6 @@ public class Server {
                 Socket clientSocket = echod.accept();
                 activeClients.incrementAndGet();
                 System.out.println("Connection established for Client: " + activeClients.get());
-                activeClients.incrementAndGet();
 
                 ClientHandler cH = new ClientHandler(activeClients.get(), clientSocket);
                 Thread cHT = new Thread(cH);
@@ -47,7 +45,7 @@ public class Server {
         activeClients.decrementAndGet();
         System.out.println("Remaining Clients: " + activeClients.get());
 
-        if(activeClients.get() == 0) {
+        if (activeClients.get() == 0) {
             System.out.println("Wait 60 seconds for new clients...");
             new Thread(() -> {
                 try {
