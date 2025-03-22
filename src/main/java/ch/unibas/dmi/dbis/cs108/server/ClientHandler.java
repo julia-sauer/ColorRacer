@@ -8,6 +8,8 @@ public class ClientHandler implements Runnable {
     private final Socket clientSocket;
     private final int clientNumber;
     private PingThread pingThread;
+    private InputStream in;
+    private OutputStream out;
 
     public ClientHandler(int clientNumber, Socket socket) {
         this.clientNumber = clientNumber;
@@ -15,12 +17,13 @@ public class ClientHandler implements Runnable {
     }
 
     public void run() {
-        // Starten des PingThreads
-        pingThread = new PingThread(clientSocket, clientNumber);
-        pingThread.start();
         try {
-            InputStream in = clientSocket.getInputStream();
-            OutputStream out = clientSocket.getOutputStream();
+            in = clientSocket.getInputStream();
+            out = clientSocket.getOutputStream();
+
+            // Starten des PingThreads
+            pingThread = new PingThread(clientSocket, clientNumber, in, out);
+            pingThread.start();
 
             String welcomeMsg = "Welcome to the Server!\n"; //Willkommensnachricht
             out.write(welcomeMsg.getBytes());

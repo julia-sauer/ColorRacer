@@ -16,17 +16,18 @@ public class PingThread extends Thread {
     private final Socket clientSocket;
     private final int clientNumber;
     private static boolean running = true;
+    private final InputStream in;
+    private final OutputStream out;
 
-    public PingThread(Socket clientSocket, int clientNumber) {
+    public PingThread(Socket clientSocket, int clientNumber, InputStream in, OutputStream out) {
         this.clientSocket = clientSocket;
         this.clientNumber = clientNumber;
+        this.in = in;
+        this.out = out;
     }
 
     public void run() {
         try {
-            InputStream in = clientSocket.getInputStream();
-            OutputStream out = clientSocket.getOutputStream();
-
             while (running) {
                 ProtocolWriterServer.sendCommand(out, Command.PING.name()); //Senden von Ping
 
