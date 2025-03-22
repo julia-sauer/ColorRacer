@@ -7,6 +7,7 @@ import java.net.*;
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
     private final int clientNumber;
+    private PingThread pingThread;
 
     public ClientHandler(int clientNumber, Socket socket) {
         this.clientNumber = clientNumber;
@@ -15,7 +16,7 @@ public class ClientHandler implements Runnable {
 
     public void run() {
         // Starten des PingThreads
-        PingThread pingThread = new PingThread(clientSocket, clientNumber);
+        pingThread = new PingThread(clientSocket, clientNumber);
         pingThread.start();
         try {
             InputStream in = clientSocket.getInputStream();
@@ -29,6 +30,7 @@ public class ClientHandler implements Runnable {
                 out.write((char)c);
                 System.out.print((char)c);
             }
+
             System.out.println("Connection closed for Client " + clientNumber);
             clientSocket.close();
             PingThread.stopPinging();
@@ -46,7 +48,6 @@ public class ClientHandler implements Runnable {
      * @author milo
      */
     private void removeUser(int clientNumber) {
-
         UserList.removeUser(clientNumber);
     }
 }
