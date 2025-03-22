@@ -1,5 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.client;
 
+import ch.unibas.dmi.dbis.cs108.network.Command;
 import java.io.*;
 import java.net.Socket;
 
