@@ -1,5 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
+
 import java.io.*;
 import java.net.*;
 
@@ -13,6 +14,9 @@ public class ClientHandler implements Runnable {
     }
 
     public void run() {
+        // Starten des PingThreads
+        PingThread pingThread = new PingThread(clientSocket, clientNumber);
+        pingThread.start();
         try {
             InputStream in = clientSocket.getInputStream();
             OutputStream out = clientSocket.getOutputStream();
