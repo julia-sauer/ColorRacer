@@ -28,33 +28,9 @@ public class PingThread extends Thread {
 
     public void run() {
         try {
-            while (running) {
-                ProtocolWriterServer.sendCommand(out, Command.PING.name()); //Senden von Ping
-
-                //Auf Pong warten
-                long startTime = System.currentTimeMillis();
-                while (System.currentTimeMillis() - startTime < 15000) {
-                    if (in.available() > 0) {
-                        String response = ProtocolReaderServer.readCommand(in);
-                        if ("PONG".equals(response)) {
-                            System.out.println("Pong received");
-                            ProtocolWriterServer.sendCommand(out, "PING"); //Pong empfangen, Ping wird gesendet
-                            startTime = System.currentTimeMillis();
-                        }
-                    }
-                }
-
-                //Wenn kein PONG empfangen wird
-                if (System.currentTimeMillis() - startTime >= 15000) {
-                    System.out.println("Connection timed out for Client " + clientNumber);
-                    running = false;
-                    clientSocket.close();
-                    Server.ClientDisconnected();
-                }
-            }
-        }
-        catch (IOException e) {
-            System.err.println("Error with Client " + clientNumber + ": " + e.getMessage());
+            ProtocolWriterServer.sendCommand(out, "PING"); //Senden von Ping
+        } catch (IOException e) {
+            System.err.println("Error, Could not send Command");
         }
     }
 
