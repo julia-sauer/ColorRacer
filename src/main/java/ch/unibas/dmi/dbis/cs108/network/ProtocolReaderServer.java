@@ -3,10 +3,7 @@ package ch.unibas.dmi.dbis.cs108.network;
 import ch.unibas.dmi.dbis.cs108.server.Server;
 import ch.unibas.dmi.dbis.cs108.server.UserList;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -26,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 public class ProtocolReaderServer {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
     private final int userId; // Die ID des Clients, der aktuell mit dem Server verbunden ist.
+    private final OutputStream out;
 
     /**
      * Konstruktor: Initialisiert den BufferedReader und die Benutzer-ID.
@@ -34,10 +32,11 @@ public class ProtocolReaderServer {
      * @param userId die eindeutige ID des Benutzers.
      * @throws IOException wenn ein Fehler beim Erstellen des BufferedReaders auftritt.
      */
-    public ProtocolReaderServer(InputStream in, int userId) throws IOException {
+    public ProtocolReaderServer(InputStream in, int userId, OutputStream out) throws IOException {
         // Initialisierung des BufferedReaders
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         this.userId = userId;
+        this.out = out;
     }
 
     /**
@@ -113,6 +112,8 @@ public class ProtocolReaderServer {
                 case PONG:
                     System.out.println("PONG erhalten von Benutzer-ID " + userId);
                     // Verbindung ist aktiv, kein Timeout nötig
+                    ProtocolWriterServer.sendCommand(out, "PING");
+                    pongCheck();
                     break;
 
                 case QUIT:
@@ -134,6 +135,18 @@ public class ProtocolReaderServer {
         } catch (IOException e) {
             System.out.println("Error in reading command");
             return null; // Gibt null zurück, wenn ein Fehler auftritt
+        }
+    }
+
+    public void pongCheck() {
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < 15000) {
+
+        }
+        if (System.currentTimeMillis() - startTime >= 15000) {
+            System.out.println("Connection timed out for Client " + userId);
+            UserList.removeUser(userId);
+            Server.ClientDisconnected();
         }
     }
 }
