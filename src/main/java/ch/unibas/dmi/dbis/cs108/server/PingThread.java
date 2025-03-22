@@ -7,16 +7,16 @@ import java.net.Socket;
 /**
  * Eine Klasse, die PING-Nachrichten versendet an Clients und auf PONG-Nachrichten vom Client hört.
  * Diese Klasse soll in einem separaten Thread verwendet werden, um die Verbindung aufrechtzuerhalten.
+ * @author Jana
  */
 public class PingThread extends Thread {
     private final Socket clientSocket;
     private final int clientNumber;
-    private boolean running;
+    private static boolean running = true;
 
     public PingThread(Socket clientSocket, int clientNumber) {
         this.clientSocket = clientSocket;
         this.clientNumber = clientNumber;
-        this.running = true;
     }
 
     public void run() {
@@ -26,20 +26,23 @@ public class PingThread extends Thread {
 
             while (running) {
                 sendCommand(out, Command.PING.name()); //Senden von Ping
+                System.out.println("Ping sent");
 
                 //Auf Pong warten
                 long startTime = System.currentTimeMillis();
-                while (System.currentTimeMillis() - startTime < 6000) {
+                while (System.currentTimeMillis() - startTime < 15000) {
                     if (in.available() > 0) {
                         String response = readCommand(in);
                         if (Command.PONG.name().equals(response)) {
-                            break; //Pong empfangen, Schleife wird verlassen
+                            System.out.println("Pong received");
+                            sendCommand(out, Command.PING.name()); //Pong empfangen, Ping wird gesendet
+                            startTime = System.currentTimeMillis();
                         }
                     }
                 }
 
-                //WEnn kein PONG empfangen wird
-                if (System.currentTimeMillis() - startTime >= 6000) {
+                //Wenn kein PONG empfangen wird
+                if (System.currentTimeMillis() - startTime >= 15000) {
                     System.out.println("Connection timed out for Client " + clientNumber);
                     running = false;
                     clientSocket.close();
@@ -52,7 +55,11 @@ public class PingThread extends Thread {
         }
     }
     private void sendCommand(OutputStream out, String command) throws IOException {
-        out.write((command + Command.SEPARATOR).getBytes());
+        try {
+            out.write((command + Command.SEPARATOR).getBytes());
+        } catch (IOException e) {
+            System.err.println("Error, Could not send Command");
+        }
     }
 
     private String readCommand(InputStream in) throws IOException {
@@ -61,7 +68,7 @@ public class PingThread extends Thread {
         return new String(buffer, 0, bytesRead).trim();
     }
 
-    public void stopPinging() {
+    public static void stopPinging() {
         running = false;
     }
 }
