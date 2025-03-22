@@ -19,6 +19,19 @@ public class ProtocolWriterServer {
     public ProtocolWriterServer(List<PrintWriter> clientWriters) {
         this.clientWriters = clientWriters;
     }
+    /**
+     * Sendet eine Chat-Nachricht an alle Clients.
+     *
+     * @param message Die zu sendende Nachricht.
+     * @param sender Der Name des Senders.
+     */
+    public void sendChat(String message, String sender){
+        String formatted = Command.CHAT.name() + Command.SEPARATOR + sender + Command.SEPARATOR + message;
+        for (PrintWriter writer : clientWriters) {
+            writer.println(formatted);
+            writer.flush();
+        }
+    }
 
 
     /**
