@@ -15,6 +15,10 @@ public class Client {
             Thread iT = new Thread(th);
             iT.start();
 
+            PongThread pongThread = new PongThread(sock);
+            Thread pongT = new Thread(pongThread);
+            pongT.start();
+
             // stream input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
             String line = " ";
