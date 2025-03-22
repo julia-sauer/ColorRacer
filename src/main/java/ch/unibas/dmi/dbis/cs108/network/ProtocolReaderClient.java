@@ -9,10 +9,12 @@ import java.nio.charset.StandardCharsets;
 public class ProtocolReaderClient {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
     private final InputStream in;
+    private final OutputStream out;
 
 
-    public ProtocolReaderClient(InputStream in) throws IOException {
+    public ProtocolReaderClient(InputStream in, OutputStream out) throws IOException {
         this.in = in;
+        this.out = out;
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
     public void readLoop() throws IOException {
@@ -33,15 +35,6 @@ public class ProtocolReaderClient {
             // Verarbeiten des Befehls mit switch-case
 
             switch (command) {
-                //case NICK:
-                // if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                //System.err.println("Fehlender Nickname von Benutzer-ID " + userId);
-                //break;
-                //}
-                //String newNick = parts[1].trim();
-                // UserList.updateUserName(userId, newNick); // // Diese Methode muss existieren!!!
-                // System.out.println("Benutzer-ID " + userId + " setzt Nickname auf " + newNick);
-                // break;
 
                 case CHAT:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
