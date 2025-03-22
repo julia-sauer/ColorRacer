@@ -2,8 +2,37 @@ package ch.unibas.dmi.dbis.cs108.network;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.List;
 
+/**
+ * Diese Klasse sendet Nachrichten an alle verbundenen Clients
+ * und kann auch einfache Befehle an einen bestimmten OutputStream senden.
+ */
 public class ProtocolWriterServer {
+    private final List<PrintWriter> clientWriters;
+    /**
+     * Konstruktor: Initialisiert die Liste der PrintWriter.
+     *
+     * @param clientWriters die Liste der PrintWriter für alle verbundenen Clients.
+     */
+    public ProtocolWriterServer(List<PrintWriter> clientWriters) {
+        this.clientWriters = clientWriters;
+    }
+    /**
+     * Sendet eine Chat-Nachricht an alle Clients.
+     *
+     * @param message Die zu sendende Nachricht.
+     * @param sender Der Name des Senders.
+     */
+    public void sendChat(String message, String sender){
+        String formatted = Command.CHAT.name() + Command.SEPARATOR + sender + Command.SEPARATOR + message;
+        for (PrintWriter writer : clientWriters) {
+            writer.println(formatted);
+            writer.flush();
+        }
+    }
+
     /**
      * Sendet den Command auf dem gewünschten OutputStream.
      *
