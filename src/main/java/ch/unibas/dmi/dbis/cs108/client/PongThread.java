@@ -1,24 +1,26 @@
 package ch.unibas.dmi.dbis.cs108.client;
 
+import ch.unibas.dmi.dbis.cs108.network.Command;
 import java.io.*;
+import java.net.Socket;
 
 /**
  * Eine Klasse, die auf PING-Nachrichten vom Server hört und PONG-Antworten sendet.
  * Diese Klasse soll in einem separaten Thread verwendet werden, um die Verbindung aufrechtzuerhalten.
  */
 class PongThread implements Runnable {
-    private BufferedReader in;
-    private PrintWriter out;
+    private final Socket clientSocket;
+    private boolean running;
 
     /**
      * Konstruiert einen PongThread mit den angegebenen Input- und OutputStreams.
      *
-     * @param in der BufferedReader von dem gelesen werden soll
-     * @param out der PrintWriter, in den geschrieben werden soll
+     * @param clientSocket der BufferedReader von dem gelesen werden soll
+     *
      */
-    public PongThread(BufferedReader in, PrintWriter out) {
-        this.in = in;
-        this.out = out;
+    public PongThread(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+        this.running = true;
     }
 
     /**
@@ -27,15 +29,43 @@ class PongThread implements Runnable {
      */
     public void run() {
         try {
-            String message;
-            while ((message = in.readLine()) != null) {
-                if ("PING".equals(message)) {
-                    out.println("PONG");
-                    out.flush();
+            InputStream in = clientSocket.getInputStream();
+            OutputStream out = clientSocket.getOutputStream();
+
+            while (running) {
+                // Auf PING warten
+                long startTime = System.currentTimeMillis();
+
+                while (System.currentTimeMillis() - startTime < 6000) {
+                    if (in.available() > 0) {
+                        String response = readCommand(in);
+                        if (Command.PING.name().equals(response)) {
+                            break; //Pong empfangen, Schleife wird verlassen
+                        }
+                    }
+                }
+                sendCommand(out, Command.PONG.name()); //Senden von Pong
+                if (System.currentTimeMillis() - startTime >= 6000) {
+                    System.out.println("Server lost connection.");
+                    running = false;
+                    clientSocket.close();
                 }
             }
         } catch (IOException e) {
-            System.err.println("ERROR: " + e.toString());
+            System.err.println("ERROR with server connection: " + e.toString());
         }
+    }
+    private void sendCommand(OutputStream out, String command) throws IOException {
+        out.write((command + Command.SEPARATOR).getBytes());
+    }
+
+    private String readCommand(InputStream in) throws IOException {
+        byte[] buffer = new byte[256];
+        int bytesRead = in.read(buffer);
+        return new String(buffer, 0, bytesRead).trim();
+    }
+
+    public void stopPinging() {
+        running = false;
     }
 }
