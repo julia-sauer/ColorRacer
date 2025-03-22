@@ -28,6 +28,7 @@ public class Server {
 
             while (true) {
                 Socket clientSocket = echod.accept();
+                activeClients.incrementAndGet();
                 System.out.println("Connection established for Client: " + activeClients.get());
                 activeClients.incrementAndGet();
 
