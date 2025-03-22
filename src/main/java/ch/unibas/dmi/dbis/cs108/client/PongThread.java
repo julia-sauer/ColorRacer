@@ -33,7 +33,6 @@ class PongThread implements Runnable {
 
             while (running) {
                 // Auf PING warten
-                sendCommand(out, Command.PONG.name()); //Senden von Pong
                 long startTime = System.currentTimeMillis();
 
                 while (System.currentTimeMillis() - startTime < 15000) {
@@ -41,11 +40,11 @@ class PongThread implements Runnable {
                         String response = readCommand(in);
                         if (Command.PING.name().equals(response)) {
                             startTime = System.currentTimeMillis(); //Restart the time setter
+                            sendCommand(out, Command.PONG.name()); //Senden von Pong
                             break; //Pong empfangen, Schleife wird verlassen
                         }
                     }
                 }
-                sendCommand(out, Command.PONG.name()); //Senden von Pong
                 if (System.currentTimeMillis() - startTime >= 15000) {
                     System.out.println("Server lost connection.");
                     running = false;
