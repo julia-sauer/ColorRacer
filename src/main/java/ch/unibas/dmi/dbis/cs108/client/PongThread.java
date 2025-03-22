@@ -2,6 +2,7 @@ package ch.unibas.dmi.dbis.cs108.client;
 
 import java.io.*;
 import java.net.Socket;
+import ch.unibas.dmi.dbis.cs108.network.Command;
 
 /**
  * Eine Klasse, die auf PING-Nachrichten vom Server hört und PONG-Antworten sendet.
@@ -39,8 +40,10 @@ class PongThread implements Runnable {
                     if (in.available() > 0) {
                         String response = readCommand(in);
                         if (Command.PING.name().equals(response)) {
-                            startTime = System.currentTimeMillis(); //Restart the time setter
+                            System.out.println(response);
                             sendCommand(out, Command.PONG.name()); //Senden von Pong
+                            System.out.println("PONG sent");
+                            startTime = System.currentTimeMillis(); //Restart the time setter
                             break; //Pong empfangen, Schleife wird verlassen
                         }
                     }
