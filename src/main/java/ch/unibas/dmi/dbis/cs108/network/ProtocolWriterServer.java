@@ -33,7 +33,6 @@ public class ProtocolWriterServer {
         }
     }
 
-
     /**
      * Sendet den Command auf dem gewünschten OutputStream.
      *
