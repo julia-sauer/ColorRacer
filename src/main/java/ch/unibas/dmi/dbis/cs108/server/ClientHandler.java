@@ -31,6 +31,7 @@ public class ClientHandler implements Runnable {
             }
             System.out.println("Connection closed for Client " + clientNumber);
             clientSocket.close();
+            PingThread.stopPinging();
             Server.ClientDisconnected();
 
         }
