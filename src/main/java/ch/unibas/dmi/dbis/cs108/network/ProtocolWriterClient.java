@@ -1,9 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.OutputStreamWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -57,5 +54,24 @@ public class ProtocolWriterClient {
         }
         writer.println(Command.CHAT.name() + Command.SEPARATOR + message); // Sendet die Nachricht im Format "CHAT <message>" an den Server
         writer.flush(); // Sicherstellen, dass Nachricht sofort gesendet wird
+    }
+
+    /**
+     * Sendet den Command auf dem gewünschten OutputStream.
+     *
+     * @param out
+     * @param command
+     * @throws IOException wenn die Nachricht nicht gesendet werden konnte.
+     * @author Julia
+     */
+    public static void sendCommand(OutputStream out, String command) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+        try {
+            writer.write(command + Command.SEPARATOR);
+            writer.flush();
+            System.out.println(command + " sent");
+        } catch (IOException e) {
+            System.err.println("Error, Could not send Command");
+        }
     }
 }
