@@ -11,9 +11,6 @@ public class Client {
             OutputStream out= sock.getOutputStream();
 
             // create server reading thread
-            InThread th = new InThread(in);
-            Thread iT = new Thread(th);
-            iT.start();
 
             PongThread pongThread = new PongThread(sock);
             Thread pongT = new Thread(pongThread);
