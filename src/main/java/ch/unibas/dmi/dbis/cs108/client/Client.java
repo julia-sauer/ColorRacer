@@ -50,7 +50,7 @@ public class Client {
             System.out.println("- leave");
             // Eingaben von der Konsole lesen
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
-            ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodeimplementation im WriterClient
+            ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodenimplementation im WriterClient
 
             String line = " ";
             while (true) {
@@ -64,7 +64,7 @@ public class Client {
                     break;
                 } else if (line.startsWith("nicknamechange")){
                     // Überprüft, ob Benutzer nicknamechange eingegeben hat.
-                    protocolClient.changeNickname(line.substring(15), out); //sollte im WriterClient implementiert sein
+                    protocolClient.changeNickname(line.substring(15), out);
                 } else if (line.startsWith("connect")) {
                     // JOIN-Befehl senden
                     String nickname = line.substring(8).trim();
