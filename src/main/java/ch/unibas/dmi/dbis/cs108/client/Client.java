@@ -40,7 +40,7 @@ public class Client {
             String systemUsername = System.getProperty("user.name");
             String defaultNickname = "Guest_" + systemUsername;
             // Default-Nickname an den Server senden
-            ProtocolWriterClient.sendCommand(out, "NICK" + defaultNickname);
+            ProtocolWriterClient.sendCommand(out, "NICK " + defaultNickname);
 
             // Eingaben von der Konsole lesen
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
@@ -48,7 +48,7 @@ public class Client {
             String line = " ";
             while (true) {
                 line = conin.readLine();
-                if (line.equalsIgnoreCase("QUIT")) {
+                if (line.equalsIgnoreCase("QUIT ")) {
                     // Verbindung beenden
                     //protocolClient.leave(); odr so halt eifach das vom ProtocolReaderClient
                     break;
