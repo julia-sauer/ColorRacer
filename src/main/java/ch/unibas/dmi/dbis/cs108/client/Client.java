@@ -50,12 +50,8 @@ public class Client {
             String line = " ";
             while (true) {
                 line = conin.readLine();
-                if (line.equalsIgnoreCase("QUIT ")) {
-                    // Verbindung beendet
-                    System.out.println("Terminating ...");
-                    in.close();
-                    out.close();
-                    sock.close();
+                if (line.equalsIgnoreCase("leave")) {
+                    protocolClient.leave(out);
                     break;
                 } else if (line.startsWith("nicknamechange")){
                     // Überprüft, ob Benutzer nicknamechange eingegeben hat.
@@ -71,7 +67,7 @@ public class Client {
             out.close();
             sock.close();
         } catch (IOException e) {
-            System.err.println("Error: " + e.toString());
+            System.err.println("Error: " + e.getMessage());
         }
     }
 }
