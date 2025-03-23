@@ -93,6 +93,32 @@ public class ProtocolWriterClient {
             System.err.println("Error, could not send NICK " + newnickname + " to Server");
         }
     }
+
+    /**
+     * Sendet den JOIN-Befehl mit dem gewünschten Nicknamen an den Server.
+     * Der Server entscheidet, ob der Nickname akzeptiert oder verändert wird (z.B. bei Duplikaten).
+     *
+     * @param nickname Der vom Spieler eingegebene Nickname
+     * @author anasv
+     */
+    public void sendJoin(String nickname){
+        if (nickname == null || nickname.trim().isEmpty()) {
+            System.out.println("Nickname is null or empty!");
+            return;
+        }
+        if (nickname.length() > 15){
+            System.out.println("Nickname is too long");
+            return;
+        }
+        if (!nickname.matches("^[a-zA-Z0-9_]{3,15}$")) {
+            System.out.println("Nickname must be 3–15 characters, only letters, digits, or _");
+            return;
+        }
+        // Sendet: JOIN <nichname>
+        writer.println(Command.JOIN.name() + Command.SEPARATOR + nickname);
+        writer.flush();
+    }
+
 }
 
 
