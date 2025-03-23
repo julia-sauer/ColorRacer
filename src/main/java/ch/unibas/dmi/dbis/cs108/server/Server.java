@@ -1,6 +1,12 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
+import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderServer;
+import ch.unibas.dmi.dbis.cs108.network.Command;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.nio.charset.StandardCharsets;
 
 import java.net.*;
 import java.io.*;
@@ -12,6 +18,8 @@ import static java.lang.System.out;
 public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
+    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+
     /**
      * Startet einen Server, der auf Verbindungen wartet und stellt Netzwerkverbindung
      * von Client zu Server dar.
@@ -38,6 +46,13 @@ public class Server {
                 ClientHandler cH = new ClientHandler(activeClients.get(), clientSocket);
                 Thread cHT = new Thread(cH);
                 cHT.start();
+
+                PrintWriter clientWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8), true);
+                clientWriters.add(clientWriter);
+
+                ProtocolWriterServer writerServer = new ProtocolWriterServer(clientWriters);
+                ProtocolReaderServer readerServer = new ProtocolReaderServer(clientSocket.getInputStream(), userId, clientSocket.getOutputStream());
+
             }
 
         } catch (IOException e) {
@@ -131,6 +146,32 @@ public class Server {
             }
         }
     }
+
+    /**
+     * Diese Methode wird aufgerufen, wenn ein Client eine Chatnachricht sendet,
+     * die an alle verbundenen Clients weitergeleitet werden soll.
+     *
+     * <p>Die Methode erstellt eine vollständige Nachricht im Format:
+     * <pre>
+     * CHAT <sender>: <message>
+     * </pre>
+     * und verschickt diese über alle {@link PrintWriter}-Verbindungen,
+     * die im Server bekannt sind (Liste {@code clientWriters}).
+     *
+     * <p>Jeder Client wird somit benachrichtigt, dass eine neue Nachricht eingetroffen ist,
+     * inklusive des Namens des Absenders.
+     *
+     * @param message Die Chatnachricht, die der Client eingegeben hat.
+     * @param sender  Der Benutzername des Absenders.
+     */
+    public static void chatToAll(String message, String sender) {
+        String chatMessage = Command.CHAT.name() + " " + sender + ": " + message; // Formatiere die Nachricht gemäss Protokoll: CHAT <sender>: <message>
+        for (PrintWriter writer : clientWriters) { // Iteriere über alle registrierten Client-Ausgabeströme und sende die Nachricht
+            writer.println(chatMessage);
+            writer.flush();
+        }
+    }
+
 }
 
 
