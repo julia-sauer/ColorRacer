@@ -114,7 +114,7 @@ public class ProtocolWriterClient {
             System.out.println("Nickname must be 3–15 characters, only letters, digits, or _");
             return;
         }
-        // Sendet: JOIN <nichname>
+        // Sendet: JOIN <nickname>
         writer.println(Command.JOIN.name() + Command.SEPARATOR + nickname);
         writer.flush();
     }
