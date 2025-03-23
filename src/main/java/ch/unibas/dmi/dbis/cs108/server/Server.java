@@ -102,19 +102,36 @@ public class Server {
      * dass der Nickname geändert wurde.
      * @param userId
      * @param newNick
+     * @author milo
      */
     public static void changeNickname(int userId, String newNick) {
+        // Validierung des neuen Nicknamens (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
+        if (!newNick.matches("^[a-zA-Z0-9_]{3,15}$")) {
+            System.err.println("Ungültiger Nickname: " + newNick);
+            return;
+        }
+
+        // Überprüfung auf Duplikate und ggf. Anpassen mit Suffix
         String finalNick = newNick;
         int suffix = 1;
         while (UserList.containsUserName(finalNick)) {
-            finalNick = finalNick + suffix;
+            finalNick = newNick + suffix;
+            suffix++;
         }
+
+        // Nickname aktualisieren
         UserList.updateUserName(userId, finalNick);
-        try {
-            ProtocolWriterServer.sendCommand(out, "NICK" + finalNick);
-        } catch (IOException e) {
-            System.err.println("Error while sending NICK " + finalNick);
+
+        // Nachricht an den Client senden
+        User user = UserList.getUser(userId);
+        if (user != null) {
+            try {
+                ProtocolWriterServer.sendCommand(user.getOut(), "NICK" + finalNick);
+            } catch (IOException e) {
+                System.err.println("Fehler beim Senden von NICK " + finalNick + " an Benutzer " + userId);
+            }
         }
     }
 }
+
 
