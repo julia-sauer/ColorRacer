@@ -42,7 +42,12 @@ public class Client {
             // Default-Nickname an den Server senden
             ProtocolWriterClient.sendCommand(out, "NICK " + defaultNickname);
             System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
-
+            // DIE BEFEHLSÜBERSICHT:
+            System.out.println("Available commands:");
+            System.out.println("- connect <nickname>");
+            System.out.println("- nicknamechange <newnickname>");
+            System.out.println("- message <your message>");
+            System.out.println("- leave");
             // Eingaben von der Konsole lesen
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
             ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodeimplementation im WriterClient
