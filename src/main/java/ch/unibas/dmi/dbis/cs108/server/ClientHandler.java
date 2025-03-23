@@ -38,8 +38,12 @@ public class ClientHandler implements Runnable {
             in = clientSocket.getInputStream();
             out = clientSocket.getOutputStream();
 
+            // Starten des PingThreads
+            pingThread = new PingThread(clientSocket, clientNumber, in, out);
+            pingThread.start();
+
             // Erstellen Sie einen Thread für das Lesen von Nachrichten
-            ProtocolReaderServer protocolReader = new ProtocolReaderServer(in, clientNumber, out);
+            ProtocolReaderServer protocolReader = new ProtocolReaderServer(in, clientNumber, out, pingThread);
             Thread readerThread = new Thread(() -> {
                 try {
                     protocolReader.readLoop();
@@ -51,12 +55,6 @@ public class ClientHandler implements Runnable {
 
             String welcomeMsg = "Welcome to the Server!\n"; //Willkommensnachricht
             out.write(welcomeMsg.getBytes(StandardCharsets.UTF_8));
-
-
-            // Starten des PingThreads
-            pingThread = new PingThread(clientSocket, clientNumber, in, out);
-            pingThread.start();
-
 
             int c;
             while ((c = in.read()) != -1) {
