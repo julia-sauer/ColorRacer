@@ -76,14 +76,19 @@ public class ProtocolReaderServer {
                     System.out.println("JOIN empfangen von Benutzer-ID " + userId);
                     // Logik zum Behandeln von JOIN
                     break;
+                /**
+                 * Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
+                 */
+                case NICK:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Fehlender Nickname von Benutzer-ID " + userId);
+                        break;
+                    }
+                    String newNick = parts[1].trim();
+                    Server.changeNickname(userId, newNick);
+                    break;
 
-                //case NICK:
-                // if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                //System.err.println("Fehlender Nickname von Benutzer-ID " + userId);
-                //break;
-                //}
-                //String newNick = parts[1].trim();
-                // UserList.updateUserName(userId, newNick); // // Diese Methode muss existieren!!!
+                // UserList.updateUserName(userId, newNick); // Diese Methode muss existieren!!!
                 // System.out.println("Benutzer-ID " + userId + " setzt Nickname auf " + newNick);
                 // break;
 
@@ -126,15 +131,6 @@ public class ProtocolReaderServer {
                     System.out.println("Unbekannter Befehl von Benutzer-ID " + userId + ": " + line);
                     break;
             }
-        }
-    }
-    public static String readCommand(InputStream in) {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            return reader.readLine();
-        } catch (IOException e) {
-            System.out.println("Error in reading command");
-            return null; // Gibt null zurück, wenn ein Fehler auftritt
         }
     }
 }
