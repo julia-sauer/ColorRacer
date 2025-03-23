@@ -86,7 +86,7 @@ public class ProtocolReaderServer {
                     }
                     String newNick = parts[1].trim();
                     if (!newNick.matches("^[a-zA-Z0-9_]{3,15}$")) {
-                        System.err.println("Ungültiger Nickname: " + newNick);
+                        System.err.println("Invalid nickname: " + newNick);
                         break;
                     }
                     String finalNick = newNick;
