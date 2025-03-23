@@ -67,6 +67,7 @@ public class ClientHandler implements Runnable {
      * @author milo
      */
     private void removeUser(int clientNumber) {
+
         UserList.removeUser(clientNumber);
     }
 }
