@@ -145,14 +145,14 @@ public class ProtocolReaderServer {
                     break;
 
                 case QUIT:
-                    System.out.println("QUIT empfangen von Benutzer-ID " + userId);
+                    System.out.println("Received QUIT from user ID " + userId);
                     // Benutzer entfernen
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();
                     break;
 
                 default:
-                    System.out.println("Unbekannter Befehl von Benutzer-ID " + userId + ": " + line);
+                    System.out.println("Unknown command from user ID " + userId + ": " + line);
                     break;
             }
         }
