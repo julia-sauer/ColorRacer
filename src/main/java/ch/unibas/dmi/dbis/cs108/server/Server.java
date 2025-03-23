@@ -53,7 +53,7 @@ public class Server {
      */
     public static int addNewUser(String userName) { // Neue Methode
 
-        return UserList.addUser(userName);
+        return UserList.addUser(userName, out);
     }
 
     /**
