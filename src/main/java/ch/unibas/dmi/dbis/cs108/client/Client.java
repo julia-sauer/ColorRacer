@@ -2,17 +2,30 @@ package ch.unibas.dmi.dbis.cs108.client;
 
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
-
 import java.net.*;
 import java.io.*;
 
+/**
+ * Die Client-Klasse stellt eine Verbindung zu einem Server her und ermöglicht die Kommunikation über ein Netzwerk.
+ * Diese Klasse verwendet das ProtocolReaderClient- und ProtocolWriterClient-Objekt, um Nachrichten zu lesen und zu senden.
+ *
+ */
 public class Client {
+    /**
+     * Die main-Methode initialisiert die Verbindung zum Server und startet einen Thread, um Nachrichten zu lesen.
+     * Sie liest auch Eingaben von der Konsole und sendet entsprechende Befehle an den Server.
+     *
+     * @param args Argumente, die die Hostadresse und den Port des Servers enthalten.
+     * @author Julia
+     */
     public static void main(String[] args) {
         try {
+            // Verbindung zum Server herstellen
             Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
             InputStream in = sock.getInputStream();
             OutputStream out= sock.getOutputStream();
 
+            // ProtocolReaderClient-Objekt erstellen und Thread starten
             ProtocolReaderClient protocolReader = new ProtocolReaderClient(in, out);
             Thread readerThread = new Thread(() -> {
                 try{
@@ -23,7 +36,7 @@ public class Client {
             });
             readerThread.start();
 
-            // stream input
+            // Eingaben von der Konsole lesen
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
             ProtocolReaderClient protocolClient = new ProtocolReaderClient(in, out);
             String line = " ";
@@ -31,15 +44,18 @@ public class Client {
                 // reading input stream
                 line = conin.readLine();
                 if (line.equalsIgnoreCase("QUIT")) {
+                    // Verbindung beenden
                     //sendQuitMessage(); odr so halt eifach das vom ProtocolReaderClient
                     break;
-                } else if (line.startsWith("nicknamechange")){ //Überprüft, ob Benutzer nicknamechange eingegeben hat.
+                } else if (line.startsWith("nicknamechange")){
+                    //Überprüft, ob Benutzer nicknamechange eingegeben hat.
                     protocolClient.changeNickname(line.substring(15));
                 } else if(line.equals("PING ")){
+                    // PONG-Antwort senden
                     ProtocolWriterClient.sendCommand(out, "PONG");
                 }
             }
-            // terminate program
+            // Programm beenden
             System.out.println("Terminating ...");
             in.close();
             out.close();
