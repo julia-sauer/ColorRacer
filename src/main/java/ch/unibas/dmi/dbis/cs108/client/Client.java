@@ -36,23 +36,25 @@ public class Client {
             });
             readerThread.start();
 
+            // System-Benutzername abrufen
+            String systemUsername = System.getProperty("user.name");
+            String defaultNickname = "Guest_" + systemUsername;
+            // Default-Nickname an den Server senden
+            ProtocolWriterClient.sendCommand(out, "NICK" + defaultNickname);
+
             // Eingaben von der Konsole lesen
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
             ProtocolReaderClient protocolClient = new ProtocolReaderClient(in, out);
             String line = " ";
             while (true) {
-                // reading input stream
                 line = conin.readLine();
                 if (line.equalsIgnoreCase("QUIT")) {
                     // Verbindung beenden
-                    //sendQuitMessage(); odr so halt eifach das vom ProtocolReaderClient
+                    //protocolClient.leave(); odr so halt eifach das vom ProtocolReaderClient
                     break;
-                } else if (line.startsWith("nicknamechange")){
+                } else if (line.startsWith("/nick")){
                     //Überprüft, ob Benutzer nicknamechange eingegeben hat.
                     protocolClient.changeNickname(line.substring(15));
-                } else if(line.equals("PING ")){
-                    // PONG-Antwort senden
-                    ProtocolWriterClient.sendCommand(out, "PONG");
                 }
             }
             // Programm beenden

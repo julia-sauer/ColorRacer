@@ -14,11 +14,25 @@ public class ClientHandler implements Runnable {
     private InputStream in;
     private OutputStream out;
 
+    /**
+     * Konstruktor von der Klasse ClientHandler
+     * @param clientNumber
+     * @param socket
+     */
     public ClientHandler(int clientNumber, Socket socket) {
         this.clientNumber = clientNumber;
         this.clientSocket = socket;
     }
 
+    /**
+     * Startet eine ProtocolReader für Server
+     * Gibt Willkommensnachricht aus
+     * Startet den PingThread und somit den Ping-Pong-Mechanismus
+     * int c + while-loop ist von EchoServer, also das was hereinkommt wird auch wieder ausgegeben
+     * wenn in.read = -1, also der Client den Server verlassen hat wird der ClientSocket beendet.
+     * Und der User wird von der UserList genommen und der Server wird benachrichtigt, dass ein Client gegangen ist.
+     * @author Jana
+     */
     public void run() {
         try {
             in = clientSocket.getInputStream();
