@@ -5,6 +5,7 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderServer;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
@@ -35,7 +36,8 @@ public class ClientHandler implements Runnable {
             readerThread.start();
 
             String welcomeMsg = "Welcome to the Server!\n"; //Willkommensnachricht
-            out.write(welcomeMsg.getBytes());
+            out.write(welcomeMsg.getBytes(StandardCharsets.UTF_8));
+
 
             // Starten des PingThreads
             pingThread = new PingThread(clientSocket, clientNumber, in, out);
@@ -45,7 +47,7 @@ public class ClientHandler implements Runnable {
             int c;
             while ((c = in.read()) != -1) {
                 out.write((char)c);
-                System.out.print((char)c);
+                out.write((String.valueOf((char) c)).getBytes(StandardCharsets.UTF_8));
             }
 
             System.out.println("Connection closed for Client " + clientNumber);
