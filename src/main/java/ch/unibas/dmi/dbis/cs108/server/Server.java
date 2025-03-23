@@ -118,7 +118,14 @@ public class Server {
     public static void changeNickname(int userId, String newNick) {
         // Validierung des neuen Nicknames (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
         if (!newNick.matches("^[a-zA-Z0-9_]{3,15}$")) {
-            System.err.println("Invalid nickname: " + newNick);
+            User user = UserList.getUser(userId);
+            if (user != null) {
+                try {
+                    ProtocolWriterServer.sendCommand(user.getOut(), "CHATInvalid nickname! Must be 3–15 characters, using only letters, numbers, or underscores.");
+                } catch (IOException e) {
+                    System.err.println("Error sending nickname validation message to user " + userId);
+                }
+            }
             return;
         }
 
