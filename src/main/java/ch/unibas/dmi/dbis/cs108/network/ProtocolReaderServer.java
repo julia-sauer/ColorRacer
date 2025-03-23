@@ -115,12 +115,12 @@ public class ProtocolReaderServer {
                     // Aufruf der chatToAll methode für das senden von einer Chatnachricht an alle Clients
                 case CHAT:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Leere Chat-Nachricht von Benutzer-ID " + userId);
+                        System.err.println("Empty chat message from user ID " + userId);
                         break;
                     }
                     String message = parts[1].trim();
                     if (message.length() > 500) {
-                        System.err.println("Empty chat message from user ID " + userId);
+                        System.err.println("Message too long from user ID " + userId);
                         break;
                     }
                     String sender = UserList.getUserName(userId);
