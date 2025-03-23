@@ -1,8 +1,12 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
+import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
+
 import java.net.*;
 import java.io.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.lang.System.out;
 
 
 public class Server {
@@ -22,14 +26,14 @@ public class Server {
      */
     public static void main(String[] args) {
         try {
-            System.out.println("Waiting for port 8090...");
+            out.println("Waiting for port 8090...");
             echod = new ServerSocket(8090);
 
             while (true) {
                 Socket clientSocket = echod.accept();
                 activeClients.incrementAndGet();
                 int userId = addNewUser("Client" + activeClients.get()); // Änderung: Aufruf der neuen Methode
-                System.out.println("Connection established for Client: " + activeClients.get());
+                out.println("Connection established for Client: " + activeClients.get());
 
                 ClientHandler cH = new ClientHandler(activeClients.get(), clientSocket);
                 Thread cHT = new Thread(cH);
@@ -52,17 +56,23 @@ public class Server {
         return UserList.addUser(userName);
     }
 
+    /**
+     * Informiert den Server, dass ein Client gegangen ist.
+     * Die aktiven Clients werden um 1 reuziert und es wird ausgegeben wie viel Clients noch aktiv sind.
+     * Falls es keine aktiven Clients mehr gibt, wird ein Tread gestartet der 60s auf neue Clients wartet.
+     * Nach 60s wird der Server abgeschalten.
+     */
     public static void ClientDisconnected() {
         activeClients.decrementAndGet();
-        System.out.println("Remaining Clients: " + activeClients.get());
+        out.println("Remaining Clients: " + activeClients.get());
 
         if (activeClients.get() == 0) {
-            System.out.println("Wait 60 seconds for new clients...");
+            out.println("Wait 60 seconds for new clients...");
             new Thread(() -> {
                 try {
                     Thread.sleep(60000);
                     if (activeClients.get() == 0) {
-                        System.out.println("No new clients. Server is shutting down.");
+                        out.println("No new clients. Server is shutting down.");
                         shutdownServer();
                     }
                 } catch (InterruptedException ignored) {}
@@ -70,6 +80,10 @@ public class Server {
         }
     }
 
+    /**
+     * Schaltet den Server ab.
+     * @author Jana
+     */
     public static void shutdownServer() {
         try {
             echod.close();
@@ -77,6 +91,29 @@ public class Server {
         }
         catch (IOException e) {
             System.err.println("Fehler beim Schliessen des Servers: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Ändert den Nickname eines Users.
+     * Überprüft mit Hilfe UserList, ob Nickname bereis vorhanden uns fügt eine 1 hinzu falls ja.
+     * Ruft dann sendCommand von ProtocolWriterServer auf, der die Nachricht an den Client sendet,
+     * dass der Nickname geändert wurde.
+     * @param userId
+     * @param newNick
+     */
+    public static void changeNickname(int userId, String newNick) {
+        String finalNick = newNick;
+        int suffix = 1;
+        while (UserList.containsUserName(finalNick)) {
+            finalNick = finalNick + suffix;
+        }
+        UserList.updateUserName(userId, finalNick);
+        try {
+            ProtocolWriterServer.sendCommand(out, "NICK" + finalNick);
+        } catch (IOException e) {
+            System.err.println("Error while sending NICK " + finalNick);
         }
     }
 }
