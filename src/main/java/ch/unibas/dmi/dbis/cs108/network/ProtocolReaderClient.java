@@ -51,6 +51,18 @@ public class ProtocolReaderClient {
                     ProtocolWriterClient.sendCommand(out, "PONG");
                     break;
 
+                /**
+                 * Wenn Comman NICK erkannt wird, wird ausgegeben, zu was der Nickname gewechselt wrude.
+                 */
+                case NICK:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Fehler: Kein Nickname erhalten.");
+                        break;
+                    }
+                    String newNick = parts[1].trim();
+                    System.out.println("Nickname changed to " + newNick);
+                    break;
+
                 default:
                     System.out.println("Unbekannter Befehl von Server: " + line);
                     break;
@@ -58,15 +70,21 @@ public class ProtocolReaderClient {
         }
     }
 
-    public static String readCommand(InputStream in) {
+    /**
+     * Diese Methode wird von Client aufgerufen, wenn nicknamechange vom Benutzer eingegeben wrid.
+     * Diese Methode ruft dann im ProtocolWriterClient die Methode sendCommand auf mit den Parametern
+     * out, NICK und den newnickname
+     * @param newnickname
+     * @ Jana
+     */
+    public void changeNickname(String newnickname) {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            return reader.readLine();
+            ProtocolWriterClient.sendCommand(out, "NICK" + newnickname);
         } catch (IOException e) {
-            System.out.println("Error in reading command");
-            return null; // Gibt null zurück, wenn ein Fehler auftritt
+            System.err.println("Error, could not send NICK " + newnickname + " to Server");
         }
     }
+
 
     public void pingCheck() {
         long startTime = System.currentTimeMillis();
