@@ -41,6 +41,7 @@ public class Client {
             String defaultNickname = "Guest_" + systemUsername;
             // Default-Nickname an den Server senden
             ProtocolWriterClient.sendCommand(out, "NICK " + defaultNickname);
+            System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
 
             // Eingaben von der Konsole lesen
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
