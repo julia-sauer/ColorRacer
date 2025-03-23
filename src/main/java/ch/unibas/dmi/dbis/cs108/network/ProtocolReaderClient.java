@@ -97,14 +97,4 @@ public class ProtocolReaderClient {
         System.out.println("+CHT " + sender + ": " + message);
     }
 
-
-    public void pingCheck() {
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < 15000) {
-
-        }
-        if (System.currentTimeMillis() - startTime >= 15000) {
-            System.out.println("Connection timed out for Server.");
-        }
-    }
 }
