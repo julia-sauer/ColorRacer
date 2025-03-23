@@ -25,6 +25,7 @@ public class ProtocolReaderServer {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
     private final int userId; // Die ID des Clients, der aktuell mit dem Server verbunden ist.
     private final OutputStream out;
+    private final PingThread pingThread;  // added reference
 
     /**
      * Konstruktor: Initialisiert den BufferedReader und die Benutzer-ID.
@@ -33,11 +34,12 @@ public class ProtocolReaderServer {
      * @param userId die eindeutige ID des Benutzers.
      * @throws IOException wenn ein Fehler beim Erstellen des BufferedReaders auftritt.
      */
-    public ProtocolReaderServer(InputStream in, int userId, OutputStream out) throws IOException {
+    public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread) throws IOException {
         // Initialisierung des BufferedReaders
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         this.userId = userId;
         this.out = out;
+        this.pingThread = pingThread;
     }
 
     /**
@@ -47,8 +49,8 @@ public class ProtocolReaderServer {
      * <p> Jede Nachricht muss mit einem der definierten {@link Command}-Enum-Werte beginnen.
      * Die Methode dekodiert diese Befehle und führt die entsprechende Serveraktion aus.
      * <p>
-     * Das verarbeiten der Netzwerkbefehle erfolgt mit switch-Statements, die der Server von einem
-     * Client erhält. Jeder Befehl (zB. CHAT, NICK, PING, ...) wird als Textzeile vom Client geschickt.
+     * Das Verarbeiten der Netzwerkbefehle erfolgt mit switch-Statements, die der Server von einem
+     * Client erhält. Jeder Befehl (z.B. CHAT, NICK, PING, ...) wird als Textzeile vom Client geschickt.
      * Der Server analysiert die Zeile, erkennt den Befehl (das erste Wort), und führt passende
      * Aktionen aus.
      * </p>
@@ -118,7 +120,9 @@ public class ProtocolReaderServer {
                 case PONG:
                     System.out.println("PONG received from Client " + userId);
                     // Verbindung ist aktiv, kein Timeout nötig
-                    PingThread.pongReceived(out, userId);
+                    if (pingThread != null) {
+                        pingThread.notifyPong();  // notify the ping thread that the PONG was received
+                    }
                     break;
 
                 case QUIT:
