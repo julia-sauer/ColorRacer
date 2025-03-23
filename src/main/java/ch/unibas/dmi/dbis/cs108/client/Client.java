@@ -52,7 +52,7 @@ public class Client {
                     // Verbindung beenden
                     //protocolClient.leave(); odr so halt eifach das vom ProtocolReaderClient
                     break;
-                } else if (line.startsWith("/nick")){
+                } else if (line.startsWith("nicknamechange")){
                     //Überprüft, ob Benutzer nicknamechange eingegeben hat.
                     protocolClient.changeNickname(line.substring(15));
                 }
