@@ -5,6 +5,11 @@ import ch.unibas.dmi.dbis.cs108.server.UserList;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.IOException;
 
 public class ProtocolReaderClient {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
@@ -17,6 +22,17 @@ public class ProtocolReaderClient {
         this.out = out;
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
+
+    /**
+     * Die Methode {@code readLoop} liest kontinuierlich Zeilen vom Server
+     * <p>Im Fall eines {@code CHAT}-Befehls wird die empfangene Nachricht analysiert, und anschließend
+     * durch {@link #displayChat(String, String)} angezeigt.</p>
+     * Format für CHAT-Nachrichten vom Server:
+     * <pre>
+     * CHAT <sender> <message>
+     * </pre>
+     * @throws IOException  IOException Wenn ein Lesefehler vom Server auftritt
+     */
     public void readLoop() throws IOException {
         String line;
         while ((line = reader.readLine()) != null) {
@@ -37,12 +53,14 @@ public class ProtocolReaderClient {
             switch (command) {
 
                 case CHAT:
-                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Leere Chat-Nachricht von Server.");
+                    // Erwartetes Format: CHAT <sender> <message>
+                    if (parts.length < 3) {
+                        System.err.println("Unvollständige Chat-Nachricht vom Server.");
                         break;
                     }
-                    String message = parts[1].trim();
-                    System.out.println("Nachricht erhalten: " + message);
+                    String sender = parts[1];
+                    String message = parts[2];
+                    displayChat(message, sender);
                     break;
 
                 case PING:
@@ -68,6 +86,16 @@ public class ProtocolReaderClient {
                     break;
             }
         }
+    }
+
+    /**
+     * Gibt eine empfangene Chatnachricht formatiert in der Konsole aus.
+     * @param message Die eigentliche Chatnachricht.
+     * @param sender  Der Benutzername des Absenders.
+     * @author anasv
+     */
+    private void displayChat(String message, String sender) {
+        System.out.println("+CHT " + sender + ": " + message);
     }
 
     /**
