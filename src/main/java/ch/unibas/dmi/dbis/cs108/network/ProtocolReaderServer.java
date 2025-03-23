@@ -79,9 +79,9 @@ public class ProtocolReaderServer {
                  * Der Client sendet JOIN <nickname>, um dem Server beizutreten.
                  */
                 case JOIN: {
-                    System.out.println("Joining " + userId);
+                    System.out.println("User " + userId + " is joining...");
                     if (parts.length < 2 || parts[1].trim().isEmpty()){
-                        System.err.println("Fehlender Nickname von Benutzer-ID " + userId);
+                        System.err.println("Missing nickname from user ID " + userId);
                         break;
                     }
                     String newNick = parts[1].trim();
