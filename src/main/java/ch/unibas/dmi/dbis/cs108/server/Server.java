@@ -93,8 +93,7 @@ public class Server {
             System.err.println("Fehler beim Schliessen des Servers: " + e.getMessage());
         }
     }
-
-
+    
     /**
      * Ändert den Nickname eines Users.
      * Überprüft mit Hilfe UserList, ob Nickname bereis vorhanden uns fügt eine 1 hinzu falls ja.
