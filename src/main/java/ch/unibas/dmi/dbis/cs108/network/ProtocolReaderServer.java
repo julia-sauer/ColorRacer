@@ -2,6 +2,7 @@ package ch.unibas.dmi.dbis.cs108.network;
 
 import ch.unibas.dmi.dbis.cs108.server.Server;
 import ch.unibas.dmi.dbis.cs108.server.UserList;
+import ch.unibas.dmi.dbis.cs108.server.PingThread;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -112,8 +113,7 @@ public class ProtocolReaderServer {
                 case PONG:
                     System.out.println("PONG erhalten von Benutzer-ID " + userId);
                     // Verbindung ist aktiv, kein Timeout nötig
-                    ProtocolWriterServer.sendCommand(out, "PING");
-                    pongCheck();
+                    PingThread.pongReceived(out, userId);
                     break;
 
                 case QUIT:
@@ -135,18 +135,6 @@ public class ProtocolReaderServer {
         } catch (IOException e) {
             System.out.println("Error in reading command");
             return null; // Gibt null zurück, wenn ein Fehler auftritt
-        }
-    }
-
-    public void pongCheck() {
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < 15000) {
-
-        }
-        if (System.currentTimeMillis() - startTime >= 15000) {
-            System.out.println("Connection timed out for Client " + userId);
-            UserList.removeUser(userId);
-            Server.ClientDisconnected();
         }
     }
 }
