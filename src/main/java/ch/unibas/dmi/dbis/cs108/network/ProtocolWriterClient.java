@@ -94,6 +94,14 @@ public class ProtocolWriterClient {
         }
     }
 
+    public void leave(OutputStream out) {
+        try {
+            sendCommand(out, "QUIT ");
+        } catch (IOException e) {
+            System.err.println("Error, could not send QUIT to Server");
+        }
+    }
+
     /**
      * Sendet den JOIN-Befehl mit dem gewünschten Nicknamen an den Server.
      * Der Server entscheidet, ob der Nickname akzeptiert oder verändert wird (z.B. bei Duplikaten).
