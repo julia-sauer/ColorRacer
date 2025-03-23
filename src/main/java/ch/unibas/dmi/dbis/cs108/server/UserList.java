@@ -48,4 +48,23 @@ public class UserList {
     public static int getUserCount() {
         return userMap.size();
     }
+
+    /**
+     * Überprüft ob ein Nickname bereits vorhanden ist in UserList.
+     * @param nickname
+     * @author Jana
+     */
+    public static boolean containsUserName (String nickname) {
+        return userMap.containsValue(nickname);
+    }
+
+    /**
+     * Änder den Nickname von User gemäss UserId zu newNickname
+     * @param userId
+     * @param newNickname
+     * @author Jana
+     */
+    public static void updateUserName(int userId, String newNickname) {
+        userMap.put(userId, newNickname);
+    }
 }
