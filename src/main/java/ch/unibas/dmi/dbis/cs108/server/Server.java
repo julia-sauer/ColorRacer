@@ -25,7 +25,7 @@ public class Server {
      * von Client zu Server dar.
      * ServerSocket erstellt einen Server (hier: echod) der auf Port 8090 läuft.
      * echod.accept(); wartet bis sich Client verbindet.
-     * Sobald sich ein Client verbunden hat wird "Connection established" ausgegeben.
+     * Sobald sich ein Client verbunden hat, wird "Connection established" ausgegeben.
      * while-Schleife: Solange bis Client Verbindung beendet. Speichert was von Client kommt in c
      * und gibt genau das Gleiche zurück (out.write).
      * Wenn Client Verbindung beendet geht es aus while-Schleife, dann wir Verbindung zu Client beendet
@@ -50,9 +50,6 @@ public class Server {
                 PrintWriter clientWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8), true);
                 clientWriters.add(clientWriter);
 
-                ProtocolWriterServer writerServer = new ProtocolWriterServer(clientWriters);
-                ProtocolReaderServer readerServer = new ProtocolReaderServer(clientSocket.getInputStream(), userId, clientSocket.getOutputStream());
-
             }
 
         } catch (IOException e) {
@@ -73,9 +70,9 @@ public class Server {
 
     /**
      * Informiert den Server, dass ein Client gegangen ist.
-     * Die aktiven Clients werden um 1 reuziert und es wird ausgegeben wie viel Clients noch aktiv sind.
-     * Falls es keine aktiven Clients mehr gibt, wird ein Tread gestartet der 60s auf neue Clients wartet.
-     * Nach 60s wird der Server abgeschalten.
+     * Die aktiven Clients werden um 1 reduziert und es wird ausgegeben wie viel Clients noch aktiv sind.
+     * Falls es keine aktiven Clients mehr gibt, wird ein Thread gestartet der 60s auf neue Clients wartet.
+     * Nach 60s wird der Server abgeschaltet.
      */
     public static void ClientDisconnected() {
         activeClients.decrementAndGet();
@@ -111,7 +108,7 @@ public class Server {
     
     /**
      * Ändert den Nickname eines Users.
-     * Überprüft mit Hilfe UserList, ob Nickname bereis vorhanden uns fügt eine 1 hinzu falls ja.
+     * Überprüft mit Hilfe UserList, ob Nickname bereits vorhanden uns fügt eine 1 hinzu falls ja.
      * Ruft dann sendCommand von ProtocolWriterServer auf, der die Nachricht an den Client sendet,
      * dass der Nickname geändert wurde.
      * @param userId
@@ -119,7 +116,7 @@ public class Server {
      * @author milo
      */
     public static void changeNickname(int userId, String newNick) {
-        // Validierung des neuen Nicknamens (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
+        // Validierung des neuen Nicknames (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
         if (!newNick.matches("^[a-zA-Z0-9_]{3,15}$")) {
             System.err.println("Invalid nickname: " + newNick);
             return;
