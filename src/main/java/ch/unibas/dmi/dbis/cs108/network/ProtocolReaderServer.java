@@ -120,7 +120,7 @@ public class ProtocolReaderServer {
                     }
                     String message = parts[1].trim();
                     if (message.length() > 500) {
-                        System.err.println("Nachricht zu lang von Benutzer-ID " + userId);
+                        System.err.println("Empty chat message from user ID " + userId);
                         break;
                     }
                     String sender = UserList.getUserName(userId);
