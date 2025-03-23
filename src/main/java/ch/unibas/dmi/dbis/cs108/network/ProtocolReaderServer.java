@@ -129,6 +129,7 @@ public class ProtocolReaderServer {
                     System.out.println("QUIT empfangen von Benutzer-ID " + userId);
                     // Benutzer entfernen
                     UserList.removeUser(userId);
+                    Server.ClientDisconnected();
                     break;
 
                 default:

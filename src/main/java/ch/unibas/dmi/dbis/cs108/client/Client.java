@@ -79,7 +79,7 @@ public class Client {
             out.close();
             sock.close();
         } catch (IOException e) {
-            System.err.println("Error: " + e.toString());
+            System.err.println("Error: " + e.getMessage());
         }
     }
 }
