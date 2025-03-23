@@ -106,7 +106,7 @@ public class ProtocolReaderServer {
                  */
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Fehlender Nickname von Benutzer-ID " + userId);
+                        System.err.println("missing nickname of userId" + userId);
                         break;
                     }
                     String newNick = parts[1].trim();
