@@ -44,7 +44,6 @@ public class Client {
 
             // Eingaben von der Konsole lesen
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
-            //ProtocolReaderClient protocolClient = new ProtocolReaderClient(in, out); --> esch FALSCH
             ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodeimplementation im WriterClient
 
             String line = " ";
@@ -56,7 +55,7 @@ public class Client {
                     break;
                 } else if (line.startsWith("nicknamechange")){
                     // Überprüft, ob Benutzer nicknamechange eingegeben hat.
-                    protocolClient.changeNickname(line.substring(15)); //sollte im WriterClient implementiert sein
+                    protocolClient.changeNickname(line.substring(15), out); //sollte im WriterClient implementiert sein
                 } else {
                     // Sendet eine Chat-Nachricht an den Server, die dann an alle verbundenen Clients weitergeleitet wird.
                     protocolClient.sendChat(line);
