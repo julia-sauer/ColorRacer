@@ -127,7 +127,7 @@ public class ProtocolReaderServer {
                     if (sender != null) {
                         Server.chatToAll(message, sender);
                     } else {
-                        System.err.println("Unbekannter Benutzer-ID: " + userId);
+                        System.err.println("Unknown user ID: " + userId);
                     }
                     break;
 
