@@ -44,17 +44,22 @@ public class Client {
 
             // Eingaben von der Konsole lesen
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
-            ProtocolReaderClient protocolClient = new ProtocolReaderClient(in, out);
+            //ProtocolReaderClient protocolClient = new ProtocolReaderClient(in, out); --> esch FALSCH
+            ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodeimplementation im WriterClient
+
             String line = " ";
             while (true) {
                 line = conin.readLine();
                 if (line.equalsIgnoreCase("QUIT ")) {
                     // Verbindung beenden
-                    //protocolClient.leave(); odr so halt eifach das vom ProtocolReaderClient
+                    // protocolClient.leave(); odr so halt eifach das vom ProtocolReaderClient
                     break;
                 } else if (line.startsWith("nicknamechange")){
-                    //Überprüft, ob Benutzer nicknamechange eingegeben hat.
-                    protocolClient.changeNickname(line.substring(15));
+                    // Überprüft, ob Benutzer nicknamechange eingegeben hat.
+                    protocolClient.changeNickname(line.substring(15)); //sollte im WriterClient implementiert sein
+                } else {
+                    // Sendet eine Chat-Nachricht an den Server, die dann an alle verbundenen Clients weitergeleitet wird.
+                    protocolClient.sendChat(line);
                 }
             }
             // Programm beenden
