@@ -65,7 +65,7 @@ public class ProtocolReaderClient {
 
                 case PING:
                     System.out.println("PING received from Server.");
-                    ProtocolWriterClient.sendCommand(out, "PONG");
+                    ProtocolWriterClient.sendCommand(out, "PONG ");
                     break;
 
                 /**
