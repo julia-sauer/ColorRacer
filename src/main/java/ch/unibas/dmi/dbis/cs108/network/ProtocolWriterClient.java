@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * Die Klasse {@code ProtocolWriterClient} wandelt die Spieler Eingaben in die entsprechenden
- * Protokollbefehle um, die in den Commands definiert sind und sendet sie wenn nötig an den Server weiter.
+ * Protokollbefehle um, die in den Commands definiert sind und sendet sie, wenn nötig, an den Server weiter.
  *
  * <p>Spielereingaben und zugehörige Protokollbefehle:
  *  * <ul>
@@ -19,7 +19,7 @@ import java.io.IOException;
  *  *     <li>{@code nicknamechange} → {@code NICK}</li>
  *  * </ul>
  * <p>
- * Diese Klasse verwedet die UFT-8-Kodierung, um eine Plattforübergreifende Kommunikaton sicherzustellen.
+ * Diese Klasse verwendet die UFT-8-Kodierung, um eine plattformübergreifende Kommunikation sicherzustellen.
  */
 public class ProtocolWriterClient {
     /**
@@ -30,7 +30,7 @@ public class ProtocolWriterClient {
 
 
     /**
-     * Konstruktor: Intialisiert den {@code PrintWriter} mit UFT-8.
+     * Konstruktor: Initialisiert den {@code PrintWriter} mit UFT-8.
      * @param outputStream der OutputStream, an den die Nachrichten gesendet werden sollen.
      * @throws IOException wenn ein Fehler beim Erstellen des PrintWriters auftritt.
      *
@@ -42,7 +42,7 @@ public class ProtocolWriterClient {
 
     /**
      * Die Methode {@code sendChat} wird für den Chat verwendet.
-     * Sie wandelt eine vom Spieler eingegebene Chatnachricht (zB. {@code message Hallo!}) in einen gültigen
+     * Sie wandelt eine vom Spieler eingegebene Chatnachricht (z.B. {@code message Hallo!}) in einen gültigen
      * Protokollbefehl des Formats {@code CHAT <message>} um und sendet sie an den Server.
      * <p>
      * @param message Die Nachricht, die vom Benutzer eingegeben wurde.
@@ -65,24 +65,19 @@ public class ProtocolWriterClient {
     /**
      * Sendet den Command auf dem gewünschten OutputStream.
      *
-     * @param out
-     * @param command
+     * @param out der OutputStream zum Senden eines Commands
+     * @param command der Command-String zum Senden
      * @throws IOException wenn die Nachricht nicht gesendet werden konnte.
      * @author Julia
      */
     public static void sendCommand(OutputStream out, String command) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
-        try {
-            writer.write(command + Command.SEPARATOR);
-            writer.flush();
-            System.out.println(command + " sent");
-        } catch (IOException e) {
-            System.err.println("Error, Could not send Command");
-        }
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
+        pw.println(command);
+        System.out.println(command + " sent");
     }
 
     /**
-     * Ruft sendCommand auf für den Command NICK um den neuen Nickname dem Server zu senden.
+     * Ruft sendCommand auf für den Command NICK, um den neuen Nickname dem Server zu senden.
      * @param newnickname
      * @param out
      */
