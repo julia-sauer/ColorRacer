@@ -28,6 +28,7 @@ public class ProtocolWriterClient {
      */
     private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
 
+
     /**
      * Konstruktor: Intialisiert den {@code PrintWriter} mit UFT-8.
      * @param outputStream der OutputStream, an den die Nachrichten gesendet werden sollen.
@@ -37,6 +38,7 @@ public class ProtocolWriterClient {
     public ProtocolWriterClient(OutputStream outputStream) throws IOException {
         writer = new PrintWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8), true);
     }
+
 
     /**
      * Die Methode {@code sendChat} wird für den Chat verwendet.
@@ -78,4 +80,19 @@ public class ProtocolWriterClient {
             System.err.println("Error, Could not send Command");
         }
     }
+
+    /**
+     * Ruft sendCommand auf für den Command NICK um den neuen Nickname dem Server zu senden.
+     * @param newnickname
+     * @param out
+     */
+    public void changeNickname(String newnickname, OutputStream out) {
+        try {
+            sendCommand(out, "NICK" + newnickname);
+        } catch (IOException e) {
+            System.err.println("Error, could not send NICK " + newnickname + " to Server");
+        }
+    }
 }
+
+
