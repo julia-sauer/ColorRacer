@@ -31,7 +31,7 @@ public class Client {
                 try{
                     protocolReader.readLoop();
                 } catch (IOException e) {
-                    System.err.println("Fehler beim Lesen von Nachrichten: " + e.getMessage());
+                    System.err.println("Error when reading messages: " + e.getMessage());
                 }
             });
             readerThread.start();
