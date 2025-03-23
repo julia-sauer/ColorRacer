@@ -44,7 +44,7 @@ public class ClientHandler implements Runnable {
                 try {
                     protocolReader.readLoop();
                 } catch (IOException e) {
-                    System.err.println("Fehler beim Lesen von Nachrichten von Client " + clientNumber + ": " + e.getMessage());
+                    System.err.println("Error when reading the message from Client " + clientNumber + ": " + e.getMessage());
                 }
             });
             readerThread.start();
@@ -72,7 +72,7 @@ public class ClientHandler implements Runnable {
 
         }
         catch (IOException e) {
-            System.err.println("Fehler bei Client " + clientNumber + ": " + e.getMessage());
+            System.err.println("Error with Client " + clientNumber + ": " + e.getMessage());
         }
     }
     /**
