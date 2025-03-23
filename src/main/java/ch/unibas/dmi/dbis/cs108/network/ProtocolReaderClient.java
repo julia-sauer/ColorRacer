@@ -53,14 +53,12 @@ public class ProtocolReaderClient {
             switch (command) {
 
                 case CHAT:
-                    // Erwartetes Format: CHAT <sender> <message>
-                    if (parts.length < 3) {
-                        System.err.println("Incomplete chat message from the server.");
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        out.write("CHAT received: [empty]\n".getBytes(StandardCharsets.UTF_8));
                         break;
                     }
-                    String sender = parts[1];
-                    String message = parts[2];
-                    displayChat(message, sender);
+                    String message = parts[1].trim();
+                    out.write(("CHAT received: " + message + "\n").getBytes(StandardCharsets.UTF_8));
                     break;
 
                 case PING:
