@@ -51,8 +51,11 @@ public class Client {
             while (true) {
                 line = conin.readLine();
                 if (line.equalsIgnoreCase("QUIT ")) {
-                    // Verbindung beenden
-                    // protocolClient.leave(); odr so halt eifach das vom ProtocolReaderClient
+                    // Verbindung beendet
+                    System.out.println("Terminating ...");
+                    in.close();
+                    out.close();
+                    sock.close();
                     break;
                 } else if (line.startsWith("nicknamechange")){
                     // Überprüft, ob Benutzer nicknamechange eingegeben hat.
