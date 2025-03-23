@@ -68,14 +68,14 @@ public class ProtocolReaderServer {
             try {
                 command = Command.valueOf(rawCommand);
             } catch (IllegalArgumentException e) {
-                System.err.println("Unbekannter Befehl von Benutzer-ID " + userId + ": " + line);
+                System.err.println("Unknown command from client " + userId + ": " + line);
                 continue;
             }
             // Verarbeiten des Befehls mit switch-case
 
             switch (command) {
                 case JOIN:
-                    System.out.println("JOIN empfangen von Benutzer-ID " + userId);
+                    System.out.println("JOIN received from client " + userId);
                     // Logik zum Behandeln von JOIN
                     break;
                 /**
@@ -83,7 +83,7 @@ public class ProtocolReaderServer {
                  */
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Fehlender Nickname von Benutzer-ID " + userId);
+                        System.err.println("Missing Nickname from Client " + userId);
                         break;
                     }
                     String newNick = parts[1].trim();
@@ -96,24 +96,24 @@ public class ProtocolReaderServer {
 
                 case CHAT:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Leere Chat-Nachricht von Benutzer-ID " + userId);
+                        System.err.println("empty Chat-message from client " + userId);
                         break;
                     }
                     String message = parts[1].trim();
                     if (message.length() > 500) {
-                        System.err.println("Nachricht zu lang von Benutzer-ID " + userId);
+                        System.err.println("message too long from client " + userId);
                         break;
                     }
                     String sender = UserList.getUserName(userId);
                     if (sender != null) {
                         Server.chatToAll(message, sender);
                     } else {
-                        System.err.println("Unbekannter Benutzer-ID: " + userId);
+                        System.err.println("Unknown client: " + userId);
                     }
                     break;
 
                 case PING:
-                    System.out.println("PING erhalten von Benutzer-ID " + userId);
+                    System.out.println("PING received from client " + userId);
                     // Antworte ggf. mit PONG
                     break;
 
@@ -126,14 +126,14 @@ public class ProtocolReaderServer {
                     break;
 
                 case QUIT:
-                    System.out.println("QUIT empfangen von Benutzer-ID " + userId);
+                    System.out.println("QUIT received from client " + userId);
                     // Benutzer entfernen
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();
                     break;
 
                 default:
-                    System.out.println("Unbekannter Befehl von Benutzer-ID " + userId + ": " + line);
+                    System.out.println("Unknown command from client " + userId + ": " + line);
                     break;
             }
         }
