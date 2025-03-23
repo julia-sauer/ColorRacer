@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -34,19 +35,14 @@ public class ProtocolWriterServer {
     /**
      * Sendet den Command auf dem gewünschten OutputStream.
      *
-     * @param out
-     * @param command
+     * @param out der OutputStream der den Command sendet.
+     * @param command der Command-String zum Senden
      * @throws IOException wenn die Nachricht nicht gesendet werden konnte.
      * @author Jana
      */
     public static void sendCommand(OutputStream out, String command) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
-        try {
-            writer.write(command + Command.SEPARATOR);
-            writer.flush();
-            System.out.println(command + " sent");
-        } catch (IOException e) {
-            System.err.println("Error, Could not send Command");
-        }
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
+        pw.println(command);
+        System.out.println(command + " sent");
     }
 }
