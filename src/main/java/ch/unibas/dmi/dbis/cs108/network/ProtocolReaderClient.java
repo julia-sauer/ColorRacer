@@ -97,21 +97,6 @@ public class ProtocolReaderClient {
         System.out.println("+CHT " + sender + ": " + message);
     }
 
-    /**
-     * Diese Methode wird von Client aufgerufen, wenn nicknamechange vom Benutzer eingegeben wrid.
-     * Diese Methode ruft dann im ProtocolWriterClient die Methode sendCommand auf mit den Parametern
-     * out, NICK und den newnickname
-     * @param newnickname
-     * @ Jana
-     */
-    public void changeNickname(String newnickname) {
-        try {
-            ProtocolWriterClient.sendCommand(out, "NICK" + newnickname);
-        } catch (IOException e) {
-            System.err.println("Error, could not send NICK " + newnickname + " to Server");
-        }
-    }
-
 
     public void pingCheck() {
         long startTime = System.currentTimeMillis();
