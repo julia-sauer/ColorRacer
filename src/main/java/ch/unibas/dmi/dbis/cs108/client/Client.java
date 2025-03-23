@@ -10,11 +10,15 @@ public class Client {
             InputStream in = sock.getInputStream();
             OutputStream out= sock.getOutputStream();
 
-            // create server reading thread
-
-            PongThread pongThread = new PongThread(sock);
-            Thread pongT = new Thread(pongThread);
-            pongT.start();
+            ProtocolReaderClient protocolReader = new ProtocolReaderClient(in, out);
+            Thread readerThread = new Thread(() -> {
+                try{
+                    protocolReader.readLoop();
+                } catch (IOException e) {
+                    System.err.println("Fehler beim Lesen von Nachrichten: " + e.getMessage());
+                }
+            });
+            readerThread.start();
 
             // stream input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
@@ -27,8 +31,8 @@ public class Client {
                     break;
                 } else if (line.startsWith("/nick")){
                     //changeNickname(line.substring(6)); oder das vom Protocol
-                } else {
-                    //sendMessage(line); oder das vom Protocol
+                } else if(line.equals("PING ")){
+                    ProtocolWriterClient.sendCommand(out, "PONG");
                 }
             }
             // terminate program
