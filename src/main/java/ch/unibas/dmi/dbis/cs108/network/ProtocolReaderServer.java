@@ -115,24 +115,24 @@ public class ProtocolReaderServer {
                     // Aufruf der chatToAll methode für das senden von einer Chatnachricht an alle Clients
                 case CHAT:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Leere Chat-Nachricht von Benutzer-ID " + userId);
+                        System.err.println("Empty chat message from user ID " + userId);
                         break;
                     }
                     String message = parts[1].trim();
                     if (message.length() > 500) {
-                        System.err.println("Nachricht zu lang von Benutzer-ID " + userId);
+                        System.err.println("Message too long from user ID " + userId);
                         break;
                     }
                     String sender = UserList.getUserName(userId);
                     if (sender != null) {
                         Server.chatToAll(message, sender);
                     } else {
-                        System.err.println("Unbekannter Benutzer-ID: " + userId);
+                        System.err.println("Unknown user ID: " + userId);
                     }
                     break;
 
                 case PING:
-                    System.out.println("PING erhalten von Benutzer-ID " + userId);
+                    System.out.println("Received PING from user ID " + userId);
                     // Antworte ggf. mit PONG
                     break;
 
@@ -145,14 +145,14 @@ public class ProtocolReaderServer {
                     break;
 
                 case QUIT:
-                    System.out.println("QUIT empfangen von Benutzer-ID " + userId);
+                    System.out.println("Received QUIT from user ID " + userId);
                     // Benutzer entfernen
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();
                     break;
 
                 default:
-                    System.out.println("Unbekannter Befehl von Benutzer-ID " + userId + ": " + line);
+                    System.out.println("Unknown command from user ID " + userId + ": " + line);
                     break;
             }
         }
