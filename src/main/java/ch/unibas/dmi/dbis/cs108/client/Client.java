@@ -51,14 +51,26 @@ public class Client {
             while (true) {
                 line = conin.readLine();
                 if (line.equalsIgnoreCase("leave")) {
-                    protocolClient.leave(out);
+                    // Verbindung beendet
+                    System.out.println("Terminating ...");
+                    in.close();
+                    out.close();
+                    sock.close();
                     break;
                 } else if (line.startsWith("nicknamechange")){
                     // Überprüft, ob Benutzer nicknamechange eingegeben hat.
                     protocolClient.changeNickname(line.substring(15), out); //sollte im WriterClient implementiert sein
-                } else {
-                    // Sendet eine Chat-Nachricht an den Server, die dann an alle verbundenen Clients weitergeleitet wird.
-                    protocolClient.sendChat(line);
+                } else if (line.startsWith("connect")) {
+                    // JOIN-Befehl senden
+                    String nickname = line.substring(8).trim();
+                    protocolClient.sendJoin(nickname);
+                } else if (line.startsWith("message")) {
+                    // Chatnachricht senden
+                String message = line.substring(8).trim();
+                protocolClient.sendChat(message);
+                } else { // ungültiger Befehl
+                System.out.println("Unknown command. Use: connect | nicknamechange | message | QUIT");
+
                 }
             }
             // Programm beenden
