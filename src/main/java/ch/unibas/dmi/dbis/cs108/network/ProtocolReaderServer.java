@@ -132,7 +132,7 @@ public class ProtocolReaderServer {
                     break;
 
                 case PING:
-                    System.out.println("PING erhalten von Benutzer-ID " + userId);
+                    System.out.println("Received PING from user ID " + userId);
                     // Antworte ggf. mit PONG
                     break;
 
