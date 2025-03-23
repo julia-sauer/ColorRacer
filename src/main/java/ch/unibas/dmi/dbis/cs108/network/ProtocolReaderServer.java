@@ -116,7 +116,7 @@ public class ProtocolReaderServer {
                     break;
 
                 case PONG:
-                    System.out.println("PONG erhalten von Benutzer-ID " + userId);
+                    System.out.println("PONG received from Client " + userId);
                     // Verbindung ist aktiv, kein Timeout nötig
                     PingThread.pongReceived(out, userId);
                     break;
