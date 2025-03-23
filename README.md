@@ -5,7 +5,7 @@ It is a bike race game where the first player to arrives at the finish field win
 
 ### Technologies used
 backed built on Java  
-Build system implemented in Gradle 
+Build system implemented in Gradle   
 Logging: Log4j
 
 ### System requirements
@@ -24,8 +24,8 @@ cd Color-Race
 ### Contact Information
 feel free to contact us with any questions regarding the Project
 
-Ana Svalina: ana.svalina@stud.unibas.ch
-Julia Sauer: julia.sauer@stud.unibas.ch
+Ana Svalina: ana.svalina@stud.unibas.ch  
+Julia Sauer: julia.sauer@stud.unibas.ch  
 Jana Egli: jana.egli@stud.unibas.ch  
 Flo Hansen: flo.hansen@stud.unibas.ch
 
