@@ -105,7 +105,7 @@ public class Server {
             System.exit(0);
         }
         catch (IOException e) {
-            System.err.println("Fehler beim Schliessen des Servers: " + e.getMessage());
+            System.err.println("Error when closing the Server: " + e.getMessage());
         }
     }
     
@@ -121,7 +121,7 @@ public class Server {
     public static void changeNickname(int userId, String newNick) {
         // Validierung des neuen Nicknamens (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
         if (!newNick.matches("^[a-zA-Z0-9_]{3,15}$")) {
-            System.err.println("Ungültiger Nickname: " + newNick);
+            System.err.println("Invalid nickname: " + newNick);
             return;
         }
 
@@ -142,7 +142,7 @@ public class Server {
             try {
                 ProtocolWriterServer.sendCommand(user.getOut(), "NICK" + finalNick);
             } catch (IOException e) {
-                System.err.println("Fehler beim Senden von NICK " + finalNick + " an Benutzer " + userId);
+                System.err.println("Error while sending NICK " + finalNick + " to user " + userId);
             }
         }
     }
