@@ -34,6 +34,28 @@ public class PingThread extends Thread {
         }
     }
 
+    public static void pongReceived(OutputStream out, int userId) {
+        try {
+            ProtocolWriterServer.sendCommand(out, "PING");
+        } catch (IOException e) {
+            System.err.println("Error, Could not send Command");
+        }
+        long startTime = System.currentTimeMillis();
+        try {
+            // Warte 15 Sekunden
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            // Wenn der Thread unterbrochen wird, fangen wir die Ausnahme ab
+            System.err.println("Thread interrupted: " + e.getMessage());
+            return;
+        }
+        if (System.currentTimeMillis() - startTime >= 15000) {
+            System.out.println("Connection timed out for Client " + userId);
+            UserList.removeUser(userId);
+            Server.ClientDisconnected();
+        }
+    }
+
     public static void stopPinging() {
         running = false;
     }
