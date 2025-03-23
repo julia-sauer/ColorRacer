@@ -1,5 +1,8 @@
 package ch.unibas.dmi.dbis.cs108.client;
 
+import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
+import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
+
 import java.net.*;
 import java.io.*;
 
@@ -22,6 +25,7 @@ public class Client {
 
             // stream input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
+            ProtocolReaderClient protocolClient = new ProtocolReaderClient(in, out);
             String line = " ";
             while (true) {
                 // reading input stream
@@ -29,8 +33,8 @@ public class Client {
                 if (line.equalsIgnoreCase("QUIT")) {
                     //sendQuitMessage(); odr so halt eifach das vom ProtocolReaderClient
                     break;
-                } else if (line.startsWith("/nick")){
-                    //changeNickname(line.substring(6)); oder das vom Protocol
+                } else if (line.startsWith("nicknamechange")){ //Überprüft, ob Benutzer nicknamechange eingegeben hat.
+                    protocolClient.changeNickname(line.substring(15));
                 } else if(line.equals("PING ")){
                     ProtocolWriterClient.sendCommand(out, "PONG");
                 }
