@@ -2,6 +2,10 @@ package ch.unibas.dmi.dbis.cs108.network;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.io.IOException;
 
 /**
  * Die Klasse {@code ProtocolWriterClient} wandelt die Spieler Eingaben in die entsprechenden
@@ -45,7 +49,7 @@ public class ProtocolWriterClient {
      */
     public void sendChat(String message) {
         if (message == null || message.trim().isEmpty()) {
-            System.out.println("Nachricht ist leer!");
+            System.out.println("Message is null or empty!");
             return;
         }
         if (message.length() > 500){
