@@ -45,7 +45,7 @@ public class ProtocolReaderClient {
             try {
                 command = Command.valueOf(rawCommand);
             } catch (IllegalArgumentException e) {
-                System.err.println("Unbekannter Befehl von Server " + line);
+                System.err.println("Unknown command from server " + line);
                 continue;
             }
             // Verarbeiten des Befehls mit switch-case
@@ -55,7 +55,7 @@ public class ProtocolReaderClient {
                 case CHAT:
                     // Erwartetes Format: CHAT <sender> <message>
                     if (parts.length < 3) {
-                        System.err.println("Unvollständige Chat-Nachricht vom Server.");
+                        System.err.println("Incomplete chat message from the server.");
                         break;
                     }
                     String sender = parts[1];
@@ -69,11 +69,11 @@ public class ProtocolReaderClient {
                     break;
 
                 /**
-                 * Wenn Comman NICK erkannt wird, wird ausgegeben, zu was der Nickname gewechselt wrude.
+                 * Wenn Command NICK erkannt wird, wird ausgegeben, zu was der Nickname gewechselt wurde.
                  */
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Fehler: Kein Nickname erhalten.");
+                        System.err.println("Error: No Nickname received.");
                         break;
                     }
                     String newNick = parts[1].trim();
@@ -81,7 +81,7 @@ public class ProtocolReaderClient {
                     break;
 
                 default:
-                    System.out.println("Unbekannter Befehl von Server: " + line);
+                    System.out.println("Unkown command from Server: " + line);
                     break;
             }
         }
