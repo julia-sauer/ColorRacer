@@ -68,7 +68,7 @@ public class ProtocolReaderServer {
             try {
                 command = Command.valueOf(rawCommand);
             } catch (IllegalArgumentException e) {
-                System.err.println("Unbekannter Befehl von Benutzer-ID " + userId + ": " + line);
+                System.err.println("Unknown command from user ID " + userId + ": " + line);
                 continue;
             }
             // Verarbeiten des Befehls mit switch-case
