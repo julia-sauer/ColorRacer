@@ -80,7 +80,7 @@ public class ProtocolReaderServer {
                 case JOIN: {
                     System.out.println("User " + userId + " is joining...");
                     if (parts.length < 2 || parts[1].trim().isEmpty()){
-                        System.err.println("Missing nickname from user ID " + userId);
+                        ProtocolWriterServer.sendCommand(out, "-ERR Nickname missing");
                         break;
                     }
                     String newNick = parts[1].trim();
