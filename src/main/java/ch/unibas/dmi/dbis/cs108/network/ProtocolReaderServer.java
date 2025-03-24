@@ -143,7 +143,7 @@ public class ProtocolReaderServer {
                     break;
 
                 case QUIT:
-                    System.out.println("Received QUIT from user ID " + userId);
+                    ProtocolWriterServer.sendCommand(out, "+OK Quit request received. Please confirm [YES/NO]");
                     // Benutzer entfernen
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();
