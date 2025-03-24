@@ -59,16 +59,34 @@ class PongThread implements Runnable {
             System.err.println("ERROR with server connection: " + e.toString());
         }
     }
+
+    /**
+     * Sendet einen Befehl über den OutputStream an den Server.
+     *
+     * @param out Der OutputStream, über den der Befehl gesendet wird.
+     * @param command Der zu sendende Befehl.
+     * @throws IOException Falls ein Fehler beim Senden des Befehls auftritt.
+     */
     private void sendCommand(OutputStream out, String command) throws IOException {
         out.write((command + Command.SEPARATOR).getBytes());
     }
 
+    /**
+     * Liest einen Befehl aus dem InputStream.
+     *
+     * @param in Der InputStream, aus dem der Befehl gelesen wird.
+     * @return Der gelesene Befehl als String.
+     * @throws IOException Falls ein Fehler beim Lesen des Befehls auftritt.
+     */
     private String readCommand(InputStream in) throws IOException {
         byte[] buffer = new byte[256];
         int bytesRead = in.read(buffer);
         return new String(buffer, 0, bytesRead).trim();
     }
 
+    /**
+     * Stoppt das Pinging und beendet den Thread.
+     */
     public void stopPinging() {
         running = false;
     }
