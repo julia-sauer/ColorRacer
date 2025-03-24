@@ -139,6 +139,7 @@ public class ProtocolReaderServer {
                     if (pingThread != null) {
                         pingThread.notifyPong();  // notify the ping thread that the PONG was received
                     }
+                    ProtocolWriterServer.sendCommand(out, "+OK PONG received");
                     break;
 
                 case QUIT:
