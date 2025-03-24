@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Diese Klasse verwaltet eine Liste von Benutzern, die mit dem Server verbunden sind.
  * Sie stellt Methoden zum Hinzufügen, Entfernen und Abrufen von Benutzerinformationen bereit.
- * @autor milo
+ * @author milo
  */
 public class UserList {
     private static final ConcurrentHashMap<Integer, User> userMap = new ConcurrentHashMap<>();

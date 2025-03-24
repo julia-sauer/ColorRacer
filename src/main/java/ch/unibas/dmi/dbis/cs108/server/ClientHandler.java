@@ -7,6 +7,10 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Die Klasse {@code ClientHandler} verarbeitet die Kommunikation zwischen Server und Client.
+ * Sie startet den Protokoll-Reader, sendet eine Willkommensnachricht und verwaltet die Client-Verbindung.
+ */
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
     private final int clientNumber;
@@ -16,8 +20,8 @@ public class ClientHandler implements Runnable {
 
     /**
      * Konstruktor von der Klasse ClientHandler
-     * @param clientNumber
-     * @param socket
+     * @param clientNumber ist die eindeutige Nummer des Clients
+     * @param socket ist das Socket-Objekt für die Client-Verbindung
      */
     public ClientHandler(int clientNumber, Socket socket) {
         this.clientNumber = clientNumber;
@@ -25,12 +29,12 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * Startet eine ProtocolReader für Server
-     * Gibt Willkommensnachricht aus
-     * Startet den PingThread und somit den Ping-Pong-Mechanismus
-     * int c + while-loop ist von EchoServer, also das was hereinkommt wird auch wieder ausgegeben
-     * wenn in.read = -1, also der Client den Server verlassen hat wird der ClientSocket beendet.
-     * Und der User wird von der UserList genommen und der Server wird benachrichtigt, dass ein Client gegangen ist.
+     * Startet eine ProtocolReader für Server.
+     * Gibt eine Willkommensnachricht aus.
+     * Startet den PingThread und somit den Ping-Pong-Mechanismus.
+     * int c + while-loop ist von EchoServer, also das was hereinkommt wird auch wieder ausgegeben.
+     * Wenn in.read = -1, also der Client den Server verlassen hat, wird der ClientSocket beendet.
+     * Der User wird von der UserList genommen und der Server wird benachrichtigt, dass ein Client gegangen ist.
      * @author Jana
      */
     public void run() {

@@ -14,7 +14,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.System.out;
 
-
+/**
+ * Die Klasse Server stellt einen einfachen Mehrbenutzer-Chatserver bereit.
+ *  * Sie verwaltet Client-Verbindungen, verarbeitet Nachrichten und sorgt für die Verwaltung der Nutzer.
+ *  * Der Server arbeitet auf Port 8090 und akzeptiert eingehende Client-Verbindungen.
+ */
 public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
@@ -111,8 +115,8 @@ public class Server {
      * Überprüft mit Hilfe UserList, ob Nickname bereits vorhanden uns fügt eine 1 hinzu falls ja.
      * Ruft dann sendCommand von ProtocolWriterServer auf, der die Nachricht an den Client sendet,
      * dass der Nickname geändert wurde.
-     * @param userId
-     * @param newNick
+     * @param userId Die ID des Benutzers, der den Nickname ändern möchte.
+     * @param newNick Der neue gewünschte Nickname.
      * @author milo
      */
     public static void changeNickname(int userId, String newNick) {

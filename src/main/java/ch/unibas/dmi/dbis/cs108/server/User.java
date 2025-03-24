@@ -46,7 +46,7 @@ public class User {
     }
 
     /**
-     * Setzt einen neuen Nicknamen für den Benutzer.
+     * Setzt einen neuen Nickname für den Benutzer.
      * @param nickname Der neue Nickname
      */
     public void setNickname(String nickname) {

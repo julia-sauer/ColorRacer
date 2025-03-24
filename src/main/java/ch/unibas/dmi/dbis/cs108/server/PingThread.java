@@ -1,7 +1,5 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
-import ch.unibas.dmi.dbis.cs108.network.Command;
-import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderServer;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 
 import java.io.*;
@@ -21,12 +19,24 @@ public class PingThread extends Thread {
     private static final long PING_INTERVAL = 15000;
     private volatile boolean pongReceived = false;// 15 seconds
 
+    /**
+     * Erstellt einen neuen {@code PingThread} für einen bestimmten Client.
+     *
+     * @param clientSocket  Das Socket des Clients.
+     * @param clientNumber  Die eindeutige Nummer des Clients.
+     * @param in           Der InputStream für Nachrichten.
+     * @param out          Der OutputStream für Nachrichten.
+     */
     public PingThread(Socket clientSocket, int clientNumber, InputStream in, OutputStream out) {
         this.clientSocket = clientSocket;
         this.clientNumber = clientNumber;
         this.in = in;
         this.out = out;
     }
+    /**
+     * Startet den Ping-Thread, der regelmäßig PING-Nachrichten sendet und auf PONG-Antworten wartet.
+     * Falls keine Antwort innerhalb des definierten Zeitlimits erfolgt, wird die Verbindung geschlossen.
+     */
     @Override
     public void run() {
         while (running && !clientSocket.isClosed()) {
@@ -61,10 +71,18 @@ public class PingThread extends Thread {
         }
     }
 
+    /**
+     * Benachrichtigt den PingThread, dass ein PONG vom Client empfangen wurde.
+     */
     public void notifyPong(){
         pongReceived = true;
     }
 
+    /**
+     * Überprüft, ob eine PONG-Nachricht empfangen wurde.
+     *
+     * @return {@code true}, wenn eine PONG-Nachricht empfangen wurde, sonst {@code false}.
+     */
     private boolean hasReceivedPong() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -79,6 +97,12 @@ public class PingThread extends Thread {
         return false;
     }
 
+    /**
+     * Verarbeitet eine empfangene PONG-Nachricht und sendet das nächste PING an den Client.
+     *
+     * @param out     Der OutputStream des Clients.
+     * @param userId  Die ID des Clients, der das PONG gesendet hat.
+     */
     public static void pongReceived(OutputStream out, int userId) {
         System.out.println("PONG received form Client " + userId);
         try {
@@ -89,6 +113,9 @@ public class PingThread extends Thread {
         }
     }
 
+    /**
+     * Stoppt den Ping-Thread und unterbricht den aktuellen Thread.
+     */
     public static void stopPinging() {
         running = false;
         Thread.currentThread().interrupt();
