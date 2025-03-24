@@ -47,7 +47,6 @@ public class UserListJoinTest {
 
         assertEquals("Anna1", user2.getNickname());
     }
-
     @Test
     public void testNicknameExists() {
         OutputStream dummyOut = new ByteArrayOutputStream();
@@ -55,7 +54,6 @@ public class UserListJoinTest {
 
         assertTrue(UserList.containsUserName("Max"));
         assertFalse(UserList.containsUserName("Moritz"));
-    }
-
+        }
 
 }
