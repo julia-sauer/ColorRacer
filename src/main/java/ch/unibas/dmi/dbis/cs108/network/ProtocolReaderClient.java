@@ -1,9 +1,5 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import ch.unibas.dmi.dbis.cs108.server.Server;
-import ch.unibas.dmi.dbis.cs108.server.UserList;
-
-import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
 import java.io.InputStream;
