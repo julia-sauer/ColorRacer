@@ -1,6 +1,5 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.io.OutputStream;
 import java.io.PrintWriter;
