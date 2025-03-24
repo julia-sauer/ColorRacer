@@ -75,10 +75,8 @@ public class ProtocolReaderServer {
             // Verarbeiten des Befehls mit switch-case
 
             switch (command) {
-                /**
-                 * Behandelt den JOIN-Befehl eines Clients.
-                 * Der Client sendet JOIN <nickname>, um dem Server beizutreten.
-                 */
+                 // Behandelt den JOIN-Befehl eines Clients.
+                 // Der Client sendet JOIN <nickname>, um dem Server beizutreten
                 case JOIN: {
                     System.out.println("User " + userId + " is joining...");
                     if (parts.length < 2 || parts[1].trim().isEmpty()){
@@ -102,9 +100,7 @@ public class ProtocolReaderServer {
                     Server.chatToAll("User " + finalNick + " has joined the chat.", "Server");
                     break;
                 }
-                /**
-                 * Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
-                 */
+                // Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("Missing nickname of userId" + userId);
