@@ -103,7 +103,7 @@ public class ProtocolReaderServer {
                 // Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Missing nickname of userId" + userId);
+                        ProtocolWriterServer.sendCommand(out, "-ERR Nickname missing");
                         break;
                     }
                     String newNick = parts[1].trim();
