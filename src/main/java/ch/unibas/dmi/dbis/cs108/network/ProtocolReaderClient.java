@@ -10,13 +10,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.IOException;
-
+/**
+ * Die Klasse {@code ProtocolReaderClient} verarbeitet eingehende Nachrichten vom Server
+ * und steuert die Interaktion mit dem Client.
+ */
 public class ProtocolReaderClient {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
     private final InputStream in;
     private final OutputStream out;
 
-
+    /**
+     * Erstellt einen neuen {@code ProtocolReaderClient}.
+     *
+     * @param in  Der InputStream, von dem Nachrichten gelesen werden.
+     * @param out Der OutputStream, auf den Antworten geschrieben werden.
+     * @throws IOException Falls ein Fehler beim Erstellen des Readers auftritt.
+     */
     public ProtocolReaderClient(InputStream in, OutputStream out) throws IOException {
         this.in = in;
         this.out = out;
@@ -31,7 +40,7 @@ public class ProtocolReaderClient {
      * <pre>
      * CHAT <sender> <message>
      * </pre>
-     * @throws IOException  IOException Wenn ein Lesefehler vom Server auftritt
+     * @throws IOException  wenn ein Lesefehler vom Server auftritt
      */
     public void readLoop() throws IOException {
         String line;
@@ -67,7 +76,7 @@ public class ProtocolReaderClient {
                     break;
 
                 /**
-                 * Wenn Command NICK erkannt wird, wird ausgegeben, zu was der Nickname gewechselt wurde.
+                 * Wenn Command NICK erkannt wird, wird ausgegeben, wozu der Nickname gewechselt wurde.
                  */
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
@@ -79,7 +88,7 @@ public class ProtocolReaderClient {
                     break;
 
                 default:
-                    System.out.println("Unkown command from Server: " + line);
+                    System.out.println("Unknown command from Server: " + line);
                     break;
             }
         }

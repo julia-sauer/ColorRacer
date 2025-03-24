@@ -78,8 +78,8 @@ public class ProtocolWriterClient {
 
     /**
      * Ruft sendCommand auf für den Command NICK, um den neuen Nickname dem Server zu senden.
-     * @param newnickname
-     * @param out
+     * @param newnickname der neue Nickname, der den User ausgewählt hat.
+     * @param out der OutputStream, mit dem es gesendet wird.
      */
     public void changeNickname(String newnickname, OutputStream out) {
         try {
@@ -89,6 +89,11 @@ public class ProtocolWriterClient {
         }
     }
 
+    /**
+     * Sendet einen {@code QUIT}-Befehl an den Server, um die Verbindung zu beenden.
+     *
+     * @param out Der OutputStream, auf den der Befehl geschrieben wird.
+     */
     public void leave(OutputStream out) {
         try {
             sendCommand(out, "QUIT ");
@@ -98,7 +103,7 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sendet den JOIN-Befehl mit dem gewünschten Nicknamen an den Server.
+     * Sendet den {@code JOIN}-Befehl mit dem gewünschten Nicknamen an den Server.
      * Der Server entscheidet, ob der Nickname akzeptiert oder verändert wird (z.B. bei Duplikaten).
      *
      * @param nickname Der vom Spieler eingegebene Nickname

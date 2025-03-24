@@ -31,6 +31,7 @@ public class ProtocolReaderServer {
      * Konstruktor: Initialisiert den BufferedReader und die Benutzer-ID.
      *
      * @param in     der InputStream, von dem die Nachrichten gelesen werden sollen.
+     * @param out    der OutputStream, auf den Antworten geschrieben werden.
      * @param userId die eindeutige ID des Benutzers.
      * @throws IOException wenn ein Fehler beim Erstellen des BufferedReaders auftritt.
      */
@@ -106,13 +107,13 @@ public class ProtocolReaderServer {
                  */
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("missing nickname of userId" + userId);
+                        System.err.println("Missing nickname of userId" + userId);
                         break;
                     }
                     String newNick = parts[1].trim();
                     Server.changeNickname(userId, newNick);
                     break;
-                    // Aufruf der chatToAll methode für das senden von einer Chatnachricht an alle Clients
+                    // Aufruf der chatToAll methode für das Senden von einer Chatnachricht an alle Clients
                 case CHAT:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("Empty chat message from user ID " + userId);
