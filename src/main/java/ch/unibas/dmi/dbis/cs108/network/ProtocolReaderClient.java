@@ -59,11 +59,17 @@ public class ProtocolReaderClient {
 
                 case CHAT:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        out.write("CHAT received: [empty]\n".getBytes(StandardCharsets.UTF_8));
+                        System.out.println("CHAT received: [empty]");
                         break;
                     }
-                    String message = parts[1].trim();
-                    out.write(("CHAT received: " + message + "\n").getBytes(StandardCharsets.UTF_8));
+                    String[] chatParts = parts[1].split(Command.SEPARATOR, 2);
+                    if(chatParts.length < 2) {
+                        System.out.println("CHAT received: " + parts[1]); //Fallback
+                    } else {
+                        String sender = chatParts[0];
+                        String message = chatParts[1];
+                        displayChat(message, sender);
+                    }
                     break;
 
                 case PING:
