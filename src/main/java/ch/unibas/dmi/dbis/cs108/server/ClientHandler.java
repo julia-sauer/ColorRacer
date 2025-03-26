@@ -46,6 +46,8 @@ public class ClientHandler implements Runnable {
             pingThread = new PingThread(clientSocket, clientNumber, in, out);
             pingThread.start();
 
+
+
             // Erstellen Sie einen Thread für das Lesen von Nachrichten
             ProtocolReaderServer protocolReader = new ProtocolReaderServer(in, clientNumber, out, pingThread);
             Thread readerThread = new Thread(() -> {
@@ -63,7 +65,7 @@ public class ClientHandler implements Runnable {
             int c;
             while ((c = in.read()) != -1) {
                 out.write((char)c);
-                out.write((String.valueOf((char) c)).getBytes(StandardCharsets.UTF_8));
+                //out.write((String.valueOf((char) c)).getBytes(StandardCharsets.UTF_8));
             }
 
             System.out.println("Connection closed for Client " + clientNumber);

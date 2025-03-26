@@ -41,7 +41,7 @@ public class PingThread extends Thread {
     public void run() {
         while (running && !clientSocket.isClosed()) {
             try {
-                ProtocolWriterServer.sendCommand(out, "PING "); //Senden von Ping
+                ProtocolWriterServer.sendCommand(out, "PING"); //Senden von Ping
                 pongReceived = false;
 
                 long startTime = System.currentTimeMillis();
@@ -87,7 +87,7 @@ public class PingThread extends Thread {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             if(reader.ready()) {
-                if (reader.readLine().trim().equals("PONG ")) {
+                if (reader.readLine().trim().equals("PONG")) {
                     return true;
                 }
             }
@@ -106,7 +106,7 @@ public class PingThread extends Thread {
     public static void pongReceived(OutputStream out, int userId) {
         System.out.println("PONG received form Client " + userId);
         try {
-            ProtocolWriterServer.sendCommand(out, "PING ");
+            ProtocolWriterServer.sendCommand(out, "PING");
             System.out.println("Next PING sent to Client " + userId);
         } catch (IOException e) {
             System.err.println("Error, Could not send Command");
