@@ -25,8 +25,8 @@ public class ProtocolReaderServer {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
     private final int userId; // Die ID des Clients, der aktuell mit dem Server verbunden ist.
     private final OutputStream out;
-    private final PingThread pingThread;  // added reference
-
+    private final PingThread pingThread;// added reference
+    private final InputStream in;
     /**
      * Konstruktor: Initialisiert den BufferedReader und die Benutzer-ID.
      *
@@ -41,6 +41,7 @@ public class ProtocolReaderServer {
         this.userId = userId;
         this.out = out;
         this.pingThread = pingThread;
+        this.in = in;
     }
 
     /**

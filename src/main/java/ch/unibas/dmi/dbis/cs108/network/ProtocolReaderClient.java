@@ -68,9 +68,8 @@ public class ProtocolReaderClient {
 
                 case PING:
                     System.out.println("PING received from Server.");
-                    ProtocolWriterClient.sendCommand(out, "PONG ");
+                    ProtocolWriterClient.sendCommand(out, "PONG");
                     break;
-
                 /**
                  * Wenn Command NICK erkannt wird, wird ausgegeben, wozu der Nickname gewechselt wurde.
                  */

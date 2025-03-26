@@ -82,7 +82,7 @@ public class ProtocolWriterClient {
      */
     public void changeNickname(String newnickname, OutputStream out) {
         try {
-            sendCommand(out, "NICK " + newnickname);
+            sendCommand(out, "NICK" + newnickname);
         } catch (IOException e) {
             System.err.println("Error, could not send NICK " + newnickname + " to Server");
         }
@@ -95,7 +95,7 @@ public class ProtocolWriterClient {
      */
     public void leave(OutputStream out) {
         try {
-            sendCommand(out, "QUIT ");
+            sendCommand(out, "QUIT");
         } catch (IOException e) {
             System.err.println("Error, could not send QUIT to Server");
         }

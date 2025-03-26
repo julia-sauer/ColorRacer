@@ -28,7 +28,7 @@ public enum Command {
     PING,
     PONG;
 
-    public static final String SEPARATOR = " "; // blank space als Separator
+    public static final String SEPARATOR = "%"; // blank space als Separator
 
     /**
      * Gibt den Befehl "JOIN" aus.
