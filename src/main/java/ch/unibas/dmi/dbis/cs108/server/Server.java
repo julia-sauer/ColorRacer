@@ -179,7 +179,9 @@ public class Server {
             writer.flush();
         }
     }
-
+    public static void mergeConflict(){
+        System.out.println("D Jana stinkt. hihihi");
+    }
 }
 
 
