@@ -179,14 +179,6 @@ public class Server {
             writer.flush();
         }
     }
-
-    public static void mergeConflictBeispiel() {
-        System.out.println("Das ist ein Erklärungsbeispiel");
-    }
-
-    public static void mergeConflict(){
-        System.out.println("D Jana stinkt. hihihi");
-    }
 }
 
 
