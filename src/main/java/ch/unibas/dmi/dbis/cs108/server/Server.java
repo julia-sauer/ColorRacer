@@ -24,18 +24,17 @@ public class Server {
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
 
     /**
-     * Starts a server that waits for connections and establishes a network connection
-     * from client to server.
-     * ServerSocket creates a server (here: echod) that runs on port 8090.
-     * echod.accept(); waits until client connects.
-     * As soon as a client has connected, “Connection established” is output.
-     * while-loop: Until the client ends the connection. Saves what comes from the client in c
-     * and returns exactly the same (out.write).
-     * When the client connection is closed, it exits the while loop, then the connection to the client is closed
-     * (socket.close) then server is closed (echod.close).
+     * Startet einen Server, der auf Verbindungen wartet und stellt Netzwerkverbindung
+     * von Client zu Server dar.
+     * ServerSocket erstellt einen Server (hier: echod) der auf Port 8090 läuft.
+     * echod.accept(); wartet bis sich Client verbindet.
+     * Sobald sich ein Client verbunden hat, wird "Connection established" ausgegeben.
+     * while-Schleife: Solange bis Client Verbindung beendet. Speichert was von Client kommt in c
+     * und gibt genau das Gleiche zurück (out.write).
+     * Wenn Client Verbindung beendet geht es aus while-Schleife, dann wir Verbindung zu Client beendet
+     * (socket.close) dann wird Server geschlossen (echod.close).
      * @author Jana
      */
-
     public static void main(String[] args) {
         try {
             out.println("Waiting for port 8090...");
@@ -62,9 +61,9 @@ public class Server {
         }
     }
     /**
-     * Adds a new user to the user list.
-     * @param userName The name of the new user.
-     * @return The unique user ID.
+     * Fügt einen neuen Benutzer zur Benutzerliste hinzu.
+     * @param userName Der Name des neuen Benutzers.
+     * @return Die eindeutige Benutzer-ID.
      * @author milo
      */
     public static int addNewUser(String userName) { // Neue Methode
@@ -150,7 +149,7 @@ public class Server {
         User user = UserList.getUser(userId);
         if (user != null) {
             try {
-                ProtocolWriterServer.sendCommand(user.getOut(), Command.NICK + Command.SEPARATOR + finalNick);
+                ProtocolWriterServer.sendCommandAndString(user.getOut(), Command.NICK, finalNick);
             } catch (IOException e) {
                 System.err.println("Error while sending NICK " + finalNick + " to user " + userId);
             }
