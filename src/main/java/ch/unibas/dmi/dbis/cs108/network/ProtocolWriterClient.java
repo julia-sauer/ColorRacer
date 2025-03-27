@@ -62,27 +62,40 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sendet den Command auf dem gewünschten OutputStream.
+     * Sends a command to the Server.
      *
-     * @param out der OutputStream zum Senden eines Commands
-     * @param command der Command-String zum Senden
-     * @throws IOException wenn die Nachricht nicht gesendet werden konnte.
+     * @param out the OutputStream to send a command
+     * @param command the Command to send
+     * @throws IOException if the command could not be sent.
      * @author Julia
      */
-    public static void sendCommand(OutputStream out, String command) throws IOException {
+    public static void sendCommand(OutputStream out, Command command) throws IOException {
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
         pw.println(command + Command.SEPARATOR);
         System.out.println(command + Command.SEPARATOR + "sent");
     }
 
     /**
-     * Ruft sendCommand auf für den Command NICK, um den neuen Nickname dem Server zu senden.
-     * @param newnickname der neue Nickname, der den User ausgewählt hat.
-     * @param out der OutputStream, mit dem es gesendet wird.
+     * Sends a command with an aditional String.
+     * @param out
+     * @param command
+     * @param text
+     * @throws IOException
+     */
+    public static void sendCommandAndString(OutputStream out, Command command, String text) throws IOException {
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
+        pw.println(command + Command.SEPARATOR + text);
+        //System.out.println(command + Command.SEPARATOR + text + " sent");
+    }
+
+    /**
+     * Calls sendCommand for the Command NICK, to send the new nickname to the server.
+     * @param newnickname the new nickname, the User choosed.
+     * @param out the OutputStream.
      */
     public void changeNickname(String newnickname, OutputStream out) {
         try {
-            sendCommand(out, Command.NICK + Command.SEPARATOR + newnickname);
+            sendCommandAndString(out, Command.NICK, newnickname);
         } catch (IOException e) {
             System.err.println("Error, could not send NICK " + newnickname + " to Server");
         }
@@ -95,7 +108,7 @@ public class ProtocolWriterClient {
      */
     public void leave(OutputStream out) {
         try {
-            sendCommand(out, Command.QUIT + Command.SEPARATOR);
+            sendCommand(out, Command.QUIT);
         } catch (IOException e) {
             System.err.println("Error, could not send QUIT to Server");
         }
