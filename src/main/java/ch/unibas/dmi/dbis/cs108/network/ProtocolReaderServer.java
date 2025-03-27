@@ -8,15 +8,15 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Die Klasse {@code ProtocolReaderServer} liest eingehende Nachrichten vom Client
- * und leitet sie an den Server weiter.
- * Die Klasse {@code ProtocolReaderServer} ist verantwortlich für das Empfangen und Interpretieren
- * von Nachrichten, die ein Client über das Netzwerk an den Server sendet. Diese Nachrichten sind
- * textbasiert und folgen einem bestimmten Netzwerkprotokoll.
+ * The class ProtocolReaderServer reads incoming messages from the client
+ * and forwards them to the server.
+ * The class is also responsible for receiving and interpreting
+ * of messages that a client sends to the server via the network. These messages are
+ * text-based and follow a specific network protocol.
  * <p>
- * Diese Klasse wird pro Clientverbindung instanziiert und liest kontinuierlich neue Zeilen
- * (Befehle) vom verbundenen Client über einen {@link BufferedReader}. Jede Zeile wird als eine
- * vollständige Nachricht betrachtet (endet mit einem Zeilenumbruch '\n').
+ * This class is instantiated per client connection and continuously reads new lines
+ * (commands) from the connected client via a {@link BufferedReader}. Each line is regarded as a
+ * complete message (ends with a line break ‘\n’).
  * </p>
  * @author anasv
  * @since 22.03.25
@@ -28,12 +28,12 @@ public class ProtocolReaderServer {
     private final PingThread pingThread;// added reference
     private final InputStream in;
     /**
-     * Konstruktor: Initialisiert den BufferedReader und die Benutzer-ID.
+     * Constructor: Initialises the BufferedReader and the user ID.
      *
-     * @param in     der InputStream, von dem die Nachrichten gelesen werden sollen.
-     * @param out    der OutputStream, auf den Antworten geschrieben werden.
-     * @param userId die eindeutige ID des Benutzers.
-     * @throws IOException wenn ein Fehler beim Erstellen des BufferedReaders auftritt.
+     * @param in the InputStream from which the messages are to be read.
+     * @param out the OutputStream to which replies are written.
+     * @param userId the unique ID of the user.
+     * @throws IOException if an error occurs when creating the BufferedReader.
      */
     public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread) throws IOException {
         // Initialisierung des BufferedReaders
@@ -45,18 +45,18 @@ public class ProtocolReaderServer {
     }
 
     /**
-     * Startet eine Endlosschleife, die kontinuierlich Nachrichten (Befehle) vom Client liest
-     * und sie anhand des Protokolls verarbeitet.
+     * Starts an endless loop that continuously reads messages (commands) from the client
+     * and processes them using the protocol.
      *
-     * <p> Jede Nachricht muss mit einem der definierten {@link Command}-Enum-Werte beginnen.
-     * Die Methode dekodiert diese Befehle und führt die entsprechende Serveraktion aus.
+     <p> Each message must begin with one of the defined {@link Command} enum values.
+     * The method decodes these commands and executes the corresponding server action.
      * <p>
-     * Das Verarbeiten der Netzwerkbefehle erfolgt mit switch-Statements, die der Server von einem
-     * Client erhält. Jeder Befehl (z.B. CHAT, NICK, PING, ...) wird als Textzeile vom Client geschickt.
-     * Der Server analysiert die Zeile, erkennt den Befehl (das erste Wort), und führt passende
-     * Aktionen aus.
+     * The network commands are processed using switch statements that the server receives from a
+     * client. Each command (e.g. CHAT, NICK, PING, ...) is sent as a line of text from the client.
+     * The server analyses the line, recognises the command (the first word) and executes suitable
+     * actions.
      * </p>
-     * @throws IOException wenn ein Fehler beim Lesen der Nachrichten auftritt.
+     * @throws IOException if an error occurs when reading the messages.
      */
     public void readLoop() throws IOException {
         String line;
@@ -73,11 +73,11 @@ public class ProtocolReaderServer {
                 System.err.println("Unknown command from user ID " + userId + ": " + line);
                 continue;
             }
-            // Verarbeiten des Befehls mit switch-case
+            // Processes the command with switch-case
 
             switch (command) {
-                 // Behandelt den JOIN-Befehl eines Clients.
-                 // Der Client sendet JOIN <nickname>, um dem Server beizutreten
+                 // Handels the JOIN-command from the client
+                 // The client sends JOIN <nickname> to enter the server
                 case JOIN: {
                     System.out.println("User " + userId + " is joining...");
                     if (parts.length < 2 || parts[1].trim().isEmpty()){
@@ -91,13 +91,13 @@ public class ProtocolReaderServer {
                     }
                     String finalNick = newNick;
                     int suffix = 1;
-                    // Überprüfen, ob der Nickname schon vergeben ist, falls ja mit Suffix ergänzen
+                    // Checks if nickname is already taken, if so he adds a suffix
                     while (UserList.containsUserName(finalNick)) {
                         finalNick = newNick + suffix++;
                     }
-                    // Benutzer zur Liste hinzufügen
+                    // adds user to UserList
                     UserList.addUser(finalNick, out);
-                    // Willkommensnachricht an alle Clients senden
+                    // Welcome-message to all clients individually
                     Server.chatToAll("User " + finalNick + " has joined the chat.", "Server");
                     break;
                 }
@@ -131,12 +131,12 @@ public class ProtocolReaderServer {
 
                 case PING:
                     ProtocolWriterServer.sendInfo(out, "+OK PING sent");
-                    // Antworte ggf. mit PONG
+                    // ggf. mit PONG antworten
                     break;
 
                 case PONG:
                     System.out.println("PONG received from Client " + userId);
-                    // Verbindung ist aktiv, kein Timeout nötig
+                    // Connection is active, no timeout necessary
                     if (pingThread != null) {
                         pingThread.notifyPong();  // notify the ping thread that the PONG was received
                     }
@@ -145,7 +145,7 @@ public class ProtocolReaderServer {
 
                 case QUIT:
                     ProtocolWriterServer.sendInfo(out, "+OK Quit request received. Please confirm [YES/NO]");
-                    // Benutzer entfernen
+                    // Removes user
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();
                     break;

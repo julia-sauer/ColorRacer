@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.Socket;
 
 /**
- * A class that sends PING messages to clients and listens for PONG messages from the client.
+ * The class {@code PingThread} sends PING messages to clients and listens for PONG messages from the client.
  * This class should be used in a separate thread to maintain the connection.
  * @author Jana
  */
@@ -43,7 +43,7 @@ public class PingThread extends Thread {
     public void run() {
         while (running && !clientSocket.isClosed()) {
             try {
-                ProtocolWriterServer.sendCommand(out, Command.PING); //Senden von Ping
+                ProtocolWriterServer.sendCommand(out, Command.PING); //Sends Ping
                 pongReceived = false;
 
                 long startTime = System.currentTimeMillis();

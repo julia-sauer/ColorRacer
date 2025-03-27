@@ -32,111 +32,111 @@ public enum Command {
     public static final String SEPARATOR = "%"; // blank space als Separator
 
     /**
-     * Gibt den Befehl "INFO" aus.
+     * Prints the command "INFO"
      */
     public static void INFO() {
         System.out.println("INFO");
     }
     /**
-     * Gibt den Befehl "JOIN" aus.
+     * Prints the command "JOIN"
      */
     public static void JOIN() {
         System.out.println("JOIN");
     }
 
     /**
-     * Gibt den Befehl "VELO" aus.
+     * Prints the command "VELO"
      */
     public static void VELO() {
         System.out.println("VELO");
     }
 
     /**
-     * Gibt den Befehl "RADY" aus.
+     * Prints the command "RADY"
      */
     public static void RADY() {
         System.out.println("RADY");
     }
 
     /**
-     * Gibt den Befehl "STRT" aus.
+     * Prints the command "STRT"
      */
     public static void STRT() {
         System.out.println("STRT");
     }
 
     /**
-     * Gibt den Befehl "RSTT" aus.
+     * Prints the command "RSTT"
      */
     public static void RSTT() {
         System.out.println("RSTT");
     }
 
     /**
-     * Gibt den Befehl "QUIT" aus.
+     * Prints the command "QUIT"
      */
     public static void QUIT() {
         System.out.println("QUIT");
     }
 
     /**
-     * Gibt den Befehl "QCNF" aus.
+     * Prints the command "QCNF"
      */
     public static void QCNF() {
         System.out.println("QCNF");
     }
 
     /**
-     * Gibt den Befehl "ROLL" aus.
+     * Prints the command "ROLL"
      */
     public static void ROLL(){
         System.out.println("ROLL");
     }
 
     /**
-     * Gibt den Befehl "CHOS" aus.
+     * Prints the command "CHOS"
      */
     public static void CHOS() {
         System.out.println("CHOS");
     }
 
     /**
-     * Gibt den Befehl "MOVE" aus.
+     * Prints the command "MOVE"
      */
     public static void MOVE() {
         System.out.println("MOVE");
     }
 
     /**
-     * Gibt den Befehl "STAT" aus.
+     * Prints the command "STAT"
      */
     public static void STAT() {
         System.out.println("STAT");
     }
 
     /**
-     * Gibt den Befehl "CHAT" aus.
+     * Prints the command "CHAT"
      */
     public static void CHAT() {
         System.out.println("CHAT");
     }
 
     /**
-     * Gibt den Befehl "NICK" aus.
+     * Prints the command "NICK"
      */
     public static void NICK() {
         System.out.println("NICK");
     }
 
     /**
-     * Gibt "PING" aus.
+     * Prints the command "PING"
      */
     public static void PING() {
         System.out.println("PING");
     }
 
     /**
-     * Gibt "PONG" aus.
+     * Prints the command "PONG"
      */
     public static void PONG() {
         System.out.println("PONG");

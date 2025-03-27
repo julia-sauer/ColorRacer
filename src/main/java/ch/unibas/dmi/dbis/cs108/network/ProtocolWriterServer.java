@@ -5,24 +5,24 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
- * Diese Klasse sendet Nachrichten an alle verbundenen Clients
- * und kann auch einfache Befehle an einen bestimmten OutputStream senden.
+ * This class sends messages to all connected clients
+ * and can also send simple commands to a specific OutputStream.
  */
 public class ProtocolWriterServer {
     private final List<PrintWriter> clientWriters;
     /**
-     * Konstruktor: Initialisiert die Liste der PrintWriter.
+     * Constructor: Initialises the list of PrintWriters.
      *
-     * @param clientWriters die Liste der PrintWriter für alle verbundenen Clients.
+     * @param clientWriters the list of PrintWriters for all connected clients.
      */
     public ProtocolWriterServer(List<PrintWriter> clientWriters) {
         this.clientWriters = clientWriters;
     }
     /**
-     * Sendet eine Chat-Nachricht an alle Clients.
+     * Sends a chat message to all clients.
      *
-     * @param message Die zu sendende Nachricht.
-     * @param sender Der Name des Senders.
+     * @param message The message to be sent.
+     * @param sender The name of the sender.
      */
     public void sendChat(String message, String sender){
         String formatted = Command.CHAT + Command.SEPARATOR + sender + Command.SEPARATOR + message;
@@ -33,11 +33,11 @@ public class ProtocolWriterServer {
     }
 
     /**
-     * Sendet den Command auf dem gewünschten OutputStream.
+     * Sends a command on the desired output stream.
      *
-     * @param out der OutputStream der den Command sendet.
-     * @param command der Command-String zum Senden
-     * @throws IOException wenn die Nachricht nicht gesendet werden konnte.
+     * @param out the OutputStream that sends the command.
+     * @param command the command String to send
+     * @throws IOException if the command could not be sent.
      * @author Jana
      */
     public static void sendCommand(OutputStream out, Command command) throws IOException {
@@ -46,12 +46,13 @@ public class ProtocolWriterServer {
         System.out.println(command + Command.SEPARATOR + "sent");
     }
 
+    //TODO JavaDoc
     public static void sendInfo(OutputStream out, String msg) throws IOException {
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
         pw.println(Command.INFO + Command.SEPARATOR + msg);
         System.out.println(Command.INFO + Command.SEPARATOR + "sent");
     }
-
+    //TODO JavaDoc
     public static void sendCommandAndString(OutputStream out, Command command, String text) throws IOException {
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
         pw.println(command + Command.SEPARATOR + text);

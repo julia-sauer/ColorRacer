@@ -16,7 +16,7 @@ public class UserList {
     /**
      * Adds a new user to the list.
      * @param userName The name of the user to be added.
-     * @param out The output stream for communicating with the user.
+     * @param out The OutputStream for communicating with the user.
      * @return The unique user ID assigned to the new user.
      */
 
@@ -69,9 +69,9 @@ public class UserList {
     }
 
     /**
-     * Checks whether a nickname already exists in the UserList.
-     * @param "nickname" The nickname to check.
-     * @return true if the nickname already exists, false otherwise.
+     * Updates the user's new nickname
+     * @param userId the user's ID so the server knows which name to change
+     * @param newNickname is the new nickname the user has chosen
      */
 
     public static void updateUserName(int userId, String newNickname) {
