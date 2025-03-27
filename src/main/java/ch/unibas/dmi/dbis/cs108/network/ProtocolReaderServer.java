@@ -8,32 +8,34 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Die Klasse {@code ProtocolReaderServer} liest eingehende Nachrichten vom Client
- * und leitet sie an den Server weiter.
- * Die Klasse {@code ProtocolReaderServer} ist verantwortlich für das Empfangen und Interpretieren
- * von Nachrichten, die ein Client über das Netzwerk an den Server sendet. Diese Nachrichten sind
- * textbasiert und folgen einem bestimmten Netzwerkprotokoll.
+ * The {@code ProtocolReaderServer} class reads incoming messages from the client
+ * and forwards them to the server.
+ * The {@code ProtocolReaderServer} class is responsible for receiving and interpreting
+ * of messages that a client sends to the server via the network. These messages are
+ * text-based and follow a specific network protocol.
  * <p>
- * Diese Klasse wird pro Clientverbindung instanziiert und liest kontinuierlich neue Zeilen
- * (Befehle) vom verbundenen Client über einen {@link BufferedReader}. Jede Zeile wird als eine
- * vollständige Nachricht betrachtet (endet mit einem Zeilenumbruch '\n').
+ * This class is instantiated per client connection and continuously reads new lines
+ * (commands) from the connected client via a {@link BufferedReader}. Each line is regarded as a
+ * complete message (ends with a line break '\n').
  * </p>
  * @author anasv
  * @since 22.03.25
  */
+
 public class ProtocolReaderServer {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
     private final int userId; // Die ID des Clients, der aktuell mit dem Server verbunden ist.
     private final OutputStream out;
     private final PingThread pingThread;// added reference
     private final InputStream in;
+
     /**
-     * Konstruktor: Initialisiert den BufferedReader und die Benutzer-ID.
+     * Constructor: Initializes the BufferedReader and the user ID.
      *
-     * @param in     der InputStream, von dem die Nachrichten gelesen werden sollen.
-     * @param out    der OutputStream, auf den Antworten geschrieben werden.
-     * @param userId die eindeutige ID des Benutzers.
-     * @throws IOException wenn ein Fehler beim Erstellen des BufferedReaders auftritt.
+     * @param in the InputStream from which the messages are to be read.
+     * @param out the OutputStream to which replies are written.
+     * @param userId the unique ID of the user.
+     * @throws IOException if an error occurs when creating the BufferedReader.
      */
     public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread) throws IOException {
         // Initialisierung des BufferedReaders
@@ -45,19 +47,20 @@ public class ProtocolReaderServer {
     }
 
     /**
-     * Startet eine Endlosschleife, die kontinuierlich Nachrichten (Befehle) vom Client liest
-     * und sie anhand des Protokolls verarbeitet.
+     * Starts an infinite loop that continuously reads messages (commands) from the client
+     * and processes them using the protocol.
      *
-     * <p> Jede Nachricht muss mit einem der definierten {@link Command}-Enum-Werte beginnen.
-     * Die Methode dekodiert diese Befehle und führt die entsprechende Serveraktion aus.
+     <p> Each message must start with one of the defined {@link Command} enum values.
+     * The method decodes these commands and executes the corresponding server action.
      * <p>
-     * Das Verarbeiten der Netzwerkbefehle erfolgt mit switch-Statements, die der Server von einem
-     * Client erhält. Jeder Befehl (z.B. CHAT, NICK, PING, ...) wird als Textzeile vom Client geschickt.
-     * Der Server analysiert die Zeile, erkennt den Befehl (das erste Wort), und führt passende
-     * Aktionen aus.
+     * The network commands are processed using switch statements that the server receives from a
+     * client receives. Each command (e.g. CHAT, NICK, PING, ...) is sent as a text line from the client.
+     * The server analyzes the line, recognizes the command (the first word), and executes appropriate
+     * actions.
      * </p>
-     * @throws IOException wenn ein Fehler beim Lesen der Nachrichten auftritt.
+     * @throws IOException if an error occurs when reading the messages.
      */
+
     public void readLoop() throws IOException {
         String line;
         while ((line = reader.readLine()) != null) {

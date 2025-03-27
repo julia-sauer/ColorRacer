@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.IOException;
 /**
- * Die Klasse {@code ProtocolReaderClient} verarbeitet eingehende Nachrichten vom Server
- * und steuert die Interaktion mit dem Client.
+ * The {@code ProtocolReaderClient} class processes incoming messages from the server
+ * and controls the interaction with the client.
  */
 public class ProtocolReaderClient {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
@@ -16,28 +16,28 @@ public class ProtocolReaderClient {
     private final OutputStream out;
 
     /**
-     * Erstellt einen neuen {@code ProtocolReaderClient}.
-     *
-     * @param in  Der InputStream, von dem Nachrichten gelesen werden.
-     * @param out Der OutputStream, auf den Antworten geschrieben werden.
-     * @throws IOException Falls ein Fehler beim Erstellen des Readers auftritt.
+     * Creates a new {@code ProtocolReaderClient}.
+     * @param in The InputStream from which messages are read.
+     * @param out The OutputStream to which responses are written.
+     * @throws IOException If an error occurs when creating the reader.
      */
+
     public ProtocolReaderClient(InputStream in, OutputStream out) throws IOException {
         this.in = in;
         this.out = out;
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
-
     /**
-     * Die Methode {@code readLoop} liest kontinuierlich Zeilen vom Server
-     * <p>Im Fall eines {@code CHAT}-Befehls wird die empfangene Nachricht analysiert, und anschließend
-     * durch {@link #displayChat(String, String)} angezeigt.</p>
-     * Format für CHAT-Nachrichten vom Server:
+     * The {@code readLoop} method continuously reads lines from the server
+     <p>In the case of a {@code CHAT} command, the received message is analyzed and then displayed.
+     * displayed by {@link #displayChat(String, String)} </p>
+     * Format for CHAT messages from the server:
      * <pre>
      * CHAT <sender> <message>
      * </pre>
-     * @throws IOException  wenn ein Lesefehler vom Server auftritt
+     * @throws IOException if a read error occurs from the server
      */
+
     public void readLoop() throws IOException {
         String line;
         while ((line = reader.readLine()) != null) {
@@ -76,9 +76,7 @@ public class ProtocolReaderClient {
                     System.out.println("PING received from Server.");
                     ProtocolWriterClient.sendCommand(out, "PONG");
                     break;
-                /**
-                 * Wenn Command NICK erkannt wird, wird ausgegeben, wozu der Nickname gewechselt wurde.
-                 */
+
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("Error: No Nickname received.");

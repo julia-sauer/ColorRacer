@@ -1,8 +1,8 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 /**
- * Diese Klasse enthält statische Methoden, die im Netzwerkprotokoll (Protocol Document) definiert sind.
- * Jeder Protokollbefehl wird durch eine Methode dargestellt, die den Namen des Befehls in der Console ausgibt.
+ * This class contains static methods that are defined in the network protocol (Protocol Document).
+ * Each protocol command is represented by a method that outputs the name of the command in the console.
  *
  * @author anasv
  * @since 21.03.25
@@ -10,7 +10,7 @@ package ch.unibas.dmi.dbis.cs108.network;
 public enum Command {
 
     /**
-     * Alle enum-Konstanten werden hier Definiert
+     * All enum constants are defined here
      */
     INFO,
     JOIN,
@@ -32,111 +32,113 @@ public enum Command {
     public static final String SEPARATOR = "%"; // blank space als Separator
 
     /**
-     * Gibt den Befehl "INFO" aus.
+     * Outputs the command “INFO”.
      */
     public static void INFO() {
         System.out.println("INFO");
     }
     /**
-     * Gibt den Befehl "JOIN" aus.
+     * Outputs the command “JOIN”.
      */
     public static void JOIN() {
+
         System.out.println("JOIN");
     }
 
     /**
-     * Gibt den Befehl "VELO" aus.
+     * Outputs the command “VELO”.
      */
     public static void VELO() {
+
         System.out.println("VELO");
     }
 
     /**
-     * Gibt den Befehl "RADY" aus.
+     * Outputs the command “RADY”.
      */
     public static void RADY() {
         System.out.println("RADY");
     }
 
     /**
-     * Gibt den Befehl "STRT" aus.
+     * Outputs the command “STRT”.
      */
     public static void STRT() {
         System.out.println("STRT");
     }
 
     /**
-     * Gibt den Befehl "RSTT" aus.
+     * Outputs the command “RSTT”.
      */
     public static void RSTT() {
         System.out.println("RSTT");
     }
 
     /**
-     * Gibt den Befehl "QUIT" aus.
+     * Outputs the command “QUIT”.
      */
     public static void QUIT() {
         System.out.println("QUIT");
     }
 
     /**
-     * Gibt den Befehl "QCNF" aus.
+     * Outputs the command “QCNF”.
      */
     public static void QCNF() {
         System.out.println("QCNF");
     }
 
     /**
-     * Gibt den Befehl "ROLL" aus.
+     * Outputs the command “ROLL”.
      */
     public static void ROLL(){
         System.out.println("ROLL");
     }
 
     /**
-     * Gibt den Befehl "CHOS" aus.
+     * Outputs the command “CHOS”.
      */
     public static void CHOS() {
         System.out.println("CHOS");
     }
 
     /**
-     * Gibt den Befehl "MOVE" aus.
+     * Outputs the command “MOVE”.
      */
     public static void MOVE() {
         System.out.println("MOVE");
     }
 
     /**
-     * Gibt den Befehl "STAT" aus.
+     * Outputs the command “STAT”.
      */
     public static void STAT() {
         System.out.println("STAT");
     }
 
     /**
-     * Gibt den Befehl "CHAT" aus.
+     * Outputs the command “CHAT”.
      */
     public static void CHAT() {
         System.out.println("CHAT");
     }
 
     /**
-     * Gibt den Befehl "NICK" aus.
+     * Outputs the command “NICK”.
      */
     public static void NICK() {
         System.out.println("NICK");
     }
 
     /**
-     * Gibt "PING" aus.
+     * Outputs "PING" .
      */
     public static void PING() {
         System.out.println("PING");
     }
 
     /**
-     * Gibt "PONG" aus.
+     * Outputs "PONG" .
      */
     public static void PONG() {
         System.out.println("PONG");
