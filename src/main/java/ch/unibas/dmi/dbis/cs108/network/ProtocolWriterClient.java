@@ -57,7 +57,7 @@ public class ProtocolWriterClient {
             System.out.println("Message is too long");
             return;
         }
-        writer.println(Command.CHAT.name() + Command.SEPARATOR + message); // Sendet die Nachricht im Format "CHAT <message>" an den Server
+        writer.println("CHAT" + Command.SEPARATOR + message); // Sendet die Nachricht im Format "CHAT <message>" an den Server
         writer.flush(); // Sicherstellen, dass Nachricht sofort gesendet wird
     }
 
@@ -71,8 +71,8 @@ public class ProtocolWriterClient {
      */
     public static void sendCommand(OutputStream out, String command) throws IOException {
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
-        pw.println(command);
-        System.out.println(command + " sent");
+        pw.println(command + Command.SEPARATOR);
+        System.out.println(command + Command.SEPARATOR + "sent");
     }
 
     /**
@@ -122,7 +122,7 @@ public class ProtocolWriterClient {
             return;
         }
         // Sendet: JOIN <nickname>
-        writer.println(Command.JOIN.name() + Command.SEPARATOR + nickname);
+        writer.println("JOIN" + Command.SEPARATOR + nickname);
         writer.flush();
     }
 
