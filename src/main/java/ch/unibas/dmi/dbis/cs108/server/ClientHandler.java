@@ -43,8 +43,8 @@ public class ClientHandler implements Runnable {
             out = clientSocket.getOutputStream();
 
             // Starten des PingThreads
-            pingThread = new PingThread(clientSocket, clientNumber, in, out);
-            pingThread.start();
+            //pingThread = new PingThread(clientSocket, clientNumber, in, out);
+            //pingThread.start();
 
 
 
