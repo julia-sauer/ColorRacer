@@ -7,10 +7,10 @@ import java.io.OutputStreamWriter;
 import java.io.IOException;
 
 /**
- * Die Klasse {@code ProtocolWriterClient} wandelt die Spieler Eingaben in die entsprechenden
- * Protokollbefehle um, die in den Commands definiert sind und sendet sie, wenn nötig, an den Server weiter.
+ * The class {@code ProtocolWriterClient} converts the client's input into the corresponding
+ * protocol commands defined in the Commands and, if necessary, forwards them to the server.
  *
- * <p>Spielereingaben und zugehörige Protokollbefehle:
+ * <p>Users input and the corresponding protocol commands:
  *  * <ul>
  *  *     <li>{@code connect} → {@code JOIN}</li>
  *  *     <li>{@code leave} → {@code QUIT}</li>
@@ -18,21 +18,20 @@ import java.io.IOException;
  *  *     <li>{@code nicknamechange} → {@code NICK}</li>
  *  * </ul>
  * <p>
- * Diese Klasse verwendet die UFT-8-Kodierung, um eine plattformübergreifende Kommunikation sicherzustellen.
+ * This class uses the UFT-8-encoding to secure a cross-platform communication.
  */
 public class ProtocolWriterClient {
     /**
-     * Der {@code PrintWriter} zum Senden von Nachrichten über die Netzwerkverbindung.
-     * Dieser Writer schreibt Protokollbefehle (z.B. {@code CHAT}) in UTF-8 an den Server.
+     * The {@code PrintWriter} for sending messages via the network connection.
+     * This Writer writes protocol commands (e.g. {@code CHAT}) in UTF-8 to the server.
      */
     private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
 
 
     /**
-     * Konstruktor: Initialisiert den {@code PrintWriter} mit UFT-8.
-     * @param outputStream der OutputStream, an den die Nachrichten gesendet werden sollen.
-     * @throws IOException wenn ein Fehler beim Erstellen des PrintWriters auftritt.
-     *
+     * Constructor: Initialises the {@code PrintWriter} with UFT-8.
+     * @param outputStream the OutputStream to which the messages are to be sent.
+     * @throws IOException if an error occurs when creating the PrintWriter.
      */
     public ProtocolWriterClient(OutputStream outputStream) throws IOException {
         writer = new PrintWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8), true);
@@ -40,11 +39,11 @@ public class ProtocolWriterClient {
 
 
     /**
-     * Die Methode {@code sendChat} wird für den Chat verwendet.
-     * Sie wandelt eine vom Spieler eingegebene Chatnachricht (z.B. {@code message Hallo!}) in einen gültigen
-     * Protokollbefehl des Formats {@code CHAT <message>} um und sendet sie an den Server.
+     * The method{@code sendChat} is used for the chat.
+     * It converts a chat message entered by the user(e.g. {@code message Hallo!}) into a valid
+     * protocol command of the format {@code CHAT <message>} and sends it to the server.
      * <p>
-     * @param message Die Nachricht, die vom Benutzer eingegeben wurde.
+     * @param message The message entered by the user.
      * @author anasv
      * @since 22.03.25
      */
@@ -57,16 +56,16 @@ public class ProtocolWriterClient {
             System.out.println("Message is too long");
             return;
         }
-        writer.println(Command.CHAT + Command.SEPARATOR + message); // Sendet die Nachricht im Format "CHAT <message>" an den Server
-        writer.flush(); // Sicherstellen, dass Nachricht sofort gesendet wird
+        writer.println(Command.CHAT + Command.SEPARATOR + message); // Sends a message in format "CHAT <message>" to the server
+        writer.flush(); // Secures that the message is sent immediately
     }
 
     /**
-     * Sendet den Command auf dem gewünschten OutputStream.
+     * Sends the command on the desired OutputStream.
      *
-     * @param out der OutputStream zum Senden eines Commands
-     * @param command der Command-String zum Senden
-     * @throws IOException wenn die Nachricht nicht gesendet werden konnte.
+     * @param out the OutputStream for sending a command
+     * @param command the command that should be sent
+     * @throws IOException if the message could not be delivered.
      * @author Julia
      */
     public static void sendCommand(OutputStream out, String command) throws IOException {
@@ -76,9 +75,9 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Ruft sendCommand auf für den Command NICK, um den neuen Nickname dem Server zu senden.
-     * @param newnickname der neue Nickname, der den User ausgewählt hat.
-     * @param out der OutputStream, mit dem es gesendet wird.
+     * Uses the method {@code sendCommand} for the command NICK to send the new nickname to the server.
+     * @param newnickname the new nickname that the user selected.
+     * @param out the OutputStream with which it is sent.
      */
     public void changeNickname(String newnickname, OutputStream out) {
         try {
@@ -89,9 +88,9 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sendet einen {@code QUIT}-Befehl an den Server, um die Verbindung zu beenden.
+     * Sends a {@code QUIT} command to the server to terminate the connection.
      *
-     * @param out Der OutputStream, auf den der Befehl geschrieben wird.
+     * @param out The OutputStream to which the command is written.
      */
     public void leave(OutputStream out) {
         try {
@@ -102,10 +101,10 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sendet den {@code JOIN}-Befehl mit dem gewünschten Nicknamen an den Server.
-     * Der Server entscheidet, ob der Nickname akzeptiert oder verändert wird (z.B. bei Duplikaten).
+     * Sends the {@code JOIN} command with the desired nickname to the server.
+     * The server decides whether the nickname is accepted or changed (e.g. in the case of duplicates).
      *
-     * @param nickname Der vom Spieler eingegebene Nickname
+     * @param nickname The nickname entered by the user
      * @author anasv
      */
     public void sendJoin(String nickname){
@@ -121,7 +120,7 @@ public class ProtocolWriterClient {
             System.out.println("Nickname must be 3–15 characters, only letters, digits, or _");
             return;
         }
-        // Sendet: JOIN <nickname>
+        // Sends: JOIN <nickname>
         writer.println(Command.JOIN + Command.SEPARATOR + nickname);
         writer.flush();
     }
