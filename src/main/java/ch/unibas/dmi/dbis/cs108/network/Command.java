@@ -1,8 +1,8 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 /**
- * Diese Klasse enthält statische Methoden, die im Netzwerkprotokoll (Protocol Document) definiert sind.
- * Jeder Protokollbefehl wird durch eine Methode dargestellt, die den Namen des Befehls in der Console ausgibt.
+ * This class contains static methods that are defined in the network protocol (Protocol Document).
+ * Each protocol command is represented by a method that outputs the name of the command in the console.
  *
  * @author anasv
  * @since 21.03.25
@@ -10,7 +10,7 @@ package ch.unibas.dmi.dbis.cs108.network;
 public enum Command {
 
     /**
-     * Alle enum-Konstanten werden hier Definiert
+     * Here are all enum-constants defined
      */
     INFO,
     JOIN,
