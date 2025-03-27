@@ -43,7 +43,7 @@ public class Client {
             // Sends Default-Nickname to server
             ProtocolWriterClient.sendCommandAndString(out, Command.NICK, defaultNickname);
             try {
-                Thread.sleep(2000); //So the Welcomemessage comes before the System.out.println's that come after that
+                Thread.sleep(2000); //So the Welcomemessage comes before the System.out.println's that come after that.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
