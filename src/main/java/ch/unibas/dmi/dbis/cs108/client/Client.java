@@ -37,19 +37,19 @@ public class Client {
             });
             readerThread.start();
 
-            // System-Benutzername abrufen
+            // taking system's username
             String systemUsername = System.getProperty("user.name");
             String defaultNickname = "Guest_" + systemUsername;
-            // Default-Nickname an den Server senden
+            // Sends Default-Nickname to server
             ProtocolWriterClient.sendCommand(out, Command.NICK + Command.SEPARATOR + defaultNickname);
             System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
-            // DIE BEFEHLSÜBERSICHT:
+            // Overview of all commands which concerns the user:
             System.out.println("Available commands:");
             System.out.println("- connect <nickname>");
             System.out.println("- nicknamechange <newnickname>");
             System.out.println("- message <your message>");
             System.out.println("- leave");
-            // Eingaben von der Konsole lesen
+            // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
             ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodenimplementation im WriterClient
 
@@ -57,26 +57,26 @@ public class Client {
             while (true) {
                 line = conin.readLine();
                 if (line.equalsIgnoreCase("leave")) {
-                    // Verbindung beendet
+                    // closing connection and sending a QUIT-command
                     protocolClient.leave(out);
                     break;
                 } else if (line.startsWith("nicknamechange")){
-                    // Überprüft, ob Benutzer nicknamechange eingegeben hat.
+                    // changing nickname
                     protocolClient.changeNickname(line.substring(15), out);
                 } else if (line.startsWith("connect")) {
-                    // JOIN-Befehl senden
+                    // sends join-command
                     String nickname = line.substring(8).trim();
                     protocolClient.sendJoin(nickname);
                 } else if (line.startsWith("message")) {
-                    // Chatnachricht senden
+                    // sends a chat-message
                 String message = line.substring(8).trim();
                 protocolClient.sendChat(message);
-                } else { // ungültiger Befehl
+                } else { // if an unknown command is being used
                 System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
                 }
             }
-            // Programm beenden
+            // closing connection
             //System.out.println("Terminating ...");
             //in.close();
             //out.close();
