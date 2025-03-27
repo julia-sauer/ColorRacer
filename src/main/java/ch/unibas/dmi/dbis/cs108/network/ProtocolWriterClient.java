@@ -95,7 +95,7 @@ public class ProtocolWriterClient {
      */
     public void leave(OutputStream out) {
         try {
-            sendCommand(out, "QUIT");
+            sendCommand(out, Command.QUIT + Command.SEPARATOR);
         } catch (IOException e) {
             System.err.println("Error, could not send QUIT to Server");
         }

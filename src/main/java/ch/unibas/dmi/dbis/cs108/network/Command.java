@@ -35,7 +35,7 @@ public enum Command {
      * Gibt den Befehl "INFO" aus.
      */
     public static void INFO() {
-        System.out.println("Welcome to the Server!");
+        System.out.println("INFO");
     }
     /**
      * Gibt den Befehl "JOIN" aus.
