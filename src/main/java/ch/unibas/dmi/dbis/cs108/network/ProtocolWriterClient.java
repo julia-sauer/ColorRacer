@@ -82,7 +82,7 @@ public class ProtocolWriterClient {
      */
     public void changeNickname(String newnickname, OutputStream out) {
         try {
-            sendCommand(out, "NICK" + newnickname);
+            sendCommand(out, "NICK" + Command.SEPARATOR + newnickname);
         } catch (IOException e) {
             System.err.println("Error, could not send NICK " + newnickname + " to Server");
         }
