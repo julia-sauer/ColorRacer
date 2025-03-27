@@ -7,16 +7,16 @@ import java.net.*;
 import java.io.*;
 
 /**
- * Die Client-Klasse stellt eine Verbindung zu einem Server her und ermöglicht die Kommunikation über ein Netzwerk.
- * Diese Klasse verwendet das ProtocolReaderClient- und ProtocolWriterClient-Objekt, um Nachrichten zu lesen und zu senden.
+ * The client class establishes a connection to a server and enables communication via a network.
+ * This class uses the ProtocolReaderClient and ProtocolWriterClient objects to read and send messages.
  *
  */
 public class Client {
     /**
-     * Die main-Methode initialisiert die Verbindung zum Server und startet einen Thread, um Nachrichten zu lesen.
-     * Sie liest auch Eingaben von der Konsole und sendet entsprechende Befehle an den Server.
+     * The main method initializes the connection to the server and starts a thread to read messages.
+     * It also reads input from the console and sends corresponding commands to the server.
      *
-     * @param args Argumente, die die Hostadresse und den Port des Servers enthalten.
+     * @param args Arguments containing the host address and port of the server.
      * @author Julia
      */
     public static void main(String[] args) {

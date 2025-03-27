@@ -3,28 +3,28 @@ package ch.unibas.dmi.dbis.cs108.client;
 import java.io.*;
 
 /**
- * Eine lauffähige Klasse, die Daten aus einem InputStream liest und sie in die Standardausgabe schreibt.
- * Diese Klasse soll in einem separaten Thread verwendet werden, um kontinuierlich von einem Netzwerksocket zu lesen.
+ * An executable class that reads data from an InputStream and writes it to the standard output.
+ * This class should be used in a separate thread to continuously read from a network socket.
  *
  * @author julia
- * @since 21.03.2025
+ * @since 03/21/2025
  */
 class InThread implements Runnable {
     private InputStream in;
-
     /**
-     * Konstruiert einen InThread mit dem angegebenen InputStream.
+     * Constructs an InThread with the specified InputStream.
      *
-     * @param in den InputStream, aus dem gelesen werden soll
+     * @param in the InputStream from which to read
      */
+
     public InThread(InputStream in) {
         this.in = in;
     }
 
     /**
-     * Liest Daten aus dem InputStream und schreibt sie in die Standardausgabe.
-     * Diese Methode läuft in einer Schleife und liest kontinuierlich Bytes aus dem InputStream
-     * bis das Ende des Streams erreicht ist (angezeigt durch einen Rückgabewert von -1 von read()).
+     * Reads data from the InputStream and writes it to the standard output.
+     * This method runs in a loop and continuously reads bytes from the InputStream
+     * until the end of the stream is reached (indicated by a return value of -1 from read()).
      */
     public void run() {
         byte[] buffer = new byte[1024]; // Increased buffer size
