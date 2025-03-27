@@ -1,6 +1,5 @@
 package ch.unibas.dmi.dbis.cs108.gamenew;
 
-import ch.unibas.dmi.dbis.cs108.server.Server;
 import ch.unibas.dmi.dbis.cs108.server.UserList;
 import ch.unibas.dmi.dbis.cs108.server.User;
 import static org.junit.jupiter.api.Assertions.*;
