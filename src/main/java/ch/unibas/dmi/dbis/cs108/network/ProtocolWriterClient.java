@@ -117,7 +117,7 @@ public class ProtocolWriterClient {
             System.out.println("Nickname is too long");
             return;
         }
-        if (!nickname.matches("^[a-zA-Z0-9_]{3,15}$")) {
+        if (!nickname.matches("^[a-zA-Z0-9_]{3,50}$")) {
             System.out.println("Nickname must be 3–15 characters, only letters, digits, or _");
             return;
         }

@@ -5,17 +5,17 @@ import java.io.*;
 import java.net.Socket;
 
 /**
- * Eine Klasse, die auf PING-Nachrichten vom Server hört und PONG-Antworten sendet.
- * Diese Klasse soll in einem separaten Thread verwendet werden, um die Verbindung aufrechtzuerhalten.
+ * A class that listens for PING messages from the server and sends PONG responses.
+ * This class should be used in a separate thread to maintain the connection.
  */
 class PongThread implements Runnable {
     private final Socket clientSocket;
     private boolean running;
 
     /**
-     * Konstruiert einen PongThread mit den angegebenen Input- und OutputStreams.
+     * Constructs a PongThread with the specified input and output streams.
      *
-     * @param clientSocket der BufferedReader von dem gelesen werden soll
+     * @param clientSocket the BufferedReader to read from
      *
      */
     public PongThread(Socket clientSocket) {
@@ -24,8 +24,8 @@ class PongThread implements Runnable {
     }
 
     /**
-     * Hört auf PING-Nachrichten vom Server und sendet PONG-Antworten.
-     * Diese Methode läuft in einer Schleife und liest kontinuierlich Nachrichten aus dem InputStream.
+     * Listens for PING messages from the server and sends PONG responses.
+     * This method runs in a loop and continuously reads messages from the InputStream.
      */
     public void run() {
         try {
@@ -61,22 +61,22 @@ class PongThread implements Runnable {
     }
 
     /**
-     * Sendet einen Befehl über den OutputStream an den Server.
+     * Sends a command to the server via the OutputStream.
      *
-     * @param out Der OutputStream, über den der Befehl gesendet wird.
-     * @param command Der zu sendende Befehl.
-     * @throws IOException Falls ein Fehler beim Senden des Befehls auftritt.
+     * @param out The OutputStream via which the command is sent.
+     * @param command The command to be sent.
+     * @throws IOException If an error occurs when sending the command.
      */
     private void sendCommand(OutputStream out, String command) throws IOException {
         out.write((command + Command.SEPARATOR).getBytes());
     }
 
     /**
-     * Liest einen Befehl aus dem InputStream.
+     * Reads a command from the InputStream.
      *
-     * @param in Der InputStream, aus dem der Befehl gelesen wird.
-     * @return Der gelesene Befehl als String.
-     * @throws IOException Falls ein Fehler beim Lesen des Befehls auftritt.
+     * @param in The InputStream from which the command is read.
+     * @return The command read as a string.
+     * @throws IOException If an error occurs when reading the command.
      */
     private String readCommand(InputStream in) throws IOException {
         byte[] buffer = new byte[256];
@@ -85,7 +85,7 @@ class PongThread implements Runnable {
     }
 
     /**
-     * Stoppt das Pinging und beendet den Thread.
+     * Stops the pinging and ends the thread.
      */
     public void stopPinging() {
         running = false;
