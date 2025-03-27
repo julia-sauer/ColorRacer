@@ -46,6 +46,12 @@ public class ProtocolWriterServer {
         System.out.println(command + Command.SEPARATOR + "sent");
     }
 
+    public static void sendCommandAndString(OutputStream out, Command command, String text) throws IOException {
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
+        pw.println(command + Command.SEPARATOR + text);
+        System.out.println(command + Command.SEPARATOR + "sent");
+    }
+
     public static void sendInfo(OutputStream out, String msg) throws IOException {
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
         pw.println(Command.INFO + Command.SEPARATOR + msg);
