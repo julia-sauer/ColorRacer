@@ -41,7 +41,12 @@ public class Client {
             String systemUsername = System.getProperty("user.name");
             String defaultNickname = "Guest_" + systemUsername;
             // Sends Default-Nickname to server
-            ProtocolWriterClient.sendCommand(out, Command.NICK + Command.SEPARATOR + defaultNickname);
+            ProtocolWriterClient.sendCommandAndString(out, Command.NICK, defaultNickname);
+            try {
+                Thread.sleep(2000); //So the Welcomemessage comes before the System.out.println's that come after that
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
             // Overview of all commands which concerns the user:
             System.out.println("Available commands:");
