@@ -5,6 +5,7 @@
  */
 package ch.unibas.dmi.dbis.cs108.gamenew;
 
+import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +43,7 @@ public class ChatTest {
         writer.sendChat("TestMessage");
 
         String written = outStream.toString("UTF-8").trim();
-        assertTrue(written.startsWith("CHAT "), "Message should start with CHAT");
+        assertTrue(written.startsWith("CHAT" + Command.SEPARATOR), "Message should start with CHAT");
         assertTrue(written.contains("TestMessage"), "Message should contain the original content");
     }
 

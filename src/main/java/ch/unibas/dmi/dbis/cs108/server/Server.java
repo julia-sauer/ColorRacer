@@ -121,7 +121,7 @@ public class Server {
      */
     public static void changeNickname(int userId, String newNick) {
         // Validierung des neuen Nicknames (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
-        if (!newNick.matches("^[a-zA-Z0-9_]{3,15}$")) {
+        if (!newNick.matches("^[a-zA-Z0-9_]{3,30}$")) {
             User user = UserList.getUser(userId);
             if (user != null) {
                 try {

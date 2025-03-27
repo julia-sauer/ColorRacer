@@ -76,7 +76,7 @@ public class NicknameTest {
 
         assertEquals("DefaultName", UserList.getUserName(userId));
         String output = testOut.toString("UTF-8");
-        assertTrue(output.contains("CHATInvalid nickname"));
+        assertTrue(output.contains("CHAT Invalid nickname"));
     }
 
     @Test

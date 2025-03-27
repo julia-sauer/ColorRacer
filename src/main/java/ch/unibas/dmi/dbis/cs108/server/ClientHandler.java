@@ -63,8 +63,8 @@ public class ClientHandler implements Runnable {
             out.write(welcomeMsg.getBytes(StandardCharsets.UTF_8));
 
             int c;
-            while ((c = in.read()) != -1) {
-                out.write((char)c);
+             while ((c = in.read()) != -1) {
+               out.write((char)c);
                 //out.write((String.valueOf((char) c)).getBytes(StandardCharsets.UTF_8));
             }
 
