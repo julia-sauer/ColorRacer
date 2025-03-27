@@ -81,12 +81,12 @@ public class ProtocolReaderServer {
                 case JOIN: {
                     System.out.println("User " + userId + " is joining...");
                     if (parts.length < 2 || parts[1].trim().isEmpty()){
-                        ProtocolWriterServer.sendCommand(out, "-ERR Nickname missing");
+                        ProtocolWriterServer.sendInfo(out, "-ERR Nickname missing");
                         break;
                     }
                     String newNick = parts[1].trim();
                     if (!newNick.matches("^[a-zA-Z0-9_]{3,50}$")) {
-                        ProtocolWriterServer.sendCommand(out, "-ERR Invalid nickname: " + newNick);
+                        ProtocolWriterServer.sendInfo(out, "-ERR Invalid nickname: " + newNick);
                         break;
                     }
                     String finalNick = newNick;
@@ -104,7 +104,7 @@ public class ProtocolReaderServer {
                 // Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        ProtocolWriterServer.sendCommand(out, "-ERR Nickname missing");
+                        ProtocolWriterServer.sendInfo(out, "-ERR Nickname missing");
                         break;
                     }
                     String newNick = parts[1].trim();
@@ -130,7 +130,7 @@ public class ProtocolReaderServer {
                     break;
 
                 case PING:
-                    ProtocolWriterServer.sendCommand(out, "+OK PING sent");
+                    ProtocolWriterServer.sendInfo(out, "+OK PING sent");
                     // Antworte ggf. mit PONG
                     break;
 
@@ -140,11 +140,11 @@ public class ProtocolReaderServer {
                     if (pingThread != null) {
                         pingThread.notifyPong();  // notify the ping thread that the PONG was received
                     }
-                    ProtocolWriterServer.sendCommand(out, "+OK PONG received");
+                    ProtocolWriterServer.sendInfo(out, "+OK PONG received");
                     break;
 
                 case QUIT:
-                    ProtocolWriterServer.sendCommand(out, "+OK Quit request received. Please confirm [YES/NO]");
+                    ProtocolWriterServer.sendInfo(out, "+OK Quit request received. Please confirm [YES/NO]");
                     // Benutzer entfernen
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();
