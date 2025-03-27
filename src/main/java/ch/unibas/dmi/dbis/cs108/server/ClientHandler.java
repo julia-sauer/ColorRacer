@@ -2,6 +2,7 @@ package ch.unibas.dmi.dbis.cs108.server;
 
 
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderServer;
+import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 
 import java.io.*;
 import java.net.*;
@@ -61,7 +62,7 @@ public class ClientHandler implements Runnable {
             readerThread.start();
 
             String welcomeMsg = "Welcome to the Server!\n"; //Willkommensnachricht
-            out.write(welcomeMsg.getBytes(StandardCharsets.UTF_8));
+            ProtocolWriterServer.sendInfo(out, welcomeMsg);
 
             int c;
              while ((c = in.read()) != -1) {
