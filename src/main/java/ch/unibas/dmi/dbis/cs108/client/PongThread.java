@@ -43,7 +43,7 @@ class PongThread implements Runnable {
                         String message = reader.readLine();
                         if (message != null && "PING".equals(message.trim())) {
                             System.out.println("PING received");
-                            sendCommand(out, "PONG");
+                            sendCommand(out,  Command.PONG + Command.SEPARATOR);
                             System.out.println("PONG sent");
                             startTime = System.currentTimeMillis(); // Reset the timer
                         }
