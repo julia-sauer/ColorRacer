@@ -88,6 +88,15 @@ public class ProtocolReaderClient {
                     System.out.println("Nickname changed to " + newNick);
                     break;
 
+                case INFO:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Error: No Info received.");
+                        break;
+                    }
+                    String msg = parts[1].trim();
+                    System.out.println(msg);
+                    break;
+
                 default:
                     System.out.println("Unknown command from Server: " + line);
                     break;
