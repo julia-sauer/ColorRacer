@@ -138,8 +138,7 @@ public class Server {
         String finalNick = newNick;
         int suffix = 1;
         while (UserList.containsUserName(finalNick)) {
-            finalNick = newNick + suffix;
-            suffix++;
+            finalNick = finalNick + suffix;
         }
 
         // updates nickname
