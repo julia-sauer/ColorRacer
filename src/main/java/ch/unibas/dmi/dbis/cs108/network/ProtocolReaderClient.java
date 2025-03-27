@@ -103,9 +103,9 @@ public class ProtocolReaderClient {
     }
 
     /**
-     * Gibt eine empfangene Chatnachricht formatiert in der Konsole aus.
-     * @param message Die eigentliche Chatnachricht.
-     * @param sender  Der Benutzername des Absenders.
+     * Outputs a received chat message formatted in the console.
+     * @param message The actual chat message.
+     * @param sender The user name of the sender.
      * @author anasv
      */
     private void displayChat(String message, String sender) {
