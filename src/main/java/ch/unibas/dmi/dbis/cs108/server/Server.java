@@ -1,6 +1,5 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
-import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import java.util.List;
@@ -121,7 +120,7 @@ public class Server {
      */
     public static void changeNickname(int userId, String newNick) {
         // Validierung des neuen Nicknames (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
-        if (!newNick.matches("^[a-zA-Z0-9_]{3,30}$")) {
+        if (!newNick.matches("^[a-zA-Z0-9_]{3,50}$")) {
             User user = UserList.getUser(userId);
             if (user != null) {
                 try {
@@ -173,7 +172,7 @@ public class Server {
      * @param sender  Der Benutzername des Absenders.
      */
     public static void chatToAll(String message, String sender) {
-        String chatMessage = Command.CHAT.name() + " " + sender + ": " + message; // Formatiere die Nachricht gemäss Protokoll: CHAT <sender>: <message>
+        String chatMessage = Command.CHAT + " " + sender + ": " + message; // Formatiere die Nachricht gemäss Protokoll: CHAT <sender>: <message>
         for (PrintWriter writer : clientWriters) { // Iteriere über alle registrierten Client-Ausgabeströme und sende die Nachricht
             writer.println(chatMessage);
             writer.flush();
