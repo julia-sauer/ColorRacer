@@ -7,8 +7,8 @@ import java.net.*;
 import java.io.*;
 
 /**
- * The client class establishes a connection to a server and enables communication via a network.
- * This class uses the ProtocolReaderClient and ProtocolWriterClient objects to read and send messages.
+ * The Client class establishes a connection to a server and enables communication via a network.
+ * This class uses {@link ProtocolReaderClient} and {@link ProtocolWriterClient} objects to read and send messages.
  *
  */
 public class Client {

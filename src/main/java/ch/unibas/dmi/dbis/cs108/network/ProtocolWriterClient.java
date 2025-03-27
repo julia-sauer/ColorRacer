@@ -7,7 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.IOException;
 
 /**
- * The class {@code ProtocolWriterClient} converts the client's input into the corresponding
+ * The class ProtocolWriterClient converts the client's input into the corresponding
  * protocol commands defined in the Commands and, if necessary, forwards them to the server.
  *
  * <p>Users input and the corresponding protocol commands:
@@ -22,14 +22,14 @@ import java.io.IOException;
  */
 public class ProtocolWriterClient {
     /**
-     * The {@code PrintWriter} for sending messages via the network connection.
+     * The {@link PrintWriter} for sending messages via the network connection.
      * This Writer writes protocol commands (e.g. {@code CHAT}) in UTF-8 to the server.
      */
     private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
 
 
     /**
-     * Constructor: Initialises the {@code PrintWriter} with UFT-8.
+     * Constructor: Initialises the {@link PrintWriter} with UFT-8.
      * @param outputStream the OutputStream to which the messages are to be sent.
      * @throws IOException if an error occurs when creating the PrintWriter.
      */
@@ -39,7 +39,7 @@ public class ProtocolWriterClient {
 
 
     /**
-     * The method{@code sendChat} is used for the chat.
+     * The method {@code sendChat} is used for the chat.
      * It converts a chat message entered by the user(e.g. {@code message Hallo!}) into a valid
      * protocol command of the format {@code CHAT <message>} and sends it to the server.
      * <p>

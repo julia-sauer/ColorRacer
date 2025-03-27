@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.IOException;
 /**
- * The {@code ProtocolReaderClient} class processes incoming messages from the server
+ * The ProtocolReaderClient class processes incoming messages from the server
  * and controls the interaction with the client.
  */
 public class ProtocolReaderClient {
@@ -16,7 +16,7 @@ public class ProtocolReaderClient {
     private final OutputStream out;
 
     /**
-     * Creates a new {@code ProtocolReaderClient}.
+     * Creates a new ProtocolReaderClient.
      *
      * @param in The InputStream from which messages are read.
      * @param out The OutputStream to which responses are written.

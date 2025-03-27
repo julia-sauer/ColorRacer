@@ -8,7 +8,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The class {@code ProtocolReaderServer} reads incoming messages from the client
+ * The class ProtocolReaderServer reads incoming messages from the client
  * and forwards them to the server.
  * The class is also responsible for receiving and interpreting
  * of messages that a client sends to the server via the network. These messages are

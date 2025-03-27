@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.lang.System.out;
 
 /**
- * The Server class provides a simple multi-user chat server.
+ * The class {@code Server} provides a simple multi-user chat server.
  * It manages client connections, processes messages and takes care of user administration.
  * * The server works on port 8090 and accepts incoming client connections.
  */
@@ -24,15 +24,15 @@ public class Server {
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
 
     /**
-     * Startet einen Server, der auf Verbindungen wartet und stellt Netzwerkverbindung
-     * von Client zu Server dar.
-     * ServerSocket erstellt einen Server (hier: echod) der auf Port 8090 läuft.
-     * echod.accept(); wartet bis sich Client verbindet.
-     * Sobald sich ein Client verbunden hat, wird "Connection established" ausgegeben.
-     * while-Schleife: Solange bis Client Verbindung beendet. Speichert was von Client kommt in c
-     * und gibt genau das Gleiche zurück (out.write).
-     * Wenn Client Verbindung beendet geht es aus while-Schleife, dann wir Verbindung zu Client beendet
-     * (socket.close) dann wird Server geschlossen (echod.close).
+     * Starts a server that waits for connections and establishes a network connection
+     * from client to server.
+     * ServerSocket creates a server (here: echod) that runs on port 8090.
+     * echod.accept(); waits until client connects.
+     * As soon as a client has connected, ‘Connection established’ is printed.
+     * while-loop: until the client ends the connection. Saves what comes from the client in c
+     * and returns exactly the same (out.write).
+     * When client connection is closed, it exits while loop, then connection to client is closed
+     * (socket.close) then server is closed (echod.close).
      * @author Jana
      */
     public static void main(String[] args) {
@@ -43,7 +43,7 @@ public class Server {
             while (true) {
                 Socket clientSocket = echod.accept();
                 activeClients.incrementAndGet();
-                int userId = addNewUser("Client" + activeClients.get()); // Änderung: Aufruf der neuen Methode
+                int userId = addNewUser("Client" + activeClients.get());
                 out.println("Connection established for Client: " + activeClients.get());
 
                 ClientHandler cH = new ClientHandler(activeClients.get(), clientSocket);
@@ -61,9 +61,9 @@ public class Server {
         }
     }
     /**
-     * Fügt einen neuen Benutzer zur Benutzerliste hinzu.
-     * @param userName Der Name des neuen Benutzers.
-     * @return Die eindeutige Benutzer-ID.
+     * Adds a new user to the user list.
+     * @param userName is the name of the new user.
+     * @return the unique user-ID.
      * @author milo
      */
     public static int addNewUser(String userName) { // Neue Methode
@@ -113,7 +113,7 @@ public class Server {
     /**
      * Changes a user's nickname.
      * Checks whether the nickname already exists using UserList and adds a 1 if so.
-     * Then calls sendCommand from ProtocolWriterServer, which sends the message to the client
+     * Then calls sendCommand from {@link ProtocolWriterServer}, which sends the message to the client
      * that the nickname has been changed.
      * @param userId The ID of the user who wants to change the nickname.
      * @param newNick The new desired nickname.
@@ -121,7 +121,7 @@ public class Server {
      */
 
     public static void changeNickname(int userId, String newNick) {
-        // Validierung des neuen Nicknames (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
+        // Validating of the new nickname (3–50 symbols; only letters, numbers and underscores)
         if (!newNick.matches("^[a-zA-Z0-9_]{3,50}$")) {
             User user = UserList.getUser(userId);
             if (user != null) {
@@ -134,7 +134,7 @@ public class Server {
             return;
         }
 
-        // Überprüfung auf Duplikate und ggf. Anpassen mit Suffix
+        // Check for duplicates and adjust with suffix if necessary
         String finalNick = newNick;
         int suffix = 1;
         while (UserList.containsUserName(finalNick)) {
@@ -142,10 +142,10 @@ public class Server {
             suffix++;
         }
 
-        // Nickname aktualisieren
+        // updates nickname
         UserList.updateUserName(userId, finalNick);
 
-        // Nachricht an den Client senden
+        // sends message to client
         User user = UserList.getUser(userId);
         if (user != null) {
             try {
@@ -175,8 +175,8 @@ public class Server {
      */
 
     public static void chatToAll(String message, String sender) {
-        String chatMessage = Command.CHAT + " " + sender + ": " + message; // Formatiere die Nachricht gemäss Protokoll: CHAT <sender>: <message>
-        for (PrintWriter writer : clientWriters) { // Iteriere über alle registrierten Client-Ausgabeströme und sende die Nachricht
+        String chatMessage = Command.CHAT + " " + sender + ": " + message; // Formats the message according to protocol: CHAT <sender>: <message>
+        for (PrintWriter writer : clientWriters) { // Iterates over all registered client output streams and sends the message
             writer.println(chatMessage);
             writer.flush();
         }

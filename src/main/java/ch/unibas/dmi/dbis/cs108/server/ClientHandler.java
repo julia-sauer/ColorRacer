@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * The {@code ClientHandler} class processes the communication between server and client.
- * It starts the protocol reader, sends a welcome message and manages the client connection.
+ * It starts the {@link ProtocolReaderServer}, sends a welcome message and manages the client connection.
  */
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
@@ -30,9 +30,9 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * Starts a ProtocolReader for servers.
+     * Starts a {@link ProtocolReaderServer} for servers.
      * Outputs a welcome message.
-     * Starts the PingThread and thus the Ping-Pong mechanism.
+     * Starts the {@link PingThread} and thus the Ping-Pong mechanism.
      * int c + while-loop is from EchoServer, so what comes in is also output again.
      * If in.read = -1, i.e. the client has left the server, the ClientSocket is terminated.
      * The user is removed from the UserList and the server is notified that a client has left.
@@ -44,13 +44,13 @@ public class ClientHandler implements Runnable {
             in = clientSocket.getInputStream();
             out = clientSocket.getOutputStream();
 
-            // Starten des PingThreads
+            // Starts a PingThread
             //pingThread = new PingThread(clientSocket, clientNumber, in, out);
             //pingThread.start();
 
 
 
-            // Erstellen Sie einen Thread für das Lesen von Nachrichten
+            // Generates a Thread for reading messages
             ProtocolReaderServer protocolReader = new ProtocolReaderServer(in, clientNumber, out, pingThread);
             Thread readerThread = new Thread(() -> {
                 try {
@@ -61,7 +61,7 @@ public class ClientHandler implements Runnable {
             });
             readerThread.start();
 
-            String welcomeMsg = "Welcome to the Server!\n"; //Willkommensnachricht
+            String welcomeMsg = "Welcome to the Server!\n"; //Welcome message
             ProtocolWriterServer.sendInfo(out, welcomeMsg);
 
             int c;
@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable {
             System.out.println("Connection closed for Client " + clientNumber);
             clientSocket.close();
             PingThread.stopPinging();
-            removeUser(clientNumber); // Aufruf der Methode removeUser
+            removeUser(clientNumber); // the invocation of the method removeUser
             Server.ClientDisconnected();
 
         }
