@@ -74,7 +74,7 @@ public class Client {
                 String message = line.substring(8).trim();
                 protocolClient.sendChat(message);
                 } else { // ungültiger Befehl
-                System.out.println("Unknown command. Use: connect | nicknamechange | message | QUIT");
+                System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
                 }
             }
