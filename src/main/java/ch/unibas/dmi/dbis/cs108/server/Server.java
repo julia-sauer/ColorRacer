@@ -147,7 +147,7 @@ public class Server {
         User user = UserList.getUser(userId);
         if (user != null) {
             try {
-                ProtocolWriterServer.sendCommand(user.getOut(), "NICK" + finalNick);
+                ProtocolWriterServer.sendCommandAndString(user.getOut(), Command.NICK, finalNick);
             } catch (IOException e) {
                 System.err.println("Error while sending NICK " + finalNick + " to user " + userId);
             }
