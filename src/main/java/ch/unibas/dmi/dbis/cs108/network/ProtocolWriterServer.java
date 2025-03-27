@@ -25,7 +25,7 @@ public class ProtocolWriterServer {
      * @param sender Der Name des Senders.
      */
     public void sendChat(String message, String sender){
-        String formatted = Command.CHAT.name() + Command.SEPARATOR + sender + Command.SEPARATOR + message;
+        String formatted = "CHAT" + Command.SEPARATOR + sender + Command.SEPARATOR + message;
         for (PrintWriter writer : clientWriters) {
             writer.println(formatted);
             writer.flush();
@@ -42,7 +42,7 @@ public class ProtocolWriterServer {
      */
     public static void sendCommand(OutputStream out, String command) throws IOException {
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
-        pw.println(command);
-        System.out.println(command + " sent");
+        pw.println(command + Command.SEPARATOR);
+        System.out.println(command + Command.SEPARATOR + "sent");
     }
 }
