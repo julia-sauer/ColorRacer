@@ -57,10 +57,7 @@ public class Client {
                 line = conin.readLine();
                 if (line.equalsIgnoreCase("leave")) {
                     // Verbindung beendet
-                    System.out.println("Terminating ...");
-                    in.close();
-                    out.close();
-                    sock.close();
+                    protocolClient.leave(out);
                     break;
                 } else if (line.startsWith("nicknamechange")){
                     // Überprüft, ob Benutzer nicknamechange eingegeben hat.
@@ -79,10 +76,10 @@ public class Client {
                 }
             }
             // Programm beenden
-            System.out.println("Terminating ...");
-            in.close();
-            out.close();
-            sock.close();
+            //System.out.println("Terminating ...");
+            //in.close();
+            //out.close();
+            //sock.close();
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
