@@ -93,8 +93,8 @@ public class ProtocolReaderClient {
                         System.err.println("Error: Welcome message not received.");
                         break;
                     }
-                    String welcomemsg = parts[1].trim();
-                    System.out.println(welcomemsg);
+                    String msg = parts[1].trim();
+                    System.out.println(msg);
                     break;
 
                 default:
