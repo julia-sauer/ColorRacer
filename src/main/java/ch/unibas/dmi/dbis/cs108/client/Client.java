@@ -1,5 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.client;
 
+import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import java.net.*;
@@ -40,7 +41,7 @@ public class Client {
             String systemUsername = System.getProperty("user.name");
             String defaultNickname = "Guest_" + systemUsername;
             // Default-Nickname an den Server senden
-            ProtocolWriterClient.sendCommand(out, "NICK " + defaultNickname);
+            ProtocolWriterClient.sendCommand(out, Command.NICK + Command.SEPARATOR + defaultNickname);
             System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
             // DIE BEFEHLSÜBERSICHT:
             System.out.println("Available commands:");
