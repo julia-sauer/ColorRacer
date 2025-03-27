@@ -16,7 +16,7 @@ public class PingThread extends Thread {
     private static boolean running = true;
     private final InputStream in;
     private final OutputStream out;
-    private static final long PING_INTERVAL = 15000;
+    private static final long PING_INTERVAL = 15000000;
     private volatile boolean pongReceived = false;// 15 seconds
 
     /**
