@@ -1,5 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
+import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 
 import java.io.*;
@@ -41,7 +42,7 @@ public class PingThread extends Thread {
     public void run() {
         while (running && !clientSocket.isClosed()) {
             try {
-                ProtocolWriterServer.sendCommand(out, "PING"); //Senden von Ping
+                ProtocolWriterServer.sendCommand(out, Command.PING); //Senden von Ping
                 pongReceived = false;
 
                 long startTime = System.currentTimeMillis();
@@ -106,7 +107,7 @@ public class PingThread extends Thread {
     public static void pongReceived(OutputStream out, int userId) {
         System.out.println("PONG received form Client " + userId);
         try {
-            ProtocolWriterServer.sendCommand(out, "PING");
+            ProtocolWriterServer.sendCommand(out, Command.PING);
             System.out.println("Next PING sent to Client " + userId);
         } catch (IOException e) {
             System.err.println("Error, Could not send Command");
