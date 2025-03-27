@@ -124,7 +124,7 @@ public class Server {
             User user = UserList.getUser(userId);
             if (user != null) {
                 try {
-                    ProtocolWriterServer.sendCommand(user.getOut(), "CHATInvalid nickname! Must be 3–15 characters, using only letters, numbers, or underscores.");
+                    ProtocolWriterServer.sendInfo(user.getOut(), "CHATInvalid nickname! Must be 3–15 characters, using only letters, numbers, or underscores.");
                 } catch (IOException e) {
                     System.err.println("Error sending nickname validation message to user " + userId);
                 }
