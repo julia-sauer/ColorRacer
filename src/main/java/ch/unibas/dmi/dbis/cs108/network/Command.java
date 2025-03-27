@@ -12,6 +12,7 @@ public enum Command {
     /**
      * Alle enum-Konstanten werden hier Definiert
      */
+    INFO,
     JOIN,
     VELO,
     RADY,
@@ -30,6 +31,12 @@ public enum Command {
 
     public static final String SEPARATOR = "%"; // blank space als Separator
 
+    /**
+     * Gibt den Befehl "INFO" aus.
+     */
+    public static void INFO() {
+        System.out.println("INFO");
+    }
     /**
      * Gibt den Befehl "JOIN" aus.
      */
