@@ -43,7 +43,7 @@ public class ChatTest {
         writer.sendChat("TestMessage");
 
         String written = outStream.toString("UTF-8").trim();
-        assertTrue(written.startsWith("CHAT" + Command.SEPARATOR), "Message should start with CHAT");
+        assertTrue(written.startsWith(Command.CHAT + Command.SEPARATOR), "Message should start with CHAT");
         assertTrue(written.contains("TestMessage"), "Message should contain the original content");
     }
 
