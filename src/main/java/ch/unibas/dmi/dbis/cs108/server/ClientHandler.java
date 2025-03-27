@@ -8,8 +8,8 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Die Klasse {@code ClientHandler} verarbeitet die Kommunikation zwischen Server und Client.
- * Sie startet den Protokoll-Reader, sendet eine Willkommensnachricht und verwaltet die Client-Verbindung.
+ * The {@code ClientHandler} class processes the communication between server and client.
+ * It starts the protocol reader, sends a welcome message and manages the client connection.
  */
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
@@ -19,9 +19,9 @@ public class ClientHandler implements Runnable {
     private OutputStream out;
 
     /**
-     * Konstruktor von der Klasse ClientHandler
-     * @param clientNumber ist die eindeutige Nummer des Clients
-     * @param socket ist das Socket-Objekt für die Client-Verbindung
+     * Constructor of the ClientHandler class
+     * @param clientNumber is the unique number of the client
+     * @param socket is the socket object for the client connection
      */
     public ClientHandler(int clientNumber, Socket socket) {
         this.clientNumber = clientNumber;
@@ -29,14 +29,15 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * Startet eine ProtocolReader für Server.
-     * Gibt eine Willkommensnachricht aus.
-     * Startet den PingThread und somit den Ping-Pong-Mechanismus.
-     * int c + while-loop ist von EchoServer, also das was hereinkommt wird auch wieder ausgegeben.
-     * Wenn in.read = -1, also der Client den Server verlassen hat, wird der ClientSocket beendet.
-     * Der User wird von der UserList genommen und der Server wird benachrichtigt, dass ein Client gegangen ist.
+     * Starts a ProtocolReader for servers.
+     * Outputs a welcome message.
+     * Starts the PingThread and thus the Ping-Pong mechanism.
+     * int c + while-loop is from EchoServer, so what comes in is also output again.
+     * If in.read = -1, i.e. the client has left the server, the ClientSocket is terminated.
+     * The user is removed from the UserList and the server is notified that a client has left.
      * @author Jana
      */
+
     public void run() {
         try {
             in = clientSocket.getInputStream();
@@ -80,8 +81,8 @@ public class ClientHandler implements Runnable {
         }
     }
     /**
-     * Entfernt einen Benutzer aus der Benutzerliste.
-     * @param clientNumber Die ID des zu entfernenden Benutzers.
+     * Removes a user from the user list.
+     * @param clientNumber The ID of the user to be removed.
      * @author milo
      */
     private void removeUser(int clientNumber) {

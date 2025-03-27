@@ -5,8 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Diese Klasse verwaltet eine Liste von Benutzern, die mit dem Server verbunden sind.
- * Sie stellt Methoden zum Hinzufügen, Entfernen und Abrufen von Benutzerinformationen bereit.
+ * This class manages a list of users connected to the server.
+ * It provides methods for adding, removing, and retrieving user information.
  * @author milo
  */
 public class UserList {
@@ -14,11 +14,12 @@ public class UserList {
     private static final AtomicInteger userIdCounter = new AtomicInteger(0);
 
     /**
-     * Fügt einen neuen Benutzer zur Liste hinzu.
-     * @param userName Der Name des hinzuzufügenden Benutzers.
-     * @param out Der OutputStream zur Kommunikation mit dem Benutzer.
-     * @return Die eindeutige Benutzer-ID, die dem neuen Benutzer zugewiesen wurde.
+     * Adds a new user to the list.
+     * @param userName The name of the user to be added.
+     * @param out The output stream for communicating with the user.
+     * @return The unique user ID assigned to the new user.
      */
+
     public static int addUser(String userName, OutputStream out) {
         int userId = userIdCounter.incrementAndGet();
         userMap.put(userId, new User(userId, userName, out));
@@ -26,48 +27,53 @@ public class UserList {
     }
 
     /**
-     * Entfernt einen Benutzer aus der Liste.
-     * @param userId Die ID des zu entfernenden Benutzers.
-     * @return Der Name des entfernten Benutzers, oder null, wenn der Benutzer nicht gefunden wurde.
+     * Removes a user from the list.
+     * @param userId The ID of the user to be removed.
+     * @return The name of the removed user, or null if the user was not found.
      */
+
     public static String removeUser(int userId) {
         User user = userMap.remove(userId);
         return (user != null) ? user.getNickname() : null;
     }
 
     /**
-     * Ruft den Namen eines Benutzers anhand seiner ID ab.
-     * @param userId Die ID des abzurufenden Benutzers.
-     * @return Der Name des Benutzers, oder null, wenn der Benutzer nicht gefunden wurde.
+     * Retrieves a user's name based on their ID.
+     * @param userId The ID of the user to retrieve.
+     * @return The user's name, or null if the user is not found.
      */
+
     public static String getUserName(int userId) {
         User user = userMap.get(userId);
         return (user != null) ? user.getNickname() : null;
     }
 
     /**
-     * Gibt die Gesamtanzahl der Benutzer in der Liste zurück.
-     * @return Die Anzahl der Benutzer.
+     * Returns the total number of users in the list.
+     * @return The number of users.
      */
+
     public static int getUserCount() {
         return userMap.size();
     }
 
     /**
-     * Überprüft, ob ein Nickname bereits in der UserList vorhanden ist.
-     * @param nickname Der zu überprüfende Nickname.
-     * @return true, wenn der Nickname bereits existiert, sonst false.
+     * Checks whether a nickname already exists in the UserList.
+     * @param nickname The nickname to check.
+     * @return true if the nickname already exists, false otherwise.
      */
+
     public static boolean containsUserName(String nickname) {
         return userMap.values().stream()
                 .anyMatch(user -> user.getNickname().equals(nickname));
     }
 
     /**
-     * Ändert den Nickname eines Benutzers basierend auf der Benutzer-ID.
-     * @param userId Die ID des Benutzers.
-     * @param newNickname Der neue Nickname.
+     * Checks whether a nickname already exists in the UserList.
+     * @param "nickname" The nickname to check.
+     * @return true if the nickname already exists, false otherwise.
      */
+
     public static void updateUserName(int userId, String newNickname) {
         User user = userMap.get(userId);
         if (user != null) {
@@ -76,10 +82,11 @@ public class UserList {
     }
 
     /**
-     * Gibt das User-Objekt zu einer Benutzer-ID zurück.
-     * @param userId Die ID des Benutzers.
-     * @return Das User-Objekt oder null, wenn nicht gefunden.
+     * Returns the User object for a user ID.
+     * @param userId The user ID.
+     * @return The User object or null if not found.
      */
+
     public static User getUser(int userId) {
         return userMap.get(userId);
     }

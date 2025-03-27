@@ -7,8 +7,8 @@ import java.io.*;
 import java.net.Socket;
 
 /**
- * Eine Klasse, die PING-Nachrichten versendet an Clients und auf PONG-Nachrichten vom Client hört.
- * Diese Klasse soll in einem separaten Thread verwendet werden, um die Verbindung aufrechtzuerhalten.
+ * A class that sends PING messages to clients and listens for PONG messages from the client.
+ * This class should be used in a separate thread to maintain the connection.
  * @author Jana
  */
 public class PingThread extends Thread {
@@ -21,13 +21,14 @@ public class PingThread extends Thread {
     private volatile boolean pongReceived = false;// 15 seconds
 
     /**
-     * Erstellt einen neuen {@code PingThread} für einen bestimmten Client.
+     * Creates a new {@code PingThread} for a specific client.
      *
-     * @param clientSocket  Das Socket des Clients.
-     * @param clientNumber  Die eindeutige Nummer des Clients.
-     * @param in           Der InputStream für Nachrichten.
-     * @param out          Der OutputStream für Nachrichten.
+     * @param clientSocket The client's socket.
+     * @param clientNumber The unique number of the client.
+     * @param in The InputStream for messages.
+     * @param out The OutputStream for messages.
      */
+
     public PingThread(Socket clientSocket, int clientNumber, InputStream in, OutputStream out) {
         this.clientSocket = clientSocket;
         this.clientNumber = clientNumber;
@@ -35,8 +36,8 @@ public class PingThread extends Thread {
         this.out = out;
     }
     /**
-     * Startet den Ping-Thread, der regelmäßig PING-Nachrichten sendet und auf PONG-Antworten wartet.
-     * Falls keine Antwort innerhalb des definierten Zeitlimits erfolgt, wird die Verbindung geschlossen.
+     * Starts the ping thread, which regularly sends PING messages and waits for PONG responses.
+     * If no response is received within the defined time limit, the connection is closed.
      */
     @Override
     public void run() {
@@ -73,16 +74,16 @@ public class PingThread extends Thread {
     }
 
     /**
-     * Benachrichtigt den PingThread, dass ein PONG vom Client empfangen wurde.
+     * Notifies the PingThread that a PONG has been received from the client.
      */
     public void notifyPong(){
         pongReceived = true;
     }
 
     /**
-     * Überprüft, ob eine PONG-Nachricht empfangen wurde.
+     * Checks whether a PONG message has been received.
      *
-     * @return {@code true}, wenn eine PONG-Nachricht empfangen wurde, sonst {@code false}.
+     * @return {@code true} if a PONG message has been received, otherwise {@code false}.
      */
     private boolean hasReceivedPong() {
         try {
@@ -99,10 +100,10 @@ public class PingThread extends Thread {
     }
 
     /**
-     * Verarbeitet eine empfangene PONG-Nachricht und sendet das nächste PING an den Client.
+     * Processes a received PONG message and sends the next PING to the client.
      *
-     * @param out     Der OutputStream des Clients.
-     * @param userId  Die ID des Clients, der das PONG gesendet hat.
+     * @param out The OutputStream of the client.
+     * @param userId The ID of the client that sent the PONG.
      */
     public static void pongReceived(OutputStream out, int userId) {
         System.out.println("PONG received form Client " + userId);
@@ -115,7 +116,7 @@ public class PingThread extends Thread {
     }
 
     /**
-     * Stoppt den Ping-Thread und unterbricht den aktuellen Thread.
+     * Stops the ping thread and interrupts the current thread.
      */
     public static void stopPinging() {
         running = false;

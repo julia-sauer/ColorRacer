@@ -14,9 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.lang.System.out;
 
 /**
- * Die Klasse Server stellt einen einfachen Mehrbenutzer-Chatserver bereit.
- *  * Sie verwaltet Client-Verbindungen, verarbeitet Nachrichten und sorgt für die Verwaltung der Nutzer.
- *  * Der Server arbeitet auf Port 8090 und akzeptiert eingehende Client-Verbindungen.
+ * The Server class provides a simple multi-user chat server.
+ * It manages client connections, processes messages and takes care of user administration.
+ * * The server works on port 8090 and accepts incoming client connections.
  */
 public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
@@ -24,17 +24,18 @@ public class Server {
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
 
     /**
-     * Startet einen Server, der auf Verbindungen wartet und stellt Netzwerkverbindung
-     * von Client zu Server dar.
-     * ServerSocket erstellt einen Server (hier: echod) der auf Port 8090 läuft.
-     * echod.accept(); wartet bis sich Client verbindet.
-     * Sobald sich ein Client verbunden hat, wird "Connection established" ausgegeben.
-     * while-Schleife: Solange bis Client Verbindung beendet. Speichert was von Client kommt in c
-     * und gibt genau das Gleiche zurück (out.write).
-     * Wenn Client Verbindung beendet geht es aus while-Schleife, dann wir Verbindung zu Client beendet
-     * (socket.close) dann wird Server geschlossen (echod.close).
+     * Starts a server that waits for connections and establishes a network connection
+     * from client to server.
+     * ServerSocket creates a server (here: echod) that runs on port 8090.
+     * echod.accept(); waits until client connects.
+     * As soon as a client has connected, “Connection established” is output.
+     * while-loop: Until the client ends the connection. Saves what comes from the client in c
+     * and returns exactly the same (out.write).
+     * When the client connection is closed, it exits the while loop, then the connection to the client is closed
+     * (socket.close) then server is closed (echod.close).
      * @author Jana
      */
+
     public static void main(String[] args) {
         try {
             out.println("Waiting for port 8090...");
@@ -61,9 +62,9 @@ public class Server {
         }
     }
     /**
-     * Fügt einen neuen Benutzer zur Benutzerliste hinzu.
-     * @param userName Der Name des neuen Benutzers.
-     * @return Die eindeutige Benutzer-ID.
+     * Adds a new user to the user list.
+     * @param userName The name of the new user.
+     * @return The unique user ID.
      * @author milo
      */
     public static int addNewUser(String userName) { // Neue Methode
@@ -72,10 +73,10 @@ public class Server {
     }
 
     /**
-     * Informiert den Server, dass ein Client gegangen ist.
-     * Die aktiven Clients werden um 1 reduziert und es wird ausgegeben wie viel Clients noch aktiv sind.
-     * Falls es keine aktiven Clients mehr gibt, wird ein Thread gestartet der 60s auf neue Clients wartet.
-     * Nach 60s wird der Server abgeschaltet.
+     * Informs the server that a client has left.
+     * The active clients are reduced by 1 and the number of clients still active is displayed.
+     * If there are no more active clients, a thread is started that waits 60 seconds for new clients.
+     * After 60 seconds, the server is shut down.
      */
     public static void ClientDisconnected() {
         activeClients.decrementAndGet();
@@ -96,9 +97,10 @@ public class Server {
     }
 
     /**
-     * Schaltet den Server ab.
+     * Shuts down the server.
      * @author Jana
      */
+
     public static void shutdownServer() {
         try {
             echod.close();
@@ -108,16 +110,17 @@ public class Server {
             System.err.println("Error when closing the Server: " + e.getMessage());
         }
     }
-    
+
     /**
-     * Ändert den Nickname eines Users.
-     * Überprüft mit Hilfe UserList, ob Nickname bereits vorhanden uns fügt eine 1 hinzu falls ja.
-     * Ruft dann sendCommand von ProtocolWriterServer auf, der die Nachricht an den Client sendet,
-     * dass der Nickname geändert wurde.
-     * @param userId Die ID des Benutzers, der den Nickname ändern möchte.
-     * @param newNick Der neue gewünschte Nickname.
+     * Changes a user's nickname.
+     * Checks whether the nickname already exists using UserList and adds a 1 if so.
+     * Then calls sendCommand from ProtocolWriterServer, which sends the message to the client
+     * that the nickname has been changed.
+     * @param userId The ID of the user who wants to change the nickname.
+     * @param newNick The new desired nickname.
      * @author milo
      */
+
     public static void changeNickname(int userId, String newNick) {
         // Validierung des neuen Nicknames (3–15 Zeichen, nur Buchstaben, Zahlen, Unterstrich)
         if (!newNick.matches("^[a-zA-Z0-9_]{3,50}$")) {
@@ -155,22 +158,23 @@ public class Server {
     }
 
     /**
-     * Diese Methode wird aufgerufen, wenn ein Client eine Chatnachricht sendet,
-     * die an alle verbundenen Clients weitergeleitet werden soll.
+     * This method is called when a client sends a chat message
+     * that should be forwarded to all connected clients.
      *
-     * <p>Die Methode erstellt eine vollständige Nachricht im Format:
+     * <p>The method creates a complete message in the format:
      * <pre>
      * CHAT <sender>: <message>
      * </pre>
-     * und verschickt diese über alle {@link PrintWriter}-Verbindungen,
-     * die im Server bekannt sind (Liste {@code clientWriters}).
+     * and sends it over all {@link PrintWriter} connections
+     * known to the server (list {@code clientWriters}).
      *
-     * <p>Jeder Client wird somit benachrichtigt, dass eine neue Nachricht eingetroffen ist,
-     * inklusive des Namens des Absenders.
+     * <p>Each client is thus notified that a new message has arrived,
+     * including the sender's name.
      *
-     * @param message Die Chatnachricht, die der Client eingegeben hat.
-     * @param sender  Der Benutzername des Absenders.
+     * @param message The chat message entered by the client.
+     * @param sender The sender's username.
      */
+
     public static void chatToAll(String message, String sender) {
         String chatMessage = Command.CHAT + " " + sender + ": " + message; // Formatiere die Nachricht gemäss Protokoll: CHAT <sender>: <message>
         for (PrintWriter writer : clientWriters) { // Iteriere über alle registrierten Client-Ausgabeströme und sende die Nachricht
