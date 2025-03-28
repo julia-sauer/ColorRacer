@@ -132,7 +132,7 @@ public class ProtocolWriterClient {
             return;
         }
         if (!nickname.matches("^[a-zA-Z0-9_äöüÄÖÜß]{3,50}$")) {
-            System.out.println("Nickname must be 3–15 characters, only letters, digits, or _");
+            System.out.println("Nickname must be 3–50 characters, only letters, digits, or _");
             return;
         }
         // Sends: JOIN <nickname>
