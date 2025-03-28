@@ -60,14 +60,12 @@ public class ProtocolWriterServer {
 
     /**
      * Sends a command with additional text to the client.
-     * @param out the OutputStream that sends the command.
      * @param command the command that should be sent to the client.
      * @param text the String that should be sent with the command.
      * @throws IOException is the error-handling if the command could not be sent.
      */
-    public static void sendCommandAndString(OutputStream out, Command command, String text) throws IOException {
-        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
-        pw.println(command + Command.SEPARATOR + text);
+    public void sendCommandAndString(Command command, String text) throws IOException {
+        writer.println(command + Command.SEPARATOR + text);
         System.out.println(command + Command.SEPARATOR + "sent");
     }
 }
