@@ -6,6 +6,9 @@ import ch.unibas.dmi.dbis.cs108.server.PingThread;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The class ProtocolReaderServer reads incoming messages from the client
@@ -27,6 +30,8 @@ public class ProtocolReaderServer {
     private final OutputStream out;
     private final PingThread pingThread;// added reference
     private final InputStream in;
+    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+
     /**
      * Constructor: Initialises the BufferedReader and the user ID.
      *
@@ -60,6 +65,8 @@ public class ProtocolReaderServer {
      */
     public void readLoop() throws IOException {
         String line;
+        Server server = new Server();
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
         while ((line = reader.readLine()) != null) {
             if (line.trim().isEmpty()) continue;
 
@@ -81,12 +88,12 @@ public class ProtocolReaderServer {
                 case JOIN: {
                     System.out.println("User " + userId + " is joining...");
                     if (parts.length < 2 || parts[1].trim().isEmpty()){
-                        ProtocolWriterServer.sendInfo(out, "-ERR Nickname missing");
+                        protocolWriterServer.sendInfo("-ERR Nickname missing");
                         break;
                     }
                     String newNick = parts[1].trim();
                     if (!newNick.matches("^[a-zA-Z0-9_]{3,50}$")) {
-                        ProtocolWriterServer.sendInfo(out, "-ERR Invalid nickname: " + newNick);
+                        protocolWriterServer.sendInfo("-ERR Invalid nickname: " + newNick);
                         break;
                     }
                     String finalNick = newNick;
@@ -98,13 +105,13 @@ public class ProtocolReaderServer {
                     // adds user to UserList
                     UserList.addUser(finalNick, out);
                     // Welcome-message to all clients individually
-                    Server.chatToAll("User " + finalNick + " has joined the chat.", "Server");
+                    server.chatToAll("User " + finalNick + " has joined the chat.", "Server");
                     break;
                 }
                 // Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        ProtocolWriterServer.sendInfo(out, "-ERR Nickname missing");
+                        protocolWriterServer.sendInfo("-ERR Nickname missing");
                         break;
                     }
                     String newNick = parts[1].trim();
@@ -123,14 +130,14 @@ public class ProtocolReaderServer {
                     }
                     String sender = UserList.getUserName(userId);
                     if (sender != null) {
-                        Server.chatToAll(message, sender);
+                        server.chatToAll(message, sender);
                     } else {
                         System.err.println("Unknown user ID: " + userId);
                     }
                     break;
 
                 case PING:
-                    ProtocolWriterServer.sendInfo(out, "+OK PING sent");
+                    protocolWriterServer.sendInfo("+OK PING sent");
                     // ggf. mit PONG antworten
                     break;
 
@@ -140,11 +147,11 @@ public class ProtocolReaderServer {
                     if (pingThread != null) {
                         pingThread.notifyPong();  // notify the ping thread that the PONG was received
                     }
-                    ProtocolWriterServer.sendInfo(out, "+OK PONG received");
+                    protocolWriterServer.sendInfo("+OK PONG received");
                     break;
 
                 case QUIT:
-                    ProtocolWriterServer.sendInfo(out, "+OK Quit request received. Please confirm [YES/NO]");
+                    protocolWriterServer.sendInfo("+OK Quit request received. Please confirm [YES/NO]");
                     // Removes user
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();

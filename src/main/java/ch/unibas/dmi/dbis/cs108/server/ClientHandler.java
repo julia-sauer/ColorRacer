@@ -7,6 +7,9 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The {@code ClientHandler} class processes the communication between server and client.
@@ -18,6 +21,7 @@ public class ClientHandler implements Runnable {
     private PingThread pingThread;
     private InputStream in;
     private OutputStream out;
+    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Constructor of the ClientHandler class
@@ -43,6 +47,7 @@ public class ClientHandler implements Runnable {
         try {
             in = clientSocket.getInputStream();
             out = clientSocket.getOutputStream();
+            ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
 
             // Starts a PingThread
             //pingThread = new PingThread(clientSocket, clientNumber, in, out);
@@ -62,7 +67,7 @@ public class ClientHandler implements Runnable {
             readerThread.start();
 
             String welcomeMsg = "Welcome to the Server!\n"; //Welcome message
-            ProtocolWriterServer.sendInfo(out, welcomeMsg);
+            protocolWriterServer.sendInfo(welcomeMsg);
 
             int c;
              while ((c = in.read()) != -1) {

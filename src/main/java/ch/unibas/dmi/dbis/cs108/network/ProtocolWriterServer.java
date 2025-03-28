@@ -10,13 +10,17 @@ import java.util.List;
  */
 public class ProtocolWriterServer {
     private final List<PrintWriter> clientWriters;
+    private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
+
     /**
      * Constructor: Initialises the list of PrintWriters.
      *
      * @param clientWriters the list of PrintWriters for all connected clients.
      */
-    public ProtocolWriterServer(List<PrintWriter> clientWriters) {
+    public ProtocolWriterServer(List<PrintWriter> clientWriters, OutputStream outputStream) {
         this.clientWriters = clientWriters;
+        writer = new PrintWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8), true);
+
     }
     /**
      * Sends a chat message to all clients.
@@ -35,26 +39,22 @@ public class ProtocolWriterServer {
     /**
      * Sends a command on the desired output stream.
      *
-     * @param out the OutputStream that sends the command.
      * @param command the command String to send
      * @throws IOException if the command could not be sent.
      * @author Jana
      */
-    public static void sendCommand(OutputStream out, Command command) throws IOException {
-        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
-        pw.println(command + Command.SEPARATOR);
+    public void sendCommand(Command command) throws IOException {
+        writer.println(command + Command.SEPARATOR);
         System.out.println(command + Command.SEPARATOR + "sent");
     }
 
     /**
      * Sends a message with the Command INFO to the client.
-     * @param out the OutputStream that sends the command.
      * @param msg the String that needs to be sent to the client.
      * @throws IOException is the error-handling if the message could not be sent.
      */
-    public static void sendInfo(OutputStream out, String msg) throws IOException {
-        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
-        pw.println(Command.INFO + Command.SEPARATOR + msg);
+    public void sendInfo(String msg) throws IOException {
+        writer.println(Command.INFO + Command.SEPARATOR + msg);
         System.out.println(Command.INFO + Command.SEPARATOR + "sent");
     }
 

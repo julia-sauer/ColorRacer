@@ -122,11 +122,12 @@ public class Server {
 
     public static void changeNickname(int userId, String newNick) {
         // Validating of the new nickname (3–50 symbols; only letters, numbers and underscores)
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
         if (!newNick.matches("^[a-zA-Z0-9_]{3,50}$")) {
             User user = UserList.getUser(userId);
             if (user != null) {
                 try {
-                    ProtocolWriterServer.sendInfo(user.getOut(), "CHATInvalid nickname! Must be 3–15 characters, using only letters, numbers, or underscores.");
+                    protocolWriterServer.sendInfo("Invalid nickname! Must be 3–15 characters, using only letters, numbers, or underscores.");
                 } catch (IOException e) {
                     System.err.println("Error sending nickname validation message to user " + userId);
                 }
@@ -173,13 +174,15 @@ public class Server {
      * @param sender The sender's username.
      */
 
-    public static void chatToAll(String message, String sender) {
-        String chatMessage = Command.CHAT + " " + sender + ": " + message; // Formats the message according to protocol: CHAT <sender>: <message>
-        for (PrintWriter writer : clientWriters) { // Iterates over all registered client output streams and sends the message
-            writer.println(chatMessage);
-            writer.flush();
-        }
+    public void chatToAll(String message, String sender) {
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
+        protocolWriterServer.sendChat(message, sender);
+        //String chatMessage = Command.CHAT + " " + sender + ": " + message; // Formats the message according to protocol: CHAT <sender>: <message>
+        //for (PrintWriter writer : clientWriters) { // Iterates over all registered client output streams and sends the message
+        //    writer.println(chatMessage);
+        //    writer.flush();
     }
 }
+
 
 
