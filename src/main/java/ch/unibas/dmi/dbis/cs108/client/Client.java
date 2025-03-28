@@ -26,6 +26,8 @@ public class Client {
             InputStream in = sock.getInputStream();
             OutputStream out= sock.getOutputStream();
 
+            ProtocolWriterClient protocolWriterClient = new ProtocolWriterClient(out);
+
             // ProtocolReaderClient-Objekt erstellen und Thread starten
             ProtocolReaderClient protocolReader = new ProtocolReaderClient(in, out);
             Thread readerThread = new Thread(() -> {
@@ -41,7 +43,7 @@ public class Client {
             String systemUsername = System.getProperty("user.name");
             String defaultNickname = "Guest_" + systemUsername;
             // Sends Default-Nickname to server
-            ProtocolWriterClient.sendCommandAndString(out, Command.NICK, defaultNickname);
+            protocolWriterClient.sendCommandAndString(Command.NICK, defaultNickname);
             try {
                 Thread.sleep(2000); //So the Welcomemessage comes before the System.out.println's that come after that.
             } catch (InterruptedException e) {

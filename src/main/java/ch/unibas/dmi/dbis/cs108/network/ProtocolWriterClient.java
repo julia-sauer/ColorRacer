@@ -63,27 +63,23 @@ public class ProtocolWriterClient {
     /**
      * Sends the command on the desired OutputStream.
      *
-     * @param out the OutputStream for sending a command
      * @param command the command that should be sent
      * @throws IOException if the message could not be delivered.
      * @author Julia
      */
-    public static void sendCommand(OutputStream out, Command command) throws IOException {
-        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
-        pw.println(command + Command.SEPARATOR);
+    public void sendCommand(Command command) throws IOException {
+        writer.println(command + Command.SEPARATOR);
         System.out.println(command + Command.SEPARATOR + "sent");
     }
 
     /**
      * Sends a command with an aditional String.
-     * @param out
      * @param command
      * @param text
      * @throws IOException
      */
-    public static void sendCommandAndString(OutputStream out, Command command, String text) throws IOException {
-        PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
-        pw.println(command + Command.SEPARATOR + text);
+    public void sendCommandAndString(Command command, String text) throws IOException {
+        writer.println(command + Command.SEPARATOR + text);
         //System.out.println(command + Command.SEPARATOR + text + " sent");
     }
 
@@ -97,7 +93,7 @@ public class ProtocolWriterClient {
      */
     public void changeNickname(String newnickname, OutputStream out) {
         try {
-            sendCommandAndString(out, Command.NICK, newnickname);
+            sendCommandAndString(Command.NICK, newnickname);
         } catch (IOException e) {
             System.err.println("Error, could not send NICK " + newnickname + " to Server");
         }
@@ -110,7 +106,7 @@ public class ProtocolWriterClient {
      */
     public void leave(OutputStream out) {
         try {
-            sendCommand(out, Command.QUIT);
+            sendCommand(Command.QUIT);
         } catch (IOException e) {
             System.err.println("Error, could not send QUIT to Server");
         }

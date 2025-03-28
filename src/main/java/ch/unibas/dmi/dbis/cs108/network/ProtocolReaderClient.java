@@ -39,6 +39,7 @@ public class ProtocolReaderClient {
      * @throws IOException if a read error occurs from the server
      */
     public void readLoop() throws IOException {
+        ProtocolWriterClient protocolWriterClient = new ProtocolWriterClient(out);
         String line;
         while ((line = reader.readLine()) != null) {
             if (line.trim().isEmpty()) continue;
@@ -74,7 +75,7 @@ public class ProtocolReaderClient {
 
                 case PING:
                     System.out.println("PING received from Server.");
-                    ProtocolWriterClient.sendCommand(out, Command.PONG);
+                    protocolWriterClient.sendCommand(Command.PONG);
                     break;
 
                 // If the command NICK is recognised, the new nickname is processed
