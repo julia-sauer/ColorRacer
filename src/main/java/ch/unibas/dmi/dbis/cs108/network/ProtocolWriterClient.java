@@ -56,7 +56,7 @@ public class ProtocolWriterClient {
             System.out.println("Message is null or empty!");
             return;
         }
-        if (!message.matches("[a-zA-Z0-9_][äöüÄÖÜß](\\u00a9|\\u00ae|[\\u2000-\\u3300]|\\ud83c[\\ud000-\\udfff]|\\ud83d[\\ud000-\\udfff]|\\ud83e[\\ud000-\\udfff])/{3,500}$")){
+        if (!message.matches("[a-zA-Z0-9_][äöüÄÖÜß](\\u00a9|\\u00ae|[\\u2000-\\u3300]|\\ud83c[\\ud000-\\udfff]|\\ud83d[\\ud000-\\udfff]|\\ud83e[\\ud000-\\udfff])/{1,500}$")){
             System.out.println("Message contains illegal characters!");
             return;
         }
@@ -135,7 +135,7 @@ public class ProtocolWriterClient {
             System.out.println("Nickname is too long");
             return;
         }
-        if (!nickname.matches("^[a-zA-Z0-9_äöüÄÖÜß]{3,50}$")) {
+        if (!nickname.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
             System.out.println("Nickname must be 3–50 characters, only letters, digits, or _");
             return;
         }

@@ -96,7 +96,7 @@ public class ProtocolReaderServer {
                         break;
                     }
                     String newNick = parts[1].trim();
-                    if (!newNick.matches("^[a-zA-Z0-9_äöüÄÖÜß]{3,50}$")) {
+                    if (!newNick.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
                         protocolWriterServer.sendInfo("-ERR Invalid nickname: " + newNick);
                         break;
                     }

@@ -43,7 +43,7 @@ public class Server {
             while (true) {
                 Socket clientSocket = echod.accept();
                 activeClients.incrementAndGet();
-                int userId = addNewUser("Client" + activeClients.get());
+                int userId = addNewUser("Client" + activeClients.get(), clientSocket.getOutputStream());
                 out.println("Connection established for Client: " + activeClients.get());
 
                 ClientHandler cH = new ClientHandler(activeClients.get(), clientSocket);
@@ -66,9 +66,9 @@ public class Server {
      * @return the unique user-ID.
      * @author milo
      */
-    public static int addNewUser(String userName) { // Neue Methode
+    public static int addNewUser(String userName, OutputStream ClientOut) { // Neue Methode
 
-        return UserList.addUser(userName, out);
+        return UserList.addUser(userName, ClientOut);
     }
 
     /**
@@ -122,9 +122,10 @@ public class Server {
 
     public static void changeNickname(int userId, String newNick) {
         // Validating of the new nickname (3–50 symbols; only letters, numbers and underscores)
-        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
-        if (!newNick.matches("^[a-zA-Z0-9_äöüÄÖÜß]{3,50}$")) {
-            User user = UserList.getUser(userId);
+        User user = UserList.getUser(userId);
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+
+        if (!newNick.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
             if (user != null) {
                 try {
                     protocolWriterServer.sendInfo("Invalid nickname! Must be 3–15 characters, using only letters, numbers, or underscores.");
@@ -146,7 +147,6 @@ public class Server {
         UserList.updateUserName(userId, finalNick);
 
         // sends message to client
-        User user = UserList.getUser(userId);
         if (user != null) {
             try {
                 protocolWriterServer.sendCommandAndString(Command.NICK, finalNick);
