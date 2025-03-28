@@ -72,7 +72,7 @@ public class ProtocolReaderServer {
         while ((line = reader.readLine()) != null) {
             if (line.trim().isEmpty()) continue;
 
-            LOGGER.error("server:  {}", line);
+            //LOGGER.error("server:  {}", line);
 
             String[] parts = line.split(Command.SEPARATOR, 2);
             String rawCommand = parts[0];

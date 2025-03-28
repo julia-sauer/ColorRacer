@@ -141,7 +141,7 @@ public class ProtocolWriterClient {
 
 
     public void sendToServer(String message) {
-        LOGGER.error("client: {}", message);
+        //LOGGER.error("client: {}", message);
         writer.println(message);
         writer.flush();
         //System.exit(1);
