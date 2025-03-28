@@ -66,11 +66,12 @@ public class ProtocolWriterServer {
      */
     public void sendCommandAndString(Command command, String text) throws IOException {
         sendToClient(command + Command.SEPARATOR + text);
-        System.out.println(command + Command.SEPARATOR + "sent");
+        //System.out.println(command + Command.SEPARATOR + "sent");
     }
 
     public void sendToClient(String message) {
         writer.println(message);
         writer.flush();
+        System.out.println(message + " sent");
     }
 }
