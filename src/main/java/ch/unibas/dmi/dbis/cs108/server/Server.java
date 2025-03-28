@@ -123,7 +123,7 @@ public class Server {
     public static void changeNickname(int userId, String newNick) {
         // Validating of the new nickname (3–50 symbols; only letters, numbers and underscores)
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
-        if (!newNick.matches("^[a-zA-Z0-9_]{3,50}$")) {
+        if (!newNick.matches("^[a-zA-Z0-9_äöüÄÖÜß]{3,50}$")) {
             User user = UserList.getUser(userId);
             if (user != null) {
                 try {
