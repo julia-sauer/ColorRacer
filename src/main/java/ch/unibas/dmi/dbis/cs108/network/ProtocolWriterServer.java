@@ -47,10 +47,10 @@ public class ProtocolWriterServer {
     }
 
     /**
-     * Sendet eine Nachricht mit Command INFO an den Client.
-     * @param out
-     * @param msg
-     * @throws IOException
+     * Sends a message with the Command INFO to the client.
+     * @param out the OutputStream that sends the command.
+     * @param msg the String that needs to be sent to the client.
+     * @throws IOException is the error-handling if the message could not be sent.
      */
     public static void sendInfo(OutputStream out, String msg) throws IOException {
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
@@ -59,11 +59,11 @@ public class ProtocolWriterServer {
     }
 
     /**
-     * Sendet einen Command mit zusätzlichem Text an den Client
-     * @param out
-     * @param command
-     * @param text
-     * @throws IOException
+     * Sends a command with additional text to the client.
+     * @param out the OutputStream that sends the command.
+     * @param command the command that should be sent to the client.
+     * @param text the String that should be sent with the command.
+     * @throws IOException is the error-handling if the command could not be sent.
      */
     public static void sendCommandAndString(OutputStream out, Command command, String text) throws IOException {
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
