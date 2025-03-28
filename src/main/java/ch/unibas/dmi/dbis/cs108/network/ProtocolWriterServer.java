@@ -45,7 +45,7 @@ public class ProtocolWriterServer {
      */
     public void sendCommand(Command command) throws IOException {
         sendToClient(command + Command.SEPARATOR);
-        System.out.println(command + Command.SEPARATOR + "sent");
+        System.out.println(command + " sent");
     }
 
     /**
@@ -55,7 +55,7 @@ public class ProtocolWriterServer {
      */
     public void sendInfo(String msg) throws IOException {
         sendToClient(Command.INFO + Command.SEPARATOR + msg);
-        System.out.println(Command.INFO + Command.SEPARATOR + "sent");
+        System.out.println(Command.INFO + " sent");
     }
 
     /**
@@ -66,12 +66,11 @@ public class ProtocolWriterServer {
      */
     public void sendCommandAndString(Command command, String text) throws IOException {
         sendToClient(command + Command.SEPARATOR + text);
-        //System.out.println(command + Command.SEPARATOR + "sent");
+        System.out.println(command + " sent");
     }
 
     public void sendToClient(String message) {
         writer.println(message);
         writer.flush();
-        System.out.println(message + " sent");
     }
 }

@@ -51,8 +51,8 @@ public class ClientHandler implements Runnable {
             ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
 
             // Starts a PingThread
-            //pingThread = new PingThread(clientSocket, clientNumber, in, out);
-            //pingThread.start();
+            pingThread = new PingThread(clientSocket, clientNumber, in, out);
+            pingThread.start();
 
 
 

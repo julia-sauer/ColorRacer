@@ -20,7 +20,7 @@ public class PingThread extends Thread {
     private static boolean running = true;
     private final InputStream in;
     private final OutputStream out;
-    private static final long PING_INTERVAL = 15000000;
+    private static final long PING_INTERVAL = 5000;
     private volatile boolean pongReceived = false;// 15 seconds
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
 
@@ -55,7 +55,6 @@ public class PingThread extends Thread {
                 long startTime = System.currentTimeMillis();
                 while (System.currentTimeMillis() - startTime < PING_INTERVAL) {
                     if (pongReceived) {
-                        System.out.println("PONG received from Client " + clientNumber);
                         break;
                     }
                 }
@@ -111,9 +110,9 @@ public class PingThread extends Thread {
      * @param out The OutputStream of the client.
      * @param userId The ID of the client that sent the PONG.
      */
+    /*
     public static void pongReceived(OutputStream out, int userId) {
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
-        System.out.println("PONG received form Client " + userId);
         try {
             protocolWriterServer.sendCommand(Command.PING);
             System.out.println("Next PING sent to Client " + userId);
@@ -121,6 +120,8 @@ public class PingThread extends Thread {
             System.err.println("Error, Could not send Command");
         }
     }
+    */
+
 
     /**
      * Stops the ping thread and interrupts the current thread.

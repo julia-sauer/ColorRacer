@@ -140,10 +140,7 @@ public class ProtocolReaderServer {
                     }
                     break;
 
-                case PING:
-                    protocolWriterServer.sendInfo("+OK PING sent");
-                    // ggf. mit PONG antworten
-                    break;
+
 
                 case PONG:
                     System.out.println("PONG received from Client " + userId);
@@ -151,8 +148,10 @@ public class ProtocolReaderServer {
                     if (pingThread != null) {
                         pingThread.notifyPong();  // notify the ping thread that the PONG was received
                     }
-                    protocolWriterServer.sendInfo("+OK PONG received");
+                    //protocolWriterServer.sendInfo("OK PONG received");
                     break;
+
+
 
                 case QUIT:
                     protocolWriterServer.sendInfo("+OK Quit request received. Please confirm [YES/NO]");

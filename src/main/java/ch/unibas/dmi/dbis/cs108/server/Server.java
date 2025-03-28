@@ -123,16 +123,15 @@ public class Server {
     public static void changeNickname(int userId, String newNick) {
         // Validating of the new nickname (3–50 symbols; only letters, numbers and underscores)
         User user = UserList.getUser(userId);
+        if (user == null) {return;}
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
 
         if (!newNick.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
-            if (user != null) {
                 try {
                     protocolWriterServer.sendInfo("Invalid nickname! Must be 3–15 characters, using only letters, numbers, or underscores.");
                 } catch (IOException e) {
                     System.err.println("Error sending nickname validation message to user " + userId);
                 }
-            }
             return;
         }
 
@@ -147,13 +146,13 @@ public class Server {
         UserList.updateUserName(userId, finalNick);
 
         // sends message to client
-        if (user != null) {
+
             try {
                 protocolWriterServer.sendCommandAndString(Command.NICK, finalNick);
             } catch (IOException e) {
                 System.err.println("Error while sending NICK " + finalNick + " to user " + userId);
             }
-        }
+
     }
 
     /**
