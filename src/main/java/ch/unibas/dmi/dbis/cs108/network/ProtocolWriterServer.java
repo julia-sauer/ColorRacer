@@ -44,7 +44,7 @@ public class ProtocolWriterServer {
      * @author Jana
      */
     public void sendCommand(Command command) throws IOException {
-        writer.println(command + Command.SEPARATOR);
+        sendToClient(command + Command.SEPARATOR);
         System.out.println(command + Command.SEPARATOR + "sent");
     }
 
@@ -54,7 +54,7 @@ public class ProtocolWriterServer {
      * @throws IOException is the error-handling if the message could not be sent.
      */
     public void sendInfo(String msg) throws IOException {
-        writer.println(Command.INFO + Command.SEPARATOR + msg);
+        sendToClient(Command.INFO + Command.SEPARATOR + msg);
         System.out.println(Command.INFO + Command.SEPARATOR + "sent");
     }
 
@@ -65,7 +65,12 @@ public class ProtocolWriterServer {
      * @throws IOException is the error-handling if the command could not be sent.
      */
     public void sendCommandAndString(Command command, String text) throws IOException {
-        writer.println(command + Command.SEPARATOR + text);
+        sendToClient(command + Command.SEPARATOR + text);
         System.out.println(command + Command.SEPARATOR + "sent");
+    }
+
+    public void sendToClient(String message) {
+        writer.println(message);
+        writer.flush();
     }
 }
