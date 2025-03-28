@@ -1,5 +1,8 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.nio.charset.StandardCharsets;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -27,6 +30,7 @@ public class ProtocolWriterClient {
      */
     private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
 
+    private static final Logger LOGGER = LogManager.getLogger(ProtocolWriterClient.class);
 
     /**
      * Constructor: Initialises the {@link PrintWriter} with UFT-8.
@@ -56,8 +60,7 @@ public class ProtocolWriterClient {
             System.out.println("Message is too long");
             return;
         }
-        writer.println(Command.CHAT + Command.SEPARATOR + message); // Sends a message in format "CHAT <message>" to the server
-        writer.flush(); // Secures that the message is sent immediately
+        sendToServer(Command.CHAT + Command.SEPARATOR + message);
     }
 
     /**
@@ -68,7 +71,7 @@ public class ProtocolWriterClient {
      * @author Julia
      */
     public void sendCommand(Command command) throws IOException {
-        writer.println(command + Command.SEPARATOR);
+        sendToServer(command + Command.SEPARATOR);
         System.out.println(command + Command.SEPARATOR + "sent");
     }
 
@@ -79,7 +82,7 @@ public class ProtocolWriterClient {
      * @throws IOException
      */
     public void sendCommandAndString(Command command, String text) throws IOException {
-        writer.println(command + Command.SEPARATOR + text);
+        sendToServer(command + Command.SEPARATOR + text);
         //System.out.println(command + Command.SEPARATOR + text + " sent");
     }
 
@@ -133,8 +136,15 @@ public class ProtocolWriterClient {
             return;
         }
         // Sends: JOIN <nickname>
-        writer.println(Command.JOIN + Command.SEPARATOR + nickname);
+        sendToServer(Command.JOIN + Command.SEPARATOR + nickname);
+    }
+
+
+    public void sendToServer(String message) {
+        LOGGER.error("client: {}", message);
+        writer.println(message);
         writer.flush();
+        //System.exit(1);
     }
 
 }

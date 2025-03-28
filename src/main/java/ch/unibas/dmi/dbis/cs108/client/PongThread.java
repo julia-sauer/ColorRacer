@@ -69,6 +69,7 @@ class PongThread implements Runnable {
      */
     private void sendCommand(OutputStream out, String command) throws IOException {
         out.write((command + Command.SEPARATOR).getBytes());
+        out.flush();
     }
 
     /**

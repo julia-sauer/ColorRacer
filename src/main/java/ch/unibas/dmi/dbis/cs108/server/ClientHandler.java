@@ -21,6 +21,7 @@ public class ClientHandler implements Runnable {
     private PingThread pingThread;
     private InputStream in;
     private OutputStream out;
+    private boolean running = true;
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
 
     /**
@@ -69,9 +70,9 @@ public class ClientHandler implements Runnable {
             String welcomeMsg = "Welcome to the Server!\n"; //Welcome message
             protocolWriterServer.sendInfo(welcomeMsg);
 
-            int c;
-             while ((c = in.read()) != -1) {
-               out.write((char)c);
+
+            // TODO
+             while (running) {
                 //out.write((String.valueOf((char) c)).getBytes(StandardCharsets.UTF_8));
             }
 

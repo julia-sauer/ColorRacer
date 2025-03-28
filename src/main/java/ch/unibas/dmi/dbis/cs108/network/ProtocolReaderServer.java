@@ -3,6 +3,8 @@ package ch.unibas.dmi.dbis.cs108.network;
 import ch.unibas.dmi.dbis.cs108.server.Server;
 import ch.unibas.dmi.dbis.cs108.server.UserList;
 import ch.unibas.dmi.dbis.cs108.server.PingThread;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -29,8 +31,9 @@ public class ProtocolReaderServer {
     private final int userId; // Die ID des Clients, der aktuell mit dem Server verbunden ist.
     private final OutputStream out;
     private final PingThread pingThread;// added reference
-    private final InputStream in;
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+
+    private static final Logger LOGGER = LogManager.getLogger(ProtocolReaderServer.class);
 
     /**
      * Constructor: Initialises the BufferedReader and the user ID.
@@ -46,7 +49,6 @@ public class ProtocolReaderServer {
         this.userId = userId;
         this.out = out;
         this.pingThread = pingThread;
-        this.in = in;
     }
 
     /**
@@ -69,6 +71,8 @@ public class ProtocolReaderServer {
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
         while ((line = reader.readLine()) != null) {
             if (line.trim().isEmpty()) continue;
+
+            LOGGER.error("server:  {}", line);
 
             String[] parts = line.split(Command.SEPARATOR, 2);
             String rawCommand = parts[0];
