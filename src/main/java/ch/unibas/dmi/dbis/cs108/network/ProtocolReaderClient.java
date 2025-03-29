@@ -74,7 +74,7 @@ public class ProtocolReaderClient {
                     break;
 
                 case PING:
-                    System.out.println("PING received from Server");
+                    //System.out.println("PING received from Server");
                     protocolWriterClient.sendCommand(Command.PONG);
                     break;
 
@@ -85,7 +85,7 @@ public class ProtocolReaderClient {
                         break;
                     }
                     String newNick = parts[1].trim();
-                    System.out.println("Nickname changed to " + newNick);
+                    System.out.println("Your nickname is " + newNick);
                     break;
 
                 case INFO:
