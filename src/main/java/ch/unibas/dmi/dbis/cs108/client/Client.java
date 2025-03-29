@@ -49,7 +49,7 @@ public class Client {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
+            //System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
             // Overview of all commands which concerns the user:
             System.out.println("Available commands:");
             System.out.println("- connect <nickname>");
