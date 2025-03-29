@@ -1,5 +1,8 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
+import ch.unibas.dmi.dbis.cs108.server.User;
+import ch.unibas.dmi.dbis.cs108.server.UserList;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -72,5 +75,20 @@ public class ProtocolWriterServer {
     public void sendToClient(String message) {
         writer.println(message);
         writer.flush();
+    }
+
+    /**
+     * This method sends a message to a specific user.
+     *
+     * @param message   The message that should be sent.
+     * @param sender    The nickname of the user who sent the message.
+     * @param receiver  The nickname of the user who receives the message.
+     */
+    public void sendWhisper(String message, String sender, String receiver) {
+        String formatted = Command.WISP + Command.SEPARATOR + sender + Command.SEPARATOR + message;
+        if (receiver != null) {
+            writer.println(formatted);
+            writer.flush();
+        }
     }
 }

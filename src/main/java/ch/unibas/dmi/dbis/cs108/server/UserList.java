@@ -90,4 +90,22 @@ public class UserList {
     public static User getUser(int userId) {
         return userMap.get(userId);
     }
+
+    /**
+     * This method can be used to retrieve the user's ID if only the user's nickname is known. This is done
+     * with a for-loop, which checks all User-objects. If the specified nickname matches one in the list,
+     * the ID of the user is returned.
+     * @param nickname  The nickname of the user from whom the ID is to be retrieved.
+     * @return          The ID of the user with the specific nickname.
+     */
+    public static int getUserId(String nickname) {
+        for (User user : userMap.values()) {
+            if (user.getNickname().equalsIgnoreCase(nickname)) {
+                return user.getId();
+            }
+        }
+        // Handle case where user is not found, e.g., throw exception or return a special value.
+        System.err.println("User with nickname '" + nickname + "' not found.");
+        return -1;
+    }
 }

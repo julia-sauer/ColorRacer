@@ -151,6 +151,33 @@ public class ProtocolWriterClient {
         //System.exit(1);
     }
 
+    /**
+     * Sends the {@code WISP} command to the server. A message for just one other user is sent.
+     *
+     * @param nicknameAndMessage is the nickname of the user, who needs to receive the message.
+     */
+
+    public void sendWhisper(String nicknameAndMessage) {
+        String[] parts = nicknameAndMessage.split(" ", 2);
+        String receiverNickname = parts[0].trim();
+        String message = parts[1].trim();
+
+        if (message == null || message.trim().isEmpty()) {
+            System.out.println("Message is null or empty!");
+            return;
+        }
+        if (!message.matches("[a-zA-ZäöüÄÖÜß0-9.,!?\\s\\p{So}]{1,500}$")){
+            System.out.println("Message contains illegal characters!");
+            return;
+        }
+        if (message.length() > 500){
+            System.out.println("Message is too long");
+            return;
+        }
+        sendToServer(Command.WISP + Command.SEPARATOR + receiverNickname + Command.SEPARATOR + message);
+    }
+        // Create a whisper message with recipientId and message content
+        // Send this message to the server
 }
 
 

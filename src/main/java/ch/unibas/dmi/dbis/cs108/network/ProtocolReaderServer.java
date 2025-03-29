@@ -140,8 +140,6 @@ public class ProtocolReaderServer {
                     }
                     break;
 
-
-
                 case PONG:
                     System.out.println("PONG received from Client " + userId);
                     // Connection is active, no timeout necessary
@@ -151,13 +149,32 @@ public class ProtocolReaderServer {
                     //protocolWriterServer.sendInfo("OK PONG received");
                     break;
 
-
-
                 case QUIT:
                     protocolWriterServer.sendInfo("+OK Quit request received. Please confirm [YES/NO]");
                     // Removes user
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();
+                    break;
+
+                case WISP:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Empty chat message from user ID " + userId);
+                        break;
+                    }
+                    String nicknameAndMessage = String.join(" ", parts[1]);
+                    String[] nicknameAndMessageParts = nicknameAndMessage.split(Command.SEPARATOR, 2);
+                    String whisperMessage = nicknameAndMessageParts[1].trim();
+                    if (whisperMessage.length() > 500) {
+                        System.err.println("Message too long from user ID " + userId);
+                        break;
+                    }
+                    String senderName = UserList.getUserName(userId);
+                    String receiverName = nicknameAndMessageParts[0].trim();
+                    if (senderName != null && receiverName != null) {
+                        server.chatToOne(whisperMessage, senderName, receiverName);
+                    } else {
+                        System.err.println("Unknown user ID: " + userId);
+                    }
                     break;
 
                 default:

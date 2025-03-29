@@ -56,6 +56,7 @@ public class Client {
             System.out.println("- nicknamechange <newnickname>");
             System.out.println("- message <your message>");
             System.out.println("- leave");
+            System.out.println("- whisper <receiver> <your message>");
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
             ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodenimplementation im WriterClient
@@ -76,10 +77,14 @@ public class Client {
                     protocolClient.sendJoin(nickname);
                 } else if (line.startsWith("message")) {
                     // sends a chat-message
-                String message = line.substring(8).trim();
-                protocolClient.sendChat(message);
+                    String message = line.substring(8).trim();
+                    protocolClient.sendChat(message);
+                } else if (line.startsWith("whisper")) {
+                    // sends a whisper-message to another user
+                    String receiverNameAndMessage = line.substring(8).trim();
+                    protocolClient.sendWhisper(receiverNameAndMessage);
                 } else { // if an unknown command is being used
-                System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
+                    System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
                 }
             }

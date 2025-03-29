@@ -97,6 +97,24 @@ public class ProtocolReaderClient {
                     System.out.println(msg);
                     break;
 
+                case WISP:
+                    String nicknameAndMessage = String.join(" ", parts[1]);
+                    String[] nicknameAndMessageParts = nicknameAndMessage.split(Command.SEPARATOR, 2);
+                    String whisperMessage = nicknameAndMessageParts[1].trim();
+                    if (nicknameAndMessageParts.length < 2 || nicknameAndMessageParts[1].trim().isEmpty()) {
+                        System.out.println("WISP received: [empty]");
+                        break;
+                    }
+                    String[] chatPart = nicknameAndMessageParts[1].split(Command.SEPARATOR, 2);
+                    //if(chatPart.length < 2) {
+                    //    System.out.println("WISP received: " + nicknameAndMessageParts[1]); //Fallback}
+                    if (chatPart.length < 2) {
+                        String sender = nicknameAndMessageParts[0];
+                        String message = nicknameAndMessageParts[1];
+                        displayWhisp(message, sender);
+                    }
+                    break;
+
                 default:
                     System.out.println("Unknown command from Server: " + line);
                     break;
@@ -105,13 +123,23 @@ public class ProtocolReaderClient {
     }
 
     /**
-     * Gibt eine empfangene Chatnachricht formatiert in der Konsole aus.
-     * @param message Die eigentliche Chatnachricht.
-     * @param sender  Der Benutzername des Absenders.
-     * @author anasv
+     * This method prints the chat message in the correct format.
+     * @param message The message that should be sent.
+     * @param sender  The nickname of the user that sent the message.
      */
     private void displayChat(String message, String sender) {
         System.out.println("+CHT " + sender + ": " + message);
+    }
+
+    /**
+     * This method prints the incoming whisper-message to the user with the right format.
+     * @param message The message that should be sent to the user.
+     * @param sender  The nickname of the user that sent the message.
+     */
+    private void displayWhisp(String message, String sender) {
+        // Display the whisper message from the sender
+        System.out.println("Whisper from " + sender + ": " + message);
+
     }
 
 }

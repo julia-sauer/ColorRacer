@@ -181,6 +181,22 @@ public class Server {
         //    writer.println(chatMessage);
         //    writer.flush();
     }
+
+    /**
+     * This method sends a message from one user to another user. With the {@link UserList} class and
+     * the {@link User} class, the method gets the ID and the OutputStream of the user that should
+     * receive the message.
+     *
+     * @param message   The message that should be sent.
+     * @param sender    The user that sent the message.
+     * @param receiver  The user that should receive the message.
+     */
+    public static void chatToOne(String message, String sender, String receiver) {
+        int receiverId = UserList.getUserId(receiver);
+        User receiverObject = UserList.getUser(receiverId);
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, receiverObject.getOut());
+        protocolWriterServer.sendWhisper(message, sender, receiver);
+    }
 }
 
 
