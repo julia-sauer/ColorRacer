@@ -177,6 +177,17 @@ public class ProtocolReaderServer {
                     }
                     break;
 
+                case CHOS:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("No FieldId from Client " + userId);
+                        break;
+                    } else {
+                        String fieldId = parts[1].trim();
+                        Server.checkField(userId, fieldId);
+                        break;
+                    }
+
+
                 default:
                     System.out.println("Unknown command from user ID " + userId + ": " + line);
                     break;
