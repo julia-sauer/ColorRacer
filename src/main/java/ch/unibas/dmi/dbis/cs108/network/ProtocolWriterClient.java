@@ -179,6 +179,11 @@ public class ProtocolWriterClient {
         // Create a whisper message with recipientId and message content
         // Send this message to the server
 
+    /**
+     * Sends the Command CHOS plus the fieldId of the chosen field to the Server.
+     *
+     * @param fieldId Contains the id of the chosen field.
+     */
     public void sendFieldChoice(String fieldId) {
         sendToServer(Command.CHOS + Command.SEPARATOR + fieldId);
     }
