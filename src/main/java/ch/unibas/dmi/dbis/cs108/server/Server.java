@@ -197,6 +197,29 @@ public class Server {
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, receiverObject.getOut());
         protocolWriterServer.sendWhisper(message, sender, receiver);
     }
+
+    public static void checkField(Integer userId, String fieldId) {
+        User user = UserList.getUser(userId);
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        if(isValidField(fieldId)) {
+            try {
+                protocolWriterServer.sendCommandAndString(Command.CHOS, fieldId);
+            } catch (IOException e) {
+                System.err.println("Error sending " + Command.CHOS + fieldId);
+            }
+        } else {
+            try {
+                protocolWriterServer.sendCommandAndString(Command.INFO, "Field is invalid. Choose a Field that touches the current field or an already selected Field and that matches a rolled color.");
+            } catch (IOException e) {
+                System.err.println("Error sending error message.");
+            }
+        }
+    }
+
+    //TODO
+    public static boolean isValidField(String fieldId) {
+        return true;
+    }
 }
 
 
