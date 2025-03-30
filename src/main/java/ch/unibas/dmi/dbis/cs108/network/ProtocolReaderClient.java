@@ -115,6 +115,15 @@ public class ProtocolReaderClient {
                     }
                     break;
 
+                case CHOS:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Error: No fieldId received.");
+                        break;
+                    }
+                    String fieldId = parts[1].trim();
+                    System.out.println("You chose Field " + fieldId);
+                    break;
+
                 default:
                     System.out.println("Unknown command from Server: " + line);
                     break;
