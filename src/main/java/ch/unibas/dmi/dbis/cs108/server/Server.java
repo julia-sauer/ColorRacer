@@ -198,6 +198,12 @@ public class Server {
         protocolWriterServer.sendWhisper(message, sender, receiver);
     }
 
+    /**
+     * Calls the send-method from the ProtocolWriterServer if the chosen field is valid.
+     *
+     * @param userId The id of the user
+     * @param fieldId the id of the chosen field
+     */
     public static void checkField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
@@ -217,6 +223,15 @@ public class Server {
     }
 
     //TODO
+
+    /**
+     * This method checks wether the field chosen by the user is valid or not.
+     * It checks if the field is connected to the field the player is currently on or if it is connected to an already selected field.
+     * It checks if the filed corresponds to a color that was rolled and is not already used.
+     *
+     * @param fieldId the id of the chosen field.
+     * @return true if field is valid, false if field is not valid
+     */
     public static boolean isValidField(String fieldId) {
         return true;
     }
