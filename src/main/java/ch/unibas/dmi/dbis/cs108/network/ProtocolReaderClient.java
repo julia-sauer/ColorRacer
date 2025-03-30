@@ -121,7 +121,7 @@ public class ProtocolReaderClient {
                         break;
                     }
                     String fieldId = parts[1].trim();
-                    System.out.println("You chose Field " + fieldId);
+                    System.out.println("Field " + fieldId + " selected.");
                     break;
 
                 default:
