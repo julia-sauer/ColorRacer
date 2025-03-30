@@ -83,6 +83,9 @@ public class Client {
                     // sends a whisper-message to another user
                     String receiverNameAndMessage = line.substring(8).trim();
                     protocolClient.sendWhisper(receiverNameAndMessage);
+                } else if (line.startsWith("fieldchoice")) {
+                    String fieldId = line.substring(12).trim();
+                    protocolClient.sendFieldChoice(fieldId);
                 } else { // if an unknown command is being used
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
