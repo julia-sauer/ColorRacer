@@ -178,6 +178,10 @@ public class ProtocolWriterClient {
     }
         // Create a whisper message with recipientId and message content
         // Send this message to the server
+
+    public void sendFieldChoice(String fieldId) {
+        sendToServer(Command.CHOS + Command.SEPARATOR + fieldId);
+    }
 }
 
 
