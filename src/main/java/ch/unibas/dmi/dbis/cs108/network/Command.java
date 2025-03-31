@@ -28,7 +28,8 @@ public enum Command {
     NICK,
     PING,
     PONG,
-    WISP;
+    WISP,
+    DEOS;
 
     public static final String SEPARATOR = "%"; // blank space als Separator
 
@@ -148,6 +149,13 @@ public enum Command {
      */
     public static void WISP(){
         System.out.println("WISP");
+    }
+
+    /**
+     * Prints the command "DEOS"
+     */
+    public static void DEOS(){
+        System.out.println("DEOS");
     }
 
 }
