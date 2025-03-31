@@ -88,9 +88,12 @@ public class Client {
                     protocolClient.sendWhisper(receiverNameAndMessage);
                 } else if (line.startsWith("fieldchoice")) {
                     String fieldId = line.substring(12).trim();
-                    protocolClient.sendFieldChoice(fieldId);
+                    protocolClient.sendFieldChoice(Command.CHOS, fieldId);
                 } else if (line.startsWith("throwdice")) {
                     protocolClient.sendCommand(Command.ROLL);
+                } else if (line.startsWith("deselect")) {
+                    String fieldId = line.substring(9).trim();
+                    protocolClient.sendFieldChoice(Command.DEOS, fieldId);
                 } else { // if an unknown command is being used
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
