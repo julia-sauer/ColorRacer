@@ -260,6 +260,24 @@ public class Server {
         }
         return false;
     }
+
+    public static void deselectField(Integer userId, String fieldId) {
+        User user = UserList.getUser(userId);
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        String fieldColor = fieldId.split("\\d")[0];
+        for(int i = 0; i < colors.length; i++) {
+            if(colors[i] == null) {
+                colors[i] = fieldColor;
+                break;
+            }
+        }
+        String newColors = Arrays.toString(colors);
+        try {
+            protocolWriterServer.sendCommandAndString(Command.DEOS, fieldId + Command.SEPARATOR + newColors);
+        } catch (IOException e) {
+            System.err.println("Error sending DEOS + fieldId");
+        }
+    }
 }
 
 
