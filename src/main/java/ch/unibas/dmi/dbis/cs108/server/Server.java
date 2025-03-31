@@ -1,7 +1,10 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
+import ch.unibas.dmi.dbis.cs108.game.Dice;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import ch.unibas.dmi.dbis.cs108.network.Command;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +25,7 @@ public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+    private static String[] colors;
 
     /**
      * Starts a server that waits for connections and establishes a network connection
@@ -197,6 +201,20 @@ public class Server {
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, receiverObject.getOut());
         protocolWriterServer.sendWhisper(message, sender, receiver);
     }
+
+    public static void rollTheDice(int userId) {
+        User user = UserList.getUser(userId);
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        colors = Dice.roll();
+        //String[] colors in String umwandeln
+        String colorText = Arrays.toString(colors);
+        try {
+            protocolWriterServer.sendCommandAndString(Command.ROLL, colorText);
+        } catch (IOException e) {
+            System.err.println("Error sending rolled colors");
+        }
+    }
+
 
     /**
      * Calls the send-method from the ProtocolWriterServer if the chosen field is valid.
