@@ -184,8 +184,8 @@ public class ProtocolWriterClient {
      *
      * @param fieldId Contains the id of the chosen field.
      */
-    public void sendFieldChoice(String fieldId) {
-        sendToServer(Command.CHOS + Command.SEPARATOR + fieldId);
+    public void sendFieldChoice(Command command, String fieldId) {
+        sendToServer(command + Command.SEPARATOR + fieldId);
     }
 }
 
