@@ -57,8 +57,9 @@ public class Client {
             System.out.println("- message <your message>");
             System.out.println("- leave");
             System.out.println("- whisper <receiver> <your message>");
-            System.out.println("- fieldchoice <fieldid>");
             System.out.println("- throwdice");
+            System.out.println("- fieldchoice <fieldid>");
+
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
             ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodenimplementation im WriterClient
