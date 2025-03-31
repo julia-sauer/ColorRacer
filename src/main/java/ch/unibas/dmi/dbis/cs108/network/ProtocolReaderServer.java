@@ -187,6 +187,9 @@ public class ProtocolReaderServer {
                         break;
                     }
 
+                case ROLL:
+                    Server.rollTheDice(userId);
+                    break;
 
                 default:
                     System.out.println("Unknown command from user ID " + userId + ": " + line);
