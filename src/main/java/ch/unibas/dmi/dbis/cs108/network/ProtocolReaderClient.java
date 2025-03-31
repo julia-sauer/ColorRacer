@@ -44,7 +44,7 @@ public class ProtocolReaderClient {
         while ((line = reader.readLine()) != null) {
             if (line.trim().isEmpty()) continue;
 
-            String[] parts = line.split(Command.SEPARATOR, 2);
+            String[] parts = line.split(Command.SEPARATOR, 3); //did limit from 2 to 3
             String rawCommand = parts[0];
             Command command;
 
@@ -131,6 +131,17 @@ public class ProtocolReaderClient {
                     }
                     String colors = parts[1].trim();
                     System.out.println("Colors " + colors + " rolled.");
+                    break;
+
+                case DEOS:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Error: No fieldId received.");
+                        break;
+                    }
+                    String deselectedFieldId = parts[1].trim();
+                    String newcolors = parts[2].trim();
+                    System.out.println("Field " + deselectedFieldId + " deselected.");
+                    System.out.println("Your colors are " + newcolors);
                     break;
 
                 default:
