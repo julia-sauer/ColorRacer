@@ -252,7 +252,13 @@ public class Server {
      */
     public static boolean isValidField(String fieldId) {
         String fieldColor = fieldId.split("\\d")[0];
-        return true;
+        for(int i = 0; i < colors.length; i++) {
+            if(fieldColor.equals(colors[i])) {
+                colors[i] = null;
+                return true;
+            }
+        }
+        return false;
     }
 }
 
