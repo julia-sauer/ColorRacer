@@ -233,6 +233,7 @@ public class Server {
      * @return true if field is valid, false if field is not valid
      */
     public static boolean isValidField(String fieldId) {
+        String fieldColor = fieldId.split("\\d")[0];
         return true;
     }
 }
