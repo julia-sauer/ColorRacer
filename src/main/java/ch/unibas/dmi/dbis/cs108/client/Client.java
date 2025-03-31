@@ -58,6 +58,7 @@ public class Client {
             System.out.println("- leave");
             System.out.println("- whisper <receiver> <your message>");
             System.out.println("- fieldchoice <fieldid>");
+            System.out.println("- throwdice");
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
             ProtocolWriterClient protocolClient = new ProtocolWriterClient(out);  // Methodenimplementation im WriterClient
@@ -87,6 +88,8 @@ public class Client {
                 } else if (line.startsWith("fieldchoice")) {
                     String fieldId = line.substring(12).trim();
                     protocolClient.sendFieldChoice(fieldId);
+                } else if (line.startsWith("throwdice")) {
+                    protocolClient.sendCommand(Command.ROLL);
                 } else { // if an unknown command is being used
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
