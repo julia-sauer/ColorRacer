@@ -205,7 +205,8 @@ public class Server {
     public static void rollTheDice(int userId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
-        colors = Dice.roll();
+        Dice dice = new Dice();
+        colors = dice.roll();
         //String[] colors in String umwandeln
         String colorText = Arrays.toString(colors);
         try {

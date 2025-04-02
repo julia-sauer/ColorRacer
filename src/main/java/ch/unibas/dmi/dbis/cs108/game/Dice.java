@@ -4,12 +4,14 @@ import java.util.Arrays;
 
 
 public class Dice {
-public static String[] roll() {
+public String[] roll() {
     String[] colors = new String[6];
     for (int i = 0; i < 6; i++) {
-        double randomValue = Math.random();  // generates [0 .. 1)
+        double randomValue = getRandom();  // 👈 NEU: Methode aufrufen statt direkt Math.random()
+        // generates [0 .. 1)
         double scaled = randomValue * 6;     // gives [0 .. 6)
-        int ceiled = (int) Math.ceil(scaled); // gives {1, 2, 3, 4, 5, 6}
+        int ceiled = (int) (randomValue * 6) + 1;
+        // gives {1, 2, 3, 4, 5, 6}
         if (ceiled == 1) {
             colors[i] = "yellow";
         }
@@ -32,8 +34,14 @@ public static String[] roll() {
     System.out.println(Arrays.toString(colors)); //Zur Überprüfung
     return colors;
 }
+    public double getRandom() {
+        return Math.random();
+    }
+
 
 public static void main(String[] args) {
-    roll();
+
+    Dice dice = new Dice();       // Objekt erstellen
+    dice.roll();
 }
 }
