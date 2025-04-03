@@ -26,6 +26,15 @@ public class Server {
     private static ServerSocket echod;
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
     private static String[] colors;
+    public static int port;
+
+    /**
+     * Constructor of the Serverclass
+     * @param port the port-number on which the Server is
+     */
+    public Server(int port) {
+        this.port = port;
+    }
 
     /**
      * Starts a server that waits for connections and establishes a network connection
@@ -39,10 +48,10 @@ public class Server {
      * (socket.close) then server is closed (echod.close).
      * @author Jana
      */
-    public static void main(String[] args) {
+    public void start() {
         try {
-            out.println("Waiting for port 8090...");
-            echod = new ServerSocket(8090);
+            out.println("Waiting for port " + port + "...");
+            echod = new ServerSocket(port);
 
             while (true) {
                 Socket clientSocket = echod.accept();
