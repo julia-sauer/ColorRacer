@@ -67,7 +67,7 @@ public class ProtocolReaderServer {
      */
     public void readLoop() throws IOException {
         String line;
-        Server server = new Server();
+        Server server = new Server(Server.port);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
         while ((line = reader.readLine()) != null) {
             if (line.trim().isEmpty()) continue;
