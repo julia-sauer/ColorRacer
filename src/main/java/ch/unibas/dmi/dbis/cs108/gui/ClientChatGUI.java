@@ -1,4 +1,4 @@
-package ch.unibas.dmi.dbis.cs108.GUI;
+package ch.unibas.dmi.dbis.cs108.gui;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
