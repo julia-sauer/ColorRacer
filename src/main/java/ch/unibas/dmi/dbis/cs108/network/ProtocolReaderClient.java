@@ -1,5 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
+import ch.unibas.dmi.dbis.cs108.gui.ClientChatGUI;
+
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -168,6 +170,8 @@ public class ProtocolReaderClient {
      */
     private void displayChat(String message, String sender) {
         System.out.println("+CHT " + sender + ": " + message);
+        ClientChatGUI clientChatGUI = new ClientChatGUI();
+        clientChatGUI.displayChat(sender + ": " + message);
     }
 
     /**
