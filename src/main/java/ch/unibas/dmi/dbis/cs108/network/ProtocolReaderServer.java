@@ -124,19 +124,19 @@ public class ProtocolReaderServer {
                     // Aufruf der chatToAll methode für das Senden von einer Chatnachricht an alle Clients
                 case CHAT:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Empty chat message from user ID " + userId);
+                        System.err.println("-ERR Empty chat message from user ID " + userId);
                         break;
                     }
                     String message = parts[1].trim();
                     if (message.length() > 500) {
-                        System.err.println("Message too long from user ID " + userId);
+                        System.err.println("-ERR Message too long from user ID " + userId);
                         break;
                     }
                     String sender = UserList.getUserName(userId);
                     if (sender != null) {
                         server.chatToAll(message, sender);
                     } else {
-                        System.err.println("Unknown user ID: " + userId);
+                        System.err.println("-ERR Unknown user ID: " + userId);
                     }
                     break;
 
@@ -150,7 +150,7 @@ public class ProtocolReaderServer {
                     break;
 
                 case QUIT:
-                    protocolWriterServer.sendInfo("+OK Quit request received. Please confirm [YES/NO]");
+                    protocolWriterServer.sendInfo(" Quit request received. Please confirm [YES/NO]");
                     // Removes user
                     UserList.removeUser(userId);
                     Server.ClientDisconnected();
@@ -158,14 +158,14 @@ public class ProtocolReaderServer {
 
                 case WISP:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("Empty chat message from user ID " + userId);
+                        System.err.println("-ERR Empty chat message from user ID " + userId);
                         break;
                     }
                     String nicknameAndMessage = String.join(" ", parts[1]);
                     String[] nicknameAndMessageParts = nicknameAndMessage.split(Command.SEPARATOR, 2);
                     String whisperMessage = nicknameAndMessageParts[1].trim();
                     if (whisperMessage.length() > 500) {
-                        System.err.println("Message too long from user ID " + userId);
+                        System.err.println("-ERR Message too long from user ID " + userId);
                         break;
                     }
                     String senderName = UserList.getUserName(userId);
@@ -173,7 +173,7 @@ public class ProtocolReaderServer {
                     if (senderName != null && receiverName != null) {
                         server.chatToOne(whisperMessage, senderName, receiverName);
                     } else {
-                        System.err.println("Unknown user ID: " + userId);
+                        System.err.println("-ERR Unknown user ID: " + userId);
                     }
                     break;
 
@@ -183,7 +183,7 @@ public class ProtocolReaderServer {
 
                 case CHOS:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("No FieldId from Client " + userId);
+                        System.err.println("-ERR No FieldId from Client " + userId);
                         break;
                     } else {
                         String fieldId = parts[1].trim();
@@ -193,13 +193,23 @@ public class ProtocolReaderServer {
 
                 case DEOS:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        System.err.println("No FieldId from Client " + userId);
+                        System.err.println("-ERR No FieldId from Client " + userId);
                         break;
                     } else {
                         String fieldId = parts[1].trim();
                         Server.deselectField(userId, fieldId);
                         break;
                     }
+                case BROD:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("-ERR Broadcast message missing " + userId);
+                        break;
+                    }
+                    String msg = parts[1].trim();
+                    String broadcasterName = UserList.getUserName(userId);
+                    Server.broadcastToAll(broadcasterName + ": " + msg);
+                    break;
+
 
 
                 default:

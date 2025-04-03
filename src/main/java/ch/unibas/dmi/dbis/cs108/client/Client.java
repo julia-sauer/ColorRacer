@@ -59,6 +59,7 @@ public class Client {
             System.out.println("- whisper <receiver> <your message>");
             System.out.println("- throwdice");
             System.out.println("- fieldchoice <fieldid>");
+            System.out.println("- broadcast <your broadcast>");
 
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
@@ -94,6 +95,9 @@ public class Client {
                 } else if (line.startsWith("deselect")) {
                     String fieldId = line.substring(9).trim();
                     protocolClient.sendFieldChoice(Command.DEOS, fieldId);
+                } else if (line.startsWith("broadcast")) {
+                    String broadcastmessage = line.substring(10).trim();
+                    protocolClient.sendCommandAndString(Command.BROD, broadcastmessage);
                 } else { // if an unknown command is being used
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
