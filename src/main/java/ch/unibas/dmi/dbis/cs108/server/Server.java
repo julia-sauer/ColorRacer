@@ -279,6 +279,14 @@ public class Server {
             System.err.println("Error sending DEOS + fieldId");
         }
     }
+    public static void broadcastToAll(String message) {
+        String broadcastMessage = Command.BROD.name() + Command.SEPARATOR + message;
+        for (PrintWriter writer : clientWriters) {
+            writer.println(broadcastMessage);
+            writer.flush();
+        }
+    }
+
 }
 
 

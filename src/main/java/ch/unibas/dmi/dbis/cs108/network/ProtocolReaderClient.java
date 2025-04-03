@@ -144,6 +144,16 @@ public class ProtocolReaderClient {
                     System.out.println("Your colors are " + newcolors);
                     break;
 
+                case BROD:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.out.println("[Broadcast] (empty)");
+                        break;
+                    }
+                    String brodMsg = parts[1].trim();
+                    System.out.println(brodMsg);
+                    break;
+
+
                 default:
                     System.out.println("Unknown command from Server: " + line);
                     break;

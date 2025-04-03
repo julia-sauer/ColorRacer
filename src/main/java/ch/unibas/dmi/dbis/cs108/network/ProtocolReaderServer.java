@@ -200,6 +200,16 @@ public class ProtocolReaderServer {
                         Server.deselectField(userId, fieldId);
                         break;
                     }
+                case BROD:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Broadcast message missing " + userId);
+                        break;
+                    }
+                    String msg = parts[1].trim();
+                    String broadcasterName = UserList.getUserName(userId);
+                    Server.broadcastToAll(broadcasterName + ": " + msg);
+                    break;
+
 
 
                 default:
