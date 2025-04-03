@@ -14,12 +14,12 @@ import java.io.IOException;
  * protocol commands defined in the Commands and, if necessary, forwards them to the server.
  *
  * <p>Users input and the corresponding protocol commands:
- *  * <ul>
- *  *     <li>{@code connect} → {@code JOIN}</li>
- *  *     <li>{@code leave} → {@code QUIT}</li>
- *  *     <li>{@code message} → {@code CHAT}</li>
- *  *     <li>{@code nicknamechange} → {@code NICK}</li>
- *  * </ul>
+ *
+ *  {@code connect} → {@code JOIN}
+ *  {@code leave} → {@code QUIT}
+ *  {@code message} → {@code CHAT}
+ *  {@code nicknamechange} → {@code NICK}
+ *
  * <p>
  * This class uses the UFT-8-encoding to secure a cross-platform communication.
  */
