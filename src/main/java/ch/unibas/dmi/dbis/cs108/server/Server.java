@@ -165,7 +165,7 @@ public class Server {
      *
      * <p>The method creates a complete message in the format:
      * <pre>
-     * CHAT <sender>: <message>
+     * CHAT sender: message
      * </pre>
      * and sends it over all {@link PrintWriter} connections
      * known to the server (list {@code clientWriters}).
