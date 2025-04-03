@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<TitledPane fx:controller="ch.unibas.dmi.dbis.cs108.gui.ClientChatGUI" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="420.0" text="Chat" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="419.0">
+         <children>
+            <TextArea layoutX="16.0" layoutY="32.0" prefHeight="441.0" prefWidth="386.0" />
+            <TextField fx:id="txtUsermsg" layoutX="14.0" layoutY="522.0" onKeyPressed="#handleEnterPressed" onMouseClicked="#mouseClicked" prefHeight="39.0" prefWidth="387.0" promptText="Type your message here..." />
+         </children></AnchorPane>
+  </content>
+</TitledPane>
