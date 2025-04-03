@@ -279,6 +279,15 @@ public class Server {
             System.err.println("Error sending DEOS + fieldId");
         }
     }
+    /**
+     * Broadcasts a message to all connected clients.
+     *
+     * <p>This method constructs a broadcast message by prepending the {@code BROD} command name
+     * and a separator to the given message. It then iterates over all client writers and sends
+     * the formatted message to each client.
+     *
+     * @param message the message to be broadcasted to all clients.
+     */
     public static void broadcastToAll(String message) {
         String broadcastMessage = Command.BROD.name() + Command.SEPARATOR + message;
         for (PrintWriter writer : clientWriters) {
