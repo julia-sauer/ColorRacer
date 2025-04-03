@@ -34,7 +34,7 @@ public class ProtocolReaderClient {
      * displayed by {@link #displayChat(String, String)}.</p>
      * Format for CHAT messages from the server:
      * <pre>
-     * CHAT <sender> <message>
+     * CHAT sender message
      * </pre>
      * @throws IOException if a read error occurs from the server
      */
