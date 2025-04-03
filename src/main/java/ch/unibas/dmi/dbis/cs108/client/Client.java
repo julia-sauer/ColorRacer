@@ -12,17 +12,37 @@ import java.io.*;
  *
  */
 public class Client {
+
+    private final String host;
+    private final int port;
+    private final String username;
+
+    /**
+     * Constructor for class Client
+     * @param host The ip-adress of the host.
+     * @param port the port number of the Server
+     * @param username the username the user wants.
+     */
+    public Client(String host, int port, String username) {
+        this.host = host;
+        this.port = port;
+        if(username != null && !username.isEmpty()) {
+            this.username = username;
+        } else {
+            String systemusername = System.getProperty("user.name");
+            this.username = "Guest_" + systemusername;
+        }
+    }
     /**
      * The main method initializes the connection to the server and starts a thread to read messages.
      * It also reads input from the console and sends corresponding commands to the server.
      *
-     * @param args Arguments containing the host address and port of the server.
      * @author Julia
      */
-    public static void main(String[] args) {
+    public void start() {
         try {
             // Verbindung zum Server herstellen
-            Socket sock = new Socket(args[0], Integer.parseInt(args[1]));
+            Socket sock = new Socket(host, port);
             InputStream in = sock.getInputStream();
             OutputStream out= sock.getOutputStream();
 
@@ -39,11 +59,8 @@ public class Client {
             });
             readerThread.start();
 
-            // taking system's username
-            String systemUsername = System.getProperty("user.name");
-            String defaultNickname = "Guest_" + systemUsername;
-            // Sends Default-Nickname to server
-            protocolWriterClient.sendCommandAndString(Command.NICK, defaultNickname);
+            // Sends username to server
+            protocolWriterClient.sendCommandAndString(Command.NICK, username);
             try {
                 Thread.sleep(2000); //So the Welcomemessage comes before the System.out.println's that come after that.
             } catch (InterruptedException e) {
