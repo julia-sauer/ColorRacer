@@ -25,6 +25,7 @@ tasks.register("build-cs108") {
         println 'Running cs108 build task to produce a jar and javadoc.'
     }
 }
+
 tasks.getByName("build-cs108").finalizedBy javadoc
 tasks.getByName("build-cs108").finalizedBy jar
 
@@ -76,7 +77,7 @@ jar {
 
     manifest {
         attributes(
-                'Main-Class': 'Starter'
+                'Main-Class': mainClassName
         )
     }
     from {
