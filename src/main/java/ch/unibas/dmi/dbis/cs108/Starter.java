@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108;
 
 import ch.unibas.dmi.dbis.cs108.client.Client;
+import ch.unibas.dmi.dbis.cs108.gui.ChatController;
 import ch.unibas.dmi.dbis.cs108.server.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
