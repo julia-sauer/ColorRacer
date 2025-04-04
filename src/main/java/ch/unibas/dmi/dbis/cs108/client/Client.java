@@ -79,6 +79,7 @@ public class Client {
             System.out.println("- whisper <receiver> <your message>");
             System.out.println("- throwdice");
             System.out.println("- fieldchoice <fieldid>");
+            System.out.println("- movetofield")
             System.out.println("- broadcast <your broadcast>");
             System.out.println("- createlobby <lobbyname>");
 
