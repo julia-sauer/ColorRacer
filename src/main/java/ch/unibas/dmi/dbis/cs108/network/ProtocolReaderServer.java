@@ -112,7 +112,7 @@ public class ProtocolReaderServer {
                         protocolWriterServer.sendInfo("-ERR Invalid lobbyName: " + lobbyName);
                         break;
                     }
-                    Server.createLobby(lobbyName);
+                    Server.createLobby(lobbyName, userId);
                     break;
                 }
                 // Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
