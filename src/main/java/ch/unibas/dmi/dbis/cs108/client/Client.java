@@ -1,5 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.client;
 
+import ch.unibas.dmi.dbis.cs108.gui.ChatController;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
@@ -16,6 +17,7 @@ public class Client {
     private final String host;
     private final int port;
     private final String username;
+    private ChatController chatController;
 
     /**
      * Constructor for class Client
