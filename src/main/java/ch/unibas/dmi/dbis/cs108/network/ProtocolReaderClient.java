@@ -64,7 +64,7 @@ public class ProtocolReaderClient {
                 case JOIN:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("Error: No lobbyname received.");
-                        return;
+                        break;
                     }
                     String lobbyName = parts[1].trim();
                     if(lobbyName.equals("Welcome")) {
@@ -75,7 +75,12 @@ public class ProtocolReaderClient {
                     break;
 
                 case CRLO:
-                    handleCreateLobby(parts);
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                    System.err.println("Error: No lobbyname received.");
+                    break;
+                    }
+                    String lobbyname = parts[1].trim();
+                    System.out.println("You created a Lobby: " + lobbyname);
                     break;
 
                 case CHAT:
@@ -205,23 +210,4 @@ public class ProtocolReaderClient {
         System.out.println("Whisper from " + sender + ": " + message);
 
     }
-
-    /**
-     * Handles the logic for creating a new lobby.
-     * <p>
-     * Checks if a valid lobby name was provided, then outputs a confirmation message.
-     * This method is typically called when the user issues a CRLO (create lobby) command.
-     *
-     * @param parts The split message parts from the command input, where parts[1] should contain the desired lobby name.
-     */
-    private void handleCreateLobby(String[] parts) {
-        if (parts.length < 2 || parts[1].trim().isEmpty()) {
-            System.err.println("Error: No lobbyname received.");
-            return;
-        }
-        String lobbyName = parts[1].trim();
-        System.out.println("You created a Lobby: " + lobbyName);
-    }
-
-
 }
