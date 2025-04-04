@@ -1,6 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import ch.unibas.dmi.dbis.cs108.gui.ClientChatGUI;
+import ch.unibas.dmi.dbis.cs108.gui.ChatController;
 
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+
 /**
  * The ProtocolReaderClient class processes incoming messages from the server
  * and controls the interaction with the client.
@@ -65,13 +67,16 @@ public class ProtocolReaderClient {
                         System.out.println("CHAT received: [empty]");
                         break;
                     }
-                    String[] chatParts = parts[1].split(Command.SEPARATOR, 2);
-                    if(chatParts.length < 2) {
-                        System.out.println("CHAT received: " + parts[1]); //Fallback
-                    } else {
-                        String sender = chatParts[0];
-                        String message = chatParts[1];
+                    // TODO: check
+                    //  String[] chatParts = parts[1].split(Command.SEPARATOR, 2);
+                    System.out.println(Arrays.toString(parts));
+                    if(parts.length == 3) {
+                        System.out.println("CHAT received: " + parts[2]); //Fallback
+                        String sender = parts[1];
+                        String message = parts[2];
                         displayChat(message, sender);
+                    } else {
+                        // TODO: handle wrong number of parameters
                     }
                     break;
 
@@ -170,8 +175,8 @@ public class ProtocolReaderClient {
      */
     private void displayChat(String message, String sender) {
         System.out.println("+CHT " + sender + ": " + message);
-        ClientChatGUI clientChatGUI = new ClientChatGUI();
-        clientChatGUI.displayChat(sender + ": " + message);
+        //ChatController clientChatGUI = new ChatController();
+        //clientChatGUI.displayChat(sender + ": " + message);
     }
 
     /**
