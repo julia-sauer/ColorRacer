@@ -37,11 +37,4 @@ public String[] roll() {
     public double getRandom() {
         return Math.random();
     }
-
-
-public static void main(String[] args) {
-
-    Dice dice = new Dice();       // Objekt erstellen
-    dice.roll();
-}
 }
