@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 import ch.unibas.dmi.dbis.cs108.gui.ChatController;
+import javafx.application.Platform;
 
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
@@ -18,6 +19,8 @@ public class ProtocolReaderClient {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
     private final InputStream in;
     private final OutputStream out;
+    private ChatController chatController; // Reference to the GUI controller
+
 
     /**
      * Creates a new ProtocolReaderClient.
@@ -191,23 +194,42 @@ public class ProtocolReaderClient {
 
     /**
      * This method prints the chat message in the correct format.
+     * If a ChatController is set, updates the GUI via Platform.runLater.
      * @param message The message that should be sent.
      * @param sender  The nickname of the user that sent the message.
      */
     private void displayChat(String message, String sender) {
-        System.out.println("+CHT " + sender + ": " + message);
-        //ChatController clientChatGUI = new ChatController();
-        //clientChatGUI.displayChat(sender + ": " + message);
+        String formattedMessage = sender + ": " + message;
+        if (chatController != null) {
+            Platform.runLater(() -> chatController.displayChat(formattedMessage));
+        } else {
+            System.out.println("+CHT " + formattedMessage);
+        }
     }
 
     /**
      * This method prints the incoming whisper-message to the user with the right format.
+     * If a ChatController is set, updates the GUI via Platform.runLater.
      * @param message The message that should be sent to the user.
      * @param sender  The nickname of the user that sent the message.
      */
     private void displayWhisp(String message, String sender) {
         // Display the whisper message from the sender
-        System.out.println("Whisper from " + sender + ": " + message);
+        String formattedMessage = "Whisper from " + sender + ": " + message;
+        if (chatController != null) {
+            Platform.runLater(() -> chatController.displayChat(formattedMessage));
+        } else {
+            System.out.println(formattedMessage);
+        }
 
+    }
+
+    /**
+     * Setter for the ChatController.
+     *
+     * @param controller The ChatController instance.
+     */
+    public void setChatController(ChatController controller) {
+        this.chatController = controller;
     }
 }
