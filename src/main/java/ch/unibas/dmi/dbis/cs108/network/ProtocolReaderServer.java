@@ -88,7 +88,6 @@ public class ProtocolReaderServer {
 
             switch (command) {
                  // Handels the JOIN-command from the client
-                 // The client sends JOIN <nickname> to enter the server
                 case JOIN: {
                     if (parts.length < 2 || parts[1].trim().isEmpty()){
                         protocolWriterServer.sendInfo("-ERR lobbyName missing");
