@@ -62,7 +62,16 @@ public class ProtocolReaderClient {
 
             switch (command) {
                 case JOIN:
-                    handleJoin(parts);
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Error: No lobbyname received.");
+                        return;
+                    }
+                    String lobbyName = parts[1].trim();
+                    if(lobbyName.equals("Welcome")) {
+                        break;
+                    } else {
+                        System.out.println("You joined: " + lobbyName);
+                    }
                     break;
 
                 case CRLO:
@@ -195,22 +204,6 @@ public class ProtocolReaderClient {
         // Display the whisper message from the sender
         System.out.println("Whisper from " + sender + ": " + message);
 
-    }
-    /**
-     * Handles the logic for joining a lobby.
-     * <p>
-     * Checks if a valid lobby name was provided, then outputs a confirmation message.
-     * This method is typically called when the user issues a JOIN command.
-     *
-     * @param parts The split message parts from the command input, where parts[1] should contain the lobby name.
-     */
-    private void handleJoin(String[] parts) {
-        if (parts.length < 2 || parts[1].trim().isEmpty()) {
-            System.err.println("Error: No lobbyname received.");
-            return;
-        }
-        String lobbyName = parts[1].trim();
-        System.out.println("You joined: " + lobbyName);
     }
 
     /**
