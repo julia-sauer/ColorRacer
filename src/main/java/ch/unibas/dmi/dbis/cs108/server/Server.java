@@ -254,8 +254,6 @@ public class Server {
         }
     }
 
-    //TODO
-
     /**
      * This method checks wether the field chosen by the user is valid or not.
      * It checks if the field is connected to the field the player is currently on or if it is connected to an already selected field.
