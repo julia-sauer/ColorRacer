@@ -71,6 +71,8 @@ public class ChatController {
             // Send the message using your existing network protocol
             if (protocolWriter != null) {
                 protocolWriter.sendChat(message);
+            } else {
+                chatArea.appendText("ProtocolWriter is null!\n");
             }
             // Optionally display the message in the chatArea as "You: ..."
             chatArea.appendText("You: " + message + "\n");
