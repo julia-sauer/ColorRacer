@@ -63,6 +63,7 @@ public class Client {
 
             // Sends username to server
             protocolWriterClient.sendCommandAndString(Command.NICK, username);
+            protocolWriterClient.sendJoin("Welcome");
             try {
                 Thread.sleep(2000); //So the Welcomemessage comes before the System.out.println's that come after that.
             } catch (InterruptedException e) {
