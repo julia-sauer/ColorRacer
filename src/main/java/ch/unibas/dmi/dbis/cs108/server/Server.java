@@ -55,6 +55,7 @@ public class Server {
         try {
             out.println("Waiting for port " + port + "...");
             echod = new ServerSocket(port);
+            createLobby("Welcome");
 
             while (true) {
                 Socket clientSocket = echod.accept();
@@ -313,7 +314,6 @@ public class Server {
      * @param lobbyName the name of the lobby to create
      */
     public static void createLobby(String lobbyName) {
-
         Lobby lobby = new Lobby (lobbyName);
         lobbies.add(lobby);
 
