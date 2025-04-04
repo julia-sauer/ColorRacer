@@ -154,8 +154,26 @@ public class ProtocolReaderServer {
                 case QUIT:
                     protocolWriterServer.sendInfo(" Quit request received. Please confirm [YES/NO]");
                     // Removes user
-                    UserList.removeUser(userId);
-                    Server.ClientDisconnected();
+
+                    break;
+
+                case QCNF:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("-ERR No confirmation received from user ID" + userId);
+                        break;
+                    }
+                    String confirmation = parts[1].trim().toUpperCase();
+                    String nickname = UserList.getUserName(userId);
+                    if ("YES".equals(confirmation)) {
+                        UserList.removeUser(userId);
+                        Server.broadcastToAll("+LFT " + nickname + " has left the game");
+                        Server.ClientDisconnected();
+                    } else if ("NO".equals(confirmation)) {
+                        // do nothing, just notify user
+                        protocolWriterServer.sendInfo("You are still in the game.");
+                    } else {
+                        System.err.println("-ERR Invalid QCNF response from user ID " + userId);
+                    }
                     break;
 
                 case WISP:

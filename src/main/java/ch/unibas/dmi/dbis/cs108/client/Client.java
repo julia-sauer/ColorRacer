@@ -92,7 +92,12 @@ public class Client {
                 if (line.equalsIgnoreCase("leave")) {
                     // closing connection and sending a QUIT-command
                     protocolClient.leave(out);
+                } else if (line.equalsIgnoreCase("YES")) {
+                    protocolClient.sendCommandAndString(Command.QCNF, "YES");
+                    System.out.println("You confirmed to leave the game.");
                     break;
+                } else if (line.equalsIgnoreCase("NO")) {
+                    protocolClient.sendCommandAndString(Command.QCNF, "NO");
                 } else if (line.startsWith("nicknamechange")) {
                     // changing nickname
                     protocolClient.changeNickname(line.substring(15), out);
