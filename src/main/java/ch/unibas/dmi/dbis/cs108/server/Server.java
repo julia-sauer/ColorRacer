@@ -55,7 +55,7 @@ public class Server {
         try {
             out.println("Waiting for port " + port + "...");
             echod = new ServerSocket(port);
-            createLobby("Welcome");
+            createLobby("Welcome", null);
 
             while (true) {
                 Socket clientSocket = echod.accept();
@@ -313,10 +313,18 @@ public class Server {
      *
      * @param lobbyName the name of the lobby to create
      */
-    public static void createLobby(String lobbyName) {
+    public static void createLobby(String lobbyName, Integer userId) {
         Lobby lobby = new Lobby (lobbyName);
         lobbies.add(lobby);
-
+        if (userId != null) {
+            User user = UserList.getUser(userId);
+            ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+            try {
+                protocolWriterServer.sendCommandAndString(Command.CRLO, lobbyName);
+            } catch (IOException e) {
+                System.err.println("Error sending CRLO");
+            }
+        }
     }
     /**
      * Creates a new lobby with the given name and adds it to the global list of lobbies.
