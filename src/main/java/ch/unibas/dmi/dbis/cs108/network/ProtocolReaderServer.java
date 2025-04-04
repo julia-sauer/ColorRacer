@@ -165,7 +165,7 @@ public class ProtocolReaderServer {
                     String confirmation = parts[1].trim().toUpperCase();
                     String nickname = UserList.getUserName(userId);
                     if ("YES".equals(confirmation)) {
-                        UserList.removeUser(userId);
+                        UserList.removeUser(userId); // removes the Player
                         Server.broadcastToAll("+LFT " + nickname + " has left the game");
                         Server.ClientDisconnected();
                     } else if ("NO".equals(confirmation)) {
