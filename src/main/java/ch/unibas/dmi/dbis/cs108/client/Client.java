@@ -117,6 +117,8 @@ public class Client {
                 } else if (line.startsWith("fieldchoice")) {
                     String fieldId = line.substring(12).trim();
                     protocolClient.sendFieldChoice(Command.CHOS, fieldId);
+                } else if (line.startsWith("movetofield")) {
+                    protocolClient.sendCommand(Command.MOVE);
                 } else if (line.startsWith("throwdice")) {
                     protocolClient.sendCommand(Command.ROLL);
                 } else if (line.startsWith("deselect")) {
