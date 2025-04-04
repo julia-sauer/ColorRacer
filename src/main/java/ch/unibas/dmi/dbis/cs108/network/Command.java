@@ -30,7 +30,8 @@ public enum Command {
     PONG,
     WISP,
     DEOS,
-    BROD;
+    BROD,
+    LIST;
 
     public static final String SEPARATOR = "%"; // blank space als Separator
 
@@ -164,6 +165,12 @@ public enum Command {
      */
     public static void BROD() {
         System.out.println("BROD");
+    }
+
+    /**
+     * Prints the command "LIST"
+     */
+    public static void LIST(){ System.out.println("LIST");
     }
 
 }
