@@ -71,7 +71,7 @@ public class Client {
             //System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
             // Overview of all commands which concerns the user:
             System.out.println("Available commands:");
-            System.out.println("- connect <nickname>");
+            System.out.println("- connect <lobbyname>");
             System.out.println("- nicknamechange <newnickname>");
             System.out.println("- message <your message>");
             System.out.println("- leave");
@@ -79,6 +79,7 @@ public class Client {
             System.out.println("- throwdice");
             System.out.println("- fieldchoice <fieldid>");
             System.out.println("- broadcast <your broadcast>");
+            System.out.println("- createlobby <lobbyname>");
 
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
@@ -91,13 +92,13 @@ public class Client {
                     // closing connection and sending a QUIT-command
                     protocolClient.leave(out);
                     break;
-                } else if (line.startsWith("nicknamechange")){
+                } else if (line.startsWith("nicknamechange")) {
                     // changing nickname
                     protocolClient.changeNickname(line.substring(15), out);
                 } else if (line.startsWith("connect")) {
                     // sends join-command
-                    String nickname = line.substring(8).trim();
-                    protocolClient.sendJoin(nickname);
+                    String lobbyName = line.substring(8).trim();
+                    protocolClient.sendJoin(lobbyName);
                 } else if (line.startsWith("message")) {
                     // sends a chat-message
                     String message = line.substring(8).trim();
@@ -117,6 +118,9 @@ public class Client {
                 } else if (line.startsWith("broadcast")) {
                     String broadcastmessage = line.substring(10).trim();
                     protocolClient.sendCommandAndString(Command.BROD, broadcastmessage);
+                } else if (line.startsWith("createlobby")) {
+                    String lobbyName = line.substring(12).trim();
+                    protocolClient.sendCommandAndString(Command.CRLO, lobbyName);
                 } else { // if an unknown command is being used
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 

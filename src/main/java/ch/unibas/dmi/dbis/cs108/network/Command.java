@@ -31,7 +31,8 @@ public enum Command {
     WISP,
     DEOS,
     BROD,
-    LIST;
+    LIST,
+    CRLO;
 
     public static final String SEPARATOR = "%"; // blank space als Separator
 
@@ -171,6 +172,11 @@ public enum Command {
      * Prints the command "LIST"
      */
     public static void LIST(){ System.out.println("LIST");
+    }
+    /**
+     * Prints the command "LIST"
+     */
+    public static void CRLO(){ System.out.println("CRLO");
     }
 
 }

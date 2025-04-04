@@ -90,26 +90,29 @@ public class ProtocolReaderServer {
                  // Handels the JOIN-command from the client
                  // The client sends JOIN <nickname> to enter the server
                 case JOIN: {
-                    System.out.println("User " + userId + " is joining...");
                     if (parts.length < 2 || parts[1].trim().isEmpty()){
-                        protocolWriterServer.sendInfo("-ERR Nickname missing");
+                        protocolWriterServer.sendInfo("-ERR lobbyName missing");
                         break;
                     }
-                    String newNick = parts[1].trim();
-                    if (!newNick.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
-                        protocolWriterServer.sendInfo("-ERR Invalid nickname: " + newNick);
+                    String lobbyName = parts[1].trim();
+                    if (!lobbyName.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
+                        protocolWriterServer.sendInfo("-ERR Invalid lobbyName: " + lobbyName);
                         break;
                     }
-                    String finalNick = newNick;
-                    int suffix = 1;
-                    // Checks if nickname is already taken, if so he adds a suffix
-                    while (UserList.containsUserName(finalNick)) {
-                        finalNick = newNick + suffix++;
+                    Server.joinLobby(lobbyName, userId);
+                    break;
+                }
+                case CRLO: {
+                    if (parts.length < 2 || parts[1].trim().isEmpty()){
+                        protocolWriterServer.sendInfo("-ERR lobbyName missing");
+                        break;
                     }
-                    // adds user to UserList
-                    UserList.addUser(finalNick, out);
-                    // Welcome-message to all clients individually
-                    server.chatToAll("User " + finalNick + " has joined the chat.", "Server");
+                    String lobbyName = parts[1].trim();
+                    if (!lobbyName.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
+                        protocolWriterServer.sendInfo("-ERR Invalid lobbyName: " + lobbyName);
+                        break;
+                    }
+                    Server.createLobby(lobbyName);
                     break;
                 }
                 // Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.

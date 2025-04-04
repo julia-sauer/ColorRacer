@@ -15,6 +15,7 @@ import java.io.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.System.out;
+import ch.unibas.dmi.dbis.cs108.server.Lobby;
 
 /**
  * The class {@code Server} provides a simple multi-user chat server.
@@ -27,6 +28,8 @@ public class Server {
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
     private static String[] colors;
     public static int port;
+    public static List<Lobby> lobbies = new ArrayList<Lobby>();
+
 
     /**
      * Constructor of the Serverclass
@@ -304,7 +307,60 @@ public class Server {
             writer.flush();
         }
     }
+    /**
+     * Creates a new lobby with the given name and adds it to the global list of lobbies.
+     *
+     * @param lobbyName the name of the lobby to create
+     */
+    public static void createLobby(String lobbyName) {
 
+        Lobby lobby = new Lobby (lobbyName);
+        lobbies.add(lobby);
+
+    }
+    /**
+     * Creates a new lobby with the given name and adds it to the global list of lobbies.
+     *
+     * @param lobbyName the name of the lobby to create
+     */
+    public static void joinLobby(String lobbyName, int userId) {
+        User user = UserList.getUser(userId);
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+
+        boolean lobbyFound = false;
+
+        for (Lobby lobby : lobbies) {
+            if (lobby.getLobbyName().equals(lobbyName)) {
+                lobbyFound = true;
+
+                if (!lobby.isFull()) {
+                    boolean success = lobby.addPlayers(userId);
+                    if (success) {
+                        try {
+                            protocolWriterServer.sendCommandAndString(Command.JOIN, lobbyName);
+                        } catch (IOException e) {
+                            System.err.println("Error sending JOIN to user " + userId);
+                        }
+                    }
+                } else {
+                    try {
+                        protocolWriterServer.sendInfo("Lobby " + lobbyName + " is full!");
+                    } catch (IOException e) {
+                        System.err.println("Error sending full lobby info.");
+                    }
+                }
+                break; // No need to keep looping
+            }
+        }
+
+        if (!lobbyFound) {
+            try {
+                protocolWriterServer.sendInfo("Lobby " + lobbyName + " does not exist!");
+            } catch (IOException e) {
+                System.err.println("Error sending 'lobby not found' info.");
+            }
+        }
+    }
 }
 
 

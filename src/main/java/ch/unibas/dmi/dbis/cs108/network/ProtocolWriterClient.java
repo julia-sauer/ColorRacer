@@ -123,24 +123,24 @@ public class ProtocolWriterClient {
      * Sends the {@code JOIN} command with the desired nickname to the server.
      * The server decides whether the nickname is accepted or changed (e.g. in the case of duplicates).
      *
-     * @param nickname The nickname entered by the user
+     * @param lobbyName The nickname entered by the user
      * @author anasv
      */
-    public void sendJoin(String nickname){
-        if (nickname == null || nickname.trim().isEmpty()) {
-            System.out.println("Nickname is null or empty!");
+    public void sendJoin(String lobbyName){
+        if (lobbyName == null || lobbyName.trim().isEmpty()) {
+            System.out.println("LobbyName is null or empty!");
             return;
         }
-        if (nickname.length() > 15){
-            System.out.println("Nickname is too long");
+        if (lobbyName.length() > 30){
+            System.out.println(" LobbyName is too long");
             return;
         }
-        if (!nickname.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
-            System.out.println("Nickname must be 3–50 characters, only letters, digits, or _");
+        if (!lobbyName.matches("^[a-zA-Z0-9_äöüÄÖÜß]{1,50}$")) {
+            System.out.println("lobbyName must be 3–50 characters, only letters, digits, or _");
             return;
         }
         // Sends: JOIN <nickname>
-        sendToServer(Command.JOIN + Command.SEPARATOR + nickname);
+        sendToServer(Command.JOIN + Command.SEPARATOR + lobbyName);
     }
 
 
