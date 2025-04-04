@@ -1,8 +1,10 @@
 package ch.unibas.dmi.dbis.cs108;
 
 import ch.unibas.dmi.dbis.cs108.client.Client;
+import ch.unibas.dmi.dbis.cs108.example.gui.javafx.GUI;
 import ch.unibas.dmi.dbis.cs108.gui.ChatController;
 import ch.unibas.dmi.dbis.cs108.server.Server;
+import javafx.application.Application;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 /**
@@ -28,8 +30,11 @@ public class Starter {
                     username = args[2];
                 }
                 Client client = new Client(host, port, username);
-                client.start();
+                new Thread(() -> client.start()).start();
+                Application.launch(GUI.class, args);
+
                 //LOGGER.info("Client started");
+
             }
         } catch (Exception e) {
             System.out.println("Your input was incorrect. Please try again! \n\n"
