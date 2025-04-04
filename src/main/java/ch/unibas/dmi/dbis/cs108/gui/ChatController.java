@@ -1,14 +1,22 @@
 package ch.unibas.dmi.dbis.cs108.gui;
 
+import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 
-public class ClientChatGUI {
+import java.awt.desktop.ScreenSleepEvent;
+import java.io.IOException;
+import java.net.URL;
+
+public class ChatController {
+    public TitledPane root = null;
 
     // The TextArea for displaying chat messages
     @FXML
@@ -20,6 +28,12 @@ public class ClientChatGUI {
 
     // Reference to your client’s protocol writer; set this after FXML loading
     private ProtocolWriterClient protocolWriter;
+
+    public ChatController() {}
+
+    public TitledPane getRoot() {
+        return root;
+    }
 
     /**
      * Setter to inject the ProtocolWriterClient instance.
