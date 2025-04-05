@@ -196,28 +196,30 @@ public class ProtocolReaderClient {
     }
 
     /**
-     * This method prints the chat message in the correct format.
-     * If a ChatController is set, updates the GUI via Platform.runLater.
-     * @param message The message that should be sent.
-     * @param sender  The nickname of the user that sent the message.
+     * This method constructs a formatted string in the form {@code "sender: message"} and prints it to the terminal.
+     * It also updates the chat GUI by invoking the controller's {@code displayChat} method.
+     * The messages are still printed in the terminal because it helps in debugging
+     * by ensuring that messages are visible in the console as well as in the graphical interface.
+     *
+     * @param message the chat message content received from the server.
+     * @param sender  the nickname of the user who sent the message.
      */
     private void displayChat(String message, String sender) {
         String formattedMessage = sender + ": " + message;
-//        if (chatController != null) {
-//            Platform.runLater(() -> chatController.displayChat(formattedMessage));
-//        } else {
-//            System.out.println("+CHT " + formattedMessage);
-//        }
-        System.out.println("+CHT " + formattedMessage);
+        System.out.println("+CHT " + formattedMessage); //so it is still printed in the terminal to check
         chatController.displayChat(formattedMessage);
 
     }
 
     /**
-     * This method prints the incoming whisper-message to the user with the right format.
-     * If a ChatController is set, updates the GUI via Platform.runLater.
-     * @param message The message that should be sent to the user.
-     * @param sender  The nickname of the user that sent the message.
+     * This method constructs a formatted string indicating that a message is a whisper. It shows in the
+     * form {@code "Whisper from sender: message"} and prints it to the terminal, and it also updates
+     * the GUI by invoking the controller's {@code displayChat} method.
+     * The messages are still printed in the terminal because it helps in debugging
+     * by ensuring that messages are visible in the console as well as in the graphical interface.
+     *
+     * @param message the whisper message content.
+     * @param sender  the nickname of the user who sent the whisper.
      */
     private void displayWhisp(String message, String sender) {
         // Display the whisper message from the sender
@@ -231,9 +233,11 @@ public class ProtocolReaderClient {
     }
 
     /**
-     * Setter for the ChatController.
+     * Sets the {@link ChatController} that will be used to update the GUI with incoming messages.
+     * This method is called during the initialization of the GUI, ensuring that the {@link ProtocolReaderClient}
+     * can forward them to the GUI for display.
      *
-     * @param controller The ChatController instance.
+     * @param controller the {@link ChatController} instance to be set.
      */
     public void setChatController(ChatController controller) {
         this.chatController = controller;
