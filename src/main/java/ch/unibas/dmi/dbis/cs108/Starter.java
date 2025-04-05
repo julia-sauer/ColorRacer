@@ -1,12 +1,9 @@
 package ch.unibas.dmi.dbis.cs108;
 
 import ch.unibas.dmi.dbis.cs108.client.Client;
-import ch.unibas.dmi.dbis.cs108.example.gui.javafx.GUI;
-import ch.unibas.dmi.dbis.cs108.gui.ChatController;
+The import ch.unibas.dmi.dbis.cs108.gui.GUI;
 import ch.unibas.dmi.dbis.cs108.server.Server;
 import javafx.application.Application;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 /**
  * This method starts either the Server or the Client
  */
@@ -32,9 +29,9 @@ public class Starter {
                 Client client = new Client(host, port, username);
                 new Thread(() -> client.start()).start();
 
-                // Set the client for the ChatStarter GUI.
-                GUI.setClient(client);
-                Application.launch(GUI.class, args);
+
+                GUI.setClient(client); // Sets the client for the ChatStarter GUI.
+                Application.launch(GUI.class, args); //starts the GUI
 
                 //LOGGER.info("Client started");
 
