@@ -72,11 +72,9 @@ public class Lobby implements Runnable {
 
     /**
      * Changes the state of the game.
-     * <ul>
-     *   <li>1 = open</li>
-     *   <li>2 = ongoing</li>
-     *   <li>3 = finished</li>
-     * </ul>
+     * 1 = open
+     * 2 = ongoing
+     * 3 = finished
      *
      * @param state the new state to set
      */
@@ -125,11 +123,9 @@ public class Lobby implements Runnable {
      * Starts the game for this lobby if all conditions are met.
      * <p>
      * Conditions:
-     * <ul>
-     *     <li>The game must not already be running or finished.</li>
-     *     <li>The lobby must not be the "Welcome" lobby.</li>
-     *     <li>At least 2 players must be present.</li>
-     * </ul>
+     * The game must not already be running or finished.
+     * The lobby must not be the "Welcome" lobby.
+     * At least 2 players must be present.
      * If any condition fails, a corresponding message is sent to the requesting client.
      *
      * @param userId the ID of the user who requested to start the game
@@ -170,7 +166,6 @@ public class Lobby implements Runnable {
             return;
         }
 
-        // ✅ Start the game
         changeGameState(2);
         System.out.println("[Lobby: " + lobbyName + "] Game is starting...");
 
