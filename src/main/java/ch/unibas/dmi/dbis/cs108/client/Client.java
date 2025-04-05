@@ -17,7 +17,9 @@ public class Client {
     private final String host;
     private final int port;
     private final String username;
-    private ChatController chatController;
+
+    private ProtocolReaderClient protocolReader;
+    private ProtocolWriterClient protocolWriterClient;
 
     /**
      * Constructor for class Client
@@ -48,10 +50,10 @@ public class Client {
             InputStream in = sock.getInputStream();
             OutputStream out= sock.getOutputStream();
 
-            ProtocolWriterClient protocolWriterClient = new ProtocolWriterClient(out);
+            this.protocolWriterClient = new ProtocolWriterClient(out);
 
             // ProtocolReaderClient-Objekt erstellen und Thread starten
-            ProtocolReaderClient protocolReader = new ProtocolReaderClient(in, out);
+            protocolReader = new ProtocolReaderClient(in, out);
             Thread readerThread = new Thread(() -> {
                 try{
                     protocolReader.readLoop();
@@ -155,5 +157,19 @@ public class Client {
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
+    }
+
+    public void setChatController(ChatController chatController) {
+        if (protocolReader != null) {
+            protocolReader.setChatController(chatController);
+        }
+    }
+
+    public ProtocolReaderClient getProtocolReader(){
+        return protocolReader;
+    }
+
+    public ProtocolWriterClient getProtocolWriter() {
+        return protocolWriterClient;
     }
 }
