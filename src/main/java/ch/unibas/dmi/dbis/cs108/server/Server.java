@@ -243,6 +243,8 @@ public class Server {
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
         GameBoard gameBoard = new GameBoard();
         if(gameBoard.isValidField(fieldId)) {
+            Field selectedField = gameBoard.getFieldById(fieldId);
+            gameBoard.addSelectedField(selectedField);
             try {
                 protocolWriterServer.sendCommandAndString(Command.CHOS, fieldId);
             } catch (IOException e) {
@@ -388,7 +390,6 @@ public class Server {
      * [Lobby: cool] Game state: open
      * [Lobby: test] Game state: running
      * </pre>
-     * </p>
      * This method is typically used for debugging and monitoring server-side lobby activity.
      */
     public static void printAllLobbyStates() {
