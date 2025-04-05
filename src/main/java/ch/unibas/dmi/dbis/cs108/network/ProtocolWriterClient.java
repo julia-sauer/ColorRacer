@@ -64,6 +64,10 @@ public class ProtocolWriterClient {
             System.out.println("Message is too long");
             return;
         }
+        if (message.startsWith("whisper")){ // checks if the message is private
+            sendWhisper(message);
+            return;
+        }
         sendToServer(Command.CHAT + Command.SEPARATOR + message);
     }
 
@@ -92,7 +96,7 @@ public class ProtocolWriterClient {
 
     /**
      * Calls sendCommand for the Command NICK, to send the new nickname to the server.
-     * @param newnickname the new nickname, the User choosed.
+     * @param newnickname the new nickname, the User chose.
      * @param out the OutputStream.
      * Uses the method {@code sendCommand} for the command NICK to send the new nickname to the server.
      * @param newnickname the new nickname that the user selected.
@@ -158,9 +162,9 @@ public class ProtocolWriterClient {
      */
 
     public void sendWhisper(String nicknameAndMessage) {
-        String[] parts = nicknameAndMessage.split(" ", 2);
-        String receiverNickname = parts[0].trim();
-        String message = parts[1].trim();
+        String[] parts = nicknameAndMessage.split(" ", 3);
+        String receiverNickname = parts[1].trim();
+        String message = parts[2].trim();
 
         if (message == null || message.trim().isEmpty()) {
             System.out.println("Message is null or empty!");
