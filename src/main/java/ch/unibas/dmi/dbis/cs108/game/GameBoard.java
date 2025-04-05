@@ -8,6 +8,7 @@ public class GameBoard {
     private Map<String, Field> fields;
     private Field currentField;
     private Set<Field> selectedFields;
+    private final List<Field> selectedFieldList = new ArrayList<>();
 
     public GameBoard() {
         this.fields = new HashMap<>();
@@ -140,5 +141,40 @@ public class GameBoard {
 
     public void addSelectedField(Field field) {
         selectedFields.add(field);
+        selectedFieldList.add(field); // for MOVE
     }
+
+    /**
+     * Returns the last field that was selected via CHOS.
+     * This is used when the player confirms their move with MOVE.
+     * @return The last selected field in the order of selection, or null if no fields were selected.
+     */
+    public Field getLastSelectedField() {
+        if (selectedFieldList.isEmpty()) return null;
+        return selectedFieldList.get(selectedFieldList.size() - 1);
+    }
+
+    /**
+     * Executes the player's move by setting the current field
+     * to the last selected field from CHOS. Clears the selection afterward.
+     * Used when the player confirms their movement with MOVE.
+     */
+    public void moveToLastSelected() {
+        Field last = getLastSelectedField();
+        if (last != null) {
+            currentField = last;
+            selectedFields.clear();
+            selectedFieldList.clear();
+        }
+    }
+
+    /**
+     * returns the current field, the player is on.
+     * Used to report the player's final position after moving.
+     * @return the current field.
+     */
+    public Field getCurrentField() {
+        return currentField;
+    }
+
 }
