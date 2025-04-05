@@ -1,7 +1,7 @@
 package ch.unibas.dmi.dbis.cs108;
 
 import ch.unibas.dmi.dbis.cs108.client.Client;
-The import ch.unibas.dmi.dbis.cs108.gui.GUI;
+import ch.unibas.dmi.dbis.cs108.gui.GUI;
 import ch.unibas.dmi.dbis.cs108.server.Server;
 import javafx.application.Application;
 /**
