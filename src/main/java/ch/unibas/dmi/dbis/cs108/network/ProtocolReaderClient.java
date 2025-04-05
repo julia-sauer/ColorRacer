@@ -129,9 +129,9 @@ public class ProtocolReaderClient {
                     break;
 
                 case WISP:
-                    String nicknameAndMessage = String.join(" ", parts[1]);
-                    String[] nicknameAndMessageParts = nicknameAndMessage.split(Command.SEPARATOR, 2);
-                    String whisperMessage = nicknameAndMessageParts[1].trim();
+                    String nickname = String.join(" ", parts[1]);
+                    String message = String.join(" ", parts[2]);
+                    String[] nicknameAndMessageParts = new String[]{nickname, message};
                     if (nicknameAndMessageParts.length < 2 || nicknameAndMessageParts[1].trim().isEmpty()) {
                         System.out.println("WISP received: [empty]");
                         break;
@@ -141,8 +141,8 @@ public class ProtocolReaderClient {
                     //    System.out.println("WISP received: " + nicknameAndMessageParts[1]); //Fallback}
                     if (chatPart.length < 2) {
                         String sender = nicknameAndMessageParts[0];
-                        String message = nicknameAndMessageParts[1];
-                        displayWhisp(message, sender);
+                        String whispermessage = nicknameAndMessageParts[1];
+                        displayWhisp(whispermessage, sender);
                     }
                     break;
 
