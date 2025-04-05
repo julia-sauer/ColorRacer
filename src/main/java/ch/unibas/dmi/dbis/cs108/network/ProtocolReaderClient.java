@@ -222,14 +222,10 @@ public class ProtocolReaderClient {
      * @param sender  the nickname of the user who sent the whisper.
      */
     private void displayWhisp(String message, String sender) {
-        // Display the whisper message from the sender
         String formattedMessage = "Whisper from " + sender + ": " + message;
-        if (chatController != null) {
-            Platform.runLater(() -> chatController.displayChat(formattedMessage));
-        } else {
-            System.out.println(formattedMessage);
-        }
 
+        System.out.println("+CHT " + formattedMessage); //so it is still printed in the terminal to check
+        chatController.displayChat(formattedMessage);
     }
 
     /**
