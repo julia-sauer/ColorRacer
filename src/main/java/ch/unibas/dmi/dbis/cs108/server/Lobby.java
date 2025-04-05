@@ -3,6 +3,7 @@ package ch.unibas.dmi.dbis.cs108.server;
 
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
+import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Lobby implements Runnable {
     private final List<String> players;
     private Server server;
     private final String lobbyName;
+    private GameBoard gameBoard = new GameBoard();
 
 
     /**
@@ -205,4 +207,13 @@ public class Lobby implements Runnable {
         changeGameState(3); // Game finished
         System.out.println("[Lobby: " + lobbyName + "] Game ended.");
     }
+
+    /**
+     * creates a gamboard
+     * @return the gameboard
+     */
+    public GameBoard getGameBoard() {
+        return gameBoard;
+    }
+
 }
