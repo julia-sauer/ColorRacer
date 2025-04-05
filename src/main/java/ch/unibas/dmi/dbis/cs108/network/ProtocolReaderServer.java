@@ -1,9 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import ch.unibas.dmi.dbis.cs108.server.Lobby;
-import ch.unibas.dmi.dbis.cs108.server.Server;
-import ch.unibas.dmi.dbis.cs108.server.UserList;
-import ch.unibas.dmi.dbis.cs108.server.PingThread;
+import ch.unibas.dmi.dbis.cs108.server.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -125,23 +122,52 @@ public class ProtocolReaderServer {
                     Server.changeNickname(userId, newNick);
                     break;
                     // Aufruf der chatToAll methode für das Senden von einer Chatnachricht an alle Clients
-                case CHAT:
+                case CHAT: {
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR Empty chat message from user ID " + userId);
                         break;
                     }
+
                     String message = parts[1].trim();
                     if (message.length() > 500) {
                         System.err.println("-ERR Message too long from user ID " + userId);
                         break;
                     }
+
                     String sender = UserList.getUserName(userId);
-                    if (sender != null) {
-                        server.chatToAll(message, sender);
-                    } else {
+                    if (sender == null) {
                         System.err.println("-ERR Unknown user ID: " + userId);
+                        break;
                     }
+
+                    Lobby userLobby = null;
+                    for (Lobby lobby : Server.lobbies) {
+                        if (lobby.getPlayers().contains(sender)) {
+                            userLobby = lobby;
+                            break;
+                        }
+                    }
+
+                    if (userLobby == null) {
+                        protocolWriterServer.sendInfo("You are not currently in a lobby.");
+                        break;
+                    }
+
+                    String lobbyName = userLobby.getLobbyName();
+                    List<String> lobbyPlayers = userLobby.getPlayers();
+
+                    for (String recipientName : lobbyPlayers) {
+                        User recipient = UserList.getUserByName(recipientName);
+                        if (recipient != null) {
+                            ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, recipient.getOut());
+                            writer.sendChat(message, sender);
+                        }
+                    }
+
+                    System.out.println("[" + lobbyName + "] " + sender + ": " + message);
                     break;
+                }
+
 
                 case PONG:
                     System.out.println("PONG received from Client " + userId);
@@ -269,10 +295,6 @@ public class ProtocolReaderServer {
 
                     break;
                 }
-
-
-
-
 
                 default:
                     System.out.println("Unknown command from user ID " + userId + ": " + line);

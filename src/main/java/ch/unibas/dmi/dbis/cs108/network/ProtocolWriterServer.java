@@ -15,6 +15,8 @@ public class ProtocolWriterServer {
     private final List<PrintWriter> clientWriters;
     private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
 
+
+
     /**
      * Constructor: Initialises the list of PrintWriters.
      *
@@ -31,12 +33,10 @@ public class ProtocolWriterServer {
      * @param message The message to be sent.
      * @param sender The name of the sender.
      */
-    public void sendChat(String message, String sender){
+    public void sendChat(String message, String sender) {
         String formatted = Command.CHAT + Command.SEPARATOR + sender + Command.SEPARATOR + message;
-        for (PrintWriter writer : clientWriters) {
-            writer.println(formatted);
-            writer.flush();
-        }
+        writer.println(formatted);   //  Use the class-level writer
+        writer.flush();
     }
 
     /**
