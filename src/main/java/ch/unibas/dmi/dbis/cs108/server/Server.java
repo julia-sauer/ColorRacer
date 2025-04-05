@@ -371,7 +371,6 @@ public class Server {
     }
     /**
      * Prints the current game state of all active lobbies to the server console.
-     * <p>
      * This method skips the special "Welcome" lobby, as it is a placeholder and not used
      * for actual gameplay. For each other lobby, it prints:
      * <ul>
@@ -389,7 +388,6 @@ public class Server {
      * [Lobby: cool] Game state: open
      * [Lobby: test] Game state: running
      * </pre>
-     * </p>
      * This method is typically used for debugging and monitoring server-side lobby activity.
      */
     public static void printAllLobbyStates() {
