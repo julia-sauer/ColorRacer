@@ -67,7 +67,7 @@ public class Client {
             protocolWriterClient.sendCommandAndString(Command.NICK, username);
             protocolWriterClient.sendJoin("Welcome");
             try {
-                Thread.sleep(2000); //So the Welcomemessage comes before the System.out.println's that come after that.
+                Thread.sleep(2000); //Welcomemessage comes before the System.out.println's that come after that.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -159,16 +159,34 @@ public class Client {
         }
     }
 
+    /**
+     * Sets the {@link ChatController} for this client by forwarding it to the {@link ProtocolReaderClient}.
+     * This allows the {@link ProtocolReaderClient} to update the GUI with incoming messages.
+     *
+     * @param chatController the ChatController instance to be used for GUI updates.
+     */
     public void setChatController(ChatController chatController) {
         if (protocolReader != null) {
             protocolReader.setChatController(chatController);
         }
     }
 
+    /**
+     * Retrieves the {@link ProtocolReaderClient} used by this client.
+     * The {@link ProtocolReaderClient} handles incoming messages from the server.
+     *
+     * @return the {@link ProtocolReaderClient} instance, or {@code null} if it has not been initialized.
+     */
     public ProtocolReaderClient getProtocolReader(){
         return protocolReader;
     }
 
+    /**
+     * Retrieves the {@link ProtocolWriterClient} used by this client.
+     * The {@link ProtocolWriterClient} is responsible for sending messages to the server.
+     *
+     * @return the {@link ProtocolWriterClient} instance, or {@code null} if it has not been initialized.
+     */
     public ProtocolWriterClient getProtocolWriter() {
         return protocolWriterClient;
     }
