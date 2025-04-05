@@ -82,6 +82,7 @@ public class Client {
             System.out.println("- movetofield");
             System.out.println("- broadcast <your broadcast>");
             System.out.println("- createlobby <lobbyname>");
+            System.out.println("- start");
 
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
@@ -130,6 +131,8 @@ public class Client {
                 } else if (line.startsWith("createlobby")) {
                     String lobbyName = line.substring(12).trim();
                     protocolClient.sendCommandAndString(Command.CRLO, lobbyName);
+                } else if (line.startsWith("start")) {
+                    protocolClient.sendCommand(Command.STRT);
                 } else { // if an unknown command is being used
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 

@@ -1,6 +1,10 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
 
+import ch.unibas.dmi.dbis.cs108.network.Command;
+import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +20,7 @@ public class Lobby implements Runnable {
     private final List<String> players;
     private Server server;
     private final String lobbyName;
+
 
     /**
      * Current state of the game:
@@ -103,13 +108,100 @@ public class Lobby implements Runnable {
     public List<String> getPlayers() {
         return new ArrayList<>(players);
     }
+    /**
+     * Removes a player from the lobby by their nickname.
+     * <p>
+     * This method is thread-safe and ensures that the internal player list is updated safely.
+     *
+     * @param playerName The nickname of the player to remove.
+     */
+    public synchronized void removePlayer(String playerName) {
+        players.remove(playerName);
+    }
+    /**
+     * Starts the game for this lobby if all conditions are met.
+     * <p>
+     * Conditions:
+     * <ul>
+     *     <li>The game must not already be running or finished.</li>
+     *     <li>The lobby must not be the "Welcome" lobby.</li>
+     *     <li>At least 2 players must be present.</li>
+     * </ul>
+     * If any condition fails, a corresponding message is sent to the requesting client.
+     *
+     * @param userId the ID of the user who requested to start the game
+     */
+    public synchronized void startGame(int userId) {
+        User user = UserList.getUser(userId);
+        if (user == null) return;
+
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+
+        // Game already started or finished
+        if (gamestate != 1) {
+            try {
+                protocolWriterServer.sendInfo("Game has already started or is finished.");
+            } catch (IOException e) {
+                System.err.println("Error sending game state message to user " + userId);
+            }
+            return;
+        }
+
+        // Welcome lobby is not a valid game lobby
+        if (lobbyName.equalsIgnoreCase("Welcome")) {
+            try {
+                protocolWriterServer.sendInfo("You are not in a real lobby. Please join or create a lobby to start a game.");
+            } catch (IOException e) {
+                System.err.println("Error sending Welcome lobby warning to user " + userId);
+            }
+            return;
+        }
+
+        // Not enough players to start
+        if (players.size() < 2) {
+            try {
+                protocolWriterServer.sendInfo("At least 2 players are required to start the game.");
+            } catch (IOException e) {
+                System.err.println("Error sending player count warning to user " + userId);
+            }
+            return;
+        }
+
+        // ✅ Start the game
+        changeGameState(2);
+        System.out.println("[Lobby: " + lobbyName + "] Game is starting...");
+
+        for (String playerName : players) {
+            User u = UserList.getUserByName(playerName);
+            if (u != null) {
+                ProtocolWriterServer playerWriter = new ProtocolWriterServer(Server.clientWriters, u.getOut());
+                try {
+                    playerWriter.sendCommand(Command.STRT);
+                } catch (IOException e) {
+                    System.err.println("Error sending STRT to " + playerName);
+                }
+            }
+        }
+
+        new Thread(this).start(); // Start game thread
+    }
 
     /**
-     * Logic to run when this lobby is executed in a thread.
+     * Logic to run when this lobby is executed in a separate thread.
      * You can implement countdowns, game loops, or timeouts here.
      */
     @Override
     public void run() {
-        // Placeholder for game logic or timer functionality
+        System.out.println("[Lobby: " + lobbyName + "] Game loop started.");
+
+        try {
+            // Simulate a 5-minute game session for testing purposes
+            Thread.sleep(5 * 60 * 1000);
+        } catch (InterruptedException e) {
+            System.err.println("[Lobby: " + lobbyName + "] Game loop was interrupted.");
+        }
+
+        changeGameState(3); // Game finished
+        System.out.println("[Lobby: " + lobbyName + "] Game ended.");
     }
 }

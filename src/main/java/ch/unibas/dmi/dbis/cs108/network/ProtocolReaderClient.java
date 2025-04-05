@@ -184,6 +184,9 @@ public class ProtocolReaderClient {
                     System.out.println(brodMsg);
                     break;
 
+                case STRT:
+                    System.out.println(" Spiel wurde gestartet!");
+                    break;
 
                 default:
                     System.out.println("Unknown command from Server: " + line);

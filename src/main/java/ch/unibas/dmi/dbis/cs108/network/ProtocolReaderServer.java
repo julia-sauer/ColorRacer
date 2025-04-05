@@ -1,5 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
+import ch.unibas.dmi.dbis.cs108.server.Lobby;
 import ch.unibas.dmi.dbis.cs108.server.Server;
 import ch.unibas.dmi.dbis.cs108.server.UserList;
 import ch.unibas.dmi.dbis.cs108.server.PingThread;
@@ -229,6 +230,47 @@ public class ProtocolReaderServer {
                     String broadcasterName = UserList.getUserName(userId);
                     Server.broadcastToAll(broadcasterName + ": " + msg);
                     break;
+
+                case STRT: {
+                    String userName = UserList.getUserName(userId);
+                    if (userName == null || userName.isBlank()) {
+                        System.err.println("-ERR No user for ID " + userId);
+                        break;
+                    }
+
+                    List<Lobby> playerLobbies = new ArrayList<>();
+                    for (Lobby lobby : Server.lobbies) {
+                        if (lobby.getPlayers().contains(userName)) {
+                            playerLobbies.add(lobby);
+                        }
+                    }
+
+                    if (playerLobbies.isEmpty()) {
+                        protocolWriterServer.sendInfo("You aren't part of a gameLobby. Please create a lobby or join an existing lobby to start a game.");
+                        break;
+                    }
+
+                    // Prüfen ob ALLE Lobbys "Welcome" heißen
+                    boolean onlyInWelcome = playerLobbies.stream()
+                            .allMatch(l -> l.getLobbyName().equalsIgnoreCase("Welcome"));
+
+                    if (onlyInWelcome) {
+                        protocolWriterServer.sendInfo("You aren't part of a gameLobby. Please create a lobby or join an existing lobby to start a game.");
+                        break;
+                    }
+
+                    // Jetzt starte das Spiel in der ersten echten Lobby (≠ Welcome)
+                    for (Lobby lobby : playerLobbies) {
+                        if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                            lobby.startGame(userId);
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+
+
 
 
 

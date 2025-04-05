@@ -108,4 +108,20 @@ public class UserList {
         System.err.println("User with nickname '" + nickname + "' not found.");
         return -1;
     }
+    /**
+     * Gibt das User-Objekt zurück, das dem übergebenen Nickname entspricht.
+     *
+     * @param nickname Der Nickname des gesuchten Benutzers.
+     * @return Das User-Objekt oder null, wenn kein Benutzer mit diesem Nickname existiert.
+     */
+    public static User getUserByName(String nickname) {
+        for (User user : userMap.values()) {
+            if (user.getNickname().equalsIgnoreCase(nickname)) {
+                return user;
+            }
+        }
+        System.err.println("User with nickname '" + nickname + "' not found.");
+        return null;
+    }
+
 }

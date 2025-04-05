@@ -27,7 +27,7 @@ import ch.unibas.dmi.dbis.cs108.server.Lobby;
 public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
-    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+    public static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
     public static String[] colors;
     public static int port;
     public static List<Lobby> lobbies = new ArrayList<Lobby>();
@@ -309,12 +309,19 @@ public class Server {
         }
     }
     /**
-     * Creates a new lobby with the given name and adds it to the global list of lobbies.
+     * Adds the specified user to the given lobby by name.
+     * <p>
+     * If the user is currently in the "Welcome" lobby, they will be removed from it automatically
+     * before joining the new lobby. If the lobby is full, the user will be notified.
+     * If the lobby does not exist, an informational message will be sent to the user.
      *
-     * @param lobbyName the name of the lobby to create
+     * @param lobbyName The name of the lobby to join.
+     * @param userId    The ID of the user requesting to join the lobby.
      */
     public static void joinLobby(String lobbyName, int userId) {
         User user = UserList.getUser(userId);
+        if (user == null) return;
+
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
 
         boolean lobbyFound = false;
@@ -322,6 +329,16 @@ public class Server {
         for (Lobby lobby : lobbies) {
             if (lobby.getLobbyName().equals(lobbyName)) {
                 lobbyFound = true;
+
+                //  Remove user from "Welcome" lobby only
+                String userName = user.getNickname();
+                for (Lobby otherLobby : lobbies) {
+                    if (otherLobby.getLobbyName().equalsIgnoreCase("Welcome") &&
+                            otherLobby.getPlayers().contains(userName)) {
+                        otherLobby.removePlayer(userName);
+                        System.out.println("User '" + userName + "' removed from Welcome lobby.");
+                    }
+                }
 
                 if (!lobby.isFull()) {
                     boolean success = lobby.addPlayers(userId);
@@ -351,6 +368,7 @@ public class Server {
             }
         }
     }
+
 }
 
 
