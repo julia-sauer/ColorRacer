@@ -122,15 +122,15 @@ public class GameBoard {
         if(!colormatches) {
             return false;
         }
-        if (currentField.getNeighbors().contains(targetField)) {
-            return true;
-        }
+        boolean isNeighbor = currentField.getNeighbors().contains(targetField);
 
+        boolean isConnectedNeighbor = false;
         for (Field selectedField : selectedFields) {
             if (selectedField.getNeighbors().contains(targetField)) {
-                return true;
+                isConnectedNeighbor = true;
+                break;
             }
         }
-        return false;
+        return isNeighbor || isConnectedNeighbor;
     }
 }
