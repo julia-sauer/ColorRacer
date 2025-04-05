@@ -32,7 +32,9 @@ public enum Command {
     DEOS,
     BROD,
     LIST,
-    CRLO;
+    CRLO,
+    LOME,
+    GLST;
 
     public static final String SEPARATOR = "%"; // blank space als Separator
 
@@ -178,5 +180,16 @@ public enum Command {
      */
     public static void CRLO(){ System.out.println("CRLO");
     }
-
+    /**
+     * Prints the command "LOME"
+     */
+    public static void LOME() {
+        System.out.println("LOME");
+    }
+    /**
+     * Prints the command "GLST"
+     */
+    public static void GLST() {
+        System.out.println("GLST");
+    }
 }

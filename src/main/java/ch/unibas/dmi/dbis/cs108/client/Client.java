@@ -84,6 +84,8 @@ public class Client {
             System.out.println("- createlobby <lobbyname>");
             System.out.println("- start");
             System.out.println("- list");
+            System.out.println("- lobbymembers");
+            System.out.println("- gamelist");
 
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
@@ -136,8 +138,11 @@ public class Client {
                     protocolClient.sendCommand(Command.STRT);
                 }else if (line.equalsIgnoreCase("list")) {
                     protocolClient.sendCommand(Command.LIST);
-
-                } else { // if an unknown command is being used
+                }else if (line.equalsIgnoreCase("lobbymembers")) {
+                    protocolClient.sendCommand(Command.LOME);
+                }else if (line.equalsIgnoreCase("gamelist")) {
+                        protocolClient.sendCommand(Command.GLST);
+                } else { // if an unknown command is being usedgame
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
                 }

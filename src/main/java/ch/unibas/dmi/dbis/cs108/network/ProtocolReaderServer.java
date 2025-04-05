@@ -327,13 +327,91 @@ public class ProtocolReaderServer {
 
                     break;
                 }
+                case LOME: {
+                    User user = UserList.getUser(userId);
+                    if (user == null) {
+                        System.err.println("-ERR No user for ID " + userId);
+                        break;
+                    }
 
+                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+                    String username = user.getNickname();
+
+                    // Find lobby the user is in
+                    Lobby userLobby = null;
+                    for (Lobby lobby : Server.lobbies) {
+                        if (lobby.getPlayers().contains(username)) {
+                            userLobby = lobby;
+                            break;
+                        }
+                    }
+
+                    if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                        try {
+                            writer.sendInfo("You are not currently in a real lobby.");
+                        } catch (IOException e) {
+                            System.err.println("Error sending no-lobby message to user " + userId);
+                        }
+                        break;
+                    }
+
+                    List<String> members = userLobby.getPlayers();
+                    try {
+                        writer.sendInfo("Players in [" + userLobby.getLobbyName() + "] (" + members.size() + "): " + members);
+                    } catch (IOException e) {
+                        System.err.println("Error sending lobby member list to user " + userId);
+                    }
+                    break;
+                }
+                case GLST: {
+                    User user = UserList.getUser(userId);
+                    if (user == null) {
+                        System.err.println("-ERR No user found for ID " + userId);
+                        break;
+                    }
+
+                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+
+                    // Zähle "echte" Lobbys (≠ Welcome)
+                    List<Lobby> realLobbies = Server.lobbies.stream()
+                            .filter(l -> !l.getLobbyName().equalsIgnoreCase("Welcome"))
+                            .toList();
+
+                    if (realLobbies.isEmpty()) {
+                        try {
+                            writer.sendInfo("There are currently no active game lobbies.");
+                        } catch (IOException e) {
+                            System.err.println("Error sending empty game list info to user " + userId);
+                        }
+                        break;
+                    }
+
+                    for (Lobby lobby : realLobbies) {
+                        List<String> players = lobby.getPlayers();
+                        int state = lobby.getGameState();
+                        String stateText = switch (state) {
+                            case 1 -> "🟢 open";
+                            case 2 -> "🔵 running";
+                            case 3 -> "⚪ finished";
+                            default -> "❓ unknown";
+                        };
+
+                        try {
+                            writer.sendInfo("[Lobby: " + lobby.getLobbyName() + "] " + stateText + " | Players (" + players.size() + "): " + players);
+                        } catch (IOException e) {
+                            System.err.println("Error sending GLST info to user " + userId);
+                        }
+                    }
+
+                    break;
+                }
                 default:
                     System.out.println("Unknown command from user ID " + userId + ": " + line);
                     break;
             }
         }
     }
+
 }
     
 
