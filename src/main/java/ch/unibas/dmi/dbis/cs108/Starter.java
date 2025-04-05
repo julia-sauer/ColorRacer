@@ -31,6 +31,9 @@ public class Starter {
                 }
                 Client client = new Client(host, port, username);
                 new Thread(() -> client.start()).start();
+
+                // Set the client for the ChatStarter GUI.
+                GUI.setClient(client);
                 Application.launch(GUI.class, args);
 
                 //LOGGER.info("Client started");
