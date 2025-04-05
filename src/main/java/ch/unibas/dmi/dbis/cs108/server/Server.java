@@ -307,6 +307,7 @@ public class Server {
                 System.err.println("Error sending CRLO");
             }
         }
+        printAllLobbyStates();
     }
     /**
      * Adds the specified user to the given lobby by name.
@@ -368,6 +369,47 @@ public class Server {
             }
         }
     }
+    /**
+     * Prints the current game state of all active lobbies to the server console.
+     * <p>
+     * This method skips the special "Welcome" lobby, as it is a placeholder and not used
+     * for actual gameplay. For each other lobby, it prints:
+     * <ul>
+     *     <li>The lobby name</li>
+     *     <li>The current game state:
+     *         <ul>
+     *             <li>1 = open (waiting for players)</li>
+     *             <li>2 = running (game in progress)</li>
+     *             <li>3 = finished (game ended)</li>
+     *         </ul>
+     *     </li>
+     * </ul>
+     * Example output:
+     * <pre>
+     * [Lobby: cool] Game state: open
+     * [Lobby: test] Game state: running
+     * </pre>
+     * </p>
+     * This method is typically used for debugging and monitoring server-side lobby activity.
+     */
+    public static void printAllLobbyStates() {
+        for (Lobby lobby : lobbies) {
+            if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                continue; // überspringe "Welcome"-Lobby
+            }
+
+            int state = lobby.getGameState();
+            String stateText = switch (state) {
+                case 1 -> "open";
+                case 2 -> "running";
+                case 3 -> "finished";
+                default -> "unknown";
+            };
+
+            System.out.println("[Lobby: " + lobby.getLobbyName() + "] Game state: " + stateText);
+        }
+    }
+
 
 }
 

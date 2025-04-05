@@ -79,6 +79,7 @@ public class Lobby implements Runnable {
      * @param state the new state to set
      */
     public synchronized void changeGameState(int state) {
+        System.out.println("[Lobby: " + lobbyName + "] Game state changed from " + gamestate + " to " + state);
         this.gamestate = state;
     }
 
