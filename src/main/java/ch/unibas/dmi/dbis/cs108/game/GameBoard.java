@@ -133,4 +133,12 @@ public class GameBoard {
         }
         return isNeighbor || isConnectedNeighbor;
     }
+
+    public Field getFieldById(String fieldId) {
+        return fields.get(fieldId);
+    }
+
+    public void addSelectedField(Field field) {
+        selectedFields.add(field);
+    }
 }
