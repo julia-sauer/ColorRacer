@@ -388,6 +388,7 @@ public class Server {
      * [Lobby: cool] Game state: open
      * [Lobby: test] Game state: running
      * </pre>
+     * </p>
      * This method is typically used for debugging and monitoring server-side lobby activity.
      */
     public static void printAllLobbyStates() {

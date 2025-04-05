@@ -1,6 +1,8 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -122,6 +124,18 @@ public class UserList {
         }
         System.err.println("User with nickname '" + nickname + "' not found.");
         return null;
+    }
+    /**
+     * Returns a list of all currently connected users' nicknames.
+     *
+     * @return List of usernames
+     */
+    public static List<String> getAllUsernames() {
+        List<String> usernames = new ArrayList<>();
+        for (User user : userMap.values()) {
+            usernames.add(user.getNickname());
+        }
+        return usernames;
     }
 
 }

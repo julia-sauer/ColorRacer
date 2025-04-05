@@ -295,6 +295,38 @@ public class ProtocolReaderServer {
 
                     break;
                 }
+                case LIST: {
+                    User user = UserList.getUser(userId);
+                    if (user == null) {
+                        System.err.println("-ERR No user found for ID " + userId);
+                        break;
+                    }
+
+                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+
+                    // Get all connected usernames
+                    List<String> allUsers = UserList.getAllUsernames();
+                    try {
+                        writer.sendInfo("Connected users (" + allUsers.size() + "): " + allUsers);
+                    } catch (IOException e) {
+                        System.err.println("Error sending user list to user " + userId);
+                        break;
+                    }
+
+                    // Show players in each lobby (excluding Welcome)
+                    for (Lobby lobby : Server.lobbies) {
+                        if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) continue;
+
+                        List<String> players = lobby.getPlayers();
+                        try {
+                            writer.sendInfo("[Lobby: " + lobby.getLobbyName() + "] Players (" + players.size() + "): " + players);
+                        } catch (IOException e) {
+                            System.err.println("Error sending lobby list to user " + userId);
+                        }
+                    }
+
+                    break;
+                }
 
                 default:
                     System.out.println("Unknown command from user ID " + userId + ": " + line);
