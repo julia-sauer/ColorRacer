@@ -2,14 +2,16 @@ package ch.unibas.dmi.dbis.cs108.game;
 
 import java.util.*;
 
+import static ch.unibas.dmi.dbis.cs108.server.Server.colors;
+
 public class GameBoard {
     private Map<String, Field> fields;
     private Field currentField;
-    private Set<Field> selectedField;
+    private Set<Field> selectedFields;
 
     public GameBoard() {
         this.fields = new HashMap<>();
-        this.selectedField = new HashSet<>();
+        this.selectedFields = new HashSet<>();
 
         initializeFields();
         initializeNeighbors();
@@ -29,6 +31,106 @@ public class GameBoard {
     }
 
     private void initializeNeighbors() {
-        //TODO
+        Map<String, List<String>> neighborMap = new HashMap<>();
+
+        neighborMap.put("white1", Arrays.asList("purple1", "yellow1", "orange1"));
+        neighborMap.put("blue1", Arrays.asList("orange1", "yellow1", "purple2", "pink1"));
+        neighborMap.put("blue2", Arrays.asList("orange2", "pink2"));
+        neighborMap.put("blue3", Arrays.asList("pink1", "pink2", "orange3", "orange4", "purple3", "red2"));
+        neighborMap.put("blue4", Arrays.asList("red2", "purple4", "orange5", "purple5", "pink3", "yellow2"));
+        neighborMap.put("blue5", Arrays.asList("pink4", "yellow3", "blue6", "purple6"));
+        neighborMap.put("blue6", Arrays.asList("blue5", "yellow3", "red4", "purple6", "yellow4"));
+        neighborMap.put("blue7", Arrays.asList("orange7", "pink6", "red6", "orange9"));
+        neighborMap.put("blue8", Arrays.asList("orange9", "pink8", "yellow5", "purple9"));
+        neighborMap.put("blue9", Arrays.asList("purple9", "yellow5", "pink9", "yellow6"));
+        neighborMap.put("blue10", Arrays.asList("purple10", "orange10", "pink10"));
+        neighborMap.put("red1", Arrays.asList("purple1", "yellow1", "purple2", "orange2"));
+        neighborMap.put("red2", Arrays.asList("orange4", "blue3", "purple3", "purple4", "blue4"));
+        neighborMap.put("red3", Arrays.asList("purple5", "orange5", "pink4", "pink5", "yellow3"));
+        neighborMap.put("red4", Arrays.asList("orange6", "yellow3", "blue6"));
+        neighborMap.put("red5", Arrays.asList("yellow4", "orange7", "purple7"));
+        neighborMap.put("red6", Arrays.asList("pink7", "orange8", "pink6", "blue7", "orange9", "pink8"));
+        neighborMap.put("red7", Arrays.asList("purple9", "yellow7", "orange10"));
+        neighborMap.put("orange1", Arrays.asList("yellow1", "blue1"));
+        neighborMap.put("orange2", Arrays.asList("red1", "purple2", "blue2"));
+        neighborMap.put("orange3", Arrays.asList("pink2", "blue3", "purple3"));
+        neighborMap.put("orange4", Arrays.asList("pink1", "blue3", "red2"));
+        neighborMap.put("orange5", Arrays.asList("blue4", "purple4", "pink4", "red3", "purple5"));
+        neighborMap.put("orange6", Arrays.asList("pink5", "yellow3", "red4"));
+        neighborMap.put("orange7", Arrays.asList("yellow4", "red5", "purple7", "pink6", "blue7"));
+        neighborMap.put("orange8", Arrays.asList("pink7", "red6"));
+        neighborMap.put("orange9", Arrays.asList("blue7", "red6", "pink8", "blue8"));
+        neighborMap.put("orange10", Arrays.asList("purple10", "yellow7", "red7", "pink10", "blue10"));
+        neighborMap.put("purple1", Arrays.asList("yellow1", "red1"));
+        neighborMap.put("purple2", Arrays.asList("yellow1", "blue1", "pink1", "red1", "orange2"));
+        neighborMap.put("purple3", Arrays.asList("orange3", "blue3", "red2"));
+        neighborMap.put("purple4", Arrays.asList("red2", "blue4", "orange5", "pink4"));
+        neighborMap.put("purple5", Arrays.asList("pink3", "blue4", "orange5", "red3", "pink5"));
+        neighborMap.put("purple6", Arrays.asList("blue5", "blue6", "yellow4"));
+        neighborMap.put("purple7", Arrays.asList("red5", "orange7", "pink6", "pink7"));
+        neighborMap.put("purple8", Arrays.asList("pink8", "yellow5", "pink9"));
+        neighborMap.put("purple9", Arrays.asList("blue8", "yellow5", "blue9", "red7"));
+        neighborMap.put("purple10", Arrays.asList("yellow6", "orange10", "blue10"));
+        neighborMap.put("yellow1", Arrays.asList("orange1", "purple1", "blue1", "red1", "purple2"));
+        neighborMap.put("yellow2", Arrays.asList("blue4", "pink3"));
+        neighborMap.put("yellow3", Arrays.asList("blue6", "red4", "blue5", "orange6", "pink4", "red3", "pink5"));
+        neighborMap.put("yellow4", Arrays.asList("orange7", "red5", "purple6", "blue6"));
+        neighborMap.put("yellow5", Arrays.asList("pink8", "purple8", "pink9", "blue9", "purple9", "blue8"));
+        neighborMap.put("yellow6", Arrays.asList("pink9", "blue9", "purple10"));
+        neighborMap.put("yellow7", Arrays.asList("red7", "orange10", "pink10"));
+        neighborMap.put("pink1", Arrays.asList("blue1", "purple2", "blue3", "orange4"));
+        neighborMap.put("pink2", Arrays.asList("blue2", "blue3", "orange3"));
+        neighborMap.put("pink3", Arrays.asList("yellow2", "blue4", "purple5"));
+        neighborMap.put("pink4", Arrays.asList("purple4", "orange5", "red3", "yellow3", "blue5"));
+        neighborMap.put("pink5", Arrays.asList("purple5", "red3", "yellow3", "orange6"));
+        neighborMap.put("pink6", Arrays.asList("purple7", "orange7", "blue7", "red6"));
+        neighborMap.put("pink7", Arrays.asList("purple7", "red6", "orange8"));
+        neighborMap.put("pink8", Arrays.asList("purple8", "blue8", "red6", "orange9", "yellow5"));
+        neighborMap.put("pink9", Arrays.asList("purple8", "yellow5", "blue9", "yellow6"));
+        neighborMap.put("pink10", Arrays.asList("yellow7", "orange10", "blue10"));
+
+        for (Map.Entry<String, List<String>> entry : neighborMap.entrySet()) {
+            Field field = fields.get(entry.getKey());
+            for (String neighborId : entry.getValue()) {
+                Field neighbor = fields.get(neighborId);
+                if (neighbor != null) {
+                    field.addNeighbor(neighbor);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method checks wether the field chosen by the user is valid or not.
+     * It checks if the field is connected to the field the player is currently on or if it is connected to an already selected field.
+     * It checks if the filed corresponds to a color that was rolled and is not already used.
+     *
+     * @param fieldId the id of the chosen field.
+     * @return true if field is valid, false if field is not valid
+     */
+    public boolean isValidField(String fieldId) {
+        Field targetField = fields.get(fieldId);
+        String fieldColor = fieldId.split("\\d")[0];
+        boolean colormatches = false;
+        for(int i = 0; i < colors.length; i++) {
+            if(fieldColor.equals(colors[i])) {
+                colors[i] = null;
+                colormatches = true;
+                break;
+            }
+        }
+        if(!colormatches) {
+            return false;
+        }
+        if (currentField.getNeighbors().contains(targetField)) {
+            return true;
+        }
+
+        for (Field selectedField : selectedFields) {
+            if (selectedField.getNeighbors().contains(targetField)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
