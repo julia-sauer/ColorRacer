@@ -155,6 +155,15 @@ public class ProtocolReaderClient {
                     System.out.println("Field " + fieldId + " selected.");
                     break;
 
+                case MOVE:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Error: No position update received.");
+                        break;
+                    }
+                    String positionMessage = parts[1].trim();
+                    System.out.println("+POS " + positionMessage);
+                    break;
+
                 case ROLL:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("Error: No colors received.");
