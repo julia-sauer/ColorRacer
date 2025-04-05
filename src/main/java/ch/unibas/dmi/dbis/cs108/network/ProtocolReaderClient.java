@@ -203,11 +203,14 @@ public class ProtocolReaderClient {
      */
     private void displayChat(String message, String sender) {
         String formattedMessage = sender + ": " + message;
-        if (chatController != null) {
-            Platform.runLater(() -> chatController.displayChat(formattedMessage));
-        } else {
-            System.out.println("+CHT " + formattedMessage);
-        }
+//        if (chatController != null) {
+//            Platform.runLater(() -> chatController.displayChat(formattedMessage));
+//        } else {
+//            System.out.println("+CHT " + formattedMessage);
+//        }
+        System.out.println("+CHT " + formattedMessage);
+        chatController.displayChat(formattedMessage);
+
     }
 
     /**
@@ -235,4 +238,5 @@ public class ProtocolReaderClient {
     public void setChatController(ChatController controller) {
         this.chatController = controller;
     }
+
 }
