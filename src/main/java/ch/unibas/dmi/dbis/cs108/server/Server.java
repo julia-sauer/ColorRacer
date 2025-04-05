@@ -241,7 +241,17 @@ public class Server {
     public static void checkField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
-        GameBoard gameBoard = new GameBoard();
+        // GameBoard gameBoard = new GameBoard();  (ersetzt)
+        Lobby userLobby = null;
+        String nickname = user.getNickname();
+        for (Lobby lobby : lobbies) {
+            if (lobby.getPlayers().contains(nickname)) {
+                userLobby = lobby;
+                break;
+            }
+        }
+        if (userLobby == null) return;
+        GameBoard gameBoard = userLobby.getGameBoard();
         if(gameBoard.isValidField(fieldId)) {
             Field selectedField = gameBoard.getFieldById(fieldId);
             gameBoard.addSelectedField(selectedField);
@@ -276,6 +286,46 @@ public class Server {
             System.err.println("Error sending DEOS + fieldId");
         }
     }
+
+    /**
+     * moves the player to the last field they selected using CHOS
+     * This method finds the lobby the user belongs to and
+     * gets the shared GameBoard of that lobby.
+     * Executes moveToLastSelected() in the GameBoard
+     * sends a message to the client with the final position
+     * @param userId userId the ID of the player executing the move
+     */
+    public static void moveToLastSelectedField(int userId) {
+        User user = UserList.getUser(userId);
+        if (user == null) return;
+
+        String nickname = user.getNickname();
+        Lobby userLobby = null;
+
+        for (Lobby lobby : lobbies) {
+            if (lobby.getPlayers().contains(nickname)) {
+                userLobby = lobby;
+                break;
+            }
+        }
+
+        if (userLobby == null) return;
+
+        GameBoard board = userLobby.getGameBoard();
+        board.moveToLastSelected();
+        Field newField = board.getCurrentField();
+
+        ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, user.getOut());
+
+        try {
+            writer.sendInfo(nickname + " moved to the Field " + newField.getFieldId());
+        } catch (IOException e) {
+            System.err.println("Error sending move info to user " + userId);
+        }
+    }
+
+
+
     /**
      * Broadcasts a message to all connected clients.
      *
