@@ -238,6 +238,10 @@ public class ProtocolReaderServer {
                         break;
                     }
 
+                case MOVE:
+                    Server.moveToLastSelectedField(userId);
+                    break;
+
                 case DEOS:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR No FieldId from Client " + userId);
