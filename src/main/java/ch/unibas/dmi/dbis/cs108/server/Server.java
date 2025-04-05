@@ -1,8 +1,10 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
 import ch.unibas.dmi.dbis.cs108.game.Dice;
+import ch.unibas.dmi.dbis.cs108.game.Field;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import ch.unibas.dmi.dbis.cs108.network.Command;
+import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +28,7 @@ public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
-    private static String[] colors;
+    public static String[] colors;
     public static int port;
     public static List<Lobby> lobbies = new ArrayList<Lobby>();
 
@@ -239,7 +241,8 @@ public class Server {
     public static void checkField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
-        if(isValidField(fieldId)) {
+        GameBoard gameBoard = new GameBoard();
+        if(gameBoard.isValidField(fieldId)) {
             try {
                 protocolWriterServer.sendCommandAndString(Command.CHOS, fieldId);
             } catch (IOException e) {
@@ -252,25 +255,6 @@ public class Server {
                 System.err.println("Error sending error message.");
             }
         }
-    }
-
-    /**
-     * This method checks wether the field chosen by the user is valid or not.
-     * It checks if the field is connected to the field the player is currently on or if it is connected to an already selected field.
-     * It checks if the filed corresponds to a color that was rolled and is not already used.
-     *
-     * @param fieldId the id of the chosen field.
-     * @return true if field is valid, false if field is not valid
-     */
-    public static boolean isValidField(String fieldId) {
-        String fieldColor = fieldId.split("\\d")[0];
-        for(int i = 0; i < colors.length; i++) {
-            if(fieldColor.equals(colors[i])) {
-                colors[i] = null;
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void deselectField(Integer userId, String fieldId) {
