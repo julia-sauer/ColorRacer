@@ -37,12 +37,13 @@ public class ProtocolReaderClient {
 
     /**
      * The method {@code readLoop} continuously reads lines from the server
-     <p>In the case of a {@code CHAT} command, the received message is analysed and then displayed.
-     * displayed by {@link #displayChat(String, String)}.</p>
+     * In the case of a {@code CHAT} command, the received message is analysed and then
+     * displayed by {@link #displayChat(String, String)}.
      * Format for CHAT messages from the server:
      * <pre>
      * CHAT sender message
      * </pre>
+     *
      * @throws IOException if a read error occurs from the server
      */
     public void readLoop() throws IOException {
@@ -91,8 +92,6 @@ public class ProtocolReaderClient {
                         System.out.println("CHAT received: [empty]");
                         break;
                     }
-                    // TODO: check
-                    //  String[] chatParts = parts[1].split(Command.SEPARATOR, 2);
                     System.out.println(Arrays.toString(parts));
                     if(parts.length == 3) {
                         System.out.println("CHAT received: " + parts[2]); //Fallback
@@ -109,7 +108,6 @@ public class ProtocolReaderClient {
                     protocolWriterClient.sendCommand(Command.PONG);
                     break;
 
-                // If the command NICK is recognised, the new nickname is processed
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("Error: No Nickname received.");
@@ -137,8 +135,6 @@ public class ProtocolReaderClient {
                         break;
                     }
                     String[] chatPart = nicknameAndMessageParts[1].split(Command.SEPARATOR, 2);
-                    //if(chatPart.length < 2) {
-                    //    System.out.println("WISP received: " + nicknameAndMessageParts[1]); //Fallback}
                     if (chatPart.length < 2) {
                         String sender = nicknameAndMessageParts[0];
                         String whispermessage = nicknameAndMessageParts[1];
@@ -194,7 +190,7 @@ public class ProtocolReaderClient {
                     break;
 
                 case STRT:
-                    System.out.println(" Spiel wurde gestartet!");
+                    System.out.println("The game starts now!");
                     break;
 
                 case VELO:
