@@ -523,9 +523,20 @@ public class ProtocolReaderServer {
                         protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby and therefore can't choose a bike.");
                         break;
                     }
-                    if (username.equals(userLobby.getHostName()) || !userLobby.winners.isEmpty()){
+                    if (username.trim().equalsIgnoreCase(userLobby.getHostName().trim()) || !userLobby.winners.isEmpty()){
                         userLobby.changeGameState(3);
-
+                        for (String player : userLobby.getPlayers()) {
+                            User u = UserList.getUserByName(player);
+                            if (u != null) {
+                                ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
+                                try {
+                                    writer.sendInfo("The game has stopped.");
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+                        break;
                     }
                     protocolWriterServer.sendInfo("You are not the host of the lobby and cannot end the game.");
                     break;
