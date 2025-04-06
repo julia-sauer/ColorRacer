@@ -185,6 +185,9 @@ public class Lobby implements Runnable {
                 ProtocolWriterServer playerWriter = new ProtocolWriterServer(Server.clientWriters, u.getOut());
                 try {
                     playerWriter.sendCommand(Command.STRT);
+                    if (playerOrder.get(0).equals(playerName)) { // zeigt bei Spielstart an, wer beginnt
+                        playerWriter.sendCommandAndString(Command.INFO, "It's " + playerName + "'s turn");
+                    }
                 } catch (IOException e) {
                     System.err.println("Error sending STRT to " + playerName);
                 }
@@ -232,9 +235,22 @@ public class Lobby implements Runnable {
 
     /**
      * Sets the next player as active (after turn or NEXT).
+     * It also sends the information message whose turn it is to all players in the lobby.
      */
     public void advanceTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
+        String currentPlayer = playerOrder.get(currentPlayerIndex);
+        for (String player : players) {
+            User u = UserList.getUserByName(player);
+            if (u != null) {
+                ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
+                try {
+                    writer.sendCommandAndString(Command.INFO, "It's " + currentPlayer + "'s turn");
+                } catch (IOException e) {
+                    System.err.println("Error sending turn info to " + player);
+                }
+            }
+        }
     }
 
 }
