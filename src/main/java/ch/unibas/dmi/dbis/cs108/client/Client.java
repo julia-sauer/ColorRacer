@@ -96,6 +96,7 @@ public class Client {
             System.out.println("- next" + "   -> to skip your turn");
             System.out.println("- finish" + "   -> to end the game (if you are the host)");
             System.out.println("- leave" + "   -> to quit the server");
+            System.out.println("- restart" + "   -> to start a new game");
 
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
@@ -194,6 +195,8 @@ public class Client {
                     }
                 } else if (line.equalsIgnoreCase("finish")) {
                     protocolClient.sendCommand(Command.FNSH);
+                } else if (line.equalsIgnoreCase("restart")) {
+                    protocolClient.sendCommand(Command.RSTT);
                 } else { // if an unknown command is being usedgame
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
