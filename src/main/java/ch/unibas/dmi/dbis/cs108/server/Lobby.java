@@ -28,8 +28,7 @@ public class Lobby implements Runnable {
     private final List<String> playerOrder = new ArrayList<>(); // reihenfolge der Spieler entsprechend Join-Reihenfolge
     private int currentPlayerIndex = 0;
     private final Map<String, String> selectedColors = new HashMap<>();
-
-
+    private String hostName; // Player who created the lobby
 
     private GameBoard gameBoard = new GameBoard();
     public static final Map<String, Boolean> readyStatus = new ConcurrentHashMap<>();
@@ -55,7 +54,7 @@ public class Lobby implements Runnable {
     }
 
     /**
-     * Adds a player to the lobby based on their user ID.
+     * Adds a player to the lobby based on their user ID. The first player added becomes the host.
      * The player is only added if the lobby is not full and the user isn't already in it.
      *
      * @param userId the unique ID of the user to add
@@ -70,6 +69,10 @@ public class Lobby implements Runnable {
             players.add(userName);
             playerOrder.add(userName); // Speichert Join-Reihenfolge
             playerGameBoards.put(userName, new GameBoard()); //Erstellt GameBoard für einzelne Spieler
+            // Sets the host if not already set
+            if (hostName == null) {
+                hostName = userName;
+            }
             makeReadyStatusList();
             return true;
         }
@@ -153,19 +156,25 @@ public class Lobby implements Runnable {
      * Removes a player from the lobby by their nickname.
      * <p>
      * This method is thread-safe and ensures that the internal player list is updated safely.
+     * It prevents the host from being removed.
      *
      * @param playerName The nickname of the player to remove.
      */
     public synchronized void removePlayer(String playerName) {
+        if (playerName.equals(hostName)) {
+            System.out.println("Host cannot leave the lobby.");
+            return;
+        }
         players.remove(playerName);
         playerOrder.remove(playerName); // Spieler auch aus Reihenfolge entfernen
         selectedColors.remove(playerName);
         playerGameBoards.remove(playerName);
     }
     /**
-     * Starts the game for this lobby if all conditions are met.
+     * Starts the game for this lobby if all conditions are met. Only the host can start a game.
      * <p>
      * Conditions:
+     * The game must be started by the host of the lobby (the player that created the lobby).
      * The game must not already be running or finished.
      * The lobby must not be the "Welcome" lobby.
      * At least 2 players must be present.
@@ -174,6 +183,21 @@ public class Lobby implements Runnable {
      * @param userId the ID of the user who requested to start the game
      */
     public synchronized void startGame(int userId) {
+        // Verify that the requesting user is the host.
+        String requester = UserList.getUserName(userId);
+        if (!isHost(requester)) {
+            User user = UserList.getUser(userId);
+            if (user != null) {
+                ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+                try {
+                    protocolWriterServer.sendInfo("Only the host can start the game.");
+                } catch (IOException e) {
+                    System.err.println("Error sending host-only message to user " + userId);
+                }
+            }
+            return;
+        }
+
         User user = UserList.getUser(userId);
         if (user == null) return;
 
@@ -236,7 +260,6 @@ public class Lobby implements Runnable {
                 }
             }
         }
-
         new Thread(this).start(); // Start game thread
     }
 
@@ -260,7 +283,7 @@ public class Lobby implements Runnable {
     }
 
     /**
-     * creates a gamboard
+     * creates a gameboard
      * @return the gameboard
      */
     public GameBoard getGameBoard(String playerName) {
@@ -296,4 +319,22 @@ public class Lobby implements Runnable {
         }
     }
 
+    /**
+     * Returns the host's username.
+     *
+     * @return the host's name
+     */
+    public String getHostName() {
+        return hostName;
+    }
+
+    /**
+     * Checks whether a given username is the host.
+     *
+     * @param userName the name of the user to check
+     * @return true if the user is the host, false otherwise
+     */
+    public boolean isHost(String userName) {
+        return hostName != null && hostName.equals(userName);
+    }
 }
