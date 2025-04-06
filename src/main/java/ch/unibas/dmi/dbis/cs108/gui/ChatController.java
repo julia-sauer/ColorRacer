@@ -15,6 +15,8 @@ import javafx.scene.input.KeyCode;
  * and updating the chat display area with incoming messages.
  * The corresponding FXML file is expected to define a {@link TitledPane} containing a {@link TextArea} for
  * displaying chat messages and a {@link TextField} for user input to write a message.
+ *
+ * @author julia
  */
 public class ChatController {
 
