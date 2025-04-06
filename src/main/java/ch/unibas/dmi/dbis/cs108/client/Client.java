@@ -4,6 +4,9 @@ import ch.unibas.dmi.dbis.cs108.gui.ChatController;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
+import ch.unibas.dmi.dbis.cs108.server.User;
+import ch.unibas.dmi.dbis.cs108.server.UserList;
+
 import java.net.*;
 import java.io.*;
 
@@ -17,6 +20,7 @@ public class Client {
     private final String host;
     private final int port;
     private final String username;
+    private boolean isReady = false;
 
     private ProtocolReaderClient protocolReader;
     private ProtocolWriterClient protocolWriterClient;
@@ -142,12 +146,18 @@ public class Client {
                     protocolClient.sendCommandAndString(Command.CRLO, lobbyName);
                 } else if (line.startsWith("start")) {
                     protocolClient.sendCommand(Command.STRT);
-                }else if (line.equalsIgnoreCase("list")) {
+                } else if (line.equalsIgnoreCase("list")) {
                     protocolClient.sendCommand(Command.LIST);
-                }else if (line.equalsIgnoreCase("lobbymembers")) {
+                } else if (line.equalsIgnoreCase("lobbymembers")) {
                     protocolClient.sendCommand(Command.LOME);
-                }else if (line.equalsIgnoreCase("gamelist")) {
-                        protocolClient.sendCommand(Command.GLST);
+                } else if (line.equalsIgnoreCase("gamelist")) {
+                    protocolClient.sendCommand(Command.GLST);
+                } else if (line.equalsIgnoreCase("ready")) {
+                    if (username != null && protocolReader.setBike(true)) {
+                        protocolClient.sendReadyStatus();
+                    } else {
+                        System.out.println("Error: You must select a bike before getting ready. Use 'selectbike <color>' command.");
+                    }
                 } else { // if an unknown command is being usedgame
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
