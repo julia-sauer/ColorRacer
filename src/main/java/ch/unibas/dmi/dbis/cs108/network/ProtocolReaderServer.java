@@ -32,7 +32,6 @@ public class ProtocolReaderServer {
     private final OutputStream out;
     private final PingThread pingThread;// added reference
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
-
     private static final Logger LOGGER = LogManager.getLogger(ProtocolReaderServer.class);
 
     /**
@@ -49,6 +48,22 @@ public class ProtocolReaderServer {
         this.userId = userId;
         this.out = out;
         this.pingThread = pingThread;
+    }
+    /**
+     * Checks if the current user is allowed to perform a turn action.
+     * Sends an error to the client if it's not their turn.
+     *
+     * @return true if it's the player's turn, false otherwise
+     */
+    private boolean isMyTurn(ProtocolWriterServer writer) throws IOException {
+        String nickname = UserList.getUserName(userId);
+        Lobby lobby = Server.getLobbyOfPlayer(nickname);
+
+        if (lobby == null || !lobby.isCurrentPlayer(nickname)) {
+            writer.sendInfo("-ERR It's not your turn.");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -227,10 +242,12 @@ public class ProtocolReaderServer {
                     break;
 
                 case ROLL:
+                    if (!isMyTurn(protocolWriterServer)) break;
                     Server.rollTheDice(userId);
                     break;
 
                 case CHOS:
+                    if (!isMyTurn(protocolWriterServer)) break;
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR No FieldId from Client " + userId);
                         break;
@@ -241,10 +258,12 @@ public class ProtocolReaderServer {
                     }
 
                 case MOVE:
+                    if (!isMyTurn(protocolWriterServer)) break;
                     Server.moveToLastSelectedField(userId);
                     break;
 
                 case DEOS:
+                    if (!isMyTurn(protocolWriterServer)) break;
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR No FieldId from Client " + userId);
                         break;
