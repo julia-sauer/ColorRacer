@@ -23,6 +23,7 @@ public enum Command {
     ROLL,
     CHOS,
     MOVE,
+    NEXT,
     STAT,
     CHAT,
     NICK,
@@ -35,6 +36,7 @@ public enum Command {
     CRLO,
     LOME,
     GLST;
+
 
     public static final String SEPARATOR = "%"; // blank space als Separator
 
@@ -191,5 +193,11 @@ public enum Command {
      */
     public static void GLST() {
         System.out.println("GLST");
+    }
+    /**
+     * Prints the command "NEXT"
+     */
+    public static void NEXT() {
+        System.out.println("NEXT");
     }
 }
