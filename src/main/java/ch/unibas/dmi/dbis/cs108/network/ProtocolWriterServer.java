@@ -70,6 +70,7 @@ public class ProtocolWriterServer {
     public void sendCommandAndString(Command command, String text) throws IOException {
         sendToClient(command + Command.SEPARATOR + text);
         System.out.println(command + " sent");
+        writer.flush();
     }
 
     public void sendToClient(String message) {
