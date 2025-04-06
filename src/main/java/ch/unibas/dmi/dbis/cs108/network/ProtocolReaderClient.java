@@ -193,6 +193,10 @@ public class ProtocolReaderClient {
                     System.out.println("The game starts now!");
                     break;
 
+                case RSTT:
+                    System.out.println("Spiel wurde neugestartet!");
+                    break;
+
                 case VELO:
                     setBike(true);
                     break;
