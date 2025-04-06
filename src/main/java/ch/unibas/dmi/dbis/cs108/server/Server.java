@@ -243,7 +243,6 @@ public class Server {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
         String nickname = user.getNickname();
-        // GameBoard gameBoard = new GameBoard();  (ersetzt)
         Lobby userLobby = null;
         for (Lobby lobby : lobbies) {
             if (lobby.getPlayers().contains(nickname)) {
