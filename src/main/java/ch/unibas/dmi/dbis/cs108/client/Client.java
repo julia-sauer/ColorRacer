@@ -121,6 +121,9 @@ public class Client {
                     // sends a whisper-message to another user
                     String receiverNameAndMessage = line.substring(8).trim();
                     protocolClient.sendWhisper(receiverNameAndMessage);
+                } else if (line.startsWith("selectbike")) {
+                    String color = line.substring(11).trim();
+                    protocolClient.sendBikeColor(color);
                 } else if (line.startsWith("fieldchoice")) {
                     String fieldId = line.substring(12).trim();
                     protocolClient.sendFieldChoice(Command.CHOS, fieldId);
