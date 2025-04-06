@@ -6,10 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Arrays;
+import java.util.*;
 
 
 /**
@@ -291,6 +288,7 @@ public class ProtocolReaderServer {
                     if (user != null) {
                         user.setBikeColor(color); // save in User
                         protocolWriterServer.sendInfo("+OK " + color + " bike is selected");
+                        protocolWriterServer.setBike(true);
                     }
                     break;
                 }
@@ -453,6 +451,20 @@ public class ProtocolReaderServer {
 
                     break;
                 }
+
+                case RADY: {
+                    String username = UserList.getUserName(userId);
+                    User user = UserList.getUser(userId);
+                    Lobby.makeReady(username);
+                    System.out.println(username + " is ready!");
+                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+                    writer.sendInfo("You are ready to play.");
+//                    if (allPlayersReady()) {
+//                        writer.sendInfo("All players are ready. Start the game now!");
+//                        Command.STRT(); // Start game command
+//                    }
+                    break;
+                }
                 default:
                     System.out.println("Unknown command from user ID " + userId + ": " + line);
                     break;
@@ -460,6 +472,18 @@ public class ProtocolReaderServer {
         }
     }
 
+    /**
+     * This method checks if all players in the game are ready. If it returns true
+     * {@code case RADY} calls {@code case STRT} to start the game.
+     *
+     * @return true if all players are ready / false if not all players are ready.
+     */
+    private boolean allPlayersReady() {
+        if (!Lobby.readyStatus.isEmpty() && Lobby.readyStatus.values().stream().allMatch(Boolean::booleanValue)) {
+            return true;
+        }
+        return false;
+    }
 }
     
 
