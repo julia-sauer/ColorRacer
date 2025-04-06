@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
 
+import ch.unibas.dmi.dbis.cs108.game.Field;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import ch.unibas.dmi.dbis.cs108.game.GameBoard;
@@ -29,6 +30,9 @@ public class Lobby implements Runnable {
     private int currentPlayerIndex = 0;
     private final Map<String, String> selectedColors = new HashMap<>();
     private String hostName; // Player who created the lobby
+    private final Set<String> winners = new HashSet<>();
+
+
 
     private GameBoard gameBoard = new GameBoard();
     public static final Map<String, Boolean> readyStatus = new ConcurrentHashMap<>();
@@ -306,18 +310,36 @@ public class Lobby implements Runnable {
     public void advanceTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
         String currentPlayer = playerOrder.get(currentPlayerIndex);
+        while(winners.contains(currentPlayer)) {
+            currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
+            currentPlayer = playerOrder.get(currentPlayerIndex);
+        }
+
+        GameBoard board = getGameBoard(currentPlayer);
+        Field currentField = board.getCurrentField();
+
         for (String player : players) {
             User u = UserList.getUserByName(player);
             if (u != null) {
                 ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
                 try {
                     writer.sendCommandAndString(Command.INFO, "It's " + currentPlayer + "'s turn");
+                    writer.sendCommandAndString(Command.INFO, currentPlayer + " is at: " + currentField.getFieldId());
                 } catch (IOException e) {
                     System.err.println("Error sending turn info to " + player);
                 }
             }
         }
     }
+
+    /**
+     * Adds a player who is at the finish line to the set winners.
+     * @param nickname The nickname of the player at the finish line.
+     */
+    public void addWinner(String nickname) {
+        winners.add(nickname);
+    }
+
 
     /**
      * Returns the host's username.

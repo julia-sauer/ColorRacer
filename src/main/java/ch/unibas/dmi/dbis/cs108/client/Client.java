@@ -113,24 +113,45 @@ public class Client {
                 } else if (line.equalsIgnoreCase("NO")) {
                     protocolClient.sendCommandAndString(Command.QCNF, "NO");
                 } else if (line.startsWith("nicknamechange")) {
-                    // changing nickname
+                    if (line.length() <= 15) {
+                        System.out.println("Please provide a nickname. Usage: nicknamechange <newname>");
+                        continue;
+                    }
                     protocolClient.changeNickname(line.substring(15), out);
                 } else if (line.startsWith("connect")) {
-                    // sends join-command
+                    if (line.length() <= 8) {
+                        System.out.println("Please provide a lobby name. Usage: connect <lobbyname>");
+                        continue;
+                    }
                     String lobbyName = line.substring(8).trim();
                     protocolClient.sendJoin(lobbyName);
                 } else if (line.startsWith("message")) {
-                    // sends a chat-message
+                    if (line.length() <= 8) {
+                        System.out.println("Please provide a message. Usage: message <your message>");
+                        continue;
+                    }
                     String message = line.substring(8).trim();
                     protocolClient.sendChat(message);
                 } else if (line.startsWith("whisper")) {
                     // sends a whisper-message to another user
+                    if (line.length() <= 8) {
+                        System.out.println("Please provide a receiver and message. Usage: whisper <user> <message>");
+                        continue;
+                    }
                     String receiverNameAndMessage = line.substring(8).trim();
                     protocolClient.sendWhisper(receiverNameAndMessage);
                 } else if (line.startsWith("selectbike")) {
+                    if (line.length() <= 11) {
+                        System.out.println("Please provide a bike name. Usage: selectbike <bike>");
+                        continue;
+                    }
                     String color = line.substring(11).trim();
                     protocolClient.sendBikeColor(color);
                 } else if (line.startsWith("fieldchoice")) {
+                    if (line.length() <= 12) {
+                        System.out.println("Please provide a field ID. Usage: fieldchoice <fieldId>");
+                        continue;
+                    }
                     String fieldId = line.substring(12).trim();
                     protocolClient.sendFieldChoice(Command.CHOS, fieldId);
                 } else if (line.startsWith("movetofield")) {
@@ -143,9 +164,17 @@ public class Client {
                     String fieldId = line.substring(9).trim();
                     protocolClient.sendFieldChoice(Command.DEOS, fieldId);
                 } else if (line.startsWith("broadcast")) {
+                    if (line.length() <= 10) {
+                        System.out.println("Please provide a message. Usage: broadcast <message>");
+                        continue;
+                    }
                     String broadcastmessage = line.substring(10).trim();
                     protocolClient.sendCommandAndString(Command.BROD, broadcastmessage);
                 } else if (line.startsWith("createlobby")) {
+                    if (line.length() <= 12) {
+                        System.out.println("Please provide a lobby name. Usage: createlobby <name>");
+                        continue;
+                    }
                     String lobbyName = line.substring(12).trim();
                     protocolClient.sendCommandAndString(Command.CRLO, lobbyName);
                 } else if (line.startsWith("start")) {
