@@ -31,6 +31,7 @@ public class Server {
     public static String[] colors;
     public static int port;
     public static List<Lobby> lobbies = new ArrayList<Lobby>();
+    private static int podestPlace = 1;
 
 
     /**
@@ -321,6 +322,17 @@ public class Server {
         } catch (IOException e) {
             System.err.println("Error sending move info to user " + userId);
         }
+
+        /*if (newField.getFieldId().equals("blue10") || newField.getFieldId().equals("pink10")) {
+            won(userId);
+        }
+
+         */
+
+        if (newField.getFieldId().equals("pink1")) {
+            won(userId);
+        }
+
         userLobby.advanceTurn(); // next players turn
     }
 
@@ -476,6 +488,35 @@ public class Server {
             }
         }
         return null;
+    }
+
+    /**
+     * This method gets called as soon as a player is at the finish line.
+     * @param userId The Id of the user that is currently on its turn.
+     */
+    public static void won(int userId) {
+        User user = UserList.getUser(userId);
+        String nickname = user.getNickname();
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        try {
+            if(podestPlace == 1) {
+                protocolWriterServer.sendInfo(nickname + " won the game!");
+            }
+            else {
+                protocolWriterServer.sendInfo(nickname + " is on the " + podestPlace + ". place!");
+            }
+        } catch (IOException e) {
+            System.err.println("Could not send Info.");
+        }
+        podestPlace++; //Podestplace wird um 1 erhöht.
+
+        for (Lobby lobby : lobbies) {
+            if (lobby.getPlayers().contains(nickname)) {
+                lobby.addWinner(nickname);
+                break;
+            }
+        }
+
     }
 
 }
