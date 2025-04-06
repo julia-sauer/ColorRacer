@@ -317,6 +317,11 @@ public class Lobby implements Runnable {
         changeGameState(1);
         startGame(userId);
 
+        try {
+            protocolWriterServer.sendCommand(Command.RSTT);
+        } catch (IOException e) {
+            System.err.println("Error sending RSTT to user " + userId);
+        }
 
     }
 
