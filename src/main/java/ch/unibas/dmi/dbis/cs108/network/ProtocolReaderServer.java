@@ -488,7 +488,6 @@ public class ProtocolReaderServer {
 
                     break;
                 }
-
                 case RADY: {
                     //checks if user is in a game lobby
                     String userName = UserList.getUserName(userId);
@@ -505,10 +504,30 @@ public class ProtocolReaderServer {
                     }
 
                     User user = UserList.getUser(userId);
-                    Lobby.makeReady(userName);
+                    userLobby.makeReady(userName);
                     System.out.println(userName + " is ready!");
                     ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
                     writer.sendInfo("You are ready to play.");
+                    break;
+                }
+                case FNSH: {
+                    String username = UserList.getUserName(userId);
+                    Lobby userLobby = null;
+                    for (Lobby lobby : Server.lobbies) {
+                        if (lobby.getPlayers().contains(username)) {
+                            userLobby = lobby;
+                            break;
+                        }
+                    }
+                    if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                        protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby and therefore can't choose a bike.");
+                        break;
+                    }
+                    if (username.equals(userLobby.getHostName()) || !userLobby.winners.isEmpty()){
+                        userLobby.changeGameState(3);
+
+                    }
+                    protocolWriterServer.sendInfo("You are not the host of the lobby and cannot end the game.");
                     break;
                 }
                 default:
@@ -525,7 +544,15 @@ public class ProtocolReaderServer {
      * @return true if all players are ready / false if not all players are ready.
      */
     private boolean allPlayersReady() {
-        if (!Lobby.readyStatus.isEmpty() && Lobby.readyStatus.values().stream().allMatch(Boolean::booleanValue)) {
+        String username = UserList.getUserName(userId);
+        Lobby userLobby = null;
+        for (Lobby lobby : Server.lobbies) {
+            if (lobby.getPlayers().contains(username)) {
+                userLobby = lobby;
+                break;
+            }
+        }
+        if (!userLobby.readyStatus.isEmpty() && userLobby.readyStatus.values().stream().allMatch(Boolean::booleanValue)) {
             return true;
         }
         return false;
