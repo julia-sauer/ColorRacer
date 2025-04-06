@@ -156,7 +156,7 @@ public class Client {
                 } else if (line.equalsIgnoreCase("gamelist")) {
                     protocolClient.sendCommand(Command.GLST);
                 } else if (line.equalsIgnoreCase("ready")) {
-                    if (username != null && protocolReader.setBike(true)) {
+                    if (username != null && protocolReader.bike) {
                         protocolClient.sendReadyStatus();
                     } else {
                         System.out.println("Error: You must select a bike before getting ready. Use 'selectbike <color>' command.");

@@ -1,7 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 import ch.unibas.dmi.dbis.cs108.gui.ChatController;
-import javafx.application.Platform;
 
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
@@ -20,6 +19,7 @@ public class ProtocolReaderClient {
     private final InputStream in;
     private final OutputStream out;
     private ChatController chatController; // Reference to the GUI controller
+    public boolean bike = false;
 
 
     /**
@@ -259,11 +259,9 @@ public class ProtocolReaderClient {
      * @param bike The boolean that indicates when a bike has been selected.
      * @return the boolean indicating whether the player has already selected a bike (true) or not (false).
      */
-    public boolean setBike(boolean bike) {
+    public void setBike(boolean bike) {
         if (bike){
-            return true;
-        } else {
-            return false;
+            this.bike = true;
         }
     }
 }
