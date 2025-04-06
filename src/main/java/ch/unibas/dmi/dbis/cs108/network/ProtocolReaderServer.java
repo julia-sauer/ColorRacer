@@ -436,10 +436,10 @@ public class ProtocolReaderServer {
                         List<String> players = lobby.getPlayers();
                         int state = lobby.getGameState();
                         String stateText = switch (state) {
-                            case 1 -> "🟢 open";
-                            case 2 -> "🔵 running";
-                            case 3 -> "⚪ finished";
-                            default -> "❓ unknown";
+                            case 1 -> "open";
+                            case 2 -> "running";
+                            case 3 -> "finished";
+                            default -> "unknown";
                         };
 
                         try {
