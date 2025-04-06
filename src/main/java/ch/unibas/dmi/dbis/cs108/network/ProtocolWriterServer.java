@@ -91,4 +91,10 @@ public class ProtocolWriterServer {
             writer.flush();
         }
     }
+
+    public void setBike(boolean bike) throws IOException {
+        if(bike){
+            sendCommand(Command.VELO);
+        }
+    }
 }
