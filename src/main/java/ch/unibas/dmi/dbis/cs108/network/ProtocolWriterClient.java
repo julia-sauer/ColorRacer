@@ -29,7 +29,7 @@ public class ProtocolWriterClient {
      * This Writer writes protocol commands (e.g. {@code CHAT}) in UTF-8 to the server.
      */
     private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
-
+    public boolean bike = false;
     private static final Logger LOGGER = LogManager.getLogger(ProtocolWriterClient.class);
 
     /**
@@ -199,6 +199,17 @@ public class ProtocolWriterClient {
      */
     public void sendBikeColor(String color) {
         sendToServer(Command.VELO + Command.SEPARATOR + color);
+        setBike();
+
+    }
+
+
+    public void sendReadyStatus() throws IOException {
+        sendCommand(Command.RADY);
+    }
+
+    public void setBike(){
+        this.bike = true;
     }
 
 }
