@@ -323,12 +323,16 @@ public class Server {
         GameBoard board = userLobby.getGameBoard(nickname);
         board.moveToLastSelected();
         Field newField = board.getCurrentField();
-        ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, user.getOut());
+        for (String playerName : userLobby.getPlayers()) {
+            User otherUser = UserList.getUserByName(playerName);
+            if (otherUser == null) continue;
 
-        try {
-            writer.sendInfo(nickname + " moved to the Field " + newField.getFieldId());
-        } catch (IOException e) {
-            System.err.println("Error sending move info to user " + userId);
+            ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, otherUser.getOut());
+            try {
+                writer.sendCommandAndString(Command.INFO, "+POS " + nickname + " moved to the Field " + newField.getFieldId());
+            } catch (IOException e) {
+                System.err.println("Error sending move info to " + playerName);
+            }
         }
 
         if (newField.getFieldId().equals("blue10") || newField.getFieldId().equals("pink10")) {
