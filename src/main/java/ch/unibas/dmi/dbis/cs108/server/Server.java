@@ -322,6 +322,7 @@ public class Server {
         } catch (IOException e) {
             System.err.println("Error sending move info to user " + userId);
         }
+        userLobby.advanceTurn(); // next players turn
     }
 
 
@@ -460,6 +461,20 @@ public class Server {
         }
     }
 
+    /**
+     * Returns the lobby that contains the given player.
+     *
+     * @param playerName the name of the player
+     * @return the Lobby object the player is in, or null if not found
+     */
+    public static Lobby getLobbyOfPlayer(String playerName) {
+        for (Lobby lobby : lobbies) {
+            if (lobby.getPlayers().contains(playerName)) {
+                return lobby;
+            }
+        }
+        return null;
+    }
 
 }
 
