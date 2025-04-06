@@ -248,6 +248,7 @@ public class Lobby implements Runnable {
                 }
             }
         }
+        currentPlayerIndex = -1;
         currentPlayer = playerOrder.get(0);
         for (String playerName : players) {
             User u = UserList.getUserByName(playerName);
@@ -260,6 +261,7 @@ public class Lobby implements Runnable {
                 }
             }
         }
+        advanceTurn();
         new Thread(this).start(); // Start game thread
     }
 
@@ -304,6 +306,7 @@ public class Lobby implements Runnable {
      * It also sends the information message whose turn it is to all players in the lobby.
      */
     public void advanceTurn() {
+        System.out.println("Advancing turn. Current index before increment: " + currentPlayerIndex);
         currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
         String currentPlayer = playerOrder.get(currentPlayerIndex);
         while(winners.contains(currentPlayer)) {
