@@ -323,13 +323,7 @@ public class Server {
             System.err.println("Error sending move info to user " + userId);
         }
 
-        /*if (newField.getFieldId().equals("blue10") || newField.getFieldId().equals("pink10")) {
-            won(userId);
-        }
-
-         */
-
-        if (newField.getFieldId().equals("pink1")) {
+        if (newField.getFieldId().equals("blue10") || newField.getFieldId().equals("pink10")) {
             won(userId);
         }
 
