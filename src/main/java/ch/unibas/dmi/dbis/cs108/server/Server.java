@@ -251,6 +251,14 @@ public class Server {
     public static void checkField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        if (!user.hasRolled()) {
+            try {
+                protocolWriterServer.sendInfo("You need to roll first.");
+            } catch (IOException e) {
+                System.err.println("Error while sending Rolled Message to user " + userId);
+            }
+            return;
+        }
         String nickname = user.getNickname();
         Lobby userLobby = null;
         for (Lobby lobby : lobbies) {
