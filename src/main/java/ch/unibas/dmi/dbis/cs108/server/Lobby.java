@@ -203,6 +203,7 @@ public class Lobby implements Runnable {
 
         changeGameState(2);
         System.out.println("[Lobby: " + lobbyName + "] Game is starting...");
+        String currentPlayer = playerOrder.get(0);
 
         for (String playerName : players) {
             User u = UserList.getUserByName(playerName);
@@ -210,11 +211,20 @@ public class Lobby implements Runnable {
                 ProtocolWriterServer playerWriter = new ProtocolWriterServer(Server.clientWriters, u.getOut());
                 try {
                     playerWriter.sendCommand(Command.STRT);
-                    if (playerOrder.get(0).equals(playerName)) { // zeigt bei Spielstart an, wer beginnt
-                        playerWriter.sendCommandAndString(Command.INFO, "It's " + playerName + "'s turn");
-                    }
                 } catch (IOException e) {
                     System.err.println("Error sending STRT to " + playerName);
+                }
+            }
+        }
+        currentPlayer = playerOrder.get(0);
+        for (String playerName : players) {
+            User u = UserList.getUserByName(playerName);
+            if (u != null) {
+                ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
+                try {
+                    writer.sendCommandAndString(Command.INFO, "It's " + currentPlayer + "'s turn");
+                } catch (IOException e) {
+                    System.err.println("Error sending INFO to " + playerName);
                 }
             }
         }
