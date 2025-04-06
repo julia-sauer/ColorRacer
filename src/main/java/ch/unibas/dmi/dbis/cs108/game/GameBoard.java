@@ -112,17 +112,7 @@ public class GameBoard {
     public boolean isValidField(String fieldId) {
         Field targetField = fields.get(fieldId);
         String fieldColor = fieldId.split("\\d")[0];
-        boolean colormatches = false;
-        for(int i = 0; i < colors.length; i++) {
-            if(fieldColor.equals(colors[i])) {
-                colors[i] = null;
-                colormatches = true;
-                break;
-            }
-        }
-        if(!colormatches) {
-            return false;
-        }
+
         boolean isNeighbor = currentField.getNeighbors().contains(targetField);
 
         boolean isConnectedNeighbor = false;
@@ -132,7 +122,23 @@ public class GameBoard {
                 break;
             }
         }
-        return isNeighbor || isConnectedNeighbor;
+        if (isNeighbor || isConnectedNeighbor) {
+            boolean colormatches = false;
+            for(int i = 0; i < colors.length; i++) {
+                if(fieldColor.equals(colors[i])) {
+                    colors[i] = null;
+                    colormatches = true;
+                    break;
+                }
+            }
+            if(!colormatches) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Field getFieldById(String fieldId) {
