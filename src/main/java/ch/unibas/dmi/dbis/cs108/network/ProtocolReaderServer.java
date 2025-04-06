@@ -332,11 +332,16 @@ public class ProtocolReaderServer {
                     }
 
                     // Jetzt starte das Spiel in der ersten echten Lobby (≠ Welcome)
-                    for (Lobby lobby : playerLobbies) {
-                        if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                            lobby.startGame(userId);
-                            break;
+                    if (allPlayersReady()) {
+                        for (Lobby lobby : playerLobbies) {
+                            if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                                lobby.startGame(userId);
+                                break;
+                            }
                         }
+                    }
+                    if (!allPlayersReady()) {
+                        protocolWriterServer.sendInfo("Not all players are ready to play.");
                     }
 
                     break;
