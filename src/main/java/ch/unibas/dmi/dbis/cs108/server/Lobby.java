@@ -77,7 +77,8 @@ public class Lobby implements Runnable {
     }
 
     /**
-     * This method creates a map which shows all players in the lobby ands states if they are ready to play
+     * This method creates a map which shows all players in the lobby ands states if they are ready to play.
+     * At the beginning all players are not ready.
      */
     public void makeReadyStatusList() {
         for(String username : players) {
@@ -87,6 +88,13 @@ public class Lobby implements Runnable {
         }
     }
 
+    /**
+     * Marks a player as ready by setting their status to {@code true} in the {@code readyStatus} map.
+     * It checks if the specified username exists in the map before updating their readiness.
+     * If the username is not found, no changes are made.
+     *
+     * @param username the name of the player to mark as ready
+     */
     public static void makeReady(String username) {
         if (readyStatus.containsKey(username)) {
             readyStatus.put(username, true);

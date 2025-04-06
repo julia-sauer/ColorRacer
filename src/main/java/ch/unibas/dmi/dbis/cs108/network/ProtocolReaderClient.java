@@ -252,6 +252,13 @@ public class ProtocolReaderClient {
         this.chatController = controller;
     }
 
+    /**
+     * This method checks if a bike has already been selected.
+     * It returns true if the player selects a bike, and false if they haven't selected a bike.
+     *
+     * @param bike The boolean that indicates when a bike has been selected.
+     * @return the boolean indicating whether the player has already selected a bike (true) or not (false).
+     */
     public boolean setBike(boolean bike) {
         if (bike){
             return true;

@@ -29,7 +29,6 @@ public class ProtocolWriterClient {
      * This Writer writes protocol commands (e.g. {@code CHAT}) in UTF-8 to the server.
      */
     private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
-    public boolean bike = false;
     private static final Logger LOGGER = LogManager.getLogger(ProtocolWriterClient.class);
 
     /**
@@ -76,7 +75,6 @@ public class ProtocolWriterClient {
      *
      * @param command the command that should be sent
      * @throws IOException if the message could not be delivered.
-     * @author Julia
      */
     public void sendCommand(Command command) throws IOException {
         sendToServer(command + Command.SEPARATOR);
@@ -84,10 +82,11 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sends a command with an aditional String.
-     * @param command
-     * @param text
-     * @throws IOException
+     * Sends a command with an additional string.
+     *
+     * @param command The command that should be sent to the server.
+     * @param text The string that should be sent in addition to the command.
+     * @throws IOException If there is an error while sending the command with the message to the server.
      */
     public void sendCommandAndString(Command command, String text) throws IOException {
         sendToServer(command + Command.SEPARATOR + text);
@@ -95,10 +94,8 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Calls sendCommand for the Command NICK, to send the new nickname to the server.
-     * @param newnickname the new nickname, the User chose.
-     * @param out the OutputStream.
      * Uses the method {@code sendCommand} for the command NICK to send the new nickname to the server.
+     *
      * @param newnickname the new nickname that the user selected.
      * @param out the OutputStream with which it is sent.
      */
@@ -128,7 +125,6 @@ public class ProtocolWriterClient {
      * The server decides whether the nickname is accepted or changed (e.g. in the case of duplicates).
      *
      * @param lobbyName The nickname entered by the user
-     * @author anasv
      */
     public void sendJoin(String lobbyName){
         if (lobbyName == null || lobbyName.trim().isEmpty()) {
@@ -147,7 +143,11 @@ public class ProtocolWriterClient {
         sendToServer(Command.JOIN + Command.SEPARATOR + lobbyName);
     }
 
-
+    /**
+     * This method sends a string to the server.
+     *
+     * @param message The message that the server should receive.
+     */
     public void sendToServer(String message) {
         //LOGGER.error("client: {}", message);
         writer.println(message);
@@ -199,19 +199,16 @@ public class ProtocolWriterClient {
      */
     public void sendBikeColor(String color) {
         sendToServer(Command.VELO + Command.SEPARATOR + color);
-        setBike();
-
     }
 
-
+    /**
+     * This method sends the {@code RADY} command to the server, to mark the player as ready to play.
+     *
+     * @throws IOException If there is an error while sending the command to the server.
+     */
     public void sendReadyStatus() throws IOException {
         sendCommand(Command.RADY);
     }
-
-    public void setBike(){
-        this.bike = true;
-    }
-
 }
 
 

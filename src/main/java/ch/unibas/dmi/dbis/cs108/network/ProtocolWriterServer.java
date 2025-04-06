@@ -1,8 +1,5 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import ch.unibas.dmi.dbis.cs108.server.User;
-import ch.unibas.dmi.dbis.cs108.server.UserList;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -44,7 +41,6 @@ public class ProtocolWriterServer {
      *
      * @param command the command String to send
      * @throws IOException if the command could not be sent.
-     * @author Jana
      */
     public void sendCommand(Command command) throws IOException {
         sendToClient(command + Command.SEPARATOR);
@@ -53,6 +49,7 @@ public class ProtocolWriterServer {
 
     /**
      * Sends a message with the Command INFO to the client.
+     *
      * @param msg the String that needs to be sent to the client.
      * @throws IOException is the error-handling if the message could not be sent.
      */
@@ -63,6 +60,7 @@ public class ProtocolWriterServer {
 
     /**
      * Sends a command with additional text to the client.
+     *
      * @param command the command that should be sent to the client.
      * @param text the String that should be sent with the command.
      * @throws IOException is the error-handling if the command could not be sent.
@@ -73,6 +71,12 @@ public class ProtocolWriterServer {
         writer.flush();
     }
 
+    /**
+     * This method sends an already formatted message to the client, more specifically
+     * to the {@link ProtocolReaderClient}.
+     *
+     * @param message The message that should be sent to the client.
+     */
     public void sendToClient(String message) {
         writer.println(message);
         writer.flush();
@@ -93,6 +97,14 @@ public class ProtocolWriterServer {
         }
     }
 
+    /**
+     * This method is called by the {@link ProtocolReaderServer} when a player correctly selects
+     * a bike. It is needed so the client-side of the network knows that a bike has been
+     * selected, so the player can therefore be ready to play.
+     *
+     * @param bike A boolean indicating whether the player has selected a bike (true) or not (false).
+     * @throws IOException If there is an error while sending the command to the client.
+     */
     public void setBike(boolean bike) throws IOException {
         if(bike){
             sendCommand(Command.VELO);
