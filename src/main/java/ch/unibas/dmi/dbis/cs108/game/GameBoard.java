@@ -183,4 +183,15 @@ public class GameBoard {
         return currentField;
     }
 
+    /**
+     * sets the current field to a specific field
+     * Used to set the currentField to white1 before restarting the game
+     * @param field the field that should be the currentField
+     * @return returns the current field
+     */
+    public Field setCurrentField(Field field) {
+        currentField = field;
+        return currentField;
+    }
+
 }
