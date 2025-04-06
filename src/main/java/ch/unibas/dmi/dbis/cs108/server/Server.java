@@ -314,7 +314,6 @@ public class Server {
         GameBoard board = userLobby.getGameBoard(nickname);
         board.moveToLastSelected();
         Field newField = board.getCurrentField();
-
         ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, user.getOut());
 
         try {

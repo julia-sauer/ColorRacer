@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
 
+import ch.unibas.dmi.dbis.cs108.game.Field;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import ch.unibas.dmi.dbis.cs108.game.GameBoard;
@@ -306,12 +307,17 @@ public class Lobby implements Runnable {
     public void advanceTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
         String currentPlayer = playerOrder.get(currentPlayerIndex);
+
+        GameBoard board = getGameBoard(currentPlayer);
+        Field currentField = board.getCurrentField();
+
         for (String player : players) {
             User u = UserList.getUserByName(player);
             if (u != null) {
                 ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
                 try {
                     writer.sendCommandAndString(Command.INFO, "It's " + currentPlayer + "'s turn");
+                    writer.sendCommandAndString(Command.INFO, currentPlayer + " is at: " + currentField.getFieldId());
                 } catch (IOException e) {
                     System.err.println("Error sending turn info to " + player);
                 }

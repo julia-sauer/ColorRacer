@@ -257,7 +257,7 @@ public class ProtocolReaderClient {
      * It returns true if the player selects a bike, and false if they haven't selected a bike.
      *
      * @param bike The boolean that indicates when a bike has been selected.
-     * @return the boolean indicating whether the player has already selected a bike (true) or not (false).
+     * the boolean indicating whether the player has already selected a bike (true) or not (false).
      */
     public void setBike(boolean bike) {
         if (bike){
