@@ -79,7 +79,7 @@ public class Client {
             System.out.println("- message <your message>");
             System.out.println("- leave");
             System.out.println("- whisper <receiver> <your message>");
-            System.out.println("- selectbike");
+            System.out.println("- selectbike <black/magenta/green/darkblue>");
             System.out.println("- throwdice");
             System.out.println("- fieldchoice <fieldid>");
             System.out.println("- movetofield");
