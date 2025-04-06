@@ -27,7 +27,7 @@ public class Client {
 
     /**
      * Constructor for class Client
-     * @param host The ip-adress of the host.
+     * @param host The ip-address of the host.
      * @param port the port number of the Server
      * @param username the username the user wants.
      */
@@ -78,22 +78,23 @@ public class Client {
             //System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
             // Overview of all commands which concerns the user:
             System.out.println("Available commands:");
-            System.out.println("- connect <lobbyname>");
-            System.out.println("- nicknamechange <newnickname>");
-            System.out.println("- message <your message>");
-            System.out.println("- leave");
-            System.out.println("- whisper <receiver> <your message>");
-            System.out.println("- selectbike <black/magenta/green/darkblue>");
-            System.out.println("- throwdice");
-            System.out.println("- fieldchoice <fieldid>");
-            System.out.println("- movetofield");
-            System.out.println("- next");
-            System.out.println("- broadcast <your broadcast>");
-            System.out.println("- createlobby <lobbyname>");
-            System.out.println("- start");
-            System.out.println("- list");
-            System.out.println("- lobbymembers");
-            System.out.println("- gamelist");
+            System.out.println("- nicknamechange <newnickname>" + "   -> to change your nickname");
+            System.out.println("- message <your message>" + "   -> to send a message to others in your lobby");
+            System.out.println("- whisper <receiver> <your message>" + "   -> to send a private message to another player");
+            System.out.println("- broadcast <your broadcast>" + "   -> to send a message to all users on the server");
+            System.out.println("- createlobby <lobbyname>" + "   -> to create a lobby");
+            System.out.println("- connect <lobbyname>" + "   -> to connect to an existing lobby");
+            System.out.println("- list" + "   -> to list all players on the server");
+            System.out.println("- lobbymembers" + "   -> to list all players in your lobby");
+            System.out.println("- gamelist" + "   -> to list all ongoing games and lobbies on the server");
+            System.out.println("- selectbike <black/magenta/green/darkblue> " + "   -> to select a bike color");
+            System.out.println("- ready" + "   -> to signal that you are ready to play");
+            System.out.println("- start" + "   -> to start a game");
+            System.out.println("- throwdice" + "   -> to throw a dice");
+            System.out.println("- fieldchoice <fieldid>" + "   -> to select a field");
+            System.out.println("- movetofield" + "   -> to move to the selected field");
+            System.out.println("- next" + "   -> to skip your turn");
+            System.out.println("- leave" + "   -> to quit the server");
 
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
