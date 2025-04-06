@@ -9,6 +9,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Arrays;
+
 
 /**
  * The class ProtocolReaderServer reads incoming messages from the client
@@ -251,6 +253,29 @@ public class ProtocolReaderServer {
                         Server.deselectField(userId, fieldId);
                         break;
                     }
+
+                case VELO: {
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        protocolWriterServer.sendInfo("-ERR No color provided. Please select: black, green, magenta, darkblue.");
+                        break;
+                    }
+
+                    String color = parts[1].trim().toLowerCase();
+                    List<String> validColors = Arrays.asList("black", "green", "magenta", "darkblue");
+
+                    if (!validColors.contains(color)) {
+                        protocolWriterServer.sendInfo("-ERR The color " + color + " is not selectable. Please choose one of: black, green, magenta, darkblue.");
+                        break;
+                    }
+
+                    User user = UserList.getUser(userId);
+                    if (user != null) {
+                        user.setBikeColor(color); // save in User
+                        protocolWriterServer.sendInfo("+OK " + color + " bike is selected");
+                    }
+                    break;
+                }
+
                 case BROD:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR Broadcast message missing " + userId);
