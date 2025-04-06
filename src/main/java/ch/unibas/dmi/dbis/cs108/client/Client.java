@@ -94,6 +94,7 @@ public class Client {
             System.out.println("- fieldchoice <fieldid>" + "   -> to select a field");
             System.out.println("- movetofield" + "   -> to move to the selected field");
             System.out.println("- next" + "   -> to skip your turn");
+            System.out.println("- finish" + "   -> to end the game (if you are the host)");
             System.out.println("- leave" + "   -> to quit the server");
 
             // reading input
@@ -191,6 +192,8 @@ public class Client {
                     } else {
                         System.out.println("Error: You must select a bike before getting ready. Use 'selectbike <color>' command.");
                     }
+                } else if (line.equalsIgnoreCase("finish")) {
+                    protocolClient.sendCommand(Command.FNSH);
                 } else { // if an unknown command is being usedgame
                     System.out.println("Unknown command. Use: connect | nicknamechange | message | leave");
 
