@@ -201,6 +201,10 @@ public class ProtocolReaderClient {
                     setBike(true);
                     break;
 
+                case FNSH:
+                    protocolWriterClient.sendCommand(Command.FNSH);
+                    break;
+
                 default:
                     System.out.println("Unknown command from Server: " + line);
                     break;
