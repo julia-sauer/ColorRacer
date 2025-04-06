@@ -22,7 +22,7 @@ public class Lobby implements Runnable {
     private final List<String> players;
     private Server server;
     private final String lobbyName;
-    private GameBoard gameBoard = new GameBoard();
+    private final Map<String, GameBoard> playerGameBoards;
     private final List<String> playerOrder = new ArrayList<>(); // reihenfolge der Spieler entsprechend Join-Reihenfolge
     private int currentPlayerIndex = 0;
     private final Map<String, String> selectedColors = new HashMap<>();
@@ -46,6 +46,7 @@ public class Lobby implements Runnable {
     public Lobby(String lobbyName) {
         this.players = new ArrayList<>();
         this.lobbyName = lobbyName;
+        this.playerGameBoards = new HashMap<>();
         this.gamestate = 1; // Default state: open
     }
 
@@ -64,6 +65,7 @@ public class Lobby implements Runnable {
         if (userName != null && !players.contains(userName)) {
             players.add(userName);
             playerOrder.add(userName); // Speichert Join-Reihenfolge
+            playerGameBoards.put(userName, new GameBoard()); //Erstellt GameBoard für einzelne Spieler
             return true;
         }
         return false;
@@ -128,6 +130,7 @@ public class Lobby implements Runnable {
         players.remove(playerName);
         playerOrder.remove(playerName); // Spieler auch aus Reihenfolge entfernen
         selectedColors.remove(playerName);
+        playerGameBoards.remove(playerName);
     }
     /**
      * Starts the game for this lobby if all conditions are met.
@@ -220,8 +223,8 @@ public class Lobby implements Runnable {
      * creates a gamboard
      * @return the gameboard
      */
-    public GameBoard getGameBoard() {
-        return gameBoard;
+    public GameBoard getGameBoard(String playerName) {
+        return playerGameBoards.get(playerName);
     }
 
     /** Checks whether it is the given player's current turn.
