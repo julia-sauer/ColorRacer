@@ -30,12 +30,10 @@ public class Lobby implements Runnable {
     private int currentPlayerIndex = 0;
     private final Map<String, String> selectedColors = new HashMap<>();
     private String hostName; // Player who created the lobby
-    private final Set<String> winners = new HashSet<>();
-
-
+    public final Set<String> winners = new HashSet<>();
 
     private GameBoard gameBoard = new GameBoard();
-    public static final Map<String, Boolean> readyStatus = new ConcurrentHashMap<>();
+    public final Map<String, Boolean> readyStatus = new ConcurrentHashMap<>();
 
     /**
      * Current state of the game:
@@ -102,7 +100,7 @@ public class Lobby implements Runnable {
      *
      * @param username the name of the player to mark as ready
      */
-    public static void makeReady(String username) {
+    public void makeReady(String username) {
         if (readyStatus.containsKey(username)) {
             readyStatus.put(username, true);
         }
