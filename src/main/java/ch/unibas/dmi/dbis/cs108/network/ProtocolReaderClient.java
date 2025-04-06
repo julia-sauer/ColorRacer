@@ -197,6 +197,10 @@ public class ProtocolReaderClient {
                     System.out.println(" Spiel wurde gestartet!");
                     break;
 
+                case VELO:
+                    setBike(true);
+                    break;
+
                 default:
                     System.out.println("Unknown command from Server: " + line);
                     break;
@@ -248,4 +252,11 @@ public class ProtocolReaderClient {
         this.chatController = controller;
     }
 
+    public boolean setBike(boolean bike) {
+        if (bike){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
