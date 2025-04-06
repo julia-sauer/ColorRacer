@@ -221,8 +221,17 @@ public class Server {
     public static void rollTheDice(int userId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        if (user.hasRolled()) {
+            try {
+                protocolWriterServer.sendInfo("You already rolled.");
+            } catch (IOException e) {
+                System.err.println("Error while sending Rolled Message to user " + userId);
+            }
+            return;
+        }
         Dice dice = new Dice();
         colors = dice.roll();
+        user.setHasRolled(true);
         //String[] colors in String umwandeln
         String colorText = Arrays.toString(colors);
         try {
