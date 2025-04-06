@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a game lobby that holds a list of players and manages the game state.
@@ -29,6 +31,8 @@ public class Lobby implements Runnable {
 
 
 
+    private GameBoard gameBoard = new GameBoard();
+    public static final Map<String, Boolean> readyStatus = new ConcurrentHashMap<>();
 
     /**
      * Current state of the game:
@@ -66,9 +70,27 @@ public class Lobby implements Runnable {
             players.add(userName);
             playerOrder.add(userName); // Speichert Join-Reihenfolge
             playerGameBoards.put(userName, new GameBoard()); //Erstellt GameBoard für einzelne Spieler
+            makeReadyStatusList();
             return true;
         }
         return false;
+    }
+
+    /**
+     * This method creates a map which shows all players in the lobby ands states if they are ready to play
+     */
+    public void makeReadyStatusList() {
+        for(String username : players) {
+            if (!readyStatus.containsKey(username)) {
+                readyStatus.put(username, false);
+            }
+        }
+    }
+
+    public static void makeReady(String username) {
+        if (readyStatus.containsKey(username)) {
+            readyStatus.put(username, true);
+        }
     }
     /**
      * Checks whether the lobby is full.
