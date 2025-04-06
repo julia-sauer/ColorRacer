@@ -264,6 +264,63 @@ public class Lobby implements Runnable {
     }
 
     /**
+     * This method restarts the Game when the Host types 'restart'.
+     * @param userId The userId of the player who typed restart.
+     */
+    public synchronized void restartGame(int userId) {
+        // Verify that the requesting user is the host.
+        String requester = UserList.getUserName(userId);
+        if (!isHost(requester)) {
+            User user = UserList.getUser(userId);
+            if (user != null) {
+                ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+                try {
+                    protocolWriterServer.sendInfo("Only the host can start the game.");
+                } catch (IOException e) {
+                    System.err.println("Error sending host-only message to user " + userId);
+                }
+            }
+            return;
+        }
+
+        User user = UserList.getUser(userId);
+        if (user == null) return;
+
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+
+        if (gamestate == 1) {
+            try {
+                protocolWriterServer.sendInfo("Game hasn't started yet. You need to start a game first.");
+            } catch (IOException e) {
+                System.err.println("Error sending game state message to user " + userId);
+            }
+            return;
+        }
+
+        // Not enough players to restart
+        if (players.size() < 2) {
+            try {
+                protocolWriterServer.sendInfo("At least 2 players are required to restart the game.");
+            } catch (IOException e) {
+                System.err.println("Error sending player count warning to user " + userId);
+            }
+            return;
+        }
+
+        // Zurücksetzen des currentField für jeden Spieler
+        for (String playerName : players) {
+            GameBoard board = getGameBoard(playerName);
+            board.setCurrentField(board.getFieldById("white1"));
+        }
+
+        changeGameState(3); //Beendet das aktuelle Spiel.
+        changeGameState(1);
+        startGame(userId);
+
+
+    }
+
+    /**
      * Logic to run when this lobby is executed in a separate thread.
      * You can implement countdowns, game loops, or timeouts here.
      */
