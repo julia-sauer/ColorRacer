@@ -191,6 +191,16 @@ public class ProtocolWriterClient {
     public void sendFieldChoice(Command command, String fieldId) {
         sendToServer(command + Command.SEPARATOR + fieldId);
     }
+
+    /**
+     * Sends the VELO command to the server with the chosen bike color.
+     *
+     * @param color the selected color, "black", "green", "magenta", or "darkblue"
+     */
+    public void sendBikeColor(String color) {
+        sendToServer(Command.VELO + Command.SEPARATOR + color);
+    }
+
 }
 
 
