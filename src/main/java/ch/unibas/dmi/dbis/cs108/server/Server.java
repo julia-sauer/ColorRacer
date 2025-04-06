@@ -35,7 +35,7 @@ public class Server {
 
 
     /**
-     * Constructor of the Serverclass
+     * Constructor of the server class
      * @param port the port-number on which the Server is
      */
     public Server(int port) {
@@ -312,7 +312,7 @@ public class Server {
      * sends a message to the client with the final position
      * @param userId userId the ID of the player executing the move
      */
-    public static void moveToLastSelectedField(int userId) {
+    public static void moveToLastSelectedField(int userId) throws IOException {
         User user = UserList.getUser(userId);
         if (user == null) return;
 
@@ -504,9 +504,9 @@ public class Server {
 
     /**
      * This method gets called as soon as a player is at the finish line.
-     * @param userId The Id of the user that is currently on its turn.
+     * @param userId The ID of the user that is currently on its turn.
      */
-    public static void won(int userId) {
+    public static void won(int userId) throws IOException {
         User user = UserList.getUser(userId);
         String nickname = user.getNickname();
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
@@ -520,7 +520,7 @@ public class Server {
         } catch (IOException e) {
             System.err.println("Could not send Info.");
         }
-        podestPlace++; //Podestplace wird um 1 erhöht.
+        podestPlace++; //Podest place wird um 1 erhöht.
 
         for (Lobby lobby : lobbies) {
             if (lobby.getPlayers().contains(nickname)) {
@@ -528,6 +528,7 @@ public class Server {
                 break;
             }
         }
+        protocolWriterServer.sendCommand(Command.FNSH);
 
     }
 
