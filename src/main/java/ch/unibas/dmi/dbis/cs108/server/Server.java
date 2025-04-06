@@ -241,9 +241,9 @@ public class Server {
     public static void checkField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        String nickname = user.getNickname();
         // GameBoard gameBoard = new GameBoard();  (ersetzt)
         Lobby userLobby = null;
-        String nickname = user.getNickname();
         for (Lobby lobby : lobbies) {
             if (lobby.getPlayers().contains(nickname)) {
                 userLobby = lobby;
@@ -251,7 +251,7 @@ public class Server {
             }
         }
         if (userLobby == null) return;
-        GameBoard gameBoard = userLobby.getGameBoard();
+        GameBoard gameBoard = userLobby.getGameBoard(nickname);
         if(gameBoard.isValidField(fieldId)) {
             Field selectedField = gameBoard.getFieldById(fieldId);
             gameBoard.addSelectedField(selectedField);
@@ -311,7 +311,7 @@ public class Server {
 
         if (userLobby == null) return;
 
-        GameBoard board = userLobby.getGameBoard();
+        GameBoard board = userLobby.getGameBoard(nickname);
         board.moveToLastSelected();
         Field newField = board.getCurrentField();
 
