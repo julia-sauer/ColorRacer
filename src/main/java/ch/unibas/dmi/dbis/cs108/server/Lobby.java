@@ -165,10 +165,6 @@ public class Lobby implements Runnable {
      * @param playerName The nickname of the player to remove.
      */
     public synchronized void removePlayer(String playerName) {
-        if (playerName.equals(hostName)) {
-            System.out.println("Host cannot leave the lobby.");
-            return;
-        }
         players.remove(playerName);
         playerOrder.remove(playerName); // Spieler auch aus Reihenfolge entfernen
         selectedColors.remove(playerName);
