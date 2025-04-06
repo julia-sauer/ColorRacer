@@ -35,7 +35,8 @@ public enum Command {
     LIST,
     CRLO,
     LOME,
-    GLST;
+    GLST,
+    FNSH;
 
 
     public static final String SEPARATOR = "%"; // blank space als Separator
@@ -199,5 +200,12 @@ public enum Command {
      */
     public static void NEXT() {
         System.out.println("NEXT");
+    }
+
+    /**
+     * Prints the command "FNSH"
+     */
+    public static void FNSH(){
+        System.out.println("FNSH");
     }
 }
