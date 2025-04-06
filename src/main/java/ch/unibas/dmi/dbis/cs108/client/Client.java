@@ -87,6 +87,7 @@ public class Client {
             System.out.println("- throwdice");
             System.out.println("- fieldchoice <fieldid>");
             System.out.println("- movetofield");
+            System.out.println("- next");
             System.out.println("- broadcast <your broadcast>");
             System.out.println("- createlobby <lobbyname>");
             System.out.println("- start");
@@ -133,6 +134,8 @@ public class Client {
                     protocolClient.sendFieldChoice(Command.CHOS, fieldId);
                 } else if (line.startsWith("movetofield")) {
                     protocolClient.sendCommand(Command.MOVE);
+                } else if (line.startsWith("next")) {
+                    protocolClient.sendCommand(Command.NEXT);
                 } else if (line.startsWith("throwdice")) {
                     protocolClient.sendCommand(Command.ROLL);
                 } else if (line.startsWith("deselect")) {
