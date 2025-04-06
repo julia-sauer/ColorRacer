@@ -389,13 +389,11 @@ public class Server {
             if (lobby.getLobbyName().equals(lobbyName)) {
                 lobbyFound = true;
 
-                //  Remove user from "Welcome" lobby only
                 String userName = user.getNickname();
                 for (Lobby otherLobby : lobbies) {
-                    if (otherLobby.getLobbyName().equalsIgnoreCase("Welcome") &&
-                            otherLobby.getPlayers().contains(userName)) {
+                    if (otherLobby.getPlayers().contains(userName)) {
                         otherLobby.removePlayer(userName);
-                        System.out.println("User '" + userName + "' removed from Welcome lobby.");
+                        System.out.println("User '" + userName + "' removed from lobby: " + otherLobby.getLobbyName());
                     }
                 }
 
