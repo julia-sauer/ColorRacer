@@ -317,6 +317,11 @@ public class Lobby implements Runnable {
         GameBoard board = getGameBoard(currentPlayer);
         Field currentField = board.getCurrentField();
 
+        User currentUser = UserList.getUserByName(currentPlayer);
+        if (currentUser != null) {
+            currentUser.setHasRolled(false); // Würfelstatus zurücksetzen
+        }
+
         for (String player : players) {
             User u = UserList.getUserByName(player);
             if (u != null) {
