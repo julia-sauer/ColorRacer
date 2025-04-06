@@ -399,8 +399,11 @@ public class Server {
                     if (success) {
                         try {
                             protocolWriterServer.sendCommandAndString(Command.JOIN, lobbyName);
+                            if (!lobbyName.equalsIgnoreCase("Welcome")) {
+                                protocolWriterServer.sendInfo("Please select a bike using: selectbike <black/magenta/green/darkblue> and then enter ready");
+                            }
                         } catch (IOException e) {
-                            System.err.println("Error sending JOIN to user " + userId);
+                            System.err.println("Error sending JOIN or INFO to user " + userId);
                         }
                     }
                 } else {
