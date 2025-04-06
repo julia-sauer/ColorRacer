@@ -18,6 +18,7 @@ public class User {
     private String nickname; // Aktueller Nickname des Benutzers
     private final OutputStream out; // OutputStream zur Kommunikation mit dem Client
     private String bikeColor;
+    private boolean hasRolled;
 
     /**
      * Constructor for creating a new user.
@@ -31,6 +32,7 @@ public class User {
         this.id = id;
         this.nickname = nickname;
         this.out = out;
+        this.hasRolled = false;
     }
 
     /**
@@ -79,6 +81,14 @@ public class User {
      */
     public String getBikeColor() {
         return bikeColor;
+    }
+
+    public boolean hasRolled() {
+        return hasRolled;
+    }
+
+    public void setHasRolled(boolean hasRolled) {
+        this.hasRolled = hasRolled;
     }
 
 }
