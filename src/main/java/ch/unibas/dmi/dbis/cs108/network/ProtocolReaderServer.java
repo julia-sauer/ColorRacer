@@ -271,6 +271,20 @@ public class ProtocolReaderServer {
                     }
 
                 case VELO: {
+                    //checks if user is in a game lobby
+                    String sender = UserList.getUserName(userId);
+                    Lobby userLobby = null;
+                    for (Lobby lobby : Server.lobbies) {
+                        if (lobby.getPlayers().contains(sender)) {
+                            userLobby = lobby;
+                            break;
+                        }
+                    }
+                    if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                        protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby and therefore can't choose a bike.");
+                        break;
+                    }
+
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         protocolWriterServer.sendInfo("-ERR No color provided. Please select: black, green, magenta, darkblue.");
                         break;
@@ -458,16 +472,25 @@ public class ProtocolReaderServer {
                 }
 
                 case RADY: {
-                    String username = UserList.getUserName(userId);
+                    //checks if user is in a game lobby
+                    String userName = UserList.getUserName(userId);
+                    Lobby userLobby = null;
+                    for (Lobby lobby : Server.lobbies) {
+                        if (lobby.getPlayers().contains(userName)) {
+                            userLobby = lobby;
+                            break;
+                        }
+                    }
+                    if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                        protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby and therefore can't choose a bike.");
+                        break;
+                    }
+
                     User user = UserList.getUser(userId);
-                    Lobby.makeReady(username);
-                    System.out.println(username + " is ready!");
+                    Lobby.makeReady(userName);
+                    System.out.println(userName + " is ready!");
                     ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
                     writer.sendInfo("You are ready to play.");
-//                    if (allPlayersReady()) {
-//                        writer.sendInfo("All players are ready. Start the game now!");
-//                        Command.STRT(); // Start game command
-//                    }
                     break;
                 }
                 default:
