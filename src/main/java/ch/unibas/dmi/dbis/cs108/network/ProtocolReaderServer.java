@@ -378,6 +378,44 @@ public class ProtocolReaderServer {
 
                     break;
                 }
+
+                case RSTT: {
+                    String userName = UserList.getUserName(userId);
+                    if (userName == null || userName.isBlank()) {
+                        System.err.println("-ERR No user for ID " + userId);
+                        break;
+                    }
+
+                    List<Lobby> playerLobbies = new ArrayList<>();
+                    for (Lobby lobby : Server.lobbies) {
+                        if (lobby.getPlayers().contains(userName)) {
+                            playerLobbies.add(lobby);
+                        }
+                    }
+
+                    if (playerLobbies.isEmpty()) {
+                        protocolWriterServer.sendInfo("You aren't part of a gameLobby.");
+                        break;
+                    }
+
+                    // Prüfen ob ALLE Lobbys "Welcome" heißen
+                    boolean onlyInWelcome = playerLobbies.stream()
+                            .allMatch(l -> l.getLobbyName().equalsIgnoreCase("Welcome"));
+
+                    if (onlyInWelcome) {
+                        protocolWriterServer.sendInfo("You aren't part of a gameLobby.");
+                        break;
+                    }
+
+                    for (Lobby lobby : playerLobbies) {
+                        if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                            lobby.restartGame(userId);
+                            break;
+                        }
+                    }
+
+                }
+
                 case LIST: {
                     User user = UserList.getUser(userId);
                     if (user == null) {
