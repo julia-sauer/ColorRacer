@@ -315,7 +315,6 @@ public class Lobby implements Runnable {
             currentPlayer = playerOrder.get(currentPlayerIndex);
         }
 
-
         GameBoard board = getGameBoard(currentPlayer);
         Field currentField = board.getCurrentField();
 
