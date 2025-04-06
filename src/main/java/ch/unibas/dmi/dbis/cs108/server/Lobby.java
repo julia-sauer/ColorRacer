@@ -8,6 +8,7 @@ import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 /**
  * Represents a game lobby that holds a list of players and manages the game state.
@@ -22,6 +23,11 @@ public class Lobby implements Runnable {
     private Server server;
     private final String lobbyName;
     private GameBoard gameBoard = new GameBoard();
+    private final List<String> playerOrder = new ArrayList<>(); // reihenfolge der Spieler entsprechend Join-Reihenfolge
+    private int currentPlayerIndex = 0;
+    private final Map<String, String> selectedColors = new HashMap<>();
+
+
 
 
     /**
@@ -57,6 +63,7 @@ public class Lobby implements Runnable {
         String userName = UserList.getUserName(userId);
         if (userName != null && !players.contains(userName)) {
             players.add(userName);
+            playerOrder.add(userName); // Speichert Join-Reihenfolge
             return true;
         }
         return false;
@@ -67,6 +74,7 @@ public class Lobby implements Runnable {
      * @return true if the lobby has reached MAX_PLAYERS, false otherwise
      */
     public boolean isFull() {
+
         return players.size() >= MAX_PLAYERS;
     }
 
@@ -118,6 +126,8 @@ public class Lobby implements Runnable {
      */
     public synchronized void removePlayer(String playerName) {
         players.remove(playerName);
+        playerOrder.remove(playerName); // Spieler auch aus Reihenfolge entfernen
+        selectedColors.remove(playerName);
     }
     /**
      * Starts the game for this lobby if all conditions are met.
@@ -209,6 +219,22 @@ public class Lobby implements Runnable {
      */
     public GameBoard getGameBoard() {
         return gameBoard;
+    }
+
+    /** Checks whether it is the given player's current turn.
+     * @param name Player name
+     * @return true if it's his turn
+     */
+    public boolean isCurrentPlayer(String name) {
+        if (playerOrder.isEmpty()) return false;
+        return playerOrder.get(currentPlayerIndex).equals(name);
+    }
+
+    /**
+     * Sets the next player as active (after turn or NEXT).
+     */
+    public void advanceTurn() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
     }
 
 }
