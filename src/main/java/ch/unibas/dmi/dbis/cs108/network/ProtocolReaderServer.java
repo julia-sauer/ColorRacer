@@ -259,6 +259,24 @@ public class ProtocolReaderServer {
                     Server.moveToLastSelectedField(userId);
                     break;
 
+                case NEXT: {
+                    if (!isMyTurn(protocolWriterServer)) break;
+
+                    nickname = UserList.getUserName(userId);
+                    Lobby userLobby = Server.getLobbyOfPlayer(nickname);
+
+                    if (userLobby == null) {
+                        protocolWriterServer.sendInfo("-ERR You are not in a valid lobby.");
+                        break;
+                    }
+
+                    protocolWriterServer.sendInfo("You skipped your turn.");
+                    userLobby.advanceTurn();  // next player
+
+                    break;
+                }
+
+
                 case DEOS:
                     if (!isMyTurn(protocolWriterServer)) break;
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
