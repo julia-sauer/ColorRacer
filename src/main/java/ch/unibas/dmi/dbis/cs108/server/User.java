@@ -83,10 +83,18 @@ public class User {
         return bikeColor;
     }
 
+    /**
+     * This methods gives back wether hasRolled is true or false. Is ture when User already rolled.
+     * @return Returns wether hasRolled is true or false -> returns true or false.
+     */
     public boolean hasRolled() {
         return hasRolled;
     }
 
+    /**
+     * This method is used to set the variable to true or false
+     * @param hasRolled Is either true or false, depending on how to change hasRolled.
+     */
     public void setHasRolled(boolean hasRolled) {
         this.hasRolled = hasRolled;
     }
