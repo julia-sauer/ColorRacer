@@ -17,6 +17,7 @@ public class User {
     private final int id; // Eindeutige Benutzer-ID
     private String nickname; // Aktueller Nickname des Benutzers
     private final OutputStream out; // OutputStream zur Kommunikation mit dem Client
+    private String bikeColor;
 
     /**
      * Constructor for creating a new user.
@@ -63,4 +64,21 @@ public class User {
     public OutputStream getOut() {
         return out;
     }
+
+    /**
+     * Sets the bike color selected by the player.
+     * @param bikeColor the selected bike color (e.g., "green", "black")
+     */
+    public void setBikeColor(String bikeColor) {
+        this.bikeColor = bikeColor;
+    }
+
+    /**
+     * Returns the selected bike color of the player.
+     * @return the selected bike color, or null if none is selected
+     */
+    public String getBikeColor() {
+        return bikeColor;
+    }
+
 }
