@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * The {@code ClientHandler} class processes the communication between server and client.
  * It starts the {@link ProtocolReaderServer}, sends a welcome message and manages the client connection.
+ * @author Jana
  */
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
@@ -38,10 +39,7 @@ public class ClientHandler implements Runnable {
      * Starts a {@link ProtocolReaderServer} for servers.
      * Outputs a welcome message.
      * Starts the {@link PingThread} and thus the Ping-Pong mechanism.
-     * int c + while-loop is from EchoServer, so what comes in is also output again.
-     * If in.read = -1, i.e. the client has left the server, the ClientSocket is terminated.
      * The user is removed from the UserList and the server is notified that a client has left.
-     * @author Jana
      */
 
     public void run() {
@@ -90,7 +88,6 @@ public class ClientHandler implements Runnable {
     /**
      * Removes a user from the user list.
      * @param clientNumber The ID of the user to be removed.
-     * @author milo
      */
     private void removeUser(int clientNumber) {
 

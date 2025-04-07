@@ -111,10 +111,10 @@ public class UserList {
         return -1;
     }
     /**
-     * Gibt das User-Objekt zurück, das dem übergebenen Nickname entspricht.
+     * Gives back the user-object that corresponds to the given nickname.
      *
-     * @param nickname Der Nickname des gesuchten Benutzers.
-     * @return Das User-Objekt oder null, wenn kein Benutzer mit diesem Nickname existiert.
+     * @param nickname nickname of searched user.
+     * @return the user-object or null, if no user with such a nickname exists.
      */
     public static User getUserByName(String nickname) {
         for (User user : userMap.values()) {
