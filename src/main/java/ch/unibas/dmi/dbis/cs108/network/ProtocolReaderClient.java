@@ -197,7 +197,7 @@ public class ProtocolReaderClient {
                     break;
 
                 case RSTT:
-                    System.out.println("game restarted!");
+                    System.out.println("The game restarts!");
                     break;
 
                 case VELO:
