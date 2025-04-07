@@ -39,6 +39,7 @@ public class ProtocolWriterClient {
      * The method {@code sendChat} is used for the chat.
      * It converts a chat message entered by the user(e.g. {@code message Hallo!}) into a valid
      * protocol command of the format {@code CHAT <message>} and sends it to the server.
+     * It also detects if it is a whisper or a broadcast message and sends it accordingly forward.
      *
      * @param message The message entered by the user.
      */
