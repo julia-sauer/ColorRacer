@@ -24,7 +24,6 @@ public enum Command {
     CHOS,
     MOVE,
     NEXT,
-    STAT,
     CHAT,
     NICK,
     PING,
@@ -115,13 +114,6 @@ public enum Command {
      */
     public static void MOVE() {
         System.out.println("MOVE");
-    }
-
-    /**
-     * Prints the command "STAT"
-     */
-    public static void STAT() {
-        System.out.println("STAT");
     }
 
     /**
