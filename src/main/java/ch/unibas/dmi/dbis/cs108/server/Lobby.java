@@ -233,7 +233,6 @@ public class Lobby implements Runnable {
 
         changeGameState(2);
         System.out.println("[Lobby: " + lobbyName + "] Game is starting...");
-        String currentPlayer = playerOrder.get(0);
 
         for (String playerName : players) {
             User u = UserList.getUserByName(playerName);
@@ -247,8 +246,8 @@ public class Lobby implements Runnable {
             }
         }
         currentPlayerIndex = -1;
-        currentPlayer = playerOrder.get(0);
-        for (String playerName : players) {
+        //String currentPlayer = playerOrder.get(0);
+        /*for (String playerName : players) {
             User u = UserList.getUserByName(playerName);
             if (u != null) {
                 ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
@@ -259,6 +258,8 @@ public class Lobby implements Runnable {
                 }
             }
         }
+
+         */
         advanceTurn();
         new Thread(this).start(); // Start game thread
     }
