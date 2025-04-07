@@ -563,7 +563,7 @@ public class ProtocolReaderServer {
                         }
                     }
                     if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                        protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby and therefore can't choose a bike.");
+                        protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby");
                         break;
                     }
                     if (username.trim().equalsIgnoreCase(userLobby.getHostName().trim()) || !userLobby.winners.isEmpty()){
