@@ -59,6 +59,12 @@ public class ProtocolWriterClient {
             sendWhisper(message);
             return;
         }
+        if (message.startsWith("broadcast")){ // checks if the message is a broadcast
+            String[] parts = message.split(" ", 2);
+            String actualMessage = parts[1].trim();
+            sendToServer(Command.BROD + Command.SEPARATOR + actualMessage);
+            return;
+        }
         sendToServer(Command.CHAT + Command.SEPARATOR + message);
     }
 

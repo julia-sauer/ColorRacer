@@ -190,6 +190,7 @@ public class ProtocolReaderClient {
                     }
                     String brodMsg = parts[1].trim();
                     System.out.println(brodMsg);
+                    chatController.displayChat(brodMsg);
                     break;
 
                 case STRT:
