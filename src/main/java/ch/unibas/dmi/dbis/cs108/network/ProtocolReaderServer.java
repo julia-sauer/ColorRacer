@@ -8,18 +8,19 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-
 /**
- * The class ProtocolReaderServer reads incoming messages from the client
+ * The class {@code ProtocolReaderServer} reads incoming messages from the client
  * and forwards them to the server.
  * The class is also responsible for receiving and interpreting
- * of messages that a client sends to the server via the network. These messages are
+ * messages that a client sends to the server via the network. These messages are
  * text-based and follow a specific network protocol.
  * <p>
  * This class is instantiated per client connection and continuously reads new lines
  * (commands) from the connected client via a {@link BufferedReader}. Each line is regarded as a
- * complete message (ends with a line break ‘\n’).
+ * complete message (ends with a line break ‘\n’). It works closely with the {@link ProtocolWriterServer}
+ * to send responses when needed.
  * </p>
+ *
  * @author anasv
  * @since 22.03.25
  */
@@ -32,12 +33,12 @@ public class ProtocolReaderServer {
     private static final Logger LOGGER = LogManager.getLogger(ProtocolReaderServer.class);
 
     /**
-     * Constructor: Initialises the BufferedReader and the user ID.
+     * Creates a new {@code ProtocolReaderServer}.
      *
-     * @param in the InputStream from which the messages are to be read.
-     * @param out the OutputStream to which replies are written.
-     * @param userId the unique ID of the user.
-     * @throws IOException if an error occurs when creating the BufferedReader.
+     * @param in The InputStream from which the messages are to be read.
+     * @param out The OutputStream to which replies are written.
+     * @param userId The unique ID of the user.
+     * @throws IOException If an error occurs when creating the BufferedReader.
      */
     public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread) throws IOException {
         // Initialisierung des BufferedReaders
@@ -50,7 +51,8 @@ public class ProtocolReaderServer {
      * Checks if the current user is allowed to perform a turn action.
      * Sends an error to the client if it's not their turn.
      *
-     * @return true if it's the player's turn, false otherwise
+     * @param writer The {@link ProtocolWriterServer} that is needed to send the information forward.
+     * @return True if it's the player's turn, false otherwise.
      */
     private boolean isMyTurn(ProtocolWriterServer writer) throws IOException {
         String nickname = UserList.getUserName(userId);
@@ -66,16 +68,17 @@ public class ProtocolReaderServer {
     /**
      * Starts an endless loop that continuously reads messages (commands) from the client
      * and processes them using the protocol.
-     *
-     <p> Each message must begin with one of the defined {@link Command} enum values.
+     * <p>
+     * Each message must begin with one of the defined {@link Command} enum values.
      * The method decodes these commands and executes the corresponding server action.
      * <p>
      * The network commands are processed using switch statements that the server receives from a
-     * client. Each command (e.g. CHAT, NICK, PING, ...) is sent as a line of text from the client.
-     * The server analyses the line, recognises the command (the first word) and executes suitable
+     * client. Each command (e.g. CHAT, NICK, PING, ...) is sent as a line of string from the client.
+     * The server analyses the string, recognises the command (the first word) and executes suitable
      * actions.
      * </p>
-     * @throws IOException if an error occurs when reading the messages.
+     *
+     * @throws IOException If an error occurs when reading the messages.
      */
     public void readLoop() throws IOException {
         String line;
@@ -588,9 +591,9 @@ public class ProtocolReaderServer {
 
     /**
      * This method checks if all players in the game are ready. If it returns true
-     * {@code case RADY} calls {@code case STRT} to start the game.
+     * the host is able to start the game.
      *
-     * @return true if all players are ready / false if not all players are ready.
+     * @return True if all players are ready / false if not all players are ready.
      */
     private boolean allPlayersReady() {
         String username = UserList.getUserName(userId);

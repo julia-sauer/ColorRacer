@@ -7,6 +7,7 @@ import java.net.Socket;
 /**
  * A class that listens for PING messages from the server and sends PONG responses.
  * This class should be used in a separate thread to maintain the connection.
+ * @deprecated
  */
 class PongThread implements Runnable {
     private final Socket clientSocket;
@@ -16,7 +17,6 @@ class PongThread implements Runnable {
      * Constructs a PongThread with the specified input and output streams.
      *
      * @param clientSocket the BufferedReader to read from
-     *
      */
     public PongThread(Socket clientSocket) {
         this.clientSocket = clientSocket;

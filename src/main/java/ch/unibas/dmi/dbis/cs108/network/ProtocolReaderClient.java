@@ -11,8 +11,11 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * The ProtocolReaderClient class processes incoming messages from the server
- * and controls the interaction with the client.
+ * The {@code ProtocolReaderClient} class is responsible for reading and processing messages
+ * from the server. It interprets server commands and triggers appropriate
+ * actions, such as updating the user interface via {@link ChatController}, printing messages,
+ * and responding to server pings.
+ * This class works closely with {@link ProtocolWriterClient} to send responses when needed.
  */
 public class ProtocolReaderClient {
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
@@ -23,7 +26,7 @@ public class ProtocolReaderClient {
 
 
     /**
-     * Creates a new ProtocolReaderClient.
+     * Creates a new {@code ProtocolReaderClient}.
      *
      * @param in The InputStream from which messages are read.
      * @param out The OutputStream to which responses are written.
@@ -44,7 +47,7 @@ public class ProtocolReaderClient {
      * CHAT sender message
      * </pre>
      *
-     * @throws IOException if a read error occurs from the server
+     * @throws IOException If a read error occurs from the server
      */
     public void readLoop() throws IOException {
         ProtocolWriterClient protocolWriterClient = new ProtocolWriterClient(out);
@@ -216,10 +219,10 @@ public class ProtocolReaderClient {
      * This method constructs a formatted string in the form {@code "sender: message"} and prints it to the terminal.
      * It also updates the chat GUI by invoking the controller's {@code displayChat} method.
      * The messages are still printed in the terminal because it helps in debugging
-     * by ensuring that messages are visible in the console as well as in the graphical interface.
+     * by ensuring that messages are visible in the console as well as in the graphical user's interface.
      *
-     * @param message the chat message content received from the server.
-     * @param sender  the nickname of the user who sent the message.
+     * @param message The chat message content received from the server.
+     * @param sender  The nickname of the user who sent the message.
      */
     private void displayChat(String message, String sender) {
         String formattedMessage = sender + ": " + message;
@@ -233,10 +236,10 @@ public class ProtocolReaderClient {
      * form {@code "Whisper from sender: message"} and prints it to the terminal, and it also updates
      * the GUI by invoking the controller's {@code displayChat} method.
      * The messages are still printed in the terminal because it helps in debugging
-     * by ensuring that messages are visible in the console as well as in the graphical interface.
+     * by ensuring that messages are visible in the console as well as in the graphical user's interface.
      *
-     * @param message the whisper message content.
-     * @param sender  the nickname of the user who sent the whisper.
+     * @param message The whisper message content.
+     * @param sender  The nickname of the user who sent the whisper.
      */
     private void displayWhisp(String message, String sender) {
         String formattedMessage = "Whisper from " + sender + ": " + message;
@@ -250,7 +253,7 @@ public class ProtocolReaderClient {
      * This method is called during the initialization of the GUI, ensuring that the {@link ProtocolReaderClient}
      * can forward them to the GUI for display.
      *
-     * @param controller the {@link ChatController} instance to be set.
+     * @param controller The {@link ChatController} instance to be set.
      */
     public void setChatController(ChatController controller) {
         this.chatController = controller;

@@ -8,6 +8,7 @@ import java.io.*;
  *
  * @author julia
  * @since 03/21/2025
+ * @deprecated
  */
 class InThread implements Runnable {
     private InputStream in;

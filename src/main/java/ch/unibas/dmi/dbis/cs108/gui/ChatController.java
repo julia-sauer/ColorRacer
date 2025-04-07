@@ -72,7 +72,6 @@ public class ChatController {
      *
      * @param event the {@code KeyEvent} triggered by user input.
      */
-
     @FXML
     private void handleEnterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
