@@ -14,9 +14,9 @@ import java.io.OutputStream;
 
 
 public class User {
-    private final int id; // Eindeutige Benutzer-ID
-    private String nickname; // Aktueller Nickname des Benutzers
-    private final OutputStream out; // OutputStream zur Kommunikation mit dem Client
+    private final int id; // clear user-ID
+    private String nickname; // current nickname of users
+    private final OutputStream out; // OutputStream for communication with client
     private String bikeColor;
     private boolean hasRolled;
 
@@ -84,8 +84,8 @@ public class User {
     }
 
     /**
-     * This methods gives back wether hasRolled is true or false. Is ture when User already rolled.
-     * @return Returns wether hasRolled is true or false -> returns true or false.
+     * That method gives back whether hasRolled is true or false. Is ture when User already rolled.
+     * @return Returns whether hasRolled is true or false -> returns true or false.
      */
     public boolean hasRolled() {
         return hasRolled;

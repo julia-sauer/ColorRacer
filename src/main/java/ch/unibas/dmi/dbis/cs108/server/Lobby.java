@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Each lobby is identified by a unique name and keeps track of the players in it.
  * The lobby can be run as a separate thread (e.g., to manage game state, timers, etc.).
+ * @author milo
  */
 public class Lobby implements Runnable {
 
@@ -26,7 +27,7 @@ public class Lobby implements Runnable {
     private Server server;
     private final String lobbyName;
     private final Map<String, GameBoard> playerGameBoards;
-    private final List<String> playerOrder = new ArrayList<>(); // reihenfolge der Spieler entsprechend Join-Reihenfolge
+    private final List<String> playerOrder = new ArrayList<>(); // order of players according to join-order
     private int currentPlayerIndex = 0;
     private final Map<String, String> selectedColors = new HashMap<>();
     private String hostName; // Player who created the lobby
@@ -45,7 +46,6 @@ public class Lobby implements Runnable {
 
     /**
      * Constructs a new Lobby instance with the given name.
-     *
      * @param lobbyName the name of the lobby
      */
     public Lobby(String lobbyName) {
@@ -69,8 +69,8 @@ public class Lobby implements Runnable {
         String userName = UserList.getUserName(userId);
         if (userName != null && !players.contains(userName)) {
             players.add(userName);
-            playerOrder.add(userName); // Speichert Join-Reihenfolge
-            playerGameBoards.put(userName, new GameBoard()); //Erstellt GameBoard für einzelne Spieler
+            playerOrder.add(userName); // saves join-sequence
+            playerGameBoards.put(userName, new GameBoard()); //Creates GameBoard for each player
             // Sets the host if not already set
             if (hostName == null) {
                 hostName = userName;
@@ -164,7 +164,7 @@ public class Lobby implements Runnable {
      */
     public synchronized void removePlayer(String playerName) {
         players.remove(playerName);
-        playerOrder.remove(playerName); // Spieler auch aus Reihenfolge entfernen
+        playerOrder.remove(playerName); // Player removed from sequence too
         selectedColors.remove(playerName);
         playerGameBoards.remove(playerName);
     }
@@ -172,7 +172,7 @@ public class Lobby implements Runnable {
      * Starts the game for this lobby if all conditions are met. Only the host can start a game.
      * <p>
      * Conditions:
-     * The game must be started by the host of the lobby (the player that created the lobby).
+     * The game must be started by the host of the lobby (the player that first joined the lobby).
      * The game must not already be running or finished.
      * The lobby must not be the "Welcome" lobby.
      * At least 2 players must be present.
@@ -211,7 +211,7 @@ public class Lobby implements Runnable {
             return;
         }
 
-        // Welcome lobby is not a valid game lobby
+        // Welcome-lobby is not a valid game lobby
         if (lobbyName.equalsIgnoreCase("Welcome")) {
             try {
                 protocolWriterServer.sendInfo("You are not in a real lobby. Please join or create a lobby to start a game.");
@@ -233,7 +233,6 @@ public class Lobby implements Runnable {
 
         changeGameState(2);
         System.out.println("[Lobby: " + lobbyName + "] Game is starting...");
-        String currentPlayer = playerOrder.get(0);
 
         for (String playerName : players) {
             User u = UserList.getUserByName(playerName);
@@ -247,8 +246,8 @@ public class Lobby implements Runnable {
             }
         }
         currentPlayerIndex = -1;
-        currentPlayer = playerOrder.get(0);
-        for (String playerName : players) {
+        //String currentPlayer = playerOrder.get(0);
+        /*for (String playerName : players) {
             User u = UserList.getUserByName(playerName);
             if (u != null) {
                 ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
@@ -259,12 +258,15 @@ public class Lobby implements Runnable {
                 }
             }
         }
+
+         */
         advanceTurn();
         new Thread(this).start(); // Start game thread
     }
 
     /**
-     * This method restarts the Game when the Host types 'restart'.
+     * This method restarts the Game when the host and only the host types 'restart'.
+     * If the gamestate is 1 the game can not be restarted.
      * @param userId The userId of the player who typed restart.
      */
     public synchronized void restartGame(int userId) {
@@ -307,21 +309,21 @@ public class Lobby implements Runnable {
             return;
         }
 
-        // Zurücksetzen des currentField für jeden Spieler
+        // Reset the currentField for each player
         for (String playerName : players) {
             GameBoard board = getGameBoard(playerName);
             board.setCurrentField(board.getFieldById("white1"));
         }
-
-        changeGameState(3); //Beendet das aktuelle Spiel.
-        changeGameState(1);
-        startGame(userId);
 
         try {
             protocolWriterServer.sendCommand(Command.RSTT);
         } catch (IOException e) {
             System.err.println("Error sending RSTT to user " + userId);
         }
+
+        changeGameState(3); //ends the current game
+        changeGameState(1);
+        startGame(userId);
 
     }
 
@@ -345,7 +347,8 @@ public class Lobby implements Runnable {
     }
 
     /**
-     * creates a gameboard
+     * creates a gameboard specific for the player with playerName
+     * @param playerName Player name (of the Player for whom this Gameboard is).
      * @return the gameboard
      */
     public GameBoard getGameBoard(String playerName) {
@@ -379,7 +382,7 @@ public class Lobby implements Runnable {
 
         User currentUser = UserList.getUserByName(currentPlayer);
         if (currentUser != null) {
-            currentUser.setHasRolled(false); // Würfelstatus zurücksetzen
+            currentUser.setHasRolled(false); // resets dice status
         }
 
         for (String player : players) {

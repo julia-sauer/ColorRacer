@@ -22,7 +22,8 @@ import ch.unibas.dmi.dbis.cs108.server.Lobby;
 /**
  * The class {@code Server} provides a simple multi-user chat server.
  * It manages client connections, processes messages and takes care of user administration.
- * * The server works on port 8090 and accepts incoming client connections.
+ * The server works on a given port and accepts incoming client connections.
+ * @author Jana
  */
 public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
@@ -48,11 +49,8 @@ public class Server {
      * ServerSocket creates a server (here: echod) that runs on port 8090.
      * echod.accept(); waits until client connects.
      * As soon as a client has connected, ‘Connection established’ is printed.
-     * while-loop: until the client ends the connection. Saves what comes from the client in c
-     * and returns exactly the same (out.write).
      * When client connection is closed, it exits while loop, then connection to client is closed
      * (socket.close) then server is closed (echod.close).
-     * @author Jana
      */
     public void start() {
         try {
@@ -84,9 +82,8 @@ public class Server {
      * Adds a new user to the user list.
      * @param userName is the name of the new user.
      * @return the unique user-ID.
-     * @author milo
      */
-    public static int addNewUser(String userName, OutputStream ClientOut) { // Neue Methode
+    public static int addNewUser(String userName, OutputStream ClientOut) {
 
         return UserList.addUser(userName, ClientOut);
     }
@@ -117,7 +114,6 @@ public class Server {
 
     /**
      * Shuts down the server.
-     * @author Jana
      */
 
     public static void shutdownServer() {
@@ -137,7 +133,6 @@ public class Server {
      * that the nickname has been changed.
      * @param userId The ID of the user who wants to change the nickname.
      * @param newNick The new desired nickname.
-     * @author milo
      */
 
     public static void changeNickname(int userId, String newNick) {
@@ -232,7 +227,7 @@ public class Server {
         Dice dice = new Dice();
         colors = dice.roll();
         user.setHasRolled(true);
-        //String[] colors in String umwandeln
+        //String[] colors to String
         String colorText = Arrays.toString(colors);
         try {
             protocolWriterServer.sendCommandAndString(Command.ROLL, colorText);
@@ -472,7 +467,7 @@ public class Server {
     public static void printAllLobbyStates() {
         for (Lobby lobby : lobbies) {
             if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                continue; // überspringe "Welcome"-Lobby
+                continue; // skip "Welcome"-Lobby
             }
 
             int state = lobby.getGameState();
@@ -520,7 +515,7 @@ public class Server {
         } catch (IOException e) {
             System.err.println("Could not send Info.");
         }
-        podestPlace++; //Podest place wird um 1 erhöht.
+        podestPlace++; //podestPlace gets incremented by 1.
 
         for (Lobby lobby : lobbies) {
             if (lobby.getPlayers().contains(nickname)) {

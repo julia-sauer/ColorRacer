@@ -10,18 +10,9 @@ import java.io.OutputStreamWriter;
 import java.io.IOException;
 
 /**
- * The class ProtocolWriterClient converts the client's input into the corresponding
- * protocol commands defined in the Commands and, if necessary, forwards them to the server.
- *
- * <p>Users input and the corresponding protocol commands:
- *
- *  {@code connect} → {@code JOIN}
- *  {@code leave} → {@code QUIT}
- *  {@code message} → {@code CHAT}
- *  {@code nicknamechange} → {@code NICK}
- *
- * <p>
- * This class uses the UFT-8-encoding to secure a cross-platform communication.
+ * The {@code ProtocolWriterClient} class handles the client's outgoing communication.
+ * It formats and sends protocol-specific commands (defined in {@link Command}) to the server.
+ * All data is sent in UTF-8 encoding to ensure cross-platform compatibility.
  */
 public class ProtocolWriterClient {
     /**
@@ -29,12 +20,15 @@ public class ProtocolWriterClient {
      * This Writer writes protocol commands (e.g. {@code CHAT}) in UTF-8 to the server.
      */
     private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
+
+    /** Logger for logging errors or debugging information. */
     private static final Logger LOGGER = LogManager.getLogger(ProtocolWriterClient.class);
 
     /**
-     * Constructor: Initialises the {@link PrintWriter} with UFT-8.
-     * @param outputStream the OutputStream to which the messages are to be sent.
-     * @throws IOException if an error occurs when creating the PrintWriter.
+     * Constructs a new {@code ProtocolWriterClient} with UTF-8 encoding.
+     *
+     * @param outputStream The OutputStream to which the messages are to be sent.
+     * @throws IOException If an error occurs when creating the PrintWriter.
      */
     public ProtocolWriterClient(OutputStream outputStream) throws IOException {
         writer = new PrintWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8), true);
@@ -45,10 +39,8 @@ public class ProtocolWriterClient {
      * The method {@code sendChat} is used for the chat.
      * It converts a chat message entered by the user(e.g. {@code message Hallo!}) into a valid
      * protocol command of the format {@code CHAT <message>} and sends it to the server.
-     * <p>
+     *
      * @param message The message entered by the user.
-     * @author anasv
-     * @since 22.03.25
      */
     public void sendChat(String message) {
         if (message == null || message.trim().isEmpty()) {
@@ -71,10 +63,10 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sends the command on the desired OutputStream.
+     * Sends a basic command (e.g., {@code QUIT}, {@code PING}) to the server.
      *
-     * @param command the command that should be sent
-     * @throws IOException if the message could not be delivered.
+     * @param command The command that should be sent
+     * @throws IOException If the message could not be delivered.
      */
     public void sendCommand(Command command) throws IOException {
         sendToServer(command + Command.SEPARATOR);
@@ -82,7 +74,7 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sends a command with an additional string.
+     * Sends a command with an additional string to the server.
      *
      * @param command The command that should be sent to the server.
      * @param text The string that should be sent in addition to the command.
@@ -94,10 +86,10 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Uses the method {@code sendCommand} for the command NICK to send the new nickname to the server.
+     * Sends a {@code NICK} command to the server with the new nickname.
      *
-     * @param newnickname the new nickname that the user selected.
-     * @param out the OutputStream with which it is sent.
+     * @param newnickname The new nickname that the user selected.
+     * @param out The OutputStream with which it is sent.
      */
     public void changeNickname(String newnickname, OutputStream out) {
         try {
@@ -108,7 +100,7 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sends a {@code QUIT} command to the server to terminate the connection.
+     * Sends a {@code QUIT} command to the server indicating client termination.
      *
      * @param out The OutputStream to which the command is written.
      */
@@ -121,8 +113,7 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sends the {@code JOIN} command with the desired nickname to the server.
-     * The server decides whether the nickname is accepted or changed (e.g. in the case of duplicates).
+     * Sends a {@code JOIN} command to the server to enter a specific lobby
      *
      * @param lobbyName The nickname entered by the user
      */
@@ -144,7 +135,7 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * This method sends a string to the server.
+     * This method sends a raw string to the server.
      *
      * @param message The message that the server should receive.
      */
@@ -156,9 +147,10 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sends the {@code WISP} command to the server. A message for just one other user is sent.
+     * Sends a private message (whisper) to another user.
+     * The message must follow the pattern: {@code whisper <nickname> <message>}.
      *
-     * @param nicknameAndMessage is the nickname of the user, who needs to receive the message.
+     * @param nicknameAndMessage The nickname of the user, who needs to receive the message.
      */
 
     public void sendWhisper(String nicknameAndMessage) {
@@ -184,25 +176,26 @@ public class ProtocolWriterClient {
         // Send this message to the server
 
     /**
-     * Sends the Command CHOS plus the fieldId of the chosen field to the Server.
+     * Sends a field selection command with a specified {@code fieldId}.
      *
-     * @param fieldId Contains the id of the chosen field.
+     * @param command The protocol command ({@code CHOS} or {@code DEOS}) to be sent to the server.
+     * @param fieldId Contains the ID of the chosen field.
      */
     public void sendFieldChoice(Command command, String fieldId) {
         sendToServer(command + Command.SEPARATOR + fieldId);
     }
 
     /**
-     * Sends the VELO command to the server with the chosen bike color.
+     * Sends a {@code VELO} command with the selected color of the bike.
      *
-     * @param color the selected color, "black", "green", "magenta", or "darkblue"
+     * @param color The selected color; "black", "green", "magenta", or "darkblue"
      */
     public void sendBikeColor(String color) {
         sendToServer(Command.VELO + Command.SEPARATOR + color);
     }
 
     /**
-     * This method sends the {@code RADY} command to the server, to mark the player as ready to play.
+     * Marks the player as ready by sending a {@code RADY} command to the server.
      *
      * @throws IOException If there is an error while sending the command to the server.
      */

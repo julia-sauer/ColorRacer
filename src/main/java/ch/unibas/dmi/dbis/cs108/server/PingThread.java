@@ -93,7 +93,7 @@ public class PingThread extends Thread {
     private boolean hasReceivedPong() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            if(reader.ready()) {
+            if (reader.ready()) {
                 if (reader.readLine().trim().equals("PONG")) {
                     return true;
                 }
@@ -103,25 +103,6 @@ public class PingThread extends Thread {
         }
         return false;
     }
-
-    /**
-     * Processes a received PONG message and sends the next PING to the client.
-     *
-     * @param out The OutputStream of the client.
-     * @param userId The ID of the client that sent the PONG.
-     */
-    /*
-    public static void pongReceived(OutputStream out, int userId) {
-        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
-        try {
-            protocolWriterServer.sendCommand(Command.PING);
-            System.out.println("Next PING sent to Client " + userId);
-        } catch (IOException e) {
-            System.err.println("Error, Could not send Command");
-        }
-    }
-    */
-
 
     /**
      * Stops the ping thread and interrupts the current thread.

@@ -4,12 +4,22 @@ import java.util.*;
 
 import static ch.unibas.dmi.dbis.cs108.server.Server.colors;
 
+/**
+ * This class specifies the GameBoard with its fields.
+ * Every player has its own object of this class.
+ * @author Jana
+ */
 public class GameBoard {
     private Map<String, Field> fields;
     private Field currentField;
     private Set<Field> selectedFields;
     private final List<Field> selectedFieldList = new ArrayList<>();
 
+    /**
+     * Constructor of the class GameBoard.
+     * Defines the Map over the fields.
+     * Defines the Set over the selectedFields.
+     */
     public GameBoard() {
         this.fields = new HashMap<>();
         this.selectedFields = new HashSet<>();
@@ -18,6 +28,10 @@ public class GameBoard {
         initializeNeighbors();
     }
 
+    /**
+     * This method initializes every field with its fieldId.
+     * Sets the current field for the start.
+     */
     private void initializeFields() {
         String[] colors = {"white", "purple", "yellow", "orange", "blue", "pink", "red"};
         int[] fieldCounts = {1, 10, 7, 10, 10, 10, 7};
@@ -31,6 +45,10 @@ public class GameBoard {
         this.currentField = fields.get("white1");
     }
 
+    /**
+     * This method initializes all the neighbors for every single field.
+     * By assigning an ArrayList with every neighbor to the single fields.
+     */
     private void initializeNeighbors() {
         Map<String, List<String>> neighborMap = new HashMap<>();
 
@@ -102,7 +120,7 @@ public class GameBoard {
     }
 
     /**
-     * This method checks wether the field chosen by the user is valid or not.
+     * This method checks whether the field chosen by the user is valid or not.
      * It checks if the field is connected to the field the player is currently on or if it is connected to an already selected field.
      * It checks if the filed corresponds to a color that was rolled and is not already used.
      *
@@ -141,10 +159,19 @@ public class GameBoard {
         return false;
     }
 
+    /**
+     * Get the correct Field using the fieldIds.
+     * @param fieldId fieldId
+     * @return the field corresponding to the fieldId
+     */
     public Field getFieldById(String fieldId) {
         return fields.get(fieldId);
     }
 
+    /**
+     * Adds a chosen field to the Set of selectedFields.
+     * @param field the chosen field
+     */
     public void addSelectedField(Field field) {
         selectedFields.add(field);
         selectedFieldList.add(field); // for MOVE

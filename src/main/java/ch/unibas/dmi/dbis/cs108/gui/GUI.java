@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-
 /**
  * The {@code GUI} class is a JavaFX Application that loads the chat interface defined in the FXML file ChatTemplate
  * and connects it to the client. This class is responsible for launching the graphical user interface,
@@ -23,7 +22,6 @@ public class GUI extends Application {
      * before launching the JavaFX application.
      */
     private static Client client;
-
 
     /**
      * The main entry point for launching the GUI.

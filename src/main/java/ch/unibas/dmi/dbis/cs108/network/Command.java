@@ -171,7 +171,7 @@ public enum Command {
     public static void LIST(){ System.out.println("LIST");
     }
     /**
-     * Prints the command "LIST"
+     * Prints the command "CRLO"
      */
     public static void CRLO(){ System.out.println("CRLO");
     }

@@ -11,25 +11,37 @@ import java.net.*;
 import java.io.*;
 
 /**
- * The Client class establishes a connection to a server and enables communication via a network.
- * This class uses {@link ProtocolReaderClient} and {@link ProtocolWriterClient} objects to read and send messages.
- *
+ * The {@code Client} class establishes a connection to a server and enables communication
+ * via a TCP/IP network. It handles sending and receiving messages according to a defined
+ * protocol using {@link ProtocolReaderClient} and {@link ProtocolWriterClient}.
+ * The client reads user's input and allows the user to interact with a multiplayer game server by sending
+ * commands such as creating or joining lobbies, chatting, selecting game options,
+ * and controlling gameplay flow.
  */
 public class Client {
 
+    /** The IP address or hostname of the server */
     private final String host;
-    private final int port;
-    private final String username;
-    private boolean isReady = false;
 
+    /** The port number on which the server is listening */
+    private final int port;
+
+    /** The username chosen by the client */
+    private final String username;
+
+    /** Responsible for reading protocol messages sent from the server */
     private ProtocolReaderClient protocolReader;
+
+    /** Responsible for writing protocol messages to the server */
     private ProtocolWriterClient protocolWriterClient;
 
     /**
-     * Constructor for class Client
+     * Constructs a new {@code Client} with the specified host, port, and username.
+     * If the username is {@code null} or empty, a default name with the system's username is used.
+     *
      * @param host The ip-address of the host.
-     * @param port the port number of the Server
-     * @param username the username the user wants.
+     * @param port The port number of the Server
+     * @param username The username the user wants.
      */
     public Client(String host, int port, String username) {
         this.host = host;
@@ -42,10 +54,10 @@ public class Client {
         }
     }
     /**
-     * The main method initializes the connection to the server and starts a thread to read messages.
-     * It also reads input from the console and sends corresponding commands to the server.
-     *
-     * @author Julia
+     * Starts the client, connects to the server, and begins processing user input.
+     * A new thread is created to handle incoming server messages.
+     * The main thread handles user input and sends the corresponding commands via the
+     * {@link ProtocolWriterClient} to the server.
      */
     public void start() {
         try {
@@ -75,8 +87,7 @@ public class Client {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //System.out.println("Your suggested nickname is " + defaultNickname + ". If you want to change it, please type in your chat and replace the dots with the desired name: nicknamechange ...");
-            // Overview of all commands which concerns the user:
+
             System.out.println("Available commands:");
             System.out.println("- nicknamechange <newnickname>" + "   -> to change your nickname");
             System.out.println("- message <your message>" + "   -> to send a message to others in your lobby");
@@ -202,11 +213,6 @@ public class Client {
 
                 }
             }
-            // closing connection
-            //System.out.println("Terminating ...");
-            //in.close();
-            //out.close();
-            //sock.close();
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
@@ -216,7 +222,7 @@ public class Client {
      * Sets the {@link ChatController} for this client by forwarding it to the {@link ProtocolReaderClient}.
      * This allows the {@link ProtocolReaderClient} to update the GUI with incoming messages.
      *
-     * @param chatController the ChatController instance to be used for GUI updates.
+     * @param chatController The ChatController instance to be used for GUI updates.
      */
     public void setChatController(ChatController chatController) {
         if (protocolReader != null) {
@@ -225,20 +231,20 @@ public class Client {
     }
 
     /**
-     * Retrieves the {@link ProtocolReaderClient} used by this client.
+     * Returns the {@link ProtocolReaderClient} used by this client.
      * The {@link ProtocolReaderClient} handles incoming messages from the server.
      *
-     * @return the {@link ProtocolReaderClient} instance, or {@code null} if it has not been initialized.
+     * @return The {@link ProtocolReaderClient} instance.
      */
     public ProtocolReaderClient getProtocolReader(){
         return protocolReader;
     }
 
     /**
-     * Retrieves the {@link ProtocolWriterClient} used by this client.
+     * Returns the {@link ProtocolWriterClient} used by this client.
      * The {@link ProtocolWriterClient} is responsible for sending messages to the server.
      *
-     * @return the {@link ProtocolWriterClient} instance, or {@code null} if it has not been initialized.
+     * @return The {@link ProtocolWriterClient} instance.
      */
     public ProtocolWriterClient getProtocolWriter() {
         return protocolWriterClient;
