@@ -18,7 +18,7 @@ import java.util.Arrays;
  * This class works closely with {@link ProtocolWriterClient} to send responses when needed.
  */
 public class ProtocolReaderClient {
-    private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
+    private final BufferedReader reader; // reads character lines from client.
     private final InputStream in;
     private final OutputStream out;
     private ChatController chatController; // Reference to the GUI controller
