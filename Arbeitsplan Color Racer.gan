@@ -94,7 +94,7 @@ Mockup]]></notes>
             <depend id="39" type="2" difference="0" hardness="Strong"/>
             <depend id="47" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="39" uid="3e0931862d6b4656abff3b7af2d22fe7" name="Zusammenführen des Codes" meeting="false" start="2025-04-07" duration="5" complete="0" priority="4" expand="true">
+        <task id="39" uid="3e0931862d6b4656abff3b7af2d22fe7" name="Zusammenführen des Codes" meeting="false" start="2025-04-07" duration="5" complete="100" priority="4" expand="true">
             <depend id="47" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="44" uid="938cde888b3c4b83b4e0b7a5287b630d" name="Chat GUI" meeting="false" start="2025-03-29" duration="8" complete="100" priority="2" expand="true">
@@ -102,8 +102,8 @@ Mockup]]></notes>
         </task>
         <task id="45" uid="a4fa18d3a3194141b962f6ecbc5e3ba4" name="Multiple lobbies possible" meeting="false" start="2025-04-02" duration="5" complete="100" priority="2" expand="true"/>
         <task id="46" uid="41e5ecb17c364325b491c9cfa2e57172" name="Game Lists" meeting="false" start="2025-04-03" duration="4" complete="100" expand="true"/>
-        <task id="47" uid="b56adfb2a97749a88acbe7d533a341f1" name="Game implementation is finished and put together" meeting="false" start="2025-04-12" duration="3" complete="0" expand="true"/>
-        <task id="21" uid="5112d7c03a1d463eb7aac2f56cfa3935" name="Finish outline of the game" meeting="false" start="2025-03-31" duration="7" complete="0" expand="true">
+        <task id="47" uid="b56adfb2a97749a88acbe7d533a341f1" name="Game implementation is finished and put together without any bugs" meeting="false" start="2025-04-12" duration="3" complete="0" expand="true"/>
+        <task id="21" uid="5112d7c03a1d463eb7aac2f56cfa3935" name="Finish outline of the game" meeting="false" start="2025-03-31" duration="7" complete="100" expand="true">
             <notes><![CDATA[The main logic of the game and its fundamental mechanics are present and the game is playable.]]></notes>
             <depend id="39" type="2" difference="0" hardness="Strong"/>
             <depend id="47" type="2" difference="0" hardness="Strong"/>
@@ -124,7 +124,9 @@ Mockup]]></notes>
         </task>
         <task id="24" uid="4993c29cc3284aff954556ba4e77bc73" name="outwritten manual" meeting="false" start="2025-04-03" duration="4" complete="100" expand="true"/>
         <task id="25" uid="4e77328cec3a4c4daff2f85471e7fbc5" name="QA concept" meeting="false" start="2025-04-01" duration="5" complete="100" expand="true"/>
-        <task id="27" uid="8ac76885e0e04b89a4b9918a031af07c" name="GUI is put together" meeting="false" start="2025-04-19" duration="6" complete="0" priority="4" expand="true"/>
+        <task id="27" uid="8ac76885e0e04b89a4b9918a031af07c" name="GUI is put together and shows no bugs" meeting="false" start="2025-04-19" duration="6" complete="0" priority="4" expand="true"/>
+        <task id="54" uid="f20ce4c9c9bd41bfb631cd12a2a82b80" name="Fixing last bugs" meeting="false" start="2025-04-21" duration="5" complete="0" expand="true"/>
+        <task id="55" uid="10096bb7830b4bb6af95fd60cf781f92" name="Handling errors accordingly" meeting="false" start="2025-04-21" duration="5" complete="0" expand="true"/>
         <task id="49" uid="f0a607768b8a48cb9213d1d354b735b1" name="Mainlobby GUI" meeting="false" start="2025-04-10" duration="9" complete="0" priority="2" expand="true">
             <depend id="27" type="2" difference="0" hardness="Strong"/>
         </task>
