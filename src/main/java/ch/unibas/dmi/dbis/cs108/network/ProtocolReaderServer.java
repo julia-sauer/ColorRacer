@@ -393,6 +393,7 @@ public class ProtocolReaderServer {
                     for (Lobby lobby : Server.lobbies) {
                         if (lobby.getPlayers().contains(userName)) {
                             playerLobbies.add(lobby);
+                            break;
                         }
                     }
 
@@ -416,6 +417,7 @@ public class ProtocolReaderServer {
                             break;
                         }
                     }
+                    break;
 
                 }
 
