@@ -102,7 +102,7 @@ public class ProtocolReaderClient {
                         String message = parts[2];
                         displayChat(message, sender);
                     } else {
-                        // TODO: handle wrong number of parameters
+                        System.err.println("Parameters are missing (either message or sender)");
                     }
                     break;
 
