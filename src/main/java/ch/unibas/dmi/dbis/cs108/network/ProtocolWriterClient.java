@@ -164,7 +164,18 @@ public class ProtocolWriterClient {
      */
 
     public void sendWhisper(String nicknameAndMessage) {
+
+        if (nicknameAndMessage == null || nicknameAndMessage.trim().isEmpty()) {
+            System.out.println("Usage: whisper <receiver> <message>");
+            return;
+        }
+
         String[] parts = nicknameAndMessage.split(" ", 3);
+        if (parts.length < 3) {
+            System.out.println("Usage: whisper <receiver> <message>");
+            return;
+        }
+
         String receiverNickname = parts[1].trim();
         String message = parts[2].trim();
 
