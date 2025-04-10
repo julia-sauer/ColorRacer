@@ -228,6 +228,9 @@ public class Client {
         if (protocolReader != null) {
             protocolReader.setChatController(chatController);
         }
+        if (protocolWriterClient != null){
+            protocolWriterClient.setChatController(chatController);
+        }
     }
 
     /**

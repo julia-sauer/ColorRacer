@@ -335,7 +335,7 @@ public class ProtocolReaderServer {
                     }
                     String msg = parts[1].trim();
                     String broadcasterName = UserList.getUserName(userId);
-                    Server.broadcastToAll(broadcasterName + ": " + msg);
+                    Server.broadcastToAll(broadcasterName + " broadcasted: " + msg);
                     break;
 
                 case STRT: {

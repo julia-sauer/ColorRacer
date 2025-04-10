@@ -1,5 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
+import ch.unibas.dmi.dbis.cs108.gui.ChatController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +24,8 @@ public class ProtocolWriterClient {
 
     /** Logger for logging errors or debugging information. */
     private static final Logger LOGGER = LogManager.getLogger(ProtocolWriterClient.class);
+
+    private ChatController chatController; // Reference to the GUI controller
 
     /**
      * Constructs a new {@code ProtocolWriterClient} with UTF-8 encoding.
@@ -48,7 +51,7 @@ public class ProtocolWriterClient {
             System.out.println("Message is null or empty!");
             return;
         }
-        if (!message.matches("[a-zA-ZäöüÄÖÜß0-9.,!?\\s\\p{So}]{1,500}$")){
+        if (!message.matches("[a-zA-ZäöüÄÖÜß0-9.,!?_\\s\\p{So}]{1,500}$")){
             System.out.println("Message contains illegal characters!");
             return;
         }
@@ -169,7 +172,7 @@ public class ProtocolWriterClient {
             System.out.println("Message is null or empty!");
             return;
         }
-        if (!message.matches("[a-zA-ZäöüÄÖÜß0-9.,!?\\s\\p{So}]{1,500}$")){
+        if (!message.matches("[a-zA-ZäöüÄÖÜß0-9.,!?_\\s\\p{So}]{1,500}$")){
             System.out.println("Message contains illegal characters!");
             return;
         }
@@ -178,6 +181,11 @@ public class ProtocolWriterClient {
             return;
         }
         sendToServer(Command.WISP + Command.SEPARATOR + receiverNickname + Command.SEPARATOR + message);
+
+        // Display whisper in sender's GUI
+        if (chatController != null) {
+            chatController.displayChat("Whisper sent to " + receiverNickname + ": " + message);
+        }
     }
         // Create a whisper message with recipientId and message content
         // Send this message to the server
@@ -208,6 +216,17 @@ public class ProtocolWriterClient {
      */
     public void sendReadyStatus() throws IOException {
         sendCommand(Command.RADY);
+    }
+
+    /**
+     * Sets the {@link ChatController} that will be used to update the GUI with incoming messages.
+     * This method is called during the initialization of the GUI, ensuring that the {@link ProtocolWriterClient}
+     * can forward them to the GUI for display.
+     *
+     * @param controller The {@link ChatController} instance to be set.
+     */
+    public void setChatController(ChatController controller) {
+        this.chatController = controller;
     }
 }
 
