@@ -95,9 +95,9 @@ public class ProtocolReaderClient {
                         System.out.println("CHAT received: [empty]");
                         break;
                     }
-                    System.out.println(Arrays.toString(parts));
+                    //System.out.println(Arrays.toString(parts)); // Überprüfung über das Terminal
                     if(parts.length == 3) {
-                        System.out.println("CHAT received: " + parts[2]); //Fallback
+                        //System.out.println("CHAT received: " + parts[2]); // Überprüfung über das Terminal
                         String sender = parts[1];
                         String message = parts[2];
                         displayChat(message, sender);
@@ -189,7 +189,7 @@ public class ProtocolReaderClient {
                         break;
                     }
                     String brodMsg = parts[1].trim();
-                    System.out.println(brodMsg);
+                    //System.out.println(brodMsg); // Überprüfung über das Terminal
                     chatController.displayChat(brodMsg);
                     break;
 
@@ -227,7 +227,7 @@ public class ProtocolReaderClient {
      */
     private void displayChat(String message, String sender) {
         String formattedMessage = sender + ": " + message;
-        System.out.println("+CHT " + formattedMessage); //so it is still printed in the terminal to check
+        //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
         chatController.displayChat(formattedMessage);
 
     }
@@ -245,7 +245,7 @@ public class ProtocolReaderClient {
     private void displayWhisp(String message, String sender) {
         String formattedMessage = "Whisper from " + sender + ": " + message;
 
-        System.out.println("+CHT " + formattedMessage); //so it is still printed in the terminal to check
+        //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
         chatController.displayChat(formattedMessage);
     }
 
