@@ -291,6 +291,19 @@ public class Server {
                 break;
             }
         }
+        String nickname = user.getNickname();
+        Lobby userLobby = null;
+        for (Lobby lobby : lobbies) {
+            if (lobby.getPlayers().contains(nickname)) {
+                userLobby = lobby;
+                break;
+            }
+        }
+        if (userLobby == null) return;
+        GameBoard gameBoard = userLobby.getGameBoard(nickname);
+        Field deselectedField = gameBoard.getFieldById(fieldId);
+        gameBoard.removeSelectedField(deselectedField);
+
         String newColors = Arrays.toString(colors);
         try {
             protocolWriterServer.sendCommandAndString(Command.DEOS, fieldId + Command.SEPARATOR + newColors);

@@ -169,6 +169,15 @@ public class GameBoard {
     }
 
     /**
+     * Takes a chosen field out of the Set of selectedFields.
+     * @param field the chosen field
+     */
+    public void removeSelectedField(Field field) {
+        selectedFields.remove(field);
+        selectedFieldList.remove(field); // for MOVE
+    }
+
+    /**
      * Adds a chosen field to the Set of selectedFields.
      * @param field the chosen field
      */
