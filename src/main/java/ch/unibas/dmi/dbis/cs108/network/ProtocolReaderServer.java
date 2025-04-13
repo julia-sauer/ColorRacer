@@ -198,7 +198,6 @@ public class ProtocolReaderServer {
                 case QUIT:
                     protocolWriterServer.sendInfo(" Quit request received. Please confirm [YES/NO]");
                     // Removes user
-
                     break;
 
                 case QCNF:
