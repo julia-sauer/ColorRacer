@@ -51,7 +51,7 @@ public class ProtocolWriterClient {
             System.out.println("Message is null or empty!");
             return;
         }
-        if (!message.matches("[a-zA-ZäöüÄÖÜß0-9.,!?_\\s\\p{So}]{1,500}$")){
+        if (!message.matches("[a-zA-ZäöüÄÖÜß0-9.,!?_'\\s\\p{So}]{1,500}$")){
             System.out.println("Message contains illegal characters!");
             return;
         }
