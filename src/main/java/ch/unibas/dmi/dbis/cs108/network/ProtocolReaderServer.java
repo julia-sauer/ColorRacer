@@ -551,6 +551,11 @@ public class ProtocolReaderServer {
                         break;
                     }
 
+                    if (userLobby.getGameState() != 1) {
+                        protocolWriterServer.sendInfo("The game already started or is finished.");
+                        break;
+                    }
+
                     User user = UserList.getUser(userId);
                     userLobby.makeReady(userName);
                     System.out.println(userName + " is ready!");
