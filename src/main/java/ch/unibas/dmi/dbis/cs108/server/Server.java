@@ -330,6 +330,7 @@ public class Server {
      */
     public static void moveToLastSelectedField(int userId) throws IOException {
         User user = UserList.getUser(userId);
+        ProtocolWriterServer writer1 = new ProtocolWriterServer(clientWriters, user.getOut());
         if (user == null) return;
 
         String nickname = user.getNickname();
@@ -345,6 +346,14 @@ public class Server {
         if (userLobby == null) return;
 
         GameBoard board = userLobby.getGameBoard(nickname);
+        if (board.selectedFieldsEmpty()) {
+            try {
+                writer1.sendInfo("You need to select at least one field first. If you dont want or cant move use 'next'.");
+            } catch (IOException e) {
+                System.err.println("Error sending Info that no field is selected.");
+            }
+            return;
+        }
         board.moveToLastSelected();
         Field newField = board.getCurrentField();
         for (String playerName : userLobby.getPlayers()) {
