@@ -302,7 +302,7 @@ public class ProtocolReaderServer {
                         }
                     }
                     if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                        protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby and therefore can't choose a bike.");
+                        protocolWriterServer.sendInfo("You are not currently in a lobby or still in the Welcome lobby and therefore can't choose a bike.");
                         break;
                     }
 
@@ -316,6 +316,11 @@ public class ProtocolReaderServer {
 
                     if (!validColors.contains(color)) {
                         protocolWriterServer.sendInfo("-ERR The color " + color + " is not selectable. Please choose one of: black, green, magenta, darkblue.");
+                        break;
+                    }
+
+                    if (userLobby.getGameState() != 1) {
+                        protocolWriterServer.sendInfo("-ERR The game already started or is already finished.");
                         break;
                     }
 
