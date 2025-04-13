@@ -142,17 +142,16 @@ public class GameBoard {
         }
         if (isNeighbor || isConnectedNeighbor) {
             boolean colormatches = false;
-            for(int i = 0; i < colors.length; i++) {
-                if(fieldColor.equals(colors[i])) {
+            for (int i = 0; i < colors.length; i++) {
+                if (fieldColor.equals(colors[i])) {
                     colors[i] = null;
                     colormatches = true;
                     break;
                 }
             }
-            if(!colormatches) {
+            if (!colormatches) {
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         }
@@ -161,6 +160,7 @@ public class GameBoard {
 
     /**
      * Get the correct Field using the fieldIds.
+     *
      * @param fieldId fieldId
      * @return the field corresponding to the fieldId
      */
@@ -170,6 +170,7 @@ public class GameBoard {
 
     /**
      * Takes a chosen field out of the Set of selectedFields.
+     *
      * @param field the chosen field
      */
     public void removeSelectedField(Field field) {
@@ -179,6 +180,7 @@ public class GameBoard {
 
     /**
      * Adds a chosen field to the Set of selectedFields.
+     *
      * @param field the chosen field
      */
     public void addSelectedField(Field field) {
@@ -187,8 +189,18 @@ public class GameBoard {
     }
 
     /**
+     * checks if given field is in the HashSet selectedFields
+     * @param field the field searched for
+     * @return true or false (depending on whether the field is in selectedFields or not)
+     */
+    public boolean inSelectedField(Field field) {
+        return selectedFields.contains(field);
+    }
+
+    /**
      * Returns the last field that was selected via CHOS.
      * This is used when the player confirms their move with MOVE.
+     *
      * @return The last selected field in the order of selection, or null if no fields were selected.
      */
     public Field getLastSelectedField() {
@@ -213,6 +225,7 @@ public class GameBoard {
     /**
      * returns the current field, the player is on.
      * Used to report the player's final position after moving.
+     *
      * @return the current field.
      */
     public Field getCurrentField() {
@@ -222,12 +235,55 @@ public class GameBoard {
     /**
      * sets the current field to a specific field
      * Used to set the currentField to white1 before restarting the game
+     *
      * @param field the field that should be the currentField
      * @return returns the current field
      */
     public Field setCurrentField(Field field) {
         currentField = field;
         return currentField;
+    }
+
+    /**
+     * checks if the HashSet selectedFields is empty
+     * @return true or false
+     */
+    public boolean selectedFieldsEmpty() {
+        if (selectedFieldList.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Goes through the hashSet selectedFields, as soon as it found the deselectedField it is removed.
+     * Every field that comes after the deselectedField is removed to and the fieldcolors are put back
+     * in the colors array.
+     * @param deselectedField the field the player clicked on
+     * @return String with the "new" available colors
+     */
+    public String deselectFields(Field deselectedField) {
+        boolean found = false;
+        Iterator<Field> iterator = selectedFieldList.iterator();
+        while (iterator.hasNext()) {
+            Field field = iterator.next();
+            if (found || field.equals(deselectedField)) {
+                iterator.remove();
+                selectedFields.remove(field);
+                String fieldColor = field.getFieldId().split("\\d")[0];
+                for(int i = 0; i < colors.length; i++) {
+                    if(colors[i] == null) {
+                        colors[i] = fieldColor;
+                        break;
+                    }
+                }
+                found = true;
+            }
+        }
+
+        String newColors = Arrays.toString(colors);
+        return newColors;
     }
 
 }

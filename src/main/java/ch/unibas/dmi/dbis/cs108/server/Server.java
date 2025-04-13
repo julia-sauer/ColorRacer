@@ -6,10 +6,7 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.nio.charset.StandardCharsets;
 
 import java.net.*;
@@ -284,13 +281,7 @@ public class Server {
     public static void deselectField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
-        String fieldColor = fieldId.split("\\d")[0];
-        for(int i = 0; i < colors.length; i++) {
-            if(colors[i] == null) {
-                colors[i] = fieldColor;
-                break;
-            }
-        }
+
         String nickname = user.getNickname();
         Lobby userLobby = null;
         for (Lobby lobby : lobbies) {
@@ -302,9 +293,26 @@ public class Server {
         if (userLobby == null) return;
         GameBoard gameBoard = userLobby.getGameBoard(nickname);
         Field deselectedField = gameBoard.getFieldById(fieldId);
-        gameBoard.removeSelectedField(deselectedField);
-
-        String newColors = Arrays.toString(colors);
+        //see if selectedFields is empty
+        if (gameBoard.selectedFieldsEmpty()) {
+            try {
+                protocolWriterServer.sendInfo("You need to select a field first.");
+            } catch (IOException e) {
+                System.err.println("Error sending Info message for empty selectedFields.");
+            }
+            return;
+        }
+        //see if deselectedField is in selectedFields
+        if (!gameBoard.inSelectedField(deselectedField)) {
+            try {
+                protocolWriterServer.sendInfo("You have not chosen this field.");
+            } catch (IOException e) {
+                System.err.println("Error sending Info message for deselectedField not in selectedFields");
+            }
+            return;
+        }
+        //remove deselectedField from selectedFields and every Field that comes after
+        String newColors = gameBoard.deselectFields(deselectedField);
         try {
             protocolWriterServer.sendCommandAndString(Command.DEOS, fieldId + Command.SEPARATOR + newColors);
         } catch (IOException e) {
