@@ -17,7 +17,7 @@ import java.util.List;
 public class PingThread extends Thread {
     private final Socket clientSocket;
     private final int clientNumber;
-    private static boolean running = true;
+    private boolean running = true;
     private final InputStream in;
     private final OutputStream out;
     private static final long PING_INTERVAL = 5000;
@@ -107,7 +107,7 @@ public class PingThread extends Thread {
     /**
      * Stops the ping thread and interrupts the current thread.
      */
-    public static void stopPinging() {
+    public void stopPinging() {
         running = false;
         Thread.currentThread().interrupt();
     }

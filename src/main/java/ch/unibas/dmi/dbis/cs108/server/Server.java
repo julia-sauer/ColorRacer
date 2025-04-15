@@ -58,10 +58,11 @@ public class Server {
             while (true) {
                 Socket clientSocket = echod.accept();
                 activeClients.incrementAndGet();
+                int clientNumber = activeClients.get();
                 int userId = addNewUser("Client" + activeClients.get(), clientSocket.getOutputStream());
                 out.println("Connection established for Client: " + activeClients.get());
 
-                ClientHandler cH = new ClientHandler(activeClients.get(), clientSocket);
+                ClientHandler cH = new ClientHandler(clientNumber, clientSocket, userId);
                 Thread cHT = new Thread(cH);
                 cHT.start();
 
@@ -96,10 +97,10 @@ public class Server {
         out.println("Remaining Clients: " + activeClients.get());
 
         if (activeClients.get() == 0) {
-            out.println("Wait 60 seconds for new clients...");
+            out.println("Wait 2 min for new clients...");
             new Thread(() -> {
                 try {
-                    Thread.sleep(60000);
+                    Thread.sleep(120000);
                     if (activeClients.get() == 0) {
                         out.println("No new clients. Server is shutting down.");
                         shutdownServer();

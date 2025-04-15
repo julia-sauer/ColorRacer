@@ -19,6 +19,7 @@ import java.util.List;
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
     private final int clientNumber;
+    private final int userId;
     private PingThread pingThread;
     private InputStream in;
     private OutputStream out;
@@ -30,9 +31,10 @@ public class ClientHandler implements Runnable {
      * @param clientNumber is the unique number of the client
      * @param socket is the socket object for the client connection
      */
-    public ClientHandler(int clientNumber, Socket socket) {
+    public ClientHandler(int clientNumber, Socket socket, int userId) {
         this.clientNumber = clientNumber;
         this.clientSocket = socket;
+        this.userId = userId;
     }
 
     /**
@@ -49,13 +51,16 @@ public class ClientHandler implements Runnable {
             ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
 
             // Starts a PingThread
-            //pingThread = new PingThread(clientSocket, clientNumber, in, out);
-            //pingThread.start();
+            pingThread = new PingThread(clientSocket, clientNumber, in, out);
+            pingThread.start();
 
 
 
             // Generates a Thread for reading messages
-            ProtocolReaderServer protocolReader = new ProtocolReaderServer(in, clientNumber, out, pingThread);
+            ProtocolReaderServer protocolReader = new ProtocolReaderServer(
+                    in, userId, out, pingThread, this::disconnectClient // Pass disconnect callback
+            );
+
             Thread readerThread = new Thread(() -> {
                 try {
                     protocolReader.readLoop();
@@ -76,7 +81,9 @@ public class ClientHandler implements Runnable {
 
             System.out.println("Connection closed for Client " + clientNumber);
             clientSocket.close();
-            PingThread.stopPinging();
+            if (pingThread != null) {
+                pingThread.stopPinging();
+            }
             removeUser(clientNumber); // the invocation of the method removeUser
             Server.ClientDisconnected();
 
@@ -93,4 +100,27 @@ public class ClientHandler implements Runnable {
 
         UserList.removeUser(clientNumber);
     }
+    public void disconnectClient() {
+        try {
+            running = false;
+            if (!clientSocket.isClosed()) {
+                clientSocket.close();  // Verbindung trennen
+            }
+        } catch (IOException e) {
+            System.err.println("Error while closing client socket: " + e.getMessage());
+        }
+        String nickname = UserList.getUserName(userId);
+        Lobby userLobby = Server.getLobbyOfPlayer(nickname);
+        if (userLobby != null) {
+            userLobby.removePlayer(nickname);
+            System.out.println("User '" + nickname + "' removed from lobby: " + userLobby.getLobbyName());
+        }
+        if (pingThread != null) {
+            pingThread.stopPinging();
+        } // Ping stoppen
+        removeUser(userId);       // aus UserList entfernen
+        Server.ClientDisconnected(); // Counter runterzählen
+    }
+
+
 }

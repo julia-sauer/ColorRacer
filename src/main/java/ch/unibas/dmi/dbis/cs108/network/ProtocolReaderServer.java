@@ -31,6 +31,7 @@ public class ProtocolReaderServer {
     private final PingThread pingThread;// added reference
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
     private static final Logger LOGGER = LogManager.getLogger(ProtocolReaderServer.class);
+    private final Runnable disconnectCallback;
 
     /**
      * Creates a new {@code ProtocolReaderServer}.
@@ -40,12 +41,13 @@ public class ProtocolReaderServer {
      * @param userId The unique ID of the user.
      * @throws IOException If an error occurs when creating the BufferedReader.
      */
-    public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread) throws IOException {
+    public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread, Runnable disconnectCallback) throws IOException {
         // Initialisierung des BufferedReaders
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         this.userId = userId;
         this.out = out;
         this.pingThread = pingThread;
+        this.disconnectCallback = disconnectCallback;
     }
     /**
      * Checks if the current user is allowed to perform a turn action.
@@ -208,9 +210,16 @@ public class ProtocolReaderServer {
                     String confirmation = parts[1].trim().toUpperCase();
                     String nickname = UserList.getUserName(userId);
                     if ("YES".equals(confirmation)) {
-                        UserList.removeUser(userId); // removes the Player
+                        protocolWriterServer.sendInfo("Disconnecting...");
+
+                        // 🗣️ 1. Alle informieren, bevor die Verbindung geschlossen wird
                         Server.broadcastToAll("+LFT " + nickname + " has left the game");
-                        Server.ClientDisconnected();
+
+                        // 🧹 2. Jetzt sauberen Disconnect durchführen
+                        if (disconnectCallback != null) {
+                            disconnectCallback.run();
+                        }
+
                     } else if ("NO".equals(confirmation)) {
                         // do nothing, just notify user
                         protocolWriterServer.sendInfo("You are still in the game.");
