@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 import ch.unibas.dmi.dbis.cs108.gui.ChatController;
+import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +26,7 @@ public class ProtocolWriterClient {
     /** Logger for logging errors or debugging information. */
     private static final Logger LOGGER = LogManager.getLogger(ProtocolWriterClient.class);
 
-    private ChatController chatController; // Reference to the GUI controller
+    private WelcomeLobbyController welcomeLobbyController; // Reference to the GUI welcomeLobbyController
 
     /**
      * Constructs a new {@code ProtocolWriterClient} with UTF-8 encoding.
@@ -99,9 +100,8 @@ public class ProtocolWriterClient {
      * Sends a {@code NICK} command to the server with the new nickname.
      *
      * @param newnickname The new nickname that the user selected.
-     * @param out The OutputStream with which it is sent.
      */
-    public void changeNickname(String newnickname, OutputStream out) {
+    public void changeNickname(String newnickname) {
         try {
             sendCommandAndString(Command.NICK, newnickname);
         } catch (IOException e) {
@@ -194,8 +194,8 @@ public class ProtocolWriterClient {
         sendToServer(Command.WISP + Command.SEPARATOR + receiverNickname + Command.SEPARATOR + message);
 
         // Display whisper in sender's GUI
-        if (chatController != null) {
-            chatController.displayChat("Whisper sent to " + receiverNickname + ": " + message);
+        if (welcomeLobbyController != null) {
+            welcomeLobbyController.displayChat("Whisper sent to " + receiverNickname + ": " + message);
         }
     }
         // Create a whisper message with recipientId and message content
@@ -236,8 +236,8 @@ public class ProtocolWriterClient {
      *
      * @param controller The {@link ChatController} instance to be set.
      */
-    public void setChatController(ChatController controller) {
-        this.chatController = controller;
+    public void setWelcomeController(WelcomeLobbyController controller) {
+        this.welcomeLobbyController = controller;
     }
 }
 
