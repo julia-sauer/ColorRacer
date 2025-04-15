@@ -116,6 +116,7 @@ public class ProtocolReaderServer {
                         break;
                     }
                     Server.joinLobby(lobbyName, userId);
+                    Server.updateAllClients();
                     break;
                 }
                 case CRLO: {
@@ -129,6 +130,7 @@ public class ProtocolReaderServer {
                         break;
                     }
                     Server.createLobby(lobbyName, userId);
+                    Server.updateAllClients();
                     break;
                 }
                 // Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
@@ -200,6 +202,7 @@ public class ProtocolReaderServer {
                 case QUIT:
                     protocolWriterServer.sendInfo(" Quit request received. Please confirm [YES/NO]");
                     // Removes user
+
                     break;
 
                 case QCNF:
@@ -218,6 +221,7 @@ public class ProtocolReaderServer {
                         // 🧹 2. Jetzt sauberen Disconnect durchführen
                         if (disconnectCallback != null) {
                             disconnectCallback.run();
+                            Server.updateAllClients();
                         }
 
                     } else if ("NO".equals(confirmation)) {
@@ -384,6 +388,7 @@ public class ProtocolReaderServer {
                         for (Lobby lobby : playerLobbies) {
                             if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
                                 lobby.startGame(userId);
+                                Server.updateAllClients();
                                 break;
                             }
                         }
@@ -427,6 +432,7 @@ public class ProtocolReaderServer {
                     for (Lobby lobby : playerLobbies) {
                         if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
                             lobby.restartGame(userId);
+                            Server.updateAllClients();
                             break;
                         }
                     }
@@ -597,6 +603,7 @@ public class ProtocolReaderServer {
                                 }
                             }
                         }
+                        Server.updateAllClients();
                         break;
                     }
                     protocolWriterServer.sendInfo("You are not the host of the lobby and cannot end the game.");
