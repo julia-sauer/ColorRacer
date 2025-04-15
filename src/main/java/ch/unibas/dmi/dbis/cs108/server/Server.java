@@ -145,19 +145,15 @@ public class Server {
                 }
             return;
         }
-
         // Check for duplicates and adjust with suffix if necessary
         String finalNick = newNick;
         int suffix = 1;
         while (UserList.containsUserName(finalNick)) {
             finalNick = finalNick + suffix;
         }
-
         // updates nickname
         UserList.updateUserName(userId, finalNick);
-
         // sends message to client
-
             try {
                 protocolWriterServer.sendCommandAndString(Command.NICK, finalNick);
             } catch (IOException e) {
@@ -625,6 +621,7 @@ public class Server {
                 .filter(l -> !l.getLobbyName().equalsIgnoreCase("Welcome"))
                 .toList();
         List<String> lobbyInfo = new ArrayList<>();
+        List<String> lobbyMembers = new ArrayList<>();
         for (Lobby lobby : realLobbies) {
             List<String> players = lobby.getPlayers();
             String stateText = switch (lobby.getGameState()) {
@@ -634,17 +631,13 @@ public class Server {
                 default -> "unknown";
             };
             lobbyInfo.add("[Lobby: " + lobby.getLobbyName() + "] " + stateText + " | Players: " + players);
+            lobbyMembers.add("[Lobby: " + lobby.getLobbyName() + "] " + "Players: " + players);
         }
         String gameListMessage = "GLST" + Command.SEPARATOR + lobbyInfo.toString();
+        String lobbyMemberMessage = "LOME" + Command.SEPARATOR + lobbyMembers.toString();
         broadcast(playerListMessage);
         broadcast(gameListMessage);
-
-        for (Lobby lobby : realLobbies) {
-            List<String> members = lobby.getPlayers();
-            String lobbyMemberMessage = "LOME" + Command.SEPARATOR + lobby.getLobbyName() + Command.SEPARATOR + members.toString();
-            // This sends the list to all clients; you might want to target only those in this lobby
-            broadcast(lobbyMemberMessage);
-        }
+        broadcast(lobbyMemberMessage);
     }
 
     /**

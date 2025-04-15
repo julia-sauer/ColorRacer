@@ -229,12 +229,10 @@ public class ProtocolReaderClient {
 
                 case LOME:
                     // Expect: LOME::lobbyName::[member1, member2, ...]
-                    if(parts.length >= 3) {
-                        String lobbyNames = parts[1];
-                        String membersStr = parts[2];
-                        List<String> members = parseListFromString(membersStr);
-                        waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updateLobbyList(lobbyNames, members));
-                    }
+                    String lobbyMembersStr = parts[1];
+                    List<String> members = parseListFromString(lobbyMembersStr);
+                    waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updateLobbyList(members));
+
                     break;
 
                 default:
