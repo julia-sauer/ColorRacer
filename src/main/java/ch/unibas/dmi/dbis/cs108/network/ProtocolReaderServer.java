@@ -141,6 +141,7 @@ public class ProtocolReaderServer {
                     }
                     String newNick = parts[1].trim();
                     Server.changeNickname(userId, newNick);
+                    Server.updateAllClients();
                     break;
                     // Aufruf der chatToAll methode für das Senden von einer Chatnachricht an alle Clients
                 case CHAT: {
