@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.client;
 
 import ch.unibas.dmi.dbis.cs108.gui.ChatController;
+import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
@@ -34,6 +35,8 @@ public class Client {
 
     /** Responsible for writing protocol messages to the server */
     private ProtocolWriterClient protocolWriterClient;
+
+    private WelcomeLobbyController welcomeLobbyController;
 
     /**
      * Constructs a new {@code Client} with the specified host, port, and username.
@@ -130,7 +133,7 @@ public class Client {
                         System.out.println("Please provide a nickname. Usage: nicknamechange <newname>");
                         continue;
                     }
-                    protocolClient.changeNickname(line.substring(15), out);
+                    protocolClient.changeNickname(line.substring(15));
                 } else if (line.startsWith("connect")) {
                     if (line.length() <= 8) {
                         System.out.println("Please provide a lobby name. Usage: connect <lobbyname>");
@@ -219,17 +222,20 @@ public class Client {
     }
 
     /**
-     * Sets the {@link ChatController} for this client by forwarding it to the {@link ProtocolReaderClient}.
+     * Sets the {@link WelcomeLobbyController} for this client by forwarding it to the {@link ProtocolReaderClient} and
+     * the {@link ProtocolWriterClient}.
      * This allows the {@link ProtocolReaderClient} to update the GUI with incoming messages.
      *
-     * @param chatController The ChatController instance to be used for GUI updates.
+     * @param welcomeController The controller instance
      */
-    public void setChatController(ChatController chatController) {
+    public void setWelcomeController(WelcomeLobbyController welcomeController) {
+        this.welcomeLobbyController = welcomeController;
         if (protocolReader != null) {
-            protocolReader.setChatController(chatController);
+            protocolReader.setWelcomeController(welcomeController);
         }
         if (protocolWriterClient != null){
-            protocolWriterClient.setChatController(chatController);
+            protocolWriterClient.setWelcomeController(welcomeController);
+            welcomeController.setProtocolWriter(protocolWriterClient);
         }
     }
 

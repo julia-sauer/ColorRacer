@@ -5,13 +5,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
  * The {@code GUI} class is a JavaFX Application that loads the chat interface defined in the FXML file ChatTemplate
  * and connects it to the client. This class is responsible for launching the graphical user interface,
- * injecting the necessary protocol objects into the {@link ChatController}, and displaying the chat window.
+ * injecting the necessary protocol objects into the {@link WelcomeLobbyController}, and displaying the chat window.
  *
  * @author julia
  */
@@ -33,8 +34,8 @@ public class GUI extends Application {
     }
 
     /**
-     * This method loads the FXML layout for the chat interface,retrieves the {@link ChatController},
-     * injects the {@link ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient} and {@link ChatController}
+     * This method loads the FXML layout for the chat interface,retrieves the {@link WelcomeLobbyController},
+     * injects the {@link ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient} and {@link WelcomeLobbyController}
      * references from the client, and displays the chat window.
      * It assumes that the FXML file is located in the resource folder at {@code /ChatTemplate.fxml}.
      *
@@ -43,22 +44,24 @@ public class GUI extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
+        Font.loadFont(getClass().getResourceAsStream("PixelEmulator-xq08.ttf"), 12);
         // Load the FXML file (ensure the correct resource path is used)
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ChatTemplate.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeLobbyTemplate.fxml"));
         Parent root = loader.load();
 
-        // Retrieve the ChatController from the FXML loader.
-        ChatController controller = loader.getController();
-
+        // Get the controller instance from the FXML loader
+        WelcomeLobbyController welcomeController = loader.getController();
+        welcomeController.setClient(client);
+        welcomeController.setPrimaryStage(primaryStage);
         // Inject the ProtocolWriterClient into the ChatController.
-        controller.setProtocolWriter(client.getProtocolWriter());
+        welcomeController.setProtocolWriter(client.getProtocolWriter());
+        client.setWelcomeController(welcomeController);
+        client.getProtocolReader().setWelcomeController(welcomeController);
 
-        // Inject the ChatController into the client (or its ProtocolReaderClient)
-        client.setChatController(controller);
-
-        // Setup and show the GUI.
+        // Setup and show the GUI
+        primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
-        primaryStage.setTitle("Chat");
+        primaryStage.setTitle("Welcome Lobby");
         primaryStage.show();
     }
 
