@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1395.0" prefWidth="1703.0" stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <right>
+      <VBox alignment="TOP_CENTER" prefHeight="1169.0" prefWidth="325.0" spacing="20.0" styleClass="game-panel" BorderPane.alignment="TOP_RIGHT">
+         <children>
+            <Label fx:id="lobbyNameDisplay" styleClass="dialog-header" text="Lobby:" />
+            <TitledPane prefHeight="497.0" prefWidth="404.0" text="Chat">
+               <content>
+                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="388.0" prefWidth="389.0" styleClass="anchor-pane">
+                     <children>
+                        <TextArea fx:id="chatArea" layoutX="16.0" layoutY="14.0" prefHeight="353.0" prefWidth="353.0" />
+                        <TextField fx:id="txtUsermsg" layoutX="19.0" layoutY="380.0" onKeyPressed="#handleEnterPressed" prefHeight="43.0" prefWidth="347.0" promptText="Type your message here..." />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+            <TabPane prefHeight="278.0" prefWidth="404.0" styleClass="tab-pane" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="List">
+                     <content>
+                        <ListView fx:id="listlist" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                <Tab text="Game List">
+                     <content>
+                        <ListView fx:id="gamelist" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab text="Lobby List">
+                     <content>
+                        <ListView fx:id="lobbylist" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <Button fx:id="readyButton" mnemonicParsing="false" styleClass="game-button" text="Ready" />
+            <Button fx:id="startButton" disable="true" mnemonicParsing="false" styleClass="game-button" text="Start Game" />
+            <Button fx:id="finishButton" disable="true" layoutX="171.0" layoutY="904.0" mnemonicParsing="false" styleClass="game-button" text="Finish Game" />
+         </children>
+      </VBox>
+   </right>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Leave">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Leave Server" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Nickname">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Change nickname" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="183.0" prefWidth="1691.0" spacing="20.0" styleClass="game-panel" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <ImageView fx:id="dice1" fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice2" fitHeight="130.0" fitWidth="130.0" layoutX="756.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice3" fitHeight="130.0" fitWidth="130.0" layoutX="861.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice4" fitHeight="130.0" fitWidth="130.0" layoutX="966.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice5" fitHeight="130.0" fitWidth="130.0" layoutX="756.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice6" fitHeight="130.0" fitWidth="130.0" layoutX="546.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="throwDiceButton" mnemonicParsing="false" onAction="#handleThrowDice" styleClass="game-button" text="Roll">
+               <HBox.margin>
+                  <Insets left="300.0" />
+               </HBox.margin></Button>
+            <Button fx:id="moveButton" mnemonicParsing="false" onAction="#handleMoveToField" styleClass="game-button" text="Move" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>
