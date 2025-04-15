@@ -85,6 +85,7 @@ public class ClientHandler implements Runnable {
                 pingThread.stopPinging();
             }
             removeUser(clientNumber); // the invocation of the method removeUser
+            Server.updateAllClients();
             Server.ClientDisconnected();
 
         }
