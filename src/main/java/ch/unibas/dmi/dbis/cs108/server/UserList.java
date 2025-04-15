@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import static ch.unibas.dmi.dbis.cs108.server.Server.lobbies;
 
 /**
  * This class manages a list of users connected to the server.
@@ -71,15 +72,27 @@ public class UserList {
     }
 
     /**
-     * Updates the user's new nickname
+     * Updates the user's new nickname in the {@link UserList} and in the {@link Lobby}.
+     *
      * @param userId the user's ID so the server knows which name to change
      * @param newNickname is the new nickname the user has chosen
      */
 
     public static void updateUserName(int userId, String newNickname) {
         User user = userMap.get(userId);
+        String oldNickname = user.getNickname();
         if (user != null) {
             user.setNickname(newNickname);
+            Lobby userLobby = null;
+            for (Lobby lobby : lobbies) {
+                if (lobby.getPlayers().contains(oldNickname)) {
+                    userLobby = lobby;
+                    break;
+                }
+            }
+            if (userLobby != null) {
+                userLobby.updateUsername(oldNickname, newNickname);
+            }
         }
     }
 
