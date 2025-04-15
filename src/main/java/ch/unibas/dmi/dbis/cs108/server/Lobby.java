@@ -426,4 +426,17 @@ public class Lobby implements Runnable {
     public boolean isHost(String userName) {
         return hostName != null && hostName.equals(userName);
     }
+
+    /**
+     * This method updates the list of the players in one lobby when someone changes their nickname.
+     *
+     * @param oldUsername The username that was previously used.
+     * @param newUsername The username that was selected.
+     */
+    public void updateUsername(String oldUsername, String newUsername) {
+        if (players.contains(oldUsername) && !oldUsername.equals(newUsername)) {
+            int index = players.indexOf(oldUsername);
+            players.set(index, newUsername);
+        }
+    }
 }
