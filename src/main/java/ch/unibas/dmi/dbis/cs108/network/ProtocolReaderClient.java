@@ -1,6 +1,9 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 import ch.unibas.dmi.dbis.cs108.gui.ChatController;
+import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
+import ch.unibas.dmi.dbis.cs108.server.UserList;
+import javafx.application.Platform;
 
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
@@ -8,7 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * The {@code ProtocolReaderClient} class is responsible for reading and processing messages
@@ -21,7 +26,7 @@ public class ProtocolReaderClient {
     private final BufferedReader reader; // reads character lines from client.
     private final InputStream in;
     private final OutputStream out;
-    private ChatController chatController; // Reference to the GUI controller
+    private WelcomeLobbyController welcomeLobbyController; // Reference to the GUI welcomeLobbyController
     public boolean bike = false;
 
 
@@ -190,7 +195,7 @@ public class ProtocolReaderClient {
                     }
                     String brodMsg = parts[1].trim();
                     //System.out.println(brodMsg); // Überprüfung über das Terminal
-                    chatController.displayChat(brodMsg);
+                    welcomeLobbyController.displayChat(brodMsg);
                     break;
 
                 case STRT:
@@ -209,6 +214,29 @@ public class ProtocolReaderClient {
                     protocolWriterClient.sendCommand(Command.FNSH);
                     break;
 
+                case LIST:
+                    // Expect the format: PLST::[player1, player2, ...]
+                    String playersStr = parts[1];
+                    List<String> players = parseListFromString(playersStr);
+                    waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updatePlayerList(players));
+                    break;
+
+                case GLST:
+                    String gamesStr = parts[1];
+                    List<String> games = parseListFromString(gamesStr);
+                    waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updateGameList(games));
+                    break;
+
+                case LOME:
+                    // Expect: LOME::lobbyName::[member1, member2, ...]
+                    if(parts.length >= 3) {
+                        String lobbyNames = parts[1];
+                        String membersStr = parts[2];
+                        List<String> members = parseListFromString(membersStr);
+                        waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updateLobbyList(lobbyNames, members));
+                    }
+                    break;
+
                 default:
                     System.out.println("Unknown command from Server: " + line);
                     break;
@@ -218,7 +246,7 @@ public class ProtocolReaderClient {
 
     /**
      * This method constructs a formatted string in the form {@code "sender: message"} and prints it to the terminal.
-     * It also updates the chat GUI by invoking the controller's {@code displayChat} method.
+     * It also updates the chat GUI by invoking the {@link WelcomeLobbyController}'s {@code displayChat} method.
      * The messages are still printed in the terminal because it helps in debugging
      * by ensuring that messages are visible in the console as well as in the graphical user's interface.
      *
@@ -228,14 +256,13 @@ public class ProtocolReaderClient {
     private void displayChat(String message, String sender) {
         String formattedMessage = sender + ": " + message;
         //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
-        chatController.displayChat(formattedMessage);
-
+        welcomeLobbyController.displayChat(formattedMessage);
     }
 
     /**
      * This method constructs a formatted string indicating that a message is a whisper. It shows in the
      * form {@code "Whisper from sender: message"} and prints it to the terminal, and it also updates
-     * the GUI by invoking the controller's {@code displayChat} method.
+     * the GUI by invoking the {@link WelcomeLobbyController}'s {@code displayChat} method.
      * The messages are still printed in the terminal because it helps in debugging
      * by ensuring that messages are visible in the console as well as in the graphical user's interface.
      *
@@ -246,18 +273,18 @@ public class ProtocolReaderClient {
         String formattedMessage = "Whisper from " + sender + ": " + message;
 
         //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
-        chatController.displayChat(formattedMessage);
+        welcomeLobbyController.displayChat(formattedMessage);
     }
 
     /**
-     * Sets the {@link ChatController} that will be used to update the GUI with incoming messages.
+     * Sets the {@link WelcomeLobbyController} that will be used to update the GUI with incoming messages.
      * This method is called during the initialization of the GUI, ensuring that the {@link ProtocolReaderClient}
      * can forward them to the GUI for display.
      *
-     * @param controller The {@link ChatController} instance to be set.
+     * @param controller The {@link WelcomeLobbyController} instance to be set.
      */
-    public void setChatController(ChatController controller) {
-        this.chatController = controller;
+    public void setWelcomeController(WelcomeLobbyController controller) {
+        this.welcomeLobbyController = controller;
     }
 
     /**
@@ -271,5 +298,54 @@ public class ProtocolReaderClient {
         if (bike){
             this.bike = true;
         }
+    }
+
+    /**
+     * Parses a string representation of a list (e.g., "[elem1, elem2, ...]") into a {@link List<String>}.
+     * This method trims the input string, removes the square brackets if present,
+     * splits the content by commas, and trims each element individually before adding
+     * it to the result list.
+     *
+     * @param listStr the string to parse, typically in the format "[elem1, elem2, ...]"
+     * @return a {@code List<String>} containing the individual elements without brackets or whitespace
+     */
+    private List<String> parseListFromString(String listStr) {
+        listStr = listStr.trim();
+        // Remove leading and trailing brackets if they exist
+        if(listStr.startsWith("[") && listStr.endsWith("]")) {
+            listStr = listStr.substring(1, listStr.length() - 1);
+        }
+        String[] elements = listStr.split(",");
+        List<String> result = new ArrayList<>();
+        for(String elem : elements) {
+            if(!elem.trim().isEmpty()){
+                result.add(elem.trim());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Ensures the {@link WelcomeLobbyController} is initialized before performing a UI update.
+     * This method spawns a background thread that waits (up to ~500ms) for the
+     * {@code WelcomeLobbyController} to become available. Once available, it executes
+     * the given update task on the JavaFX Application Thread using {@link Platform#runLater(Runnable)}.
+     *
+     * @param updateAction the action to perform on the GUI once the controller is ready
+     */
+    private void waitForControllerAndUpdate(Runnable updateAction) {
+        new Thread(() -> {
+            // Wait up to 500ms for the controller to be ready
+            int attempts = 0;
+            while (WelcomeLobbyController.getInstance() == null && attempts < 5) {
+                try {
+                    Thread.sleep(100);
+                    attempts++;
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            Platform.runLater(updateAction);
+        }).start();
     }
 }
