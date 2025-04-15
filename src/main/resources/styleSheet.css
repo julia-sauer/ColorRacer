@@ -1,0 +1,207 @@
+/* Root: soft sky background with grassy vibes */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #d4f4dd, #ffffff);
+    -fx-font-family: "Press Start 2P", "Pixel Emulator", "monospace";
+}
+
+/* Welcome and header text */
+.welcome-text, .header-label, .dialog-header {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32; /* Deep green */
+    -fx-effect: dropshadow(gaussian, rgba(46,125,50,0.3), 4, 0.4, 0, 1);
+}
+
+/* Game and dialog panels */
+.game-panel, .dialog-panel {
+    -fx-background-color: #e8f5e9; /* Light green */
+    -fx-border-color: #81c784;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.2, 0, 2);
+}
+
+/* Game buttons */
+.game-button {
+    -fx-background-color: linear-gradient(to bottom, #66bb6a, #43a047);
+    -fx-text-fill: #fff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #c8e6c9;
+    -fx-border-width: 1;
+}
+
+.game-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #81c784, #66bb6a);
+    -fx-cursor: hand;
+}
+
+/* Bike buttons - flower colors with round shapes */
+.bike-button {
+    -fx-min-width: 80px;
+    -fx-min-height: 80px;
+    -fx-background-radius: 50;
+    -fx-border-radius: 50;
+    -fx-border-width: 3;
+    -fx-border-color: #aed581;
+    -fx-background-color: #ffccbc; /* peachy pink */
+}
+
+/* Game board */
+.game-board {
+    -fx-background-color: #c5e1a5; /* grassy green */
+    -fx-border-color: #81c784;
+    -fx-border-width: 2;
+    -fx-padding: 10;
+}
+
+/* List styling */
+.list-view {
+    -fx-background-color: #f1f8e9;
+    -fx-background-radius: 6;
+    -fx-border-color: #c5e1a5;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 13px;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #a5d6a7;
+    -fx-text-fill: white;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #c8e6c9;
+}
+
+/* Menu bar */
+.menu-bar {
+    -fx-background-color: linear-gradient(to right, #a5d6a7, #c8e6c9);
+    -fx-padding: 6 12;
+}
+
+.menu {
+    -fx-text-fill: #2e7d32;
+    -fx-font-weight: bold;
+}
+
+.menu-item {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #2e7d32;
+}
+
+.menu-item:hover {
+    -fx-background-color: #dcedc8;
+}
+
+/* TextField and TextArea */
+.text-field, .text-area {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #a5d6a7;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6;
+    -fx-font-size: 18px;
+    -fx-text-fill: #2e7d32;
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-border-color: #66bb6a;
+    -fx-effect: dropshadow(gaussian, rgba(102,187,106,0.3), 4, 0.2, 0, 2);
+}
+
+.titled-pane {
+    -fx-background-color: #f1f8e9;
+    -fx-border-color: #aed581;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #a5d6a7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6;
+    -fx-background-radius: 10 10 0 0;
+}
+
+/* AnchorPane – soft and flexible like the field itself */
+.anchor-pane {
+    -fx-background-color: #e8f5e9;
+    -fx-border-color: #c8e6c9;
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.2), 3, 0.1, 0, 1);
+}
+
+
+/* Scroll bar styling */
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: #e8f5e9;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #81c784;
+    -fx-background-radius: 4;
+}
+.tab-pane {
+    -fx-background-color: #dcedc8;
+    -fx-border-color: #aed581;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-font-family: "Press Start 2P", "Pixel Emulator", "monospace";
+    -fx-font-size: 18px;
+}
+
+/* This styles the tab header area (where the tabs themselves are) */
+.tab-pane > .tab-header-area {
+    -fx-background-color: linear-gradient(to bottom, #c5e1a5, #a5d6a7);
+    -fx-border-color: #aed581;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-radius: 10 10 0 0;
+    -fx-background-radius: 10 10 0 0;
+    -fx-padding: 6;
+}
+
+/* Styles individual tabs */
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 6 12;
+    -fx-text-fill: #2e7d32;
+    -fx-font-weight: bold;
+}
+
+/* Selected tab */
+.tab-pane .tab:selected {
+    -fx-background-color: #81c784;
+    -fx-text-fill: white;
+    -fx-border-radius: 6 6 0 0;
+}
+
+/* Hover effect */
+.tab-pane .tab:hover {
+    -fx-background-color: #aed581;
+    -fx-text-fill: #1b5e20;
+}
+
+/* Tab content area */
+.tab-pane .tab-content-area {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #aed581;
+    -fx-border-width: 2;
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+    -fx-padding: 10;
+}
