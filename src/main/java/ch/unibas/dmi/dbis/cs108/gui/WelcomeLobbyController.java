@@ -22,9 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.IOException;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class WelcomeLobbyController {
 
@@ -35,7 +33,7 @@ public class WelcomeLobbyController {
     private static WelcomeLobbyController instance;
 
     @FXML
-    private ListView<String> listlist;
+    public ListView<String> listlist;
 
     @FXML
     private ListView<String> gamelist;
@@ -85,10 +83,6 @@ public class WelcomeLobbyController {
         gamelist.setItems(FXCollections.observableArrayList());
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;  // Store the instance when initialized
-
-        // Start the update mechanism with a small initial delay to allow everything to be set up
-        Timeline initialDelay = new Timeline(new KeyFrame(Duration.millis(300), event -> startUpdateTimeline()));
-        initialDelay.play();
     }
 
     public static WelcomeLobbyController getInstance() {
@@ -110,35 +104,38 @@ public class WelcomeLobbyController {
     }
 
     // This method is called to update the player list (listlist)
-    public void updatePlayerList(List<String> fetchedPlayers) {
+    public void updatePlayerList(List<String> players) {
         Platform.runLater(() -> {
             try {
-                // Merge the current items and the fetched players
-                ObservableList<String> currentItems = listlist.getItems();
-                Set<String> newSet = new LinkedHashSet<>(currentItems);
-                newSet.addAll(fetchedPlayers);
-                // Only update if there is a change
-                if (!currentItems.equals(FXCollections.observableArrayList(newSet))) {
-                    listlist.setItems(FXCollections.observableArrayList(newSet));
-                }
+                listlist.getItems().clear(); //
+                listlist.getItems().addAll(players);
             } catch (Exception e) {
-                System.err.println("Error updating player list: " + e.getMessage());
+                System.err.println("Fehler beim Aktualisieren der Spieler-Liste: " + e.getMessage());
                 e.printStackTrace();
             }
         });
     }
 
     // This method is called to update the game lobby list (gamelist)
-    public void updateGameList(List<String> games) {
+    public void updateGameList(List<String> newGames) {
         Platform.runLater(() -> {
             try {
                 ObservableList<String> currentItems = gamelist.getItems();
-                Set<String> newSet = new LinkedHashSet<>(currentItems);
-                newSet.addAll(games);
+                Map<String, String> lobbyMap = new LinkedHashMap<>();
 
-                if (!currentItems.equals(FXCollections.observableArrayList(newSet))) {
-                    gamelist.setItems(FXCollections.observableArrayList(newSet));
+                // Parse current items into a map: lobbyName -> fullString
+                for (String entry : currentItems) {
+                    String lobbyName = extractLobbyName(entry);
+                    lobbyMap.put(lobbyName, entry);
                 }
+
+                // Update or add from newGames
+                for (String entry : newGames) {
+                    String lobbyName = extractLobbyName(entry);
+                    lobbyMap.put(lobbyName, entry); // replaces old if name matches
+                }
+
+                gamelist.setItems(FXCollections.observableArrayList(lobbyMap.values()));
             } catch (Exception e) {
                 System.err.println("Error updating game list: " + e.getMessage());
                 e.printStackTrace();
@@ -147,16 +144,23 @@ public class WelcomeLobbyController {
     }
 
     // This method is called to update the lobby member list (lobbylist)
-    public void updateLobbyList(String lobbyName, List<String> members) {
+    public void updateLobbyList(List<String> newMembers) {
         Platform.runLater(() -> {
             try {
                 ObservableList<String> currentItems = lobbylist.getItems();
-                Set<String> newSet = new LinkedHashSet<>(currentItems);
-                newSet.add(lobbyName);
+                Map<String, String> lobbyMap = new LinkedHashMap<>();
 
-                if (!currentItems.equals(FXCollections.observableArrayList(newSet))) {
-                    lobbylist.setItems(FXCollections.observableArrayList(newSet));
+                for (String entry : currentItems) {
+                    String lobbyName = extractLobbyName(entry);
+                    lobbyMap.put(lobbyName, entry);
                 }
+
+                for (String entry : newMembers) {
+                    String lobbyName = extractLobbyName(entry);
+                    lobbyMap.put(lobbyName, entry); // replaces if already exists
+                }
+
+                lobbylist.setItems(FXCollections.observableArrayList(lobbyMap.values()));
             } catch (Exception e) {
                 System.err.println("Error updating lobby members: " + e.getMessage());
                 e.printStackTrace();
@@ -164,22 +168,12 @@ public class WelcomeLobbyController {
         });
     }
 
-    // Starts a Timeline that periodically (every second) polls for updated data.
-    // In a push model this may be unnecessary, but is useful for testing timing.
-    private void startUpdateTimeline() {
-        updateTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            // For demonstration, we assume methods that fetch updated lists exist.
-            // Replace these calls with your mechanism to request the latest data.
-            List<String> updatedPlayers = UserList.getAllUsernames();
-            List<String> updatedGames = Server.getUpdatedGames();
-            List<String> updatedLobbyList = Server.getUpdatedLobbyMembers();
-
-            updatePlayerList(updatedPlayers);
-            updateGameList(updatedGames);
-            updateLobbyList("currentLobby", updatedLobbyList);
-        }));
-        updateTimeline.setCycleCount(Timeline.INDEFINITE);
-        updateTimeline.play();
+    private String extractLobbyName(String entry) {
+        if (entry == null || !entry.contains("[Lobby: ")) return "";
+        int start = entry.indexOf("[Lobby: ") + 8;
+        int end = entry.indexOf("]", start);
+        if (start < 0 || end < 0 || end <= start) return "";
+        return entry.substring(start, end).trim();
     }
 
     @FXML
@@ -260,16 +254,18 @@ public class WelcomeLobbyController {
     @FXML
     private void handleJoinLobby() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("joinLobbyDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/joinLobbyDialog.fxml"));
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
+            dialogStage.setTitle("Join Lobby");
             dialogStage.setScene(new Scene(dialogPane));
 
+            // Set controller
             JoinLobbyDialogController controller = loader.getController();
-            controller.setAvailableLobbies(listlist.getItems());
+            controller.setAvailableLobbies(getAvailableLobbyNames());
             controller.setDialogStage(dialogStage);
             controller.setWelcomeLobbyController(this);
 
@@ -282,6 +278,13 @@ public class WelcomeLobbyController {
         } catch (IOException e) {
             showError("Failed to open join lobby dialog", e.getMessage());
         }
+    }
+
+    private List<String> getAvailableLobbyNames() {
+        return gamelist.getItems()
+                .stream()
+                .map(entry -> entry.split("]")[0].replace("[Lobby: ", "").trim()) // extract "LobbyOne" from "[Lobby: LobbyOne] open | Players: [...]"
+                .toList();
     }
 
     public void joinLobby(String lobbyName) {
