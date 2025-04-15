@@ -1,25 +1,19 @@
 package ch.unibas.dmi.dbis.cs108.gui;
 
-import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import java.util.List;
 
 public class JoinLobbyDialogController {
+
     @FXML
     private ListView<String> availableLobbies;
 
     private Stage dialogStage;
     private String selectedLobby;
     private WelcomeLobbyController welcomeLobbyController;
-
-    @FXML
-    public void initialize() {
-        // Initialize ListView selection listener
-        availableLobbies.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> selectedLobby = newValue
-        );
-    }
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -29,8 +23,8 @@ public class JoinLobbyDialogController {
         this.welcomeLobbyController = controller;
     }
 
-    public void setAvailableLobbies(ObservableList<String> lobbies) {
-        availableLobbies.setItems(lobbies);
+    public void setAvailableLobbies(List<String> lobbyNames) {
+        availableLobbies.setItems(FXCollections.observableArrayList(lobbyNames));
     }
 
     public String getSelectedLobby() {
@@ -39,14 +33,13 @@ public class JoinLobbyDialogController {
 
     @FXML
     private void handleJoin() {
-        if (selectedLobby != null) {
-            dialogStage.close();
-        }
+        selectedLobby = availableLobbies.getSelectionModel().getSelectedItem();
+        dialogStage.close(); // Closes the dialog
     }
 
     @FXML
     private void handleCancel() {
         selectedLobby = null;
-        dialogStage.close();
+        dialogStage.close(); // Closes the dialog without joining
     }
 }
