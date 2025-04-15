@@ -8,13 +8,11 @@ import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 
 import java.util.*;
 import java.nio.charset.StandardCharsets;
-
 import java.net.*;
 import java.io.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.System.out;
-import ch.unibas.dmi.dbis.cs108.server.Lobby;
 
 /**
  * The class {@code Server} provides a simple multi-user chat server.
@@ -474,6 +472,7 @@ public class Server {
             }
         }
     }
+
     /**
      * Prints the current game state of all active lobbies to the server console.
      * This method skips the special "Welcome" lobby, as it is a placeholder and not used
@@ -511,6 +510,57 @@ public class Server {
 
             System.out.println("[Lobby: " + lobby.getLobbyName() + "] Game state: " + stateText);
         }
+    }
+
+    /**
+     * Retrieves a list of active game lobbies along with their current game states.
+     * This method excludes the "Welcome" lobby and returns a formatted list of strings
+     * describing each lobby's name and game state (e.g., open, running, or finished).
+     *
+     * @return a {@code List<String>} where each entry describes a game lobby and its state
+     */
+    public static List<String> getUpdatedGames() {
+        List<String> updatedGames = new ArrayList<>();
+        for (Lobby lobby : lobbies) {
+            // Skip "Welcome" lobby
+            if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                continue;
+            }
+            int state = lobby.getGameState();
+            String stateText = switch (state) {
+                case 1 -> "open";
+                case 2 -> "running";
+                case 3 -> "finished";
+                default -> "unknown";
+            };
+            // Optionally, you can also include the list of players in the lobby by appending lobby.getPlayers()
+            String lobbyInfo = "[Lobby: " + lobby.getLobbyName() + "] Game state: " + stateText;
+            updatedGames.add(lobbyInfo);
+        }
+        return updatedGames;
+    }
+
+    /**
+     * Retrieves a list of players in each active lobby (excluding the "Welcome" lobby).
+     * This method returns a list of strings where each entry contains the lobby name
+     * and a list of players currently in that lobby.
+     *
+     * @return a {@code List<String>} where each entry lists the players in a specific lobby
+     */
+    public static List<String> getUpdatedLobbyMembers() {
+        List<String> updatedLobbyMembers = new ArrayList<>();
+        for (Lobby lobby : lobbies) {
+            if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                continue; // skip Welcome-lobby
+            }
+            // Retrieve players for the lobby
+            List<String> players = lobby.getPlayers();
+            // Create a formatted string for this lobby
+            String lobbyInfo = "[Lobby: " + lobby.getLobbyName() + "] Players: " + players.toString();
+            // Add to the list
+            updatedLobbyMembers.add(lobbyInfo);
+        }
+        return updatedLobbyMembers;
     }
 
     /**
@@ -556,6 +606,59 @@ public class Server {
         }
         protocolWriterServer.sendCommand(Command.FNSH);
 
+    }
+
+    /**
+     * Sends updated player and lobby information to all connected clients.
+     * This method constructs and broadcasts three types of updates:
+     * A player list update (command: {@code LIST}) containing all currently connected usernames.
+     * A game lobby list update (command: {@code GLST}) containing each non-Welcome lobby's name, game state, and players.
+     * Lobby-specific member lists (command: {@code LOME}) that show members in each lobby, sent to all clients (could be refined per lobby).
+     * These messages are formatted as simple protocol strings and dispatched using {@link #broadcast(String)}.
+     */
+    public static void updateAllClients() {
+        List<String> allPlayers = UserList.getAllUsernames();
+        String playerListMessage = Command.LIST + Command.SEPARATOR + allPlayers.toString();
+
+        // builds the game lobby list update message
+        List<Lobby> realLobbies = Server.lobbies.stream()
+                .filter(l -> !l.getLobbyName().equalsIgnoreCase("Welcome"))
+                .toList();
+        List<String> lobbyInfo = new ArrayList<>();
+        for (Lobby lobby : realLobbies) {
+            List<String> players = lobby.getPlayers();
+            String stateText = switch (lobby.getGameState()) {
+                case 1 -> "open";
+                case 2 -> "running";
+                case 3 -> "finished";
+                default -> "unknown";
+            };
+            lobbyInfo.add("[Lobby: " + lobby.getLobbyName() + "] " + stateText + " | Players: " + players);
+        }
+        String gameListMessage = "GLST" + Command.SEPARATOR + lobbyInfo.toString();
+        broadcast(playerListMessage);
+        broadcast(gameListMessage);
+
+        for (Lobby lobby : realLobbies) {
+            List<String> members = lobby.getPlayers();
+            String lobbyMemberMessage = "LOME" + Command.SEPARATOR + lobby.getLobbyName() + Command.SEPARATOR + members.toString();
+            // This sends the list to all clients; you might want to target only those in this lobby
+            broadcast(lobbyMemberMessage);
+        }
+    }
+
+    /**
+     * Sends a single text message to all connected clients.
+     * This method writes the given message string to each {@link PrintWriter}
+     * in the list of client connections, followed by a flush to ensure delivery.
+     *
+     * @param message the text message to send to all clients
+     */
+    public static void broadcast(String message) {
+        for (PrintWriter writer : clientWriters) {
+            writer.println(message);
+            writer.flush();
+        }
     }
 
 }
