@@ -21,24 +21,31 @@ public class LobbyTest {
         lobby = new Lobby("TestLobby");
     }
 
+
     @Test
-    void testAddPlayersAddsFirstAsHost() {
-        UserList.addUser("Alice", mock(OutputStream.class));
-        boolean result = lobby.addPlayers(1);
-        assertTrue(result);
-        assertEquals("Alice", lobby.getHostName());
-        assertEquals(List.of("Alice"), lobby.getPlayers());
-    }
+        void testAddPlayersAddsFirstAsHost() {
+            OutputStream dummyOut = mock(OutputStream.class);
+            int userId = UserList.addUser("Alice", dummyOut); // Speichere tatsächliche ID
+            boolean result = lobby.addPlayers(userId);
+
+            assertTrue(result);
+            assertEquals("Alice", lobby.getHostName());
+            assertEquals(List.of("Alice"), lobby.getPlayers());
+        }
+
 
     @Test
     void testLobbyRejectsMoreThanMaxPlayers() {
-        for (int i = 1; i <= Lobby.MAX_PLAYERS; i++) {
-            UserList.addUser("Player" + i, mock(OutputStream.class));
-            assertTrue(lobby.addPlayers(i));
+        UserList.clear();
+        for (int i = 0; i < 4; i++) {
+            int id = UserList.addUser("P" + i, mock(OutputStream.class));
+            assertTrue(lobby.addPlayers(id), "Should accept player " + i);
         }
-        UserList.addUser("Extra", mock(OutputStream.class));
-        assertFalse(lobby.addPlayers(Lobby.MAX_PLAYERS + 1));
+
+        int extraId = UserList.addUser("Extra", mock(OutputStream.class));
+        assertFalse(lobby.addPlayers(extraId), "Lobby should reject 5th player");
     }
+
 
     @Test
     void testChangeGameState() {
@@ -55,12 +62,17 @@ public class LobbyTest {
 
     @Test
     void testMakeReadyStatusListAndMakeReady() {
-        UserList.addUser("ReadyPlayer", mock(OutputStream.class));
-        lobby.addPlayers(1);
+        OutputStream dummyOut = mock(OutputStream.class);
+        int userId = UserList.addUser("ReadyPlayer", dummyOut);
+        lobby.addPlayers(userId);
+
+        lobby.makeReadyStatusList();
+
         assertFalse(lobby.readyStatus.get("ReadyPlayer"));
         lobby.makeReady("ReadyPlayer");
         assertTrue(lobby.readyStatus.get("ReadyPlayer"));
     }
+
 
     @Test
     void testIsHost() {
@@ -72,21 +84,35 @@ public class LobbyTest {
 
     @Test
     void testRemovePlayer() {
-        UserList.addUser("Alice", mock(OutputStream.class));
-        UserList.addUser("Bob", mock(OutputStream.class));
-        lobby.addPlayers(1);
-        lobby.addPlayers(2);
+        UserList.clear();
+        OutputStream dummyOut = mock(OutputStream.class);
 
-        assertEquals(2, lobby.getPlayers().size());
-        lobby.removePlayer("Alice");
+        int id1 = UserList.addUser("Host", dummyOut);
+        int id2 = UserList.addUser("Guest", dummyOut);
+
+        String name1 = UserList.getUserName(id1);
+        String name2 = UserList.getUserName(id2);
+
+        lobby.addPlayers(id1);
+        lobby.addPlayers(id2);
+
+        System.out.println("Before remove: " + lobby.getPlayers());
+
+        lobby.removePlayer(name1); // 🔧 nicht "Host", sondern das was wirklich gespeichert ist
+
+        System.out.println("After remove: " + lobby.getPlayers());
+
         assertEquals(1, lobby.getPlayers().size());
-        assertFalse(lobby.getPlayers().contains("Alice"));
+        assertTrue(lobby.getPlayers().contains(name2));
+        assertFalse(lobby.getPlayers().contains(name1));
     }
+
 
     @Test
     void testGetGameBoardForPlayer() {
-        UserList.addUser("Alice", mock(OutputStream.class));
-        lobby.addPlayers(1);
+        OutputStream dummyOut = mock(OutputStream.class);
+        int userId = UserList.addUser("Alice", dummyOut); // Richtige ID speichern
+        lobby.addPlayers(userId); // Diese ID verwenden
 
         GameBoard board = lobby.getGameBoard("Alice");
         assertNotNull(board);
@@ -95,21 +121,28 @@ public class LobbyTest {
 
     @Test
     void testAdvanceTurnSkipsWinner() {
-        UserList.addUser("A", mock(OutputStream.class));
-        UserList.addUser("B", mock(OutputStream.class));
-        UserList.addUser("C", mock(OutputStream.class));
+        UserList.clear();
 
-        lobby.addPlayers(1); // A
-        lobby.addPlayers(2); // B
-        lobby.addPlayers(3); // C
+        int idA = UserList.addUser("A", mock(OutputStream.class));
+        int idB = UserList.addUser("B", mock(OutputStream.class));
+        int idC = UserList.addUser("C", mock(OutputStream.class));
 
-        lobby.addWinner("B"); // Skip B
+        String nameA = UserList.getUserName(idA);
+        String nameB = UserList.getUserName(idB);
+        String nameC = UserList.getUserName(idC);
 
-        // Set up A as current
-        lobby.advanceTurn(); // Should skip B and go to C
-        String expected = "C";
-        assertTrue(lobby.isCurrentPlayer(expected));
+        lobby.addPlayers(idA);
+        lobby.addPlayers(idB);
+        lobby.addPlayers(idC);
+
+        lobby.advanceTurn();         // A
+        lobby.addWinner(nameB);      // B wins
+        lobby.advanceTurn();         // B should be skipped → C
+
+        assertTrue(lobby.isCurrentPlayer(nameC), "Expected current player to be C, got: " + lobby.getCurrentPlayer());
     }
+
+
 
     @Test
     void testStartGameOnlyHostCanStart() {

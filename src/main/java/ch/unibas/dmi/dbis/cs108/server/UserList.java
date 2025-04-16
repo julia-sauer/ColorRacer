@@ -150,5 +150,13 @@ public class UserList {
         }
         return usernames;
     }
+    /**
+     * Clears the user list and resets the ID counter.
+     * Useful for unit tests.
+     */
+    public static void clear() {
+        userMap.clear();
+        userIdCounter.set(0);
+    }
 
 }

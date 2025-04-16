@@ -63,23 +63,27 @@ public class Lobby implements Runnable {
      * @return true if the player was added successfully, false otherwise
      */
     public boolean addPlayers(int userId) {
-        if (isFull()) {
+        if (players.size() >= MAX_PLAYERS) {
+            System.out.println("Lobby is full: " + players.size() + " / " + MAX_PLAYERS);
             return false;
         }
+
         String userName = UserList.getUserName(userId);
         if (userName != null && !players.contains(userName)) {
             players.add(userName);
-            playerOrder.add(userName); // saves join-sequence
-            playerGameBoards.put(userName, new GameBoard()); //Creates GameBoard for each player
-            // Sets the host if not already set
+            playerOrder.add(userName);
+            playerGameBoards.put(userName, new GameBoard());
+
             if (hostName == null) {
                 hostName = userName;
             }
             makeReadyStatusList();
             return true;
         }
+
         return false;
     }
+
 
     /**
      * This method creates a map which shows all players in the lobby ands states if they are ready to play.
@@ -167,6 +171,8 @@ public class Lobby implements Runnable {
         playerOrder.remove(playerName); // Player removed from sequence too
         selectedColors.remove(playerName);
         playerGameBoards.remove(playerName);
+        readyStatus.remove(playerName);
+        winners.remove(playerName);
     }
     /**
      * Starts the game for this lobby if all conditions are met. Only the host can start a game.
@@ -370,12 +376,20 @@ public class Lobby implements Runnable {
      */
     public void advanceTurn() {
         System.out.println("Advancing turn. Current index before increment: " + currentPlayerIndex);
-        currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
-        String currentPlayer = playerOrder.get(currentPlayerIndex);
-        while(winners.contains(currentPlayer)) {
+        int safety = 0;
+        String currentPlayer;
+
+        do {
             currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
             currentPlayer = playerOrder.get(currentPlayerIndex);
-        }
+            safety++;
+
+            // Sicherheitsabbruch: falls alle Spieler gewonnen haben
+            if (safety > playerOrder.size()) {
+                System.out.println("No eligible players left to take a turn.");
+                return; // beende advanceTurn(), kein gültiger Spieler mehr da
+            }
+        } while (winners.contains(currentPlayer));
 
         GameBoard board = getGameBoard(currentPlayer);
         Field currentField = board.getCurrentField();
@@ -439,4 +453,15 @@ public class Lobby implements Runnable {
             players.set(index, newUsername);
         }
     }
+    /**
+     * Returns the currently active player (i.e., the one whose turn it is).
+     * @return the username of the current player or null if no player is set
+     */
+    public String getCurrentPlayer() {
+        if (playerOrder.isEmpty() || currentPlayerIndex < 0 || currentPlayerIndex >= playerOrder.size()) {
+            return null;
+        }
+        return playerOrder.get(currentPlayerIndex);
+    }
+
 }
