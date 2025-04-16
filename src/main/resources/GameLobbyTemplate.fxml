@@ -16,8 +16,9 @@
                <content>
                   <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="388.0" prefWidth="389.0" styleClass="anchor-pane">
                      <children>
-                        <TextArea fx:id="chatArea" layoutX="16.0" layoutY="14.0" prefHeight="353.0" prefWidth="353.0" />
-                        <TextField fx:id="txtUsermsg" layoutX="19.0" layoutY="380.0" onKeyPressed="#handleEnterPressed" prefHeight="43.0" prefWidth="347.0" promptText="Type your message here..." />
+                        <TextArea fx:id="chatArea" layoutX="16.0" layoutY="14.0" prefHeight="353.0" prefWidth="353.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                        <TextField fx:id="txtUsermsg" layoutX="19.0" layoutY="380.0" onKeyPressed="#handleEnterPressed" prefHeight="43.0" prefWidth="282.0" promptText="Type your message here..." />
+                        <Button layoutX="301.0" layoutY="376.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleBroadcast" prefHeight="43.0" prefWidth="68.0" styleClass="game-button" text="All" AnchorPane.rightAnchor="5.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -41,9 +42,9 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <Button fx:id="readyButton" mnemonicParsing="false" styleClass="game-button" text="Ready" />
-            <Button fx:id="startButton" disable="true" mnemonicParsing="false" styleClass="game-button" text="Start Game" />
-            <Button fx:id="finishButton" disable="true" layoutX="171.0" layoutY="904.0" mnemonicParsing="false" styleClass="game-button" text="Finish Game" />
+            <Button fx:id="readyButton" mnemonicParsing="false" onAction="#handleReady" styleClass="game-button" text="Ready" />
+            <Button fx:id="startButton" disable="true" mnemonicParsing="false" onAction="#handleStart" styleClass="game-button" text="Start Game" />
+            <Button fx:id="finishButton" disable="true" layoutX="171.0" layoutY="904.0" mnemonicParsing="false" onAction="#handleFinish" styleClass="game-button" text="Finish Game" />
          </children>
       </VBox>
    </right>
@@ -52,19 +53,24 @@
         <menus>
           <Menu mnemonicParsing="false" text="Leave">
             <items>
-              <MenuItem mnemonicParsing="false" text="Leave Server" />
+              <MenuItem mnemonicParsing="false" onAction="#handleLeave" text="Leave Server" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Nickname">
             <items>
-              <MenuItem mnemonicParsing="false" text="Change nickname" />
+              <MenuItem mnemonicParsing="false" onAction="#handleNicknameChange" text="Change nickname" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" text="Bike">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" onAction="#handleBikeSelection" text="Change Bike" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
@@ -85,6 +91,7 @@
                   <Insets left="300.0" />
                </HBox.margin></Button>
             <Button fx:id="moveButton" mnemonicParsing="false" onAction="#handleMoveToField" styleClass="game-button" text="Move" />
+            <Button fx:id="skipButton" mnemonicParsing="false" onAction="#handleSkip" styleClass="game-button" text="Skip" />
          </children>
       </HBox>
    </bottom>

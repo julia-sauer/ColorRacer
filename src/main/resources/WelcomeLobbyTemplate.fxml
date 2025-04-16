@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1132.0" prefWidth="1747.0" stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1158.0" prefWidth="1793.0" stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController">
    <left>
       <VBox prefHeight="1013.0" prefWidth="406.0" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
          <children>
@@ -41,14 +41,15 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="587.0" prefWidth="370.0" styleClass="anchor-pane">
                      <children>
-                        <TextArea fx:id="chatArea" layoutX="5.0" layoutY="14.0" prefHeight="458.0" prefWidth="360.0" styleClass="text-area" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                        <TextArea fx:id="chatArea" layoutX="5.0" layoutY="14.0" prefHeight="458.0" prefWidth="360.0" styleClass="text-area" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding></TextArea>
-                        <TextField fx:id="txtUsermsg" layoutX="5.0" layoutY="478.0" onKeyPressed="#handleEnterPressed" prefHeight="45.0" prefWidth="361.0" promptText="Type your message here..." styleClass="text-field" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                        <TextField fx:id="txtUsermsg" layoutX="16.0" layoutY="478.0" onKeyPressed="#handleEnterPressed" prefHeight="45.0" prefWidth="269.0" promptText="Type your message here..." styleClass="text-field" AnchorPane.leftAnchor="5.0">
                            <padding>
                               <Insets left="5.0" right="5.0" />
                            </padding></TextField>
+                        <Button layoutX="288.0" layoutY="475.0" mnemonicParsing="false" onAction="#handleBroadcast" prefHeight="52.0" prefWidth="68.0" styleClass="game-button" text="All" AnchorPane.rightAnchor="5.0" />
                      </children>
                   </AnchorPane>
               </content>
