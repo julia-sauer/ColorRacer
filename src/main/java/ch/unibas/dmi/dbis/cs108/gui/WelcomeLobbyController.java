@@ -3,7 +3,6 @@ package ch.unibas.dmi.dbis.cs108.gui;
 import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,23 +24,28 @@ public class WelcomeLobbyController {
     @FXML
     private BorderPane root;
 
-    // Static instance that can be accessed from anywhere
+    /**
+     * The static instance that can be accessed from anywhere.
+     */
     private static WelcomeLobbyController instance;
 
+    /**
+     * The {@link ListView} that displays a list of all players on the server.
+     */
     @FXML
     public ListView<String> listlist;
 
+    /**
+     * The {@link ListView} that displays a list of all games with the status and the players.
+     */
     @FXML
     private ListView<String> gamelist;
 
+    /**
+     * The {@link ListView} that displays a list of all lobbies and its players.
+     */
     @FXML
     private ListView<String> lobbylist;
-
-    @FXML
-    private Button createLobbyButton;
-
-    @FXML
-    private Button joinLobbyButton;
 
     /**
      * The {@link TextArea} for displaying chat messages.
@@ -55,18 +59,9 @@ public class WelcomeLobbyController {
     @FXML
     private TextField txtUsermsg;
 
-    @FXML
-    private MenuItem leaveOption;
-
-    @FXML
-    private MenuItem nicknameChangeOption;
-
     private ProtocolWriterClient protocolWriter;
     private Client client;
     private Stage primaryStage;
-    private Timeline updateTimeline;
-
-
 
     public BorderPane getRoot() {
         return root;
@@ -184,9 +179,7 @@ public class WelcomeLobbyController {
         dialog.setHeaderText("Enter nickname:");
         dialog.setContentText("Name:");
 
-        dialog.showAndWait().ifPresent(nickname -> {
-            protocolWriter.changeNickname(nickname);
-        });
+        dialog.showAndWait().ifPresent(nickname -> protocolWriter.changeNickname(nickname));
     }
 
     /**
@@ -307,5 +300,28 @@ public class WelcomeLobbyController {
             }
             txtUsermsg.clear();
         }
+    }
+
+    public void switchToGameLobby(String lobbyName) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameLobbyTemplate.fxml"));
+                BorderPane gameLobbyRoot = loader.load();
+
+                // Get controller and pass lobby name or other data if needed
+                GameLobbyController gameLobbyController = loader.getController();
+                gameLobbyController.setLobbyName(lobbyName);
+                // You can pass additional data here: client, protocolWriter, etc.
+
+                // Replace current scene
+                Scene scene = primaryStage.getScene();
+                scene.setRoot(gameLobbyRoot);
+                primaryStage.setFullScreen(true);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("Failed to load GameLobbyTemplate.fxml");
+            }
+        });
     }
 }

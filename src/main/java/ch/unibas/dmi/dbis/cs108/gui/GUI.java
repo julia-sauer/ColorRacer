@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class GUI extends Application {
         Font.loadFont(getClass().getResourceAsStream("PixelEmulator-xq08.ttf"), 12);
         // Load the FXML file (ensure the correct resource path is used)
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeLobbyTemplate.fxml"));
-        Parent root = loader.load();
+        BorderPane root = loader.load();
 
         // Get the controller instance from the FXML loader
         WelcomeLobbyController welcomeController = loader.getController();

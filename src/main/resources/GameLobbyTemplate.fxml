@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1395.0" prefWidth="1703.0" stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="1080.0" prefWidth="1554.0" stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.GameLobbyController">
    <right>
-      <VBox alignment="TOP_CENTER" prefHeight="1169.0" prefWidth="325.0" spacing="20.0" styleClass="game-panel" BorderPane.alignment="TOP_RIGHT">
+      <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="895.0" prefWidth="361.0" spacing="10.0" styleClass="game-panel" BorderPane.alignment="TOP_CENTER">
          <children>
-            <Label fx:id="lobbyNameDisplay" styleClass="dialog-header" text="Lobby:" />
-            <TitledPane prefHeight="497.0" prefWidth="404.0" text="Chat">
+            <Label fx:id="lobbyNameDisplay" alignment="CENTER" prefHeight="45.0" prefWidth="323.0" styleClass="dialog-header" text="Lobby:" VBox.vgrow="NEVER" />
+            <TitledPane prefHeight="412.0" prefWidth="358.0" text="Chat">
                <content>
-                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="388.0" prefWidth="389.0" styleClass="anchor-pane">
+                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="275.0">
                      <children>
-                        <TextArea fx:id="chatArea" layoutX="16.0" layoutY="14.0" prefHeight="353.0" prefWidth="353.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                        <TextField fx:id="txtUsermsg" layoutX="19.0" layoutY="380.0" onKeyPressed="#handleEnterPressed" prefHeight="43.0" prefWidth="282.0" promptText="Type your message here..." />
-                        <Button layoutX="301.0" layoutY="376.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleBroadcast" prefHeight="43.0" prefWidth="68.0" styleClass="game-button" text="All" AnchorPane.rightAnchor="5.0" />
+                        <TextArea fx:id="chatArea" layoutX="7.0" layoutY="5.0" prefHeight="267.0" prefWidth="292.0" />
+                        <TextField fx:id="txtUsermsg" layoutX="7.0" layoutY="279.0" onKeyPressed="#handleEnterPressed" prefHeight="43.0" prefWidth="220.0" promptText="Type your message here..." />
+                        <Button alignment="CENTER" layoutX="229.0" layoutY="275.0" mnemonicParsing="false" onAction="#handleBroadcast" prefHeight="52.0" prefWidth="72.0" styleClass="game-button" text="All" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
                </content>
             </TitledPane>
-            <TabPane prefHeight="278.0" prefWidth="404.0" styleClass="tab-pane" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="244.0" prefWidth="357.0" styleClass="tab-pane" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="List">
                      <content>
@@ -75,24 +73,28 @@
       </MenuBar>
    </top>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="183.0" prefWidth="1691.0" spacing="20.0" styleClass="game-panel" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" fillHeight="false" prefHeight="128.0" prefWidth="1920.0" spacing="20.0" styleClass="game-panel" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <children>
-            <ImageView fx:id="dice1" fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="dice2" fitHeight="130.0" fitWidth="130.0" layoutX="756.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="dice3" fitHeight="130.0" fitWidth="130.0" layoutX="861.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="dice4" fitHeight="130.0" fitWidth="130.0" layoutX="966.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="dice5" fitHeight="130.0" fitWidth="130.0" layoutX="756.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="dice6" fitHeight="130.0" fitWidth="130.0" layoutX="546.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice1" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice2" fitHeight="100.0" fitWidth="100.0" layoutX="756.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice3" fitHeight="100.0" fitWidth="100.0" layoutX="861.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice4" fitHeight="100.0" fitWidth="100.0" layoutX="966.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice5" fitHeight="100.0" fitWidth="100.0" layoutX="756.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="dice6" fitHeight="100.0" fitWidth="100.0" layoutX="546.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" />
             <Button fx:id="throwDiceButton" mnemonicParsing="false" onAction="#handleThrowDice" styleClass="game-button" text="Roll">
                <HBox.margin>
                   <Insets left="300.0" />
-               </HBox.margin></Button>
+               </HBox.margin>
+            </Button>
             <Button fx:id="moveButton" mnemonicParsing="false" onAction="#handleMoveToField" styleClass="game-button" text="Move" />
             <Button fx:id="skipButton" mnemonicParsing="false" onAction="#handleSkip" styleClass="game-button" text="Skip" />
          </children>
       </HBox>
    </bottom>
+   <center>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>
