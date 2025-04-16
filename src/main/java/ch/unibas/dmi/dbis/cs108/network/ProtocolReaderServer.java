@@ -218,6 +218,15 @@ public class ProtocolReaderServer {
 
                         // 🗣️ 1. Alle informieren, bevor die Verbindung geschlossen wird
                         Server.broadcastToAll("+LFT " + nickname + " has left the game");
+                        UserList.removeUser(userId);
+                        Lobby userLobby = null;
+                        for (Lobby lobby : Server.lobbies) {
+                            if (lobby.getPlayers().contains(nickname)) {
+                                userLobby = lobby;
+                                break;
+                            }
+                        }
+                        userLobby.removePlayer(nickname);
 
                         // 🧹 2. Jetzt sauberen Disconnect durchführen
                         if (disconnectCallback != null) {
