@@ -163,33 +163,6 @@ public class Server {
     }
 
     /**
-     * This method is called when a client sends a chat message
-     * that should be forwarded to all connected clients.
-     *
-     * <p>The method creates a complete message in the format:
-     * <pre>
-     * CHAT sender: message
-     * </pre>
-     * and sends it over all {@link PrintWriter} connections
-     * known to the server (list {@code clientWriters}).
-     *
-     * <p>Each client is thus notified that a new message has arrived,
-     * including the sender's name.
-     *
-     * @param message The chat message entered by the client.
-     * @param sender The sender's username.
-     */
-
-    public void chatToAll(String message, String sender) {
-        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
-        protocolWriterServer.sendChat(message, sender);
-        //String chatMessage = Command.CHAT + " " + sender + ": " + message; // Formats the message according to protocol: CHAT <sender>: <message>
-        //for (PrintWriter writer : clientWriters) { // Iterates over all registered client output streams and sends the message
-        //    writer.println(chatMessage);
-        //    writer.flush();
-    }
-
-    /**
      * This method sends a message from one user to another user. With the {@link UserList} class and
      * the {@link User} class, the method gets the ID and the OutputStream of the user that should
      * receive the message.
