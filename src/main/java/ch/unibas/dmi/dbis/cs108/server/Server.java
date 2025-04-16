@@ -498,7 +498,7 @@ public class Server {
      * This method gets called as soon as a player is at the finish line.
      * @param userId The ID of the user that is currently on its turn.
      */
-    public static void won(int userId) throws IOException {
+    public static void won(int userId) {
         User user = UserList.getUser(userId);
         String nickname = user.getNickname();
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
@@ -520,7 +520,14 @@ public class Server {
                 break;
             }
         }
-        protocolWriterServer.sendCommand(Command.FNSH);
+        Lobby userlobby = getLobbyOfPlayer(user.getNickname());
+        if (userlobby.getPlayers().size() == userlobby.winners.size()) {
+            try {
+                protocolWriterServer.sendCommand(Command.FNSH);
+            } catch (IOException e) {
+                System.err.println("Could not send Command.");
+            }
+        }
 
     }
 
