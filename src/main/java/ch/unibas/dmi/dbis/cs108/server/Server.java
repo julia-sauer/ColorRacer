@@ -653,6 +653,9 @@ public class Server {
             writer.flush();
         }
     }
+    public static int getActiveClientCount() {
+        return activeClients.get();
+    }
 
 }
 
