@@ -3,9 +3,6 @@ package ch.unibas.dmi.dbis.cs108.gui;
 import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
-import ch.unibas.dmi.dbis.cs108.server.Server;
-import ch.unibas.dmi.dbis.cs108.server.UserList;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,7 +17,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import java.io.IOException;
 import java.util.*;
 
@@ -299,5 +295,17 @@ public class WelcomeLobbyController {
             alert.setContentText(content);
             alert.showAndWait();
         });
+    }
+
+    @FXML
+    private void handleBroadcast() {
+        String message = txtUsermsg.getText().trim();
+        if (!message.isEmpty()) {
+            // Send the message using your existing network protocol
+            if (protocolWriter != null) {
+                protocolWriter.sendChat("broadcast " + message);
+            }
+            txtUsermsg.clear();
+        }
     }
 }
