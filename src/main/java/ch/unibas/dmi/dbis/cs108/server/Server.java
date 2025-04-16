@@ -343,8 +343,6 @@ public class Server {
         userLobby.advanceTurn(); // next players turn
     }
 
-
-
     /**
      * Broadcasts a message to all connected clients.
      *
@@ -479,57 +477,6 @@ public class Server {
 
             System.out.println("[Lobby: " + lobby.getLobbyName() + "] Game state: " + stateText);
         }
-    }
-
-    /**
-     * Retrieves a list of active game lobbies along with their current game states.
-     * This method excludes the "Welcome" lobby and returns a formatted list of strings
-     * describing each lobby's name and game state (e.g., open, running, or finished).
-     *
-     * @return a {@code List<String>} where each entry describes a game lobby and its state
-     */
-    public static List<String> getUpdatedGames() {
-        List<String> updatedGames = new ArrayList<>();
-        for (Lobby lobby : lobbies) {
-            // Skip "Welcome" lobby
-            if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                continue;
-            }
-            int state = lobby.getGameState();
-            String stateText = switch (state) {
-                case 1 -> "open";
-                case 2 -> "running";
-                case 3 -> "finished";
-                default -> "unknown";
-            };
-            // Optionally, you can also include the list of players in the lobby by appending lobby.getPlayers()
-            String lobbyInfo = "[Lobby: " + lobby.getLobbyName() + "] Game state: " + stateText;
-            updatedGames.add(lobbyInfo);
-        }
-        return updatedGames;
-    }
-
-    /**
-     * Retrieves a list of players in each active lobby (excluding the "Welcome" lobby).
-     * This method returns a list of strings where each entry contains the lobby name
-     * and a list of players currently in that lobby.
-     *
-     * @return a {@code List<String>} where each entry lists the players in a specific lobby
-     */
-    public static List<String> getUpdatedLobbyMembers() {
-        List<String> updatedLobbyMembers = new ArrayList<>();
-        for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                continue; // skip Welcome-lobby
-            }
-            // Retrieve players for the lobby
-            List<String> players = lobby.getPlayers();
-            // Create a formatted string for this lobby
-            String lobbyInfo = "[Lobby: " + lobby.getLobbyName() + "] Players: " + players.toString();
-            // Add to the list
-            updatedLobbyMembers.add(lobbyInfo);
-        }
-        return updatedLobbyMembers;
     }
 
     /**
