@@ -165,22 +165,8 @@ public class WelcomeLobbyController {
     public void updateGameList(List<String> newGames) {
         Platform.runLater(() -> {
             try {
-                ObservableList<String> currentItems = gamelist.getItems();
-                Map<String, String> lobbyMap = new LinkedHashMap<>();
-
-                // Parse current items into a map: lobbyName -> fullString
-                for (String entry : currentItems) {
-                    String lobbyName = extractLobbyName(entry);
-                    lobbyMap.put(lobbyName, entry);
-                }
-
-                // Update or add from newGames
-                for (String entry : newGames) {
-                    String lobbyName = extractLobbyName(entry);
-                    lobbyMap.put(lobbyName, entry); // replaces old if name matches
-                }
-
-                gamelist.setItems(FXCollections.observableArrayList(lobbyMap.values()));
+                gamelist.getItems().clear();
+                gamelist.getItems().addAll(newGames);
             } catch (Exception e) {
                 System.err.println("Error updating game list: " + e.getMessage());
                 e.printStackTrace();
@@ -196,20 +182,8 @@ public class WelcomeLobbyController {
     public void updateLobbyList(List<String> newMembers) {
         Platform.runLater(() -> {
             try {
-                ObservableList<String> currentItems = lobbylist.getItems();
-                Map<String, String> lobbyMap = new LinkedHashMap<>();
-
-                for (String entry : currentItems) {
-                    String lobbyName = extractLobbyName(entry);
-                    lobbyMap.put(lobbyName, entry);
-                }
-
-                for (String entry : newMembers) {
-                    String lobbyName = extractLobbyName(entry);
-                    lobbyMap.put(lobbyName, entry); // replaces if already exists
-                }
-
-                lobbylist.setItems(FXCollections.observableArrayList(lobbyMap.values()));
+                lobbylist.getItems().clear();
+                lobbylist.getItems().addAll(newMembers);
             } catch (Exception e) {
                 System.err.println("Error updating lobby members: " + e.getMessage());
                 e.printStackTrace();

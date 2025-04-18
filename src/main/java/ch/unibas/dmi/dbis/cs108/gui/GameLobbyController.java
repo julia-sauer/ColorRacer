@@ -419,22 +419,8 @@ public class GameLobbyController {
     public void updateGameList(List<String> newGames) {
         Platform.runLater(() -> {
             try {
-                ObservableList<String> currentItems = gamelist.getItems();
-                Map<String, String> lobbyMap = new LinkedHashMap<>();
-
-                // Parse current items into a map: lobbyName -> fullString
-                for (String entry : currentItems) {
-                    String lobbyName = extractLobbyName(entry);
-                    lobbyMap.put(lobbyName, entry);
-                }
-
-                // Update or add from newGames
-                for (String entry : newGames) {
-                    String lobbyName = extractLobbyName(entry);
-                    lobbyMap.put(lobbyName, entry); // replaces old if name matches
-                }
-
-                gamelist.setItems(FXCollections.observableArrayList(lobbyMap.values()));
+                gamelist.getItems().clear();
+                gamelist.getItems().addAll(newGames);
             } catch (Exception e) {
                 System.err.println("Error updating game list: " + e.getMessage());
                 e.printStackTrace();
@@ -450,25 +436,18 @@ public class GameLobbyController {
     public void updateLobbyList(List<String> newMembers) {
         Platform.runLater(() -> {
             try {
-                ObservableList<String> currentItems = lobbylist.getItems();
+                lobbylist.getItems().clear();
+                lobbylist.getItems().addAll(newMembers);
+
                 Map<String, String> lobbyMap = new LinkedHashMap<>();
-
-                for (String entry : currentItems) {
-                    String lobbyName = extractLobbyName(entry);
-                    lobbyMap.put(lobbyName, entry);
-                }
-
                 for (String entry : newMembers) {
-                    String lobbyName = extractLobbyName(entry);
-                    lobbyMap.put(lobbyName, entry); // replaces if already exists
+                    lobbyMap.put(extractLobbyName(entry), entry);
                 }
-                lobbylist.setItems(FXCollections.observableArrayList(lobbyMap.values()));
                 String myEntry = lobbyMap.get(lobbyname);
                 if (myEntry != null) {
                     List<String> players = extractPlayers(myEntry);
-                    boolean amHost =
-                            !players.isEmpty() &&
-                                    players.get(0).equalsIgnoreCase(nickname);
+                    boolean amHost = !players.isEmpty()
+                            && players.get(0).equalsIgnoreCase(nickname);
                     setHost(amHost);
                 }
             } catch (Exception e) {
@@ -484,11 +463,9 @@ public class GameLobbyController {
      * returns List.of("Alice","Bob","Charlie").
      */
     private List<String> extractPlayers(String entry) {
-        // find the bracketed list after "Players:"
-        int idx = entry.indexOf("Players:");
+        int idx = entry.indexOf("Host:");
         if (idx < 0) return List.of();
-        String after = entry.substring(idx + "Players:".length()).trim();
-        // now after == "[Alice, Bob, Charlie]"
+        String after = entry.substring(idx + "Host:".length()).trim();
         return parseListFromString(after);
     }
 

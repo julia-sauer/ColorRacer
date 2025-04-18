@@ -557,8 +557,8 @@ public class Server {
                 case 3 -> "finished";
                 default -> "unknown";
             };
-            lobbyInfo.add("[Lobby: " + lobby.getLobbyName() + "] " + stateText + " | Players: " + players);
-            lobbyMembers.add("[Lobby: " + lobby.getLobbyName() + "] " + "Players: " + players);
+            lobbyInfo.add("[Lobby: " + lobby.getLobbyName() + "] " + stateText); // + " | Players: " + players);
+            lobbyMembers.add("[Lobby: " + lobby.getLobbyName() + "] " + "Host: " + players);
         }
         String gameListMessage = "GLST" + Command.SEPARATOR + lobbyInfo.toString();
         String lobbyMemberMessage = "LOME" + Command.SEPARATOR + lobbyMembers.toString();

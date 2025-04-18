@@ -11,7 +11,7 @@
       <VBox prefHeight="1013.0" prefWidth="406.0" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
          <children>
             <Label styleClass="header-label" text="List" />
-            <ListView fx:id="listlist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="listlist" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS" />
             <Label styleClass="header-label" text="Game list" />
             <ListView fx:id="gamelist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
             <Label styleClass="header-label" text="Lobby list" />

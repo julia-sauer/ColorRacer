@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -25,7 +26,7 @@
               <tabs>
                 <Tab text="List">
                      <content>
-                        <ListView fx:id="listlist" prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="listlist" minWidth="-Infinity" prefHeight="200.0" />
                      </content>
                   </Tab>
                 <Tab text="Game List">
