@@ -151,8 +151,7 @@ public class WelcomeLobbyController {
                 listlist.getItems().clear(); //
                 listlist.getItems().addAll(players);
             } catch (Exception e) {
-                System.err.println("Fehler beim Aktualisieren der Spieler-Liste: " + e.getMessage());
-                e.printStackTrace();
+                showError("Failed to update player list", e.getMessage());
             }
         });
     }
@@ -168,8 +167,7 @@ public class WelcomeLobbyController {
                 gamelist.getItems().clear();
                 gamelist.getItems().addAll(newGames);
             } catch (Exception e) {
-                System.err.println("Error updating game list: " + e.getMessage());
-                e.printStackTrace();
+                showError("Failed to update game list", e.getMessage());
             }
         });
     }
@@ -185,35 +183,41 @@ public class WelcomeLobbyController {
                 lobbylist.getItems().clear();
                 lobbylist.getItems().addAll(newMembers);
             } catch (Exception e) {
-                System.err.println("Error updating lobby members: " + e.getMessage());
-                e.printStackTrace();
+                showError("Failed to update lobby list", e.getMessage());
             }
         });
     }
 
     /**
-     * Extracts the lobby name from a formatted entry string so the {@code updateGameList} and the
-     * {@code updateLobbyList} methods know when a lobby is already registered in the list.
-     *
-     * @param entry The string containing "[Lobby: name]"
-     * @return The extracted lobby name or empty if it's invalid
-     */
-    private String extractLobbyName(String entry) {
-        if (entry == null || !entry.contains("[Lobby: ")) return "";
-        int start = entry.indexOf("[Lobby: ") + 8;
-        int end = entry.indexOf("]", start);
-        if (start < 0 || end < 0 || end <= start) return "";
-        return entry.substring(start, end).trim();
-    }
-
-    /**
-     * This method sends the QUIT command to leave the server.
-     *
-     * @throws IOException on network errors if sending the command does not work.
+     * This method opens a dialog to ask the user if they want to leave the server. If the user wants to leave
+     * a message is sent over the {@link ProtocolWriterClient} and the window closes.
      */
     @FXML
-    private void handleLeave() throws IOException {
-        protocolWriter.sendCommand(Command.QUIT);
+    private void handleLeave() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LeaveLobbyDialogTemplate.fxml"));
+            VBox dialogPane = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            dialogStage.setTitle("Leave Lobby");
+            dialogStage.setScene(new Scene(dialogPane));
+
+            // Set controller
+            LeaveLobbyDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setWelcomeLobbyController(this);
+
+            dialogStage.showAndWait();
+
+            if (controller.isLeaving) {
+                protocolWriter.sendCommandAndString(Command.QCNF, "YES");
+                Platform.exit();
+            }
+        } catch (IOException e) {
+            showError("Failed to open leave lobby dialog", e.getMessage());
+        }
     }
 
     /**
@@ -374,7 +378,6 @@ public class WelcomeLobbyController {
     private void handleBroadcast() {
         String message = txtUsermsg.getText().trim();
         if (!message.isEmpty()) {
-            // Send the message using your existing network protocol
             if (protocolWriter != null) {
                 protocolWriter.sendChat("broadcast " + message);
             }
@@ -410,8 +413,7 @@ public class WelcomeLobbyController {
                 scene.setRoot(gameLobbyRoot);
                 primaryStage.setMaximized(true);
             } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Failed to load GameLobbyTemplate.fxml");
+                showError("Failed to load the GameLobby" + lobbyName, e.getMessage());
             }
         });
     }

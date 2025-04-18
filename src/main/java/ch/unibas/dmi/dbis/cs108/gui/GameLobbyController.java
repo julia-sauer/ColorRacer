@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.gui;
 
 import ch.unibas.dmi.dbis.cs108.client.Client;
+import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
@@ -277,9 +278,35 @@ public class GameLobbyController {
         // TODO: Skip turn logic
     }
 
+    /**
+     * This method opens a dialog to ask the user if they want to leave the server. If the user wants to leave
+     * a message is sent over the {@link ProtocolWriterClient} and the window closes.
+     */
     @FXML
     private void handleLeave() {
-        // TODO: Logic to leave the server
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LeaveLobbyDialogTemplate.fxml"));
+            VBox dialogPane = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setTitle("Leave Lobby");
+            dialogStage.setScene(new Scene(dialogPane));
+
+            // Set controller
+            LeaveLobbyDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setGameLobbyController(this);
+
+            dialogStage.showAndWait();
+
+            if (controller.isLeaving) {
+                protocolWriter.sendCommandAndString(Command.QCNF, "YES");
+                Platform.exit();
+            }
+        } catch (IOException e) {
+            showError("Failed to open leave lobby dialog", e.getMessage());
+        }
     }
 
     /**
@@ -405,8 +432,7 @@ public class GameLobbyController {
                 listlist.getItems().clear(); //
                 listlist.getItems().addAll(players);
             } catch (Exception e) {
-                System.err.println("Fehler beim Aktualisieren der Spieler-Liste: " + e.getMessage());
-                e.printStackTrace();
+                showError("Failed to update player list", e.getMessage());
             }
         });
     }
@@ -422,8 +448,7 @@ public class GameLobbyController {
                 gamelist.getItems().clear();
                 gamelist.getItems().addAll(newGames);
             } catch (Exception e) {
-                System.err.println("Error updating game list: " + e.getMessage());
-                e.printStackTrace();
+                showError("Failed to update game list", e.getMessage());
             }
         });
     }
@@ -451,8 +476,7 @@ public class GameLobbyController {
                     setHost(amHost);
                 }
             } catch (Exception e) {
-                System.err.println("Error updating lobby members: " + e.getMessage());
-                e.printStackTrace();
+                showError("Failed to update lobby list", e.getMessage());
             }
         });
     }
