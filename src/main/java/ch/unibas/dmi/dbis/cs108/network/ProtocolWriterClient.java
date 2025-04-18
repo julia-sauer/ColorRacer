@@ -1,6 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import ch.unibas.dmi.dbis.cs108.gui.ChatController;
+import ch.unibas.dmi.dbis.cs108.gui.GameLobbyController;
 import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +27,7 @@ public class ProtocolWriterClient {
     private static final Logger LOGGER = LogManager.getLogger(ProtocolWriterClient.class);
 
     private WelcomeLobbyController welcomeLobbyController; // Reference to the GUI welcomeLobbyController
+    private GameLobbyController gameLobbyController;
 
     /**
      * Constructs a new {@code ProtocolWriterClient} with UTF-8 encoding.
@@ -162,7 +163,6 @@ public class ProtocolWriterClient {
      *
      * @param nicknameAndMessage The nickname of the user, who needs to receive the message.
      */
-
     public void sendWhisper(String nicknameAndMessage) {
 
         if (nicknameAndMessage == null || nicknameAndMessage.trim().isEmpty()) {
@@ -230,14 +230,25 @@ public class ProtocolWriterClient {
     }
 
     /**
-     * Sets the {@link ChatController} that will be used to update the GUI with incoming messages.
+     * Sets the {@link WelcomeLobbyController} that will be used to update the GUI with incoming messages.
      * This method is called during the initialization of the GUI, ensuring that the {@link ProtocolWriterClient}
      * can forward them to the GUI for display.
      *
-     * @param controller The {@link ChatController} instance to be set.
+     * @param controller The {@link WelcomeLobbyController} instance to be set.
      */
     public void setWelcomeController(WelcomeLobbyController controller) {
         this.welcomeLobbyController = controller;
+    }
+
+    /**
+     * Sets the {@link GameLobbyController} that will be used to update the GUI with incoming messages.
+     * This method is called during the change from the WelcomeLobby to the GameLobby and ensures
+     * that the {@link ProtocolWriterClient} can forward messages to the GUI for display.
+     *
+     * @param controller The {@link GameLobbyController} instance to be set.
+     */
+    public void setGameLobbyController(GameLobbyController controller) {
+        this.gameLobbyController = controller;
     }
 }
 
