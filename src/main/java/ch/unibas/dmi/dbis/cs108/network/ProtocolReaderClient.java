@@ -93,6 +93,7 @@ public class ProtocolReaderClient {
                     }
                     String lobbyname = parts[1].trim();
                     System.out.println("You created a Lobby: " + lobbyname);
+                    display("You created a Lobby: " + lobbyname);
                     break;
 
                 case CHAT:
@@ -123,6 +124,10 @@ public class ProtocolReaderClient {
                     }
                     String newNick = parts[1].trim();
                     System.out.println("Your nickname is " + newNick);
+                    if(!lobbyChanged) {
+                        waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().displayChat("Your nickname is " + newNick));
+                    }
+                    waitForControllerAndUpdate(() -> gameLobbyController.displayChat("Your nickname is " + newNick));
                     break;
 
                 case INFO:
@@ -132,6 +137,7 @@ public class ProtocolReaderClient {
                     }
                     String msg = parts[1].trim();
                     System.out.println(msg);
+                    display(msg);
                     break;
 
                 case WISP:
@@ -293,6 +299,19 @@ public class ProtocolReaderClient {
             welcomeLobbyController.displayChat(formattedMessage);
         } else {
             gameLobbyController.displayChat(formattedMessage);
+        }
+    }
+
+    /**
+     * This method sends an informational message from the server to the controller application and displays it in the
+     * Chat.
+     * @param message The message that should be displayed in the Chat GUI.
+     */
+    private void display(String message) {
+        if(!lobbyChanged){
+            welcomeLobbyController.displayChat(message);
+        } else {
+            gameLobbyController.displayChat(message);
         }
     }
 
