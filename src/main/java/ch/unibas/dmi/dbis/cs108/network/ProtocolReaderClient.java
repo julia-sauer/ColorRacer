@@ -124,10 +124,7 @@ public class ProtocolReaderClient {
                     }
                     String newNick = parts[1].trim();
                     System.out.println("Your nickname is " + newNick);
-                    if(!lobbyChanged) {
-                        waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().displayChat("Your nickname is " + newNick));
-                    }
-                    waitForControllerAndUpdate(() -> gameLobbyController.displayChat("Your nickname is " + newNick));
+                    display("Your nickname is " + newNick);
                     break;
 
                 case INFO:
@@ -309,9 +306,9 @@ public class ProtocolReaderClient {
      */
     private void display(String message) {
         if(!lobbyChanged){
-            welcomeLobbyController.displayChat(message);
+            waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().displayChat(message));
         } else {
-            gameLobbyController.displayChat(message);
+            waitForControllerAndUpdate(() -> GameLobbyController.getInstance().displayChat(message));
         }
     }
 

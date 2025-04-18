@@ -583,8 +583,8 @@ public class ProtocolReaderServer {
                     userLobby.makeReady(userName);
                     System.out.println(userName + " is ready!");
                     ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
-                    String info = "INFO" + Command.SEPARATOR + userName + " is ready.";
-                    Server.broadcast(info);
+                    String info = userName + " is ready.";
+                    Server.broadcastInLobby(info, userName);
                     break;
                 }
                 case FNSH: {

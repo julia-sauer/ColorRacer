@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Lobby implements Runnable {
 
     public static final int MAX_PLAYERS = 4;
-    private final List<String> players;
+    public final List<String> players;
     private Server server;
     private final String lobbyName;
     private final Map<String, GameBoard> playerGameBoards;

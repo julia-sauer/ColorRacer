@@ -572,7 +572,7 @@ public class Server {
      * This method writes the given message string to each {@link PrintWriter}
      * in the list of client connections, followed by a flush to ensure delivery.
      *
-     * @param message the text message to send to all clients
+     * @param message The text message to send to all clients
      */
     public static void broadcast(String message) {
         for (PrintWriter writer : clientWriters) {
@@ -580,6 +580,36 @@ public class Server {
             writer.flush();
         }
     }
+
+    /**
+     * Sends a single informational message to all clients in the same lobby.
+     * This method writes the given message string to each {@link PrintWriter}
+     * in the list of the lobby, followed by a flush to ensure delivery.
+     *
+     * @param message The text message to send to all clients
+     * @param nickname The nickname that belongs in the lobby and who is the trigger of the message.
+     */
+    public static void broadcastInLobby(String message, String nickname) {
+        Lobby userLobby = null;
+        for (Lobby lobby : lobbies) {
+            if (lobby.getPlayers().contains(nickname)) {
+                userLobby = lobby;
+                break;
+            }
+        }
+        for (String player : userLobby.players) {
+            User u = UserList.getUserByName(player);
+            if (u != null) {
+                ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, u.getOut());
+                try {
+                    writer.sendInfo(message);
+                } catch (IOException e) {
+                    System.err.println("Error sending turn info to " + player);
+                }
+            }
+        }
+    }
+
     public static int getActiveClientCount() {
         return activeClients.get();
     }
