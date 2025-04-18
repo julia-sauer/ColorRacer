@@ -1,10 +1,8 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import ch.unibas.dmi.dbis.cs108.gui.ChatController;
+import ch.unibas.dmi.dbis.cs108.gui.GameLobbyController;
 import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
-import ch.unibas.dmi.dbis.cs108.server.UserList;
 import javafx.application.Platform;
-
 import java.nio.charset.StandardCharsets;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,13 +10,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * The {@code ProtocolReaderClient} class is responsible for reading and processing messages
  * from the server. It interprets server commands and triggers appropriate
- * actions, such as updating the user interface via {@link ChatController}, printing messages,
+ * actions, such as updating the user interface via {@link WelcomeLobbyController} or {@link GameLobbyController}
+ * , printing messages,
  * and responding to server pings.
  * This class works closely with {@link ProtocolWriterClient} to send responses when needed.
  */
@@ -27,8 +25,9 @@ public class ProtocolReaderClient {
     private final InputStream in;
     private final OutputStream out;
     private WelcomeLobbyController welcomeLobbyController; // Reference to the GUI welcomeLobbyController
+    private GameLobbyController gameLobbyController;
     public boolean bike = false;
-
+    public boolean lobbyChanged = false;
 
     /**
      * Creates a new {@code ProtocolReaderClient}.
@@ -83,7 +82,7 @@ public class ProtocolReaderClient {
                         break;
                     } else {
                         System.out.println("You joined: " + lobbyName);
-                        WelcomeLobbyController.getInstance().switchToGameLobby(lobbyName);
+                        //WelcomeLobbyController.getInstance().switchToGameLobby(lobbyName);
                     }
                     break;
 
@@ -196,7 +195,11 @@ public class ProtocolReaderClient {
                     }
                     String brodMsg = parts[1].trim();
                     //System.out.println(brodMsg); // Überprüfung über das Terminal
-                    welcomeLobbyController.displayChat(brodMsg);
+                    if(!lobbyChanged){
+                        welcomeLobbyController.displayChat(brodMsg);
+                        break;
+                    }
+                    gameLobbyController.displayChat(brodMsg);
                     break;
 
                 case STRT:
@@ -219,21 +222,32 @@ public class ProtocolReaderClient {
                     // Expect the format: PLST::[player1, player2, ...]
                     String playersStr = parts[1];
                     List<String> players = parseListFromString(playersStr);
-                    waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updatePlayerList(players));
+                    if(!lobbyChanged){
+                        waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updatePlayerList(players));
+                        break;
+                    }
+                    waitForControllerAndUpdate(() -> GameLobbyController.getInstance().updatePlayerList(players));
                     break;
 
                 case GLST:
                     String gamesStr = parts[1];
                     List<String> games = parseListFromString(gamesStr);
-                    waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updateGameList(games));
+                    if(!lobbyChanged){
+                        waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updateGameList(games));
+                        break;
+                    }
+                    waitForControllerAndUpdate(() -> GameLobbyController.getInstance().updateGameList(games));
                     break;
 
                 case LOME:
                     // Expect: LOME::lobbyName::[member1, member2, ...]
                     String lobbyMembersStr = parts[1];
                     List<String> members = parseListFromString(lobbyMembersStr);
-                    waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updateLobbyList(members));
-
+                    if(!lobbyChanged){
+                        waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().updateLobbyList(members));
+                        break;
+                    }
+                    waitForControllerAndUpdate(() -> GameLobbyController.getInstance().updateLobbyList(members));
                     break;
 
                 default:
@@ -255,7 +269,11 @@ public class ProtocolReaderClient {
     private void displayChat(String message, String sender) {
         String formattedMessage = sender + ": " + message;
         //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
-        welcomeLobbyController.displayChat(formattedMessage);
+        if(!lobbyChanged){
+            welcomeLobbyController.displayChat(formattedMessage);
+        } else {
+            gameLobbyController.displayChat(formattedMessage);
+        }
     }
 
     /**
@@ -270,9 +288,12 @@ public class ProtocolReaderClient {
      */
     private void displayWhisp(String message, String sender) {
         String formattedMessage = "Whisper from " + sender + ": " + message;
-
         //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
-        welcomeLobbyController.displayChat(formattedMessage);
+        if(!lobbyChanged){
+            welcomeLobbyController.displayChat(formattedMessage);
+        } else {
+            gameLobbyController.displayChat(formattedMessage);
+        }
     }
 
     /**
@@ -284,6 +305,26 @@ public class ProtocolReaderClient {
      */
     public void setWelcomeController(WelcomeLobbyController controller) {
         this.welcomeLobbyController = controller;
+    }
+
+    /**
+     * Sets the {@link GameLobbyController} that will be used to update the GUI with incoming messages.
+     * This method is called during the change from the WelcomeLobby to the GameLobby and ensures
+     * that the {@link ProtocolReaderClient} can forward them to the GUI for display.
+     *
+     * @param controller The {@link GameLobbyController} instance to be set.
+     */
+    public void setGameLobbyController(GameLobbyController controller) {
+        this.gameLobbyController = controller;
+    }
+
+    /**
+     * This method changes a boolean field so the client knows it needs to change the display of messages to
+     * the GameLobby. It is called in the {@link WelcomeLobbyController} when the GUI changes to the
+     * {@link GameLobbyController}.
+     */
+    public void changesController(){
+        this.lobbyChanged = true;
     }
 
     /**
