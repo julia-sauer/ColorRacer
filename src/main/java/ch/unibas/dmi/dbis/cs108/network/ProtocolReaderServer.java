@@ -301,7 +301,6 @@ public class ProtocolReaderServer {
                     break;
                 }
 
-
                 case DEOS:
                     if (!isMyTurn(protocolWriterServer)) break;
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
@@ -461,23 +460,23 @@ public class ProtocolReaderServer {
 
                     // Get all connected usernames
                     List<String> allUsers = UserList.getAllUsernames();
-                    try {
-                        writer.sendInfo("Connected users (" + allUsers.size() + "): " + allUsers);
-                    } catch (IOException e) {
-                        System.err.println("Error sending user list to user " + userId);
-                        break;
-                    }
+//                    try {
+//                        writer.sendInfo("Connected users (" + allUsers.size() + "): " + allUsers);
+//                    } catch (IOException e) {
+//                        System.err.println("Error sending user list to user " + userId);
+//                        break;
+//                    }
 
                     // Show players in each lobby (excluding Welcome)
                     for (Lobby lobby : Server.lobbies) {
                         if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) continue;
 
                         List<String> players = lobby.getPlayers();
-                        try {
-                            writer.sendInfo("[Lobby: " + lobby.getLobbyName() + "] Players (" + players.size() + "): " + players);
-                        } catch (IOException e) {
-                            System.err.println("Error sending lobby list to user " + userId);
-                        }
+//                        try {
+//                            writer.sendInfo("[Lobby: " + lobby.getLobbyName() + "] Players (" + players.size() + "): " + players);
+//                        } catch (IOException e) {
+//                            System.err.println("Error sending lobby list to user " + userId);
+//                        }
                     }
 
                     break;
@@ -511,11 +510,11 @@ public class ProtocolReaderServer {
                     }
 
                     List<String> members = userLobby.getPlayers();
-                    try {
-                        writer.sendInfo("Players in [" + userLobby.getLobbyName() + "] (" + members.size() + "): " + members);
-                    } catch (IOException e) {
-                        System.err.println("Error sending lobby member list to user " + userId);
-                    }
+//                    try {
+//                        writer.sendInfo("Players in [" + userLobby.getLobbyName() + "] (" + members.size() + "): " + members);
+//                    } catch (IOException e) {
+//                        System.err.println("Error sending lobby member list to user " + userId);
+//                    }
                     break;
                 }
                 case GLST: {
@@ -533,11 +532,11 @@ public class ProtocolReaderServer {
                             .toList();
 
                     if (realLobbies.isEmpty()) {
-                        try {
-                            writer.sendInfo("There are currently no active game lobbies.");
-                        } catch (IOException e) {
-                            System.err.println("Error sending empty game list info to user " + userId);
-                        }
+//                        try {
+//                            writer.sendInfo("There are currently no active game lobbies.");
+//                        } catch (IOException e) {
+//                            System.err.println("Error sending empty game list info to user " + userId);
+//                        }
                         break;
                     }
 
@@ -551,11 +550,11 @@ public class ProtocolReaderServer {
                             default -> "unknown";
                         };
 
-                        try {
-                            writer.sendInfo("[Lobby: " + lobby.getLobbyName() + "] " + stateText + " | Players (" + players.size() + "): " + players);
-                        } catch (IOException e) {
-                            System.err.println("Error sending GLST info to user " + userId);
-                        }
+//                        try {
+//                            writer.sendInfo("[Lobby: " + lobby.getLobbyName() + "] " + stateText + " | Players (" + players.size() + "): " + players);
+//                        } catch (IOException e) {
+//                            System.err.println("Error sending GLST info to user " + userId);
+//                        }
                     }
 
                     break;
@@ -584,7 +583,8 @@ public class ProtocolReaderServer {
                     userLobby.makeReady(userName);
                     System.out.println(userName + " is ready!");
                     ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
-                    writer.sendInfo("You are ready to play.");
+                    String info = "INFO" + Command.SEPARATOR + userName + " is ready.";
+                    Server.broadcast(info);
                     break;
                 }
                 case FNSH: {
