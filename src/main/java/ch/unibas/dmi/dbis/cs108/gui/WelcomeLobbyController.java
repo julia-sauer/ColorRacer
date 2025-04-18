@@ -3,6 +3,7 @@ package ch.unibas.dmi.dbis.cs108.gui;
 import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
+import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,8 +20,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This class is the controller for the Welcome Lobby view. Manages display and interaction
+ * for player lists, game lists, lobby member lists, chat, and transitioning
+ * to specific game lobbies.
+ */
 public class WelcomeLobbyController {
 
+    /**
+     * The root pane of the welcome lobby scene.
+     */
     @FXML
     private BorderPane root;
 
@@ -59,14 +68,18 @@ public class WelcomeLobbyController {
     @FXML
     private TextField txtUsermsg;
 
+    /**
+     * The {@link ProtocolWriterClient} instance to send commands to the server.
+     */
     private ProtocolWriterClient protocolWriter;
+
     private Client client;
+
     private Stage primaryStage;
 
-    public BorderPane getRoot() {
-        return root;
-    }
-
+    /**
+     * This method initializes the lists and stores the static instance reference.
+     */
     @FXML
     public void initialize() {
         // Initialize lists with observable array lists
@@ -76,25 +89,58 @@ public class WelcomeLobbyController {
         instance = this;  // Store the instance when initialized
     }
 
+    /**
+     * Returns the root BorderPane of this view.
+     *
+     * @return root BorderPane
+     */
+    public BorderPane getRoot() {
+        return root;
+    }
+
+    /**
+     * Returns the static instance of this controller.
+     *
+     * @return WelcomeLobbyController instance
+     */
     public static WelcomeLobbyController getInstance() {
         return instance;
     }
 
-    // Start updates when client is set
+    /**
+     * Configures the client and its protocol writer for network operations.
+     *
+     * @param client the client instance
+     */
     public void setClient(Client client) {
         this.client = client;
         this.protocolWriter = client.getProtocolWriter();
     }
 
+    /**
+     * Sets the primary application stage for modal dialogs.
+     *
+     * @param stage primary Stage
+     */
     public void setPrimaryStage(Stage stage) {
         this.primaryStage = stage;
     }
 
+    /**
+     * Directly sets the protocol writer for server communication.
+     *
+     * @param protocolWriter ProtocolWriterClient instance
+     */
     public void setProtocolWriter(ProtocolWriterClient protocolWriter) {
         this.protocolWriter = protocolWriter;
     }
 
-    // This method is called to update the player list (listlist)
+    /**
+     * This method updates the list of all players. First it clears the list which is important when
+     * a user quits or changes their nickname, and then it reproduces it with the new updated list version.
+     *
+     * @param players The list of current player names received from the {@link ProtocolReaderClient}
+     */
     public void updatePlayerList(List<String> players) {
         Platform.runLater(() -> {
             try {
@@ -107,7 +153,11 @@ public class WelcomeLobbyController {
         });
     }
 
-    // This method is called to update the game lobby list (gamelist)
+    /**
+     * This method merges and updates the list of all games by lobby name.
+     *
+     * @param newGames The formatted list of game lobby entries.
+     */
     public void updateGameList(List<String> newGames) {
         Platform.runLater(() -> {
             try {
@@ -134,7 +184,11 @@ public class WelcomeLobbyController {
         });
     }
 
-    // This method is called to update the lobby member list (lobbylist)
+    /**
+     * This method merges and updates the list of all lobbies and their members by lobby name.
+     *
+     * @param newMembers The formatted list of lobby member entries.
+     */
     public void updateLobbyList(List<String> newMembers) {
         Platform.runLater(() -> {
             try {
@@ -159,6 +213,13 @@ public class WelcomeLobbyController {
         });
     }
 
+    /**
+     * Extracts the lobby name from a formatted entry string so the {@code updateGameList} and the
+     * {@code updateLobbyList} methods know when a lobby is already registered in the list.
+     *
+     * @param entry The string containing "[Lobby: name]"
+     * @return The extracted lobby name or empty if it's invalid
+     */
     private String extractLobbyName(String entry) {
         if (entry == null || !entry.contains("[Lobby: ")) return "";
         int start = entry.indexOf("[Lobby: ") + 8;
@@ -167,11 +228,20 @@ public class WelcomeLobbyController {
         return entry.substring(start, end).trim();
     }
 
+    /**
+     * This method sends the QUIT command to leave the server.
+     *
+     * @throws IOException on network errors if sending the command does not work.
+     */
     @FXML
     private void handleLeave() throws IOException {
         protocolWriter.sendCommand(Command.QUIT);
     }
 
+    /**
+     * This method opens a dialog to change the user's nickname which then gets send over to the
+     * {@link ProtocolWriterClient}.
+     */
     @FXML
     private void handleNicknameChange() {
         TextInputDialog dialog = new TextInputDialog();
@@ -186,7 +256,7 @@ public class WelcomeLobbyController {
      * Handles key press events on the chat input field.
      * When the ENTER key is pressed, the message is sent to the server.
      *
-     * @param event the {@code KeyEvent} triggered by user input.
+     * @param event The {@code KeyEvent} triggered by user input.
      */
     @FXML
     private void handleEnterPressed(KeyEvent event) {
@@ -224,6 +294,10 @@ public class WelcomeLobbyController {
         Platform.runLater(() -> chatArea.appendText(message + "\n"));
     }
 
+    /**
+     * This method opens a dialog where the user can input a name to which a lobby is created and sends this
+     * over to the server with the {@link ProtocolWriterClient}.
+     */
     @FXML
     private void handleCreateLobby() {
         TextInputDialog dialog = new TextInputDialog();
@@ -240,6 +314,10 @@ public class WelcomeLobbyController {
         });
     }
 
+    /**
+     * This method opens a dialog where the user can select and join a lobby. The request gets send over to the
+     * {@code joinLobby} method.
+     */
     @FXML
     private void handleJoinLobby() {
         try {
@@ -269,17 +347,37 @@ public class WelcomeLobbyController {
         }
     }
 
+    // TODO Watch if lobbies are actually available to join.
+    /**
+     * This method extracts lobby names from the gamelist entries.
+     *
+     * @return list of lobby names
+     */
     private List<String> getAvailableLobbyNames() {
         return gamelist.getItems()
                 .stream()
-                .map(entry -> entry.split("]")[0].replace("[Lobby: ", "").trim()) // extract "LobbyOne" from "[Lobby: LobbyOne] open | Players: [...]"
+                .map(entry -> entry.split("]")[0].replace("[Lobby: ", "").trim())
                 .toList();
     }
 
+    /**
+     * This method sends a JOIN command over with the {@link ProtocolWriterClient} and activates the method that
+     * changes to the GameLobby view.
+     *
+     * @param lobbyName The name of the lobby the user wants to join.
+     */
     public void joinLobby(String lobbyName) {
         protocolWriter.sendJoin(lobbyName);
+        switchToGameLobby(lobbyName);
     }
 
+    //TODO include this method for all action methods for security.
+    /**
+     * Shows an error alert with specified header and content.
+     *
+     * @param header The header text
+     * @param content The content text
+     */
     private void showError(String header, String content) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -290,6 +388,10 @@ public class WelcomeLobbyController {
         });
     }
 
+    /**
+     * This method handles a {@link Button} {@link java.awt.event.ActionEvent} when a user wants the message to be
+     * sent to all users.
+     */
     @FXML
     private void handleBroadcast() {
         String message = txtUsermsg.getText().trim();
@@ -302,22 +404,31 @@ public class WelcomeLobbyController {
         }
     }
 
+    /**
+     * This method transitions the scene to the GameLobby view for the given lobby.
+     *
+     * @param lobbyName The name of the lobby the user joined.
+     */
     public void switchToGameLobby(String lobbyName) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameLobbyTemplate.fxml"));
                 BorderPane gameLobbyRoot = loader.load();
 
-                // Get controller and pass lobby name or other data if needed
                 GameLobbyController gameLobbyController = loader.getController();
                 gameLobbyController.setLobbyName(lobbyName);
-                // You can pass additional data here: client, protocolWriter, etc.
+                gameLobbyController.setProtocolWriter(protocolWriter);
+                client.setGameLobbyController(gameLobbyController);
+                // add additional data here: client, protocolWriter, protocolReader
 
-                // Replace current scene
+                gameLobbyController.listlist.setItems(listlist.getItems());
+                gameLobbyController.gamelist.setItems(gamelist.getItems());
+                gameLobbyController.lobbylist.setItems(lobbylist.getItems());
+
+                // Replaces current WelcomeLobby scene
                 Scene scene = primaryStage.getScene();
                 scene.setRoot(gameLobbyRoot);
-                primaryStage.setFullScreen(true);
-
+                primaryStage.setMaximized(true);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("Failed to load GameLobbyTemplate.fxml");
