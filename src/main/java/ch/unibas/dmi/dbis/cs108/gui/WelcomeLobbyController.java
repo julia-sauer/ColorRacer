@@ -419,6 +419,7 @@ public class WelcomeLobbyController {
                 gameLobbyController.setLobbyName(lobbyName);
                 gameLobbyController.setProtocolWriter(protocolWriter);
                 client.setGameLobbyController(gameLobbyController);
+                gameLobbyController.setClient(client);
                 // add additional data here: client, protocolWriter, protocolReader
 
                 gameLobbyController.listlist.setItems(listlist.getItems());
