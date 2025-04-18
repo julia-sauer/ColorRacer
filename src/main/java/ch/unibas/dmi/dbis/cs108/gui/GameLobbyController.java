@@ -19,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +130,12 @@ public class GameLobbyController {
 
     private Client client;
 
+    private String nickname;
+
+    private String lobbyname;
+
+    private boolean isHost;
+
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog immediately after joining.
      */
@@ -150,6 +157,10 @@ public class GameLobbyController {
      */
     public void setProtocolWriter(ProtocolWriterClient protocolWriter) {
         this.protocolWriter = protocolWriter;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     /**
@@ -281,8 +292,8 @@ public class GameLobbyController {
         dialog.setTitle("Choose Your Nickname");
         dialog.setHeaderText("Enter nickname:");
         dialog.setContentText("Name:");
-
         dialog.showAndWait().ifPresent(nickname -> protocolWriter.changeNickname(nickname));
+        this.nickname = nickname;
     }
 
     /**
@@ -331,6 +342,18 @@ public class GameLobbyController {
      */
     public void setLobbyName(String name) {
         Platform.runLater(() -> lobbyNameDisplay.setText("Lobby: " + name));
+        this.lobbyname = name;
+    }
+
+    /**
+     * Enables/disables start & finish based on whether I'm host.
+     */
+    public void setHost(boolean host) {
+        this.isHost = host;
+        Platform.runLater(() -> {
+            startButton.setDisable(!host);
+            finishButton.setDisable(!host);
+        });
     }
 
     // TODO implementing when it should set the dices visible.
@@ -346,6 +369,11 @@ public class GameLobbyController {
         dice4.setVisible(visible);
         dice5.setVisible(visible);
         dice6.setVisible(visible);
+    }
+
+    public void setHostButtonVisible(boolean visible) {
+        startButton.setDisable(false);
+        finishButton.setDisable(false);
     }
 
     //TODO include this method for all action methods for security.
@@ -434,13 +462,48 @@ public class GameLobbyController {
                     String lobbyName = extractLobbyName(entry);
                     lobbyMap.put(lobbyName, entry); // replaces if already exists
                 }
-
                 lobbylist.setItems(FXCollections.observableArrayList(lobbyMap.values()));
+                String myEntry = lobbyMap.get(lobbyname);
+                if (myEntry != null) {
+                    List<String> players = extractPlayers(myEntry);
+                    boolean amHost =
+                            !players.isEmpty() &&
+                                    players.get(0).equalsIgnoreCase(nickname);
+                    setHost(amHost);
+                }
             } catch (Exception e) {
                 System.err.println("Error updating lobby members: " + e.getMessage());
                 e.printStackTrace();
             }
         });
+    }
+
+    /**
+     * Given an entry like
+     *   "[Lobby: Foo] Players: [Alice, Bob, Charlie]"
+     * returns List.of("Alice","Bob","Charlie").
+     */
+    private List<String> extractPlayers(String entry) {
+        // find the bracketed list after "Players:"
+        int idx = entry.indexOf("Players:");
+        if (idx < 0) return List.of();
+        String after = entry.substring(idx + "Players:".length()).trim();
+        // now after == "[Alice, Bob, Charlie]"
+        return parseListFromString(after);
+    }
+
+    /**
+     * Helper to parse "[a, b, c]" into List<String>.
+     */
+    private List<String> parseListFromString(String listStr) {
+        String s = listStr.strip();
+        if (s.startsWith("[") && s.endsWith("]")) {
+            s = s.substring(1, s.length()-1);
+        }
+        if (s.isBlank()) return List.of();
+        return Arrays.stream(s.split(","))
+                .map(String::trim)
+                .toList();
     }
 
     /**

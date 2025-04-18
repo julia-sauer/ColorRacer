@@ -124,6 +124,7 @@ public class ProtocolReaderClient {
                     }
                     String newNick = parts[1].trim();
                     System.out.println("Your nickname is " + newNick);
+                    waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().nickname = newNick);
                     display("Your nickname is " + newNick);
                     break;
 

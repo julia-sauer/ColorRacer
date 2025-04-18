@@ -4,6 +4,8 @@ import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
+import ch.unibas.dmi.dbis.cs108.server.Lobby;
+import ch.unibas.dmi.dbis.cs108.server.Server;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -76,6 +78,8 @@ public class WelcomeLobbyController {
     private Client client;
 
     private Stage primaryStage;
+
+    public String nickname;
 
     /**
      * This method initializes the lists and stores the static instance reference.
@@ -420,6 +424,7 @@ public class WelcomeLobbyController {
                 gameLobbyController.setProtocolWriter(protocolWriter);
                 client.setGameLobbyController(gameLobbyController);
                 gameLobbyController.setClient(client);
+                gameLobbyController.setNickname(nickname);
                 // add additional data here: client, protocolWriter, protocolReader
 
                 gameLobbyController.listlist.setItems(listlist.getItems());

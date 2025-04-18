@@ -196,6 +196,7 @@ public class ProtocolReaderServer {
                     // Connection is active, no timeout necessary
                     if (pingThread != null) {
                         pingThread.notifyPong();  // notify the ping thread that the PONG was received
+                        Server.updateAllClients();
                     }
                     //protocolWriterServer.sendInfo("OK PONG received");
                     break;
@@ -350,6 +351,7 @@ public class ProtocolReaderServer {
                         user.setBikeColor(color); // save in User
                         protocolWriterServer.sendInfo("+OK " + color + " bike is selected");
                         protocolWriterServer.setBike(true);
+                        Server.updateAllClients();
                     }
                     break;
                 }
