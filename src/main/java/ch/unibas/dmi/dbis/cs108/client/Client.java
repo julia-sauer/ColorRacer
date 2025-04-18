@@ -1,12 +1,10 @@
 package ch.unibas.dmi.dbis.cs108.client;
 
-import ch.unibas.dmi.dbis.cs108.gui.ChatController;
+import ch.unibas.dmi.dbis.cs108.gui.GameLobbyController;
 import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
-import ch.unibas.dmi.dbis.cs108.server.User;
-import ch.unibas.dmi.dbis.cs108.server.UserList;
 
 import java.net.*;
 import java.io.*;
@@ -37,6 +35,7 @@ public class Client {
     private ProtocolWriterClient protocolWriterClient;
 
     private WelcomeLobbyController welcomeLobbyController;
+    private GameLobbyController gameLobbyController;
 
     /**
      * Constructs a new {@code Client} with the specified host, port, and username.
@@ -236,6 +235,25 @@ public class Client {
         if (protocolWriterClient != null){
             protocolWriterClient.setWelcomeController(welcomeController);
             welcomeController.setProtocolWriter(protocolWriterClient);
+        }
+    }
+
+    /**
+     * Sets the {@link GameLobbyController} for this client by forwarding it to the {@link ProtocolReaderClient} and
+     * the {@link ProtocolWriterClient}.
+     * This allows the {@link ProtocolReaderClient} to update the GameLobby GUI with incoming messages.
+     *
+     * @param controller The controller instance
+     */
+    public void setGameLobbyController(GameLobbyController controller) {
+        this.gameLobbyController = controller;
+        if (protocolReader != null) {
+            protocolReader.setGameLobbyController(controller);
+            protocolReader.changesController();
+        }
+        if (protocolWriterClient != null){
+            protocolWriterClient.setGameLobbyController(controller);
+            controller.setProtocolWriter(protocolWriterClient);
         }
     }
 
