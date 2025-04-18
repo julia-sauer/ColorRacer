@@ -1,5 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.gui;
 
+import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
@@ -124,6 +125,10 @@ public class GameLobbyController {
      */
     private ProtocolWriterClient protocolWriter;
 
+    private ProtocolReaderClient protocolReader;
+
+    private Client client;
+
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog immediately after joining.
      */
@@ -145,6 +150,17 @@ public class GameLobbyController {
      */
     public void setProtocolWriter(ProtocolWriterClient protocolWriter) {
         this.protocolWriter = protocolWriter;
+    }
+
+    /**
+     * Configures the client and its protocol writer for network operations.
+     *
+     * @param client the client instance
+     */
+    public void setClient(Client client) {
+        this.client = client;
+        this.protocolWriter = client.getProtocolWriter();
+        this.protocolReader = client.getProtocolReader();
     }
 
     /**
@@ -216,7 +232,13 @@ public class GameLobbyController {
 
     @FXML
     private void handleReady() {
-        // TODO: Implement ready logic
+        try {
+            if(protocolReader.bike) {
+                protocolWriter.sendReadyStatus();
+            }
+        } catch (IOException e) {
+            showError("Failed to send ready status", e.getMessage());
+        }
     }
 
     @FXML
