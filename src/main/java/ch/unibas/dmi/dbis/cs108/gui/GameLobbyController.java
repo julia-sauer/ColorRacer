@@ -6,6 +6,7 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -121,6 +123,27 @@ public class GameLobbyController {
     @FXML
     private ImageView dice1, dice2, dice3, dice4, dice5, dice6;
 
+    @FXML
+    private AnchorPane gameBoard;
+
+    @FXML
+    private Button yellow1, yellow2, yellow3, yellow4, yellow5, yellow6, yellow7;
+
+    @FXML
+    private Button red1, red2, red3, red4, red5, red6, red7;
+
+    @FXML
+    private Button blue1, blue2, blue3, blue4, blue5, blue6, blue7, blue8, blue9, blue10;
+
+    @FXML
+    private Button purple1, purple2, purple3, purple4, purple5, purple6, purple7, purple8, purple9, purple10;
+
+    @FXML
+    private Button pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10;
+
+    @FXML
+    private Button orange1, orange2, orange3, orange4, orange5, orange6, orange7, orange8, orange9, orange10;
+
     /**
      * The {@link ProtocolWriterClient} instance to send commands to the server.
      */
@@ -159,6 +182,11 @@ public class GameLobbyController {
         this.protocolWriter = protocolWriter;
     }
 
+    /**
+     * Sets the nickname of the user that's connected with this {@link GameLobbyController}.
+     *
+     * @param nickname The nickname that the user has.
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -241,6 +269,9 @@ public class GameLobbyController {
         Platform.runLater(() -> chatArea.appendText(message + "\n"));
     }
 
+    /**
+     * This method sends a ready status to the server and lets all know that the user is ready to play the game.
+     */
     @FXML
     private void handleReady() {
         try {
@@ -252,6 +283,10 @@ public class GameLobbyController {
         }
     }
 
+    /**
+     * This method sends the {@code STRT} command to the server when all players are ready. Only the host can
+     * use this {@link Button} respectively this method.
+     */
     @FXML
     private void handleStart() {
         try {
@@ -261,6 +296,10 @@ public class GameLobbyController {
         }
     }
 
+    /**
+     * This method sends the {@code FNSH} command to the server. Only the host can use this {@link Button}
+     * respectively this method.
+     */
     @FXML
     private void handleFinish() {
         try {
@@ -270,19 +309,34 @@ public class GameLobbyController {
         }
     }
 
+    //TODO javadoc
     @FXML
     private void handleThrowDice() {
-        // TODO: Dice rolling logic
+        try {
+            protocolWriter.sendCommand(Command.ROLL);
+        } catch (IOException e) {
+            showError("Failed to throw the dices", e.getMessage());
+        }
     }
 
+    //TODO javadoc
     @FXML
     private void handleMoveToField() {
-        // TODO: Movement logic
+        try {
+            protocolWriter.sendCommand(Command.MOVE);
+        } catch (IOException e) {
+            showError("Failed to move to the field", e.getMessage());
+        }
     }
 
+    //TODO javadoc
     @FXML
     private void handleSkip() {
-        // TODO: Skip turn logic
+        try {
+            protocolWriter.sendCommand(Command.NEXT);
+        } catch (IOException e) {
+            showError("Failed to skip your turn", e.getMessage());
+        }
     }
 
     /**
@@ -379,14 +433,24 @@ public class GameLobbyController {
     }
 
     /**
-     * Enables/disables start & finish based on whether I'm host.
+     * Enables/disables start & finish based on whether the user is the host.
+     *
+     * @param host The boolean whether the user is the host (first player in the lobby) or not
      */
     public void setHost(boolean host) {
         this.isHost = host;
         Platform.runLater(() -> {
             startButton.setDisable(!host);
+            startButton.setVisible(host);
             finishButton.setDisable(!host);
         });
+    }
+
+    public void gameOngoing(){
+        if(isHost){
+            finishButton.setVisible(true);
+        }
+        gameBoard.setVisible(true);
     }
 
     // TODO implementing when it should set the dices visible.
@@ -402,11 +466,6 @@ public class GameLobbyController {
         dice4.setVisible(visible);
         dice5.setVisible(visible);
         dice6.setVisible(visible);
-    }
-
-    public void setHostButtonVisible(boolean visible) {
-        startButton.setDisable(false);
-        finishButton.setDisable(false);
     }
 
     //TODO include this method for all action methods for security.
@@ -453,6 +512,20 @@ public class GameLobbyController {
             try {
                 gamelist.getItems().clear();
                 gamelist.getItems().addAll(newGames);
+                // 2) Check *your* lobby’s status
+                for (String entry : newGames) {
+                    // extractLobbyName(...) must return exactly your lobby’s name
+                    if (extractLobbyName(entry).equalsIgnoreCase(lobbyname)) {
+                        // get the text after the "]"
+                        int end = entry.indexOf("]");
+                        String status = entry.substring(end + 1).trim();
+                        // status is now e.g. "open", "running", or "finished"
+                        if (status.equalsIgnoreCase("running")) {
+                            gameOngoing();
+                        }
+                        break;
+                    }
+                }
             } catch (Exception e) {
                 showError("Failed to update game list", e.getMessage());
             }
@@ -460,7 +533,8 @@ public class GameLobbyController {
     }
 
     /**
-     * This method merges and updates the list of all lobbies and their members by lobby name.
+     * This method merges and updates the list of all lobbies and their members by lobby name. It also sets
+     * the host of the lobby by looking at the first name in the list in the corresponding lobby.
      *
      * @param newMembers The formatted list of lobby member entries.
      */
@@ -488,7 +562,7 @@ public class GameLobbyController {
     }
 
     /**
-     * Given an entry like
+     * Given an entry like //TODO correct Javadoc
      *   "[Lobby: Foo] Players: [Alice, Bob, Charlie]"
      * returns List.of("Alice","Bob","Charlie").
      */
@@ -508,20 +582,6 @@ public class GameLobbyController {
     }
 
     /**
-     * Helper to parse "[a, b, c]" into List<String>.
-     */
-    private List<String> parseListFromString(String listStr) {
-        String s = listStr.strip();
-        if (s.startsWith("[") && s.endsWith("]")) {
-            s = s.substring(1, s.length()-1);
-        }
-        if (s.isBlank()) return List.of();
-        return Arrays.stream(s.split("|"))
-                .map(String::trim)
-                .toList();
-    }
-
-    /**
      * Extracts the lobby name from a formatted entry string so the {@code updateGameList} and the
      * {@code updateLobbyList} methods know when a lobby is already registered in the list.
      *
@@ -534,5 +594,9 @@ public class GameLobbyController {
         int end = entry.indexOf("]", start);
         if (end <= start) return "";
         return entry.substring(start, end).trim();
+    }
+
+    @FXML
+    public void handleFieldChoice(ActionEvent actionEvent) {
     }
 }

@@ -8,21 +8,21 @@
 
 <BorderPane prefHeight="1080.0" prefWidth="1554.0" stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.GameLobbyController">
    <right>
-      <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="895.0" prefWidth="361.0" spacing="10.0" styleClass="game-panel" BorderPane.alignment="TOP_CENTER">
+      <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="lobbyNameDisplay" alignment="CENTER" prefHeight="45.0" prefWidth="323.0" styleClass="dialog-header" text="Lobby:" VBox.vgrow="NEVER" />
-            <TitledPane prefHeight="412.0" prefWidth="358.0" text="Chat">
+            <TitledPane prefHeight="370.0" prefWidth="327.0" text="Chat">
                <content>
                   <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="275.0">
                      <children>
-                        <TextArea fx:id="chatArea" layoutX="7.0" layoutY="5.0" prefHeight="267.0" prefWidth="292.0" />
+                        <TextArea fx:id="chatArea" layoutX="7.0" layoutY="2.0" prefHeight="270.0" prefWidth="292.0" />
                         <TextField fx:id="txtUsermsg" layoutX="7.0" layoutY="279.0" onKeyPressed="#handleEnterPressed" prefHeight="43.0" prefWidth="220.0" promptText="Type your message here..." />
                         <Button alignment="CENTER" layoutX="229.0" layoutY="275.0" mnemonicParsing="false" onAction="#handleBroadcast" prefHeight="52.0" prefWidth="72.0" styleClass="game-button" text="All" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
                </content>
             </TitledPane>
-            <TabPane prefHeight="244.0" prefWidth="357.0" styleClass="tab-pane" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="282.0" prefWidth="327.0" styleClass="tab-pane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="SOMETIMES">
               <tabs>
                 <Tab text="List">
                      <content>
@@ -42,8 +42,8 @@
               </tabs>
             </TabPane>
             <Button fx:id="readyButton" mnemonicParsing="false" onAction="#handleReady" styleClass="game-button" text="Ready" />
-            <Button fx:id="startButton" disable="true" mnemonicParsing="false" onAction="#handleStart" styleClass="game-button" text="Start Game" />
-            <Button fx:id="finishButton" disable="true" layoutX="171.0" layoutY="904.0" mnemonicParsing="false" onAction="#handleFinish" styleClass="game-button" text="Finish Game" />
+            <Button fx:id="startButton" disable="true" mnemonicParsing="false" onAction="#handleStart" styleClass="game-button" text="Start Game" visible="false" />
+            <Button fx:id="finishButton" disable="true" mnemonicParsing="false" onAction="#handleFinish" styleClass="game-button" text="Finish Game" visible="false" />
          </children>
       </VBox>
    </right>
@@ -74,7 +74,7 @@
       </MenuBar>
    </top>
    <bottom>
-      <HBox alignment="CENTER" fillHeight="false" prefHeight="128.0" prefWidth="1920.0" spacing="20.0" styleClass="game-panel" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" fillHeight="false" focusTraversable="true" spacing="20.0" styleClass="game-panel" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
@@ -96,6 +96,68 @@
       </HBox>
    </bottom>
    <center>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="gameBoard" prefHeight="200.0" prefWidth="200.0" styleClass="game-board" visible="false" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="874.0" fitWidth="1101.0" layoutX="57.0" pickOnBounds="true" preserveRatio="true">
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+            <Button fx:id="yellow1" layoutX="41.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="y1" />
+            <Button fx:id="purple1" layoutX="32.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p1" />
+            <Button fx:id="orange1" layoutX="32.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o1" />
+            <Button fx:id="orange2" layoutX="135.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o2" />
+            <Button fx:id="orange3" layoutX="217.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o3" />
+            <Button fx:id="orange10" layoutX="893.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o10" />
+            <Button fx:id="orange9" layoutX="785.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o9" />
+            <Button fx:id="orange4" layoutX="301.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o4" />
+            <Button fx:id="orange8" layoutX="691.0" layoutY="40.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o8" />
+            <Button fx:id="orange7" layoutX="597.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o7" />
+            <Button fx:id="orange6" layoutX="496.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o6" />
+            <Button fx:id="orange5" layoutX="381.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="o5" />
+            <Button fx:id="yellow7" layoutX="597.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="y7" />
+            <Button fx:id="yellow6" layoutX="496.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="y6" />
+            <Button fx:id="yellow5" layoutX="395.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="y5" />
+            <Button fx:id="yellow2" layoutX="126.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="y2" />
+            <Button fx:id="yellow3" layoutX="229.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="y3" />
+            <Button fx:id="yellow4" layoutX="311.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="y4" />
+            <Button fx:id="purple2" layoutX="126.0" layoutY="271.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p2" />
+            <Button fx:id="purple3" layoutX="229.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p3" />
+            <Button fx:id="purple4" layoutX="311.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p4" />
+            <Button fx:id="purple5" layoutX="395.0" layoutY="277.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p5" />
+            <Button fx:id="purple6" layoutX="496.0" layoutY="277.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p6" />
+            <Button fx:id="purple7" layoutX="597.0" layoutY="271.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p7" />
+            <Button fx:id="purple8" layoutX="705.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p8" />
+            <Button fx:id="purple9" layoutX="799.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p9" />
+            <Button fx:id="purple10" layoutX="893.0" layoutY="266.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="p10" />
+            <Button fx:id="red1" layoutX="41.0" layoutY="368.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="r1" />
+            <Button fx:id="red4" layoutX="311.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="r4" />
+            <Button fx:id="red5" layoutX="395.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="r5" />
+            <Button fx:id="red6" layoutX="496.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="r6" />
+            <Button fx:id="red3" layoutX="217.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="r3" />
+            <Button fx:id="red2" layoutX="126.0" layoutY="368.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="r2" />
+            <Button fx:id="red7" layoutX="597.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="r7" />
+            <Button fx:id="pink1" layoutX="32.0" layoutY="469.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi1" />
+            <Button fx:id="pink3" layoutX="207.0" layoutY="479.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi3" />
+            <Button fx:id="pink4" layoutX="311.0" layoutY="474.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi4" />
+            <Button fx:id="pink5" layoutX="395.0" layoutY="479.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi5" />
+            <Button fx:id="pink6" layoutX="496.0" layoutY="469.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi6" />
+            <Button fx:id="pink7" layoutX="590.0" layoutY="479.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi7" />
+            <Button fx:id="pink8" layoutX="691.0" layoutY="474.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi8" />
+            <Button fx:id="pink9" layoutX="799.0" layoutY="469.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi9" />
+            <Button fx:id="pink10" layoutX="893.0" layoutY="474.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi10" />
+            <Button fx:id="pink2" layoutX="123.0" layoutY="487.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="pi2" />
+            <Button fx:id="blue1" layoutX="32.0" layoutY="590.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b1" />
+            <Button fx:id="blue2" layoutX="126.0" layoutY="585.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b2" />
+            <Button fx:id="blue3" layoutX="207.0" layoutY="585.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b3" />
+            <Button fx:id="blue4" layoutX="301.0" layoutY="585.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b4" />
+            <Button fx:id="blue5" layoutX="395.0" layoutY="575.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b5" />
+            <Button fx:id="blue6" layoutX="496.0" layoutY="590.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b6" />
+            <Button fx:id="blue7" layoutX="590.0" layoutY="585.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b7" />
+            <Button fx:id="blue8" layoutX="691.0" layoutY="575.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b8" />
+            <Button fx:id="blue9" layoutX="799.0" layoutY="575.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b9" />
+            <Button fx:id="blue10" layoutX="893.0" layoutY="575.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b10" />
+         </children>
+      </AnchorPane>
    </center>
 </BorderPane>
