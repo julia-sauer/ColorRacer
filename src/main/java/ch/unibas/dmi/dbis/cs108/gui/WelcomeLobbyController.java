@@ -4,11 +4,8 @@ import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
-import ch.unibas.dmi.dbis.cs108.server.Lobby;
-import ch.unibas.dmi.dbis.cs108.server.Server;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,12 +25,6 @@ import java.util.*;
  * to specific game lobbies.
  */
 public class WelcomeLobbyController {
-
-    /**
-     * The root pane of the welcome lobby scene.
-     */
-    @FXML
-    private BorderPane root;
 
     /**
      * The static instance that can be accessed from anywhere.
@@ -86,20 +77,10 @@ public class WelcomeLobbyController {
      */
     @FXML
     public void initialize() {
-        // Initialize lists with observable array lists
-        listlist.setItems(FXCollections.observableArrayList());
+        listlist.setItems(FXCollections.observableArrayList()); // Initialize lists with observable array lists
         gamelist.setItems(FXCollections.observableArrayList());
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;  // Store the instance when initialized
-    }
-
-    /**
-     * Returns the root BorderPane of this view.
-     *
-     * @return root BorderPane
-     */
-    public BorderPane getRoot() {
-        return root;
     }
 
     /**
@@ -204,10 +185,8 @@ public class WelcomeLobbyController {
             dialogStage.setTitle("Leave Lobby");
             dialogStage.setScene(new Scene(dialogPane));
 
-            // Set controller
-            LeaveLobbyDialogController controller = loader.getController();
+            LeaveLobbyDialogController controller = loader.getController();// Sets controller
             controller.setDialogStage(dialogStage);
-            controller.setWelcomeLobbyController(this);
 
             dialogStage.showAndWait();
 
@@ -255,7 +234,6 @@ public class WelcomeLobbyController {
     private void sendMessage() {
         String message = txtUsermsg.getText().trim();
         if (!message.isEmpty()) {
-            // Send the message using your existing network protocol
             if (protocolWriter != null) {
                 protocolWriter.sendChat(message);
             }
@@ -312,11 +290,9 @@ public class WelcomeLobbyController {
             dialogStage.setTitle("Join Lobby");
             dialogStage.setScene(new Scene(dialogPane));
 
-            // Set controller
-            JoinLobbyDialogController controller = loader.getController();
+            JoinLobbyDialogController controller = loader.getController(); // Set controller
             controller.setAvailableLobbies(getAvailableLobbyNames());
             controller.setDialogStage(dialogStage);
-            controller.setWelcomeLobbyController(this);
 
             dialogStage.showAndWait();
 
@@ -331,9 +307,9 @@ public class WelcomeLobbyController {
 
     // TODO Watch if lobbies are actually available to join.
     /**
-     * This method extracts lobby names from the gamelist entries.
+     * This method extracts lobby names from the game list entries.
      *
-     * @return list of lobby names
+     * @return The list of lobby names
      */
     private List<String> getAvailableLobbyNames() {
         return gamelist.getItems()
@@ -353,7 +329,6 @@ public class WelcomeLobbyController {
         switchToGameLobby(lobbyName);
     }
 
-    //TODO include this method for all action methods for security.
     /**
      * Shows an error alert with specified header and content.
      *
@@ -408,8 +383,7 @@ public class WelcomeLobbyController {
                 gameLobbyController.gamelist.setItems(gamelist.getItems());
                 gameLobbyController.lobbylist.setItems(lobbylist.getItems());
 
-                // Replaces current WelcomeLobby scene
-                Scene scene = primaryStage.getScene();
+                Scene scene = primaryStage.getScene(); // Replaces current WelcomeLobby scene
                 scene.setRoot(gameLobbyRoot);
                 primaryStage.setMaximized(true);
             } catch (IOException e) {

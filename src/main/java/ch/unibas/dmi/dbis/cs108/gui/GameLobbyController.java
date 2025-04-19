@@ -40,11 +40,6 @@ public class GameLobbyController {
     private static GameLobbyController instance;
 
     /**
-     * The root pane of the Game Lobby scene.
-     */
-    private BorderPane root;
-
-    /**
      * The {@link Label} for displaying the lobbyname.
      */
     @FXML
@@ -174,12 +169,12 @@ public class GameLobbyController {
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;  // Store the instance when initialized
         diceImages = new HashMap<>(); // Load all dice‐color images into a map:
-        diceImages.put("yellow", new Image(getClass().getResourceAsStream("/dice_yellow_dummy.png")));
-        diceImages.put("orange", new Image(getClass().getResourceAsStream("/dice_orange_dummy.png")));
-        diceImages.put("red", new Image(getClass().getResourceAsStream("/dice_red_dummy.png")));
-        diceImages.put("pink", new Image(getClass().getResourceAsStream("/dice_pink_dummy.png")));
-        diceImages.put("purple", new Image(getClass().getResourceAsStream("/dice_purple_dummy.png")));
-        diceImages.put("blue", new Image(getClass().getResourceAsStream("/dice_blue_dummy.png")));
+        diceImages.put("yellow", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_yellow_dummy.png"))));
+        diceImages.put("orange", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_orange_dummy.png"))));
+        diceImages.put("red", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_red_dummy.png"))));
+        diceImages.put("pink", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_pink_dummy.png"))));
+        diceImages.put("purple", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_purple_dummy.png"))));
+        diceImages.put("blue", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_blue_dummy.png"))));
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
@@ -279,7 +274,7 @@ public class GameLobbyController {
     }
 
     /**
-     * This method sends a ready status to the server and lets all know that the user is ready to play the game.
+     * This method sends a ready status to the server and let all know that the user is ready to play the game.
      */
     @FXML
     private void handleReady() {
@@ -319,7 +314,7 @@ public class GameLobbyController {
     }
 
     /**
-     * Sends the {@code ROLL} command to the server to request a dice roll.
+     * Sends the {@code ROLL} command to the server to request the dice roll.
      * This method is triggered when the user clicks the "Roll" {@link Button}.
      */
     @FXML
@@ -405,7 +400,6 @@ public class GameLobbyController {
 
             LeaveLobbyDialogController controller = loader.getController(); // sets controller
             controller.setDialogStage(dialogStage);
-            controller.setGameLobbyController(this);
 
             dialogStage.showAndWait();
 
@@ -447,7 +441,6 @@ public class GameLobbyController {
 
             SelectBikeDialogController bikeDialogController = loader.getController();
             bikeDialogController.setDialogStage(dialogStage);
-            bikeDialogController.setGameLobby(this);
 
             dialogStage.showAndWait();
 
