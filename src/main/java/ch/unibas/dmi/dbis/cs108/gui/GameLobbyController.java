@@ -6,7 +6,6 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -135,7 +134,7 @@ public class GameLobbyController {
 
     private String lobbyname;
 
-    private boolean isHost;
+    private boolean isHost = false;
 
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog immediately after joining.
@@ -255,12 +254,20 @@ public class GameLobbyController {
 
     @FXML
     private void handleStart() {
-        // TODO: Implement game start logic
+        try {
+            protocolWriter.sendCommand(Command.STRT);
+        } catch (IOException e) {
+            showError("Failed to start the game", e.getMessage());
+        }
     }
 
     @FXML
     private void handleFinish() {
-        // TODO: Implement game finish logic
+        try {
+            protocolWriter.sendCommand(Command.FNSH);
+        } catch (IOException e) {
+            showError("Failed to end the game", e.getMessage());
+        }
     }
 
     @FXML
@@ -320,7 +327,6 @@ public class GameLobbyController {
         dialog.setHeaderText("Enter nickname:");
         dialog.setContentText("Name:");
         dialog.showAndWait().ifPresent(nickname -> protocolWriter.changeNickname(nickname));
-        this.nickname = nickname;
     }
 
     /**
@@ -487,10 +493,18 @@ public class GameLobbyController {
      * returns List.of("Alice","Bob","Charlie").
      */
     private List<String> extractPlayers(String entry) {
-        int idx = entry.indexOf("Host:");
+        int idx = entry.indexOf("Players:");
         if (idx < 0) return List.of();
-        String after = entry.substring(idx + "Host:".length()).trim();
-        return parseListFromString(after);
+        String after = entry.substring(idx + "Players:".length()).trim();
+        // strip the brackets
+        if (after.startsWith("[") && after.endsWith("]")) {
+            after = after.substring(1, after.length() - 1);
+        }
+        if (after.isBlank()) return List.of();
+        // split on pipe, trimming whitespace
+        return Arrays.stream(after.split("\\|"))
+                .map(String::trim)
+                .toList();
     }
 
     /**
@@ -502,7 +516,7 @@ public class GameLobbyController {
             s = s.substring(1, s.length()-1);
         }
         if (s.isBlank()) return List.of();
-        return Arrays.stream(s.split(","))
+        return Arrays.stream(s.split("|"))
                 .map(String::trim)
                 .toList();
     }
@@ -518,7 +532,7 @@ public class GameLobbyController {
         if (entry == null || !entry.contains("[Lobby: ")) return "";
         int start = entry.indexOf("[Lobby: ") + 8;
         int end = entry.indexOf("]", start);
-        if (start < 0 || end < 0 || end <= start) return "";
+        if (end <= start) return "";
         return entry.substring(start, end).trim();
     }
 }

@@ -551,6 +551,7 @@ public class Server {
         List<String> lobbyMembers = new ArrayList<>();
         for (Lobby lobby : realLobbies) {
             List<String> players = lobby.getPlayers();
+            String memberlist = String.join(" | ", players);
             String stateText = switch (lobby.getGameState()) {
                 case 1 -> "open";
                 case 2 -> "running";
@@ -558,7 +559,7 @@ public class Server {
                 default -> "unknown";
             };
             lobbyInfo.add("[Lobby: " + lobby.getLobbyName() + "] " + stateText); // + " | Players: " + players);
-            lobbyMembers.add("[Lobby: " + lobby.getLobbyName() + "] " + "Host: " + players);
+            lobbyMembers.add("[Lobby: " + lobby.getLobbyName() + "] " + "Players: " + memberlist);
         }
         String gameListMessage = "GLST" + Command.SEPARATOR + lobbyInfo.toString();
         String lobbyMemberMessage = "LOME" + Command.SEPARATOR + lobbyMembers.toString();
