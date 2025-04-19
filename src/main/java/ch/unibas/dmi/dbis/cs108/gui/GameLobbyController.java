@@ -21,10 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This is the controller class for managing the GameLobby view.
@@ -125,6 +122,12 @@ public class GameLobbyController {
 
     @FXML
     private AnchorPane gameBoard;
+
+    /** The field button the user clicked most recently. */
+    private Button selectedFieldButton;
+
+    /** Tracks all field buttons the user has clicked but not yet moved to. */
+    private final Set<Button> selectedFieldButtons = new HashSet<>();
 
     @FXML
     private Button yellow1, yellow2, yellow3, yellow4, yellow5, yellow6, yellow7;
@@ -324,6 +327,11 @@ public class GameLobbyController {
     private void handleMoveToField() {
         try {
             protocolWriter.sendCommand(Command.MOVE);
+            // clear highlights on all selected fields
+            for (Button btn : selectedFieldButtons) {
+                btn.getStyleClass().remove("field-button-selected");
+            }
+            selectedFieldButtons.clear();
         } catch (IOException e) {
             showError("Failed to move to the field", e.getMessage());
         }
@@ -597,6 +605,21 @@ public class GameLobbyController {
     }
 
     @FXML
-    public void handleFieldChoice(ActionEvent actionEvent) {
+    public void handleFieldChoice(ActionEvent event) {
+        Button btn = (Button) event.getSource();
+        String fieldId = btn.getId();
+
+        try {
+            protocolWriter.sendCommandAndString(Command.CHOS, fieldId);
+
+            // highlight and remember this button
+            if (!btn.getStyleClass().contains("field-button-selected")) {
+                btn.getStyleClass().add("field-button-selected");
+            }
+            selectedFieldButtons.add(btn);
+
+        } catch (IOException e) {
+            showError("Failed to send field choice", e.getMessage());
+        }
     }
 }
