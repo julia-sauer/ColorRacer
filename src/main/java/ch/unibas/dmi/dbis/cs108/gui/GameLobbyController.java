@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -121,11 +122,10 @@ public class GameLobbyController {
     @FXML
     private ImageView dice1, dice2, dice3, dice4, dice5, dice6;
 
+    private Map<String, Image> diceImages;
+
     @FXML
     private AnchorPane gameBoard;
-
-    /** The field button the user clicked most recently. */
-    private Button selectedFieldButton;
 
     /** Tracks all field buttons the user has clicked but not yet moved to. */
     private final Set<Button> selectedFieldButtons = new HashSet<>();
@@ -165,6 +165,7 @@ public class GameLobbyController {
 
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog immediately after joining.
+     * It also sets the Map for the six Images for the dice colors.
      */
     @FXML
     public void initialize() {
@@ -173,6 +174,15 @@ public class GameLobbyController {
         gamelist.setItems(FXCollections.observableArrayList());
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;  // Store the instance when initialized
+
+        // Load all dice‐color images into a map:
+        diceImages = new HashMap<>();
+        diceImages.put("yellow", new Image(getClass().getResourceAsStream("/dice_yellow_dummy.png")));
+        diceImages.put("orange", new Image(getClass().getResourceAsStream("/dice_orange_dummy.png")));
+        diceImages.put("red", new Image(getClass().getResourceAsStream("/dice_red_dummy.png")));
+        diceImages.put("pink", new Image(getClass().getResourceAsStream("/dice_pink_dummy.png")));
+        diceImages.put("purple", new Image(getClass().getResourceAsStream("/dice_purple_dummy.png")));
+        diceImages.put("blue", new Image(getClass().getResourceAsStream("/dice_blue_dummy.png")));
 
         Platform.runLater(this::handleBikeSelection);
     }
@@ -323,6 +333,28 @@ public class GameLobbyController {
         }
     }
 
+    /**
+     * Called from your ProtocolReaderClient when you get back ROLL::<[black,green,…]> //TODO javadoc
+     */
+    public void updateDice(String[] colors) {
+        Platform.runLater(() -> {
+            ImageView[] views = { dice1, dice2, dice3, dice4, dice5, dice6 };
+
+            // Make sure visible
+            setDiceVisible(true);
+
+            for (int i = 0; i < colors.length && i < views.length; i++) {
+                Image img = diceImages.get(colors[i].toLowerCase());
+                if (img != null) {
+                    views[i].setImage(img);
+                } else {
+                    // fallback or clear
+                    views[i].setImage(null);
+                }
+            }
+        });
+    }
+
     //TODO javadoc
     @FXML
     private void handleMoveToField() {
@@ -333,6 +365,7 @@ public class GameLobbyController {
                 btn.getStyleClass().remove("field-button-selected");
             }
             selectedFieldButtons.clear();
+            setDiceVisible(false);
         } catch (IOException e) {
             showError("Failed to move to the field", e.getMessage());
         }
@@ -343,6 +376,7 @@ public class GameLobbyController {
     private void handleSkip() {
         try {
             protocolWriter.sendCommand(Command.NEXT);
+            setDiceVisible(false);
         } catch (IOException e) {
             showError("Failed to skip your turn", e.getMessage());
         }
@@ -455,6 +489,7 @@ public class GameLobbyController {
         });
     }
 
+    //TODO javadoc
     public void gameOngoing(){
         if(isHost){
             finishButton.setVisible(true);
@@ -462,7 +497,6 @@ public class GameLobbyController {
         gameBoard.setVisible(true);
     }
 
-    // TODO implementing when it should set the dices visible.
     /**
      * Sets all dice images visible when pressing the {@link Button} 'Roll'.
      *
@@ -631,7 +665,7 @@ public class GameLobbyController {
     }
 
     /**
-     * Called when the server confirms a DEOS (deselect) for fieldId.
+     * Called when the server confirms a DEOS (deselect) for fieldId. //TODO javadoc
      */
     public void unhighlightField(String fieldId) {
         Button btn = lookupButton(fieldId);
@@ -640,6 +674,7 @@ public class GameLobbyController {
         selectedFieldButtons.remove(btn);
     }
 
+    //TODO javadoc
     private Button lookupButton(String fieldId) {
         try {
             Field f = getClass().getDeclaredField(fieldId);

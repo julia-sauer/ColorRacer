@@ -182,6 +182,11 @@ public class ProtocolReaderClient {
                     }
                     String colors = parts[1].trim();
                     System.out.println("Colors " + colors + " rolled.");
+                    List<String> cols = parseListFromString(parts[1]);
+                    String[] colorArray = cols.toArray(new String[0]);
+                    Platform.runLater(() ->
+                            GameLobbyController.getInstance().updateDice(colorArray)
+                    );
                     break;
 
                 case DEOS:
