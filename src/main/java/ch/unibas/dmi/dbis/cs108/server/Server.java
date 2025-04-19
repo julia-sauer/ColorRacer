@@ -413,6 +413,14 @@ public class Server {
                     if (success) {
                         try {
                             protocolWriterServer.sendCommandAndString(Command.JOIN, lobbyName);
+                            for (String member : lobby.getPlayers()) {
+                                User u = UserList.getUserByName(member);
+                                assert u != null;
+                                String color = u.getBikeColor();    // you stored this in VELO handler
+                                if (color != null) {
+                                    protocolWriterServer.sendCommandAndString(Command.VELO, member + " " + color); // replays every members bike color
+                                }
+                            }
                             if (!lobbyName.equalsIgnoreCase("Welcome")) {
                                 protocolWriterServer.sendInfo("Please select a bike using: selectbike <black/magenta/green/darkblue> and then enter ready");
                             }

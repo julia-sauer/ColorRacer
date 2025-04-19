@@ -16,7 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -94,7 +93,7 @@ public class GameLobbyController {
     public Button finishButton;
 
     /**
-     * The {@link Button} to roll the dices.
+     * The {@link Button} that lets the player roll the dice.
      */
     @FXML
     private Button throwDiceButton;
@@ -112,51 +111,88 @@ public class GameLobbyController {
     private Button skipButton;
 
     /**
-     * The {@link ImageView} for the six dices.
+     * The {@link ImageView}s used to show the six dice rolled.
      */
     @FXML
     private ImageView dice1, dice2, dice3, dice4, dice5, dice6;
 
+    /**
+     * A map that stores the preloaded dice images by color name.
+     */
     private Map<String, Image> diceImages;
 
+    /**
+     * The game board pane where the field buttons and bike icons are displayed.
+     */
     @FXML
     private AnchorPane gameBoard;
 
-    /** Tracks all field buttons the user has clicked but not yet moved to. */
+    /**
+     * Tracks all field buttons that have been selected by the user but not yet confirmed.
+     */
     private final Set<Button> selectedFieldButtons = new HashSet<>();
 
+    /**
+     * The colored field {@link Button}s grouped by color.
+     */
     @FXML
     private Button yellow1, yellow2, yellow3, yellow4, yellow5, yellow6, yellow7;
-
     @FXML
     private Button red1, red2, red3, red4, red5, red6, red7;
-
     @FXML
     private Button blue1, blue2, blue3, blue4, blue5, blue6, blue7, blue8, blue9, blue10;
-
     @FXML
     private Button purple1, purple2, purple3, purple4, purple5, purple6, purple7, purple8, purple9, purple10;
-
     @FXML
     private Button pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10;
-
     @FXML
     private Button orange1, orange2, orange3, orange4, orange5, orange6, orange7, orange8, orange9, orange10;
+
+    /**
+     * The white starting field button for all players.
+     */
+    @FXML
+    private Button white1;
 
     /**
      * The {@link ProtocolWriterClient} instance to send commands to the server.
      */
     private ProtocolWriterClient protocolWriter;
 
+    /**
+     * The {@link ProtocolReaderClient} used to read incoming data from the server.
+     */
     private ProtocolReaderClient protocolReader;
 
+    /**
+     * The {@link Client} instance holding the networking logic.
+     */
     private Client client;
 
+    /**
+     * The nickname of the local player using this controller.
+     */
     private String nickname;
 
+    /**
+     * The name of the lobby this player is currently in.
+     */
     private String lobbyname;
 
+    /**
+     * Indicates whether this player is the host of the current lobby.
+     */
     private boolean isHost = false;
+
+    /**
+     * Maps each player's nickname to their corresponding {@link ImageView} bike icon.
+     */
+    private final Map<String, ImageView> playerBikes = new HashMap<>();
+
+    /**
+     * Maps each selectable bike color to its corresponding {@link Image} graphic.
+     */
+    private final Map<String, Image> bikeImages = new HashMap<>();
 
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog immediately after joining.
@@ -175,6 +211,10 @@ public class GameLobbyController {
         diceImages.put("pink", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_pink_dummy.png"))));
         diceImages.put("purple", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_purple_dummy.png"))));
         diceImages.put("blue", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_blue_dummy.png"))));
+        bikeImages.put("black", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
+        bikeImages.put("magenta", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
+        bikeImages.put("green", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
+        bikeImages.put("darkblue", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
@@ -461,6 +501,38 @@ public class GameLobbyController {
      */
     public void setBike(String color) {
         protocolWriter.sendBikeColor(color);
+    }
+
+    /**
+     * Called when ANY player picks a bike (broadcast via VELO::<player>::<color>).
+     * Creates an ImageView for that player (if not already) and places it on the start field.
+     */
+    public void addPlayerBike(String player, String color) {
+        Platform.runLater(() -> {
+            if (playerBikes.containsKey(player)) return;  // already have them
+            Image img = bikeImages.get(color.toLowerCase());
+            if (img == null) return;
+            ImageView iv = new ImageView(img);
+            iv.setFitWidth(40);
+            iv.setFitHeight(40);
+            playerBikes.put(player, iv);
+            gameBoard.getChildren().add(iv);
+            // place at starting field:
+            updatePlayerPosition(player, "white1");
+        });
+    }
+
+    /**
+     * Moves the existing bike ImageView of `player` to the button `fieldId`.
+     */
+    public void updatePlayerPosition(String player, String fieldId) {
+        ImageView iv = playerBikes.get(player);
+        if (iv == null) return;
+        Button fld = lookupButton(fieldId);
+        if (fld == null) return;
+        double x = fld.getLayoutX() + (fld.getWidth() - iv.getFitWidth())/2;
+        double y = fld.getLayoutY() + (fld.getHeight() - iv.getFitHeight())/2;
+        Platform.runLater(() -> iv.relocate(x, y));
     }
 
     /**

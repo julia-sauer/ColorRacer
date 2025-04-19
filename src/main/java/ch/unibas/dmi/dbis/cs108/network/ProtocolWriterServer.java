@@ -106,18 +106,4 @@ public class ProtocolWriterServer {
             writer.flush();
         }
     }
-
-    /**
-     * This method is called by the {@link ProtocolReaderServer} when a player correctly selects
-     * a bike. It is needed so the client-side of the network knows that a bike has been
-     * selected, so the player can therefore be ready to play.
-     *
-     * @param bike A boolean indicating whether the player has selected a bike (true) or not (false).
-     * @throws IOException If there is an error while sending the command to the client.
-     */
-    public void setBike(boolean bike) throws IOException {
-        if(bike){
-            sendCommand(Command.VELO);
-        }
-    }
 }

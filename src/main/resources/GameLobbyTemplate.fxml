@@ -157,6 +157,7 @@
             <Button fx:id="blue8" layoutX="691.0" layoutY="575.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b8" />
             <Button fx:id="blue9" layoutX="799.0" layoutY="575.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b9" />
             <Button fx:id="blue10" layoutX="893.0" layoutY="575.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="91.0" prefWidth="94.0" styleClass="field-button" text="b10" />
+            <Button fx:id="white1" layoutX="475.0" layoutY="750.0" mnemonicParsing="false" styleClass="field-button" text="white1" />
          </children>
       </AnchorPane>
    </center>

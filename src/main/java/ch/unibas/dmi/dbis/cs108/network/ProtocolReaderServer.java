@@ -350,7 +350,13 @@ public class ProtocolReaderServer {
                     if (user != null) {
                         user.setBikeColor(color); // save in User
                         protocolWriterServer.sendInfo("+OK " + color + " bike is selected");
-                        protocolWriterServer.setBike(true);
+                        Lobby lobby = Server.getLobbyOfPlayer(sender);
+                        assert lobby != null;
+                        for (String member : lobby.getPlayers()) {
+                            User u = UserList.getUserByName(member);
+                            ProtocolWriterServer w = new ProtocolWriterServer(clientWriters, Objects.requireNonNull(u).getOut());
+                            w.sendCommandAndString(Command.VELO, sender + " " + color);
+                        }
                         Server.updateAllClients();
                     }
                     break;

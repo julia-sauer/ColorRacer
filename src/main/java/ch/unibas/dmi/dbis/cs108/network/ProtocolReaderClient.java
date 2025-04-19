@@ -136,6 +136,16 @@ public class ProtocolReaderClient {
                     String msg = parts[1].trim();
                     System.out.println(msg);
                     display(msg);
+                    if (parts[1].startsWith("+POS ")) {
+                        // parse "+POS Alice moved to the Field red3"
+                        String[] tok = parts[1].split(" ");
+                        String whoMoved = tok[1];
+                        String fieldId = tok[tok.length - 1];
+                        waitForControllerAndUpdate(() ->
+                                GameLobbyController.getInstance().updatePlayerPosition(whoMoved, fieldId)
+                        );
+                        break;
+                    }
                     break;
 
                 case WISP:
@@ -227,6 +237,12 @@ public class ProtocolReaderClient {
 
                 case VELO:
                     setBike(true);
+                    String[] pc = parts[1].split(" ");
+                    String who = pc[0];
+                    String color = pc[1];
+                    waitForControllerAndUpdate(() ->
+                            GameLobbyController.getInstance().addPlayerBike(who, color)
+                    );
                     break;
 
                 case FNSH:
