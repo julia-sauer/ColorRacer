@@ -26,9 +26,9 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 /**
- * This is the controller class for managing the GameLobby view.
- * This includes chat handling, lobby and player list updates and
- * game controls.
+ * This is the controller class for managing the Game Lobby view.
+ * This includes chat handling, lobby and player list updates,
+ * game controls and an integration with the bike selection dialog.
  *
  * @author julia
  */
@@ -40,12 +40,12 @@ public class GameLobbyController {
     private static GameLobbyController instance;
 
     /**
-     * The root pane of the welcome lobby scene.
+     * The root pane of the Game Lobby scene.
      */
     private BorderPane root;
 
     /**
-     * The {@link Label} that displays the lobbyname.
+     * The {@link Label} for displaying the lobbyname.
      */
     @FXML
     public Label lobbyNameDisplay;
@@ -169,14 +169,11 @@ public class GameLobbyController {
      */
     @FXML
     public void initialize() {
-        // Initialize lists with observable array lists
         listlist.setItems(FXCollections.observableArrayList());
-        gamelist.setItems(FXCollections.observableArrayList());
+        gamelist.setItems(FXCollections.observableArrayList()); // Initializes lists with observable array lists
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;  // Store the instance when initialized
-
-        // Load all dice‐color images into a map:
-        diceImages = new HashMap<>();
+        diceImages = new HashMap<>(); // Load all dice‐color images into a map:
         diceImages.put("yellow", new Image(getClass().getResourceAsStream("/dice_yellow_dummy.png")));
         diceImages.put("orange", new Image(getClass().getResourceAsStream("/dice_orange_dummy.png")));
         diceImages.put("red", new Image(getClass().getResourceAsStream("/dice_red_dummy.png")));
@@ -184,7 +181,7 @@ public class GameLobbyController {
         diceImages.put("purple", new Image(getClass().getResourceAsStream("/dice_purple_dummy.png")));
         diceImages.put("blue", new Image(getClass().getResourceAsStream("/dice_blue_dummy.png")));
 
-        Platform.runLater(this::handleBikeSelection);
+        Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
 
     /**
@@ -233,7 +230,6 @@ public class GameLobbyController {
     private void handleBroadcast() {
         String message = txtUsermsg.getText().trim();
         if (!message.isEmpty()) {
-            // Send the message using your existing network protocol
             if (protocolWriter != null) {
                 protocolWriter.sendChat("broadcast " + message);
             }
@@ -262,7 +258,6 @@ public class GameLobbyController {
     private void sendMessage() {
         String message = txtUsermsg.getText().trim();
         if (!message.isEmpty()) {
-            // Send the message using your existing network protocol
             if (protocolWriter != null) {
                 protocolWriter.sendChat(message);
             }
@@ -323,7 +318,10 @@ public class GameLobbyController {
         }
     }
 
-    //TODO javadoc
+    /**
+     * Sends the {@code ROLL} command to the server to request a dice roll.
+     * This method is triggered when the user clicks the "Roll" {@link Button}.
+     */
     @FXML
     private void handleThrowDice() {
         try {
@@ -334,34 +332,39 @@ public class GameLobbyController {
     }
 
     /**
-     * Called from your ProtocolReaderClient when you get back ROLL::<[black,green,…]> //TODO javadoc
+     * Updates the dice display based on the colors received from the server.
+     * This method is called from the {@link ProtocolReaderClient}
+     * after receiving the {@code ROLL} command from the server.
+     * It updates each {@link ImageView} with the corresponding colored dice image.
+     *
+     * @param colors An array of color names corresponding to the dice roll results.
      */
     public void updateDice(String[] colors) {
         Platform.runLater(() -> {
             ImageView[] views = { dice1, dice2, dice3, dice4, dice5, dice6 };
 
-            // Make sure visible
-            setDiceVisible(true);
+            setDiceVisible(true); //makes dice visible
 
             for (int i = 0; i < colors.length && i < views.length; i++) {
                 Image img = diceImages.get(colors[i].toLowerCase());
                 if (img != null) {
                     views[i].setImage(img);
                 } else {
-                    // fallback or clear
-                    views[i].setImage(null);
+                    views[i].setImage(null); //fallback
                 }
             }
         });
     }
 
-    //TODO javadoc
+    /**
+     * Sends the {@code MOVE} command to the server to confirm movement to the selected field(s).
+     * After the move, all highlighted fields are cleared and the dice are hidden.
+     */
     @FXML
     private void handleMoveToField() {
         try {
             protocolWriter.sendCommand(Command.MOVE);
-            // clear highlights on all selected fields
-            for (Button btn : selectedFieldButtons) {
+            for (Button btn : selectedFieldButtons) { //clears highlight of the buttons
                 btn.getStyleClass().remove("field-button-selected");
             }
             selectedFieldButtons.clear();
@@ -371,7 +374,10 @@ public class GameLobbyController {
         }
     }
 
-    //TODO javadoc
+    /**
+     * Sends the {@code NEXT} command to the server to skip the current turn.
+     * After using this {@link Button} the dice are hidden again as the player has finished his turn.
+     */
     @FXML
     private void handleSkip() {
         try {
@@ -397,8 +403,7 @@ public class GameLobbyController {
             dialogStage.setTitle("Leave Lobby");
             dialogStage.setScene(new Scene(dialogPane));
 
-            // Set controller
-            LeaveLobbyDialogController controller = loader.getController();
+            LeaveLobbyDialogController controller = loader.getController(); // sets controller
             controller.setDialogStage(dialogStage);
             controller.setGameLobbyController(this);
 
@@ -489,7 +494,12 @@ public class GameLobbyController {
         });
     }
 
-    //TODO javadoc
+    /**
+     * Activates the game board GUI when the game status becomes "running".
+     * This method is called when the game officially starts. It ensures that the game board is visible
+     * to all players. If the current player is the host, it also makes the {@code finishButton}
+     * visible so that the host has the option to end the game prematurely.
+     */
     public void gameOngoing(){
         if(isHost){
             finishButton.setVisible(true);
@@ -537,7 +547,7 @@ public class GameLobbyController {
     public void updatePlayerList(List<String> players) {
         Platform.runLater(() -> {
             try {
-                listlist.getItems().clear(); //
+                listlist.getItems().clear();
                 listlist.getItems().addAll(players);
             } catch (Exception e) {
                 showError("Failed to update player list", e.getMessage());
@@ -555,14 +565,10 @@ public class GameLobbyController {
             try {
                 gamelist.getItems().clear();
                 gamelist.getItems().addAll(newGames);
-                // 2) Check *your* lobby’s status
-                for (String entry : newGames) {
-                    // extractLobbyName(...) must return exactly your lobby’s name
+                for (String entry : newGames) { // checks the users lobby status
                     if (extractLobbyName(entry).equalsIgnoreCase(lobbyname)) {
-                        // get the text after the "]"
-                        int end = entry.indexOf("]");
+                        int end = entry.indexOf("]"); // gets the text after the "]"
                         String status = entry.substring(end + 1).trim();
-                        // status is now e.g. "open", "running", or "finished"
                         if (status.equalsIgnoreCase("running")) {
                             gameOngoing();
                         }
@@ -605,20 +611,23 @@ public class GameLobbyController {
     }
 
     /**
-     * Given an entry like //TODO correct Javadoc
-     *   "[Lobby: Foo] Players: [Alice, Bob, Charlie]"
-     * returns List.of("Alice","Bob","Charlie").
+     * Extracts a list of player names from a formatted lobby entry string.
+     * The expected input format is something like:
+     * {@code "[Lobby: LobbyName] Players: [Jana | Ana | Flo | Julia]"}.
+     * This method will extract the part after {@code "Players:"}, remove the square brackets,
+     * and split the names by the pipe character {@code |}, trimming any extra spaces.
+     *
+     * @param entry The full lobby entry string containing the list of players.
+     * @return A list of player names. Returns an empty list if the format is invalid or no players found.
      */
     private List<String> extractPlayers(String entry) {
         int idx = entry.indexOf("Players:");
         if (idx < 0) return List.of();
         String after = entry.substring(idx + "Players:".length()).trim();
-        // strip the brackets
         if (after.startsWith("[") && after.endsWith("]")) {
             after = after.substring(1, after.length() - 1);
         }
         if (after.isBlank()) return List.of();
-        // split on pipe, trimming whitespace
         return Arrays.stream(after.split("\\|"))
                 .map(String::trim)
                 .toList();
@@ -639,6 +648,17 @@ public class GameLobbyController {
         return entry.substring(start, end).trim();
     }
 
+    /**
+     * Handles a field selection or deselection when a field {@link Button} is clicked.
+     * If the clicked {@link Button} is already in the set of {@code selectedFieldButtons},
+     * it sends a {@code DEOS} (deselect) command to the server. Otherwise, it
+     * sends a {@code CHOS} (select) command to the server.
+     * This method does not update the UI immediately. It waits for confirmation
+     * from the server before highlighting or removing the highlighting from the {@link Button} via
+     * {@link #highlightField(String)} or {@link #unhighlightField(String)}.
+     *
+     * @param event The action event triggered by clicking a field {@link Button}.
+     */
     @FXML
     public void handleFieldChoice(ActionEvent event) {
         Button btn = (Button)event.getSource();
@@ -654,8 +674,14 @@ public class GameLobbyController {
         }
     }
 
+    /**
+     * Highlights a field {@link Button} in the GUI by its field ID.
+     * This method is called when the server confirms a field selection with the command {@code CHOS}.
+     * The corresponding {@link Button} will be visually marked and tracked in {@code selectedFieldButtons}.
+     *
+     * @param fieldId The {@code fx:id} of the {@link Button} representing the selected field.
+     */
     public void highlightField(String fieldId) {
-        // look up your Button (either via reflection or a pre‐built Map<String,Button>)
         Button btn = lookupButton(fieldId);
         if (btn == null) return;
         if (!btn.getStyleClass().contains("field-button-selected")) {
@@ -665,7 +691,11 @@ public class GameLobbyController {
     }
 
     /**
-     * Called when the server confirms a DEOS (deselect) for fieldId. //TODO javadoc
+     * Removes the highlight of a field {@link Button} in the GUI by its field ID.
+     * This method is called when the server confirms a deselection with the command {@code DEOS}.
+     * The corresponding {@link Button} will be visually reset and removed from the {@code selectedFieldButtons}.
+     *
+     * @param fieldId The {@code fx:id} of the {@link Button} representing the deselected field.
      */
     public void unhighlightField(String fieldId) {
         Button btn = lookupButton(fieldId);
@@ -674,8 +704,13 @@ public class GameLobbyController {
         selectedFieldButtons.remove(btn);
     }
 
-    //TODO javadoc
-    private Button lookupButton(String fieldId) {
+    /**
+     * Looks up a {@link Button} field in the controller using reflection based on its {@code fx:id}.
+     * This method is used to dynamically access field buttons from their string ID values (e.g., "red1", "yellow2").
+     *
+     * @param fieldId The {@code fx:id} of the desired button.
+     * @return The {@link Button} instance matching the given ID, or {@code null} if not found.
+     */    private Button lookupButton(String fieldId) {
         try {
             Field f = getClass().getDeclaredField(fieldId);
             f.setAccessible(true);

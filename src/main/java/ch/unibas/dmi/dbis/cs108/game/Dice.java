@@ -1,9 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.game;
 
-import java.util.Arrays;
-
 /**
- * The class Dice provides a method to roll the six dices by random generating
+ * The class Dice provides a method to roll the six dice by random generating
  * six numbers between 1 and 6 which then are connected to colors.
  * @author Jana
  */
