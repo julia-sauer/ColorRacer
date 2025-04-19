@@ -21,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -606,20 +607,48 @@ public class GameLobbyController {
 
     @FXML
     public void handleFieldChoice(ActionEvent event) {
-        Button btn = (Button) event.getSource();
+        Button btn = (Button)event.getSource();
         String fieldId = btn.getId();
-
         try {
-            protocolWriter.sendCommandAndString(Command.CHOS, fieldId);
-
-            // highlight and remember this button
-            if (!btn.getStyleClass().contains("field-button-selected")) {
-                btn.getStyleClass().add("field-button-selected");
+            if (selectedFieldButtons.contains(btn)) {
+                protocolWriter.sendFieldChoice(Command.DEOS, fieldId);
+            } else {
+                protocolWriter.sendFieldChoice(Command.CHOS, fieldId);
             }
-            selectedFieldButtons.add(btn);
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             showError("Failed to send field choice", e.getMessage());
         }
     }
+
+    public void highlightField(String fieldId) {
+        // look up your Button (either via reflection or a pre‐built Map<String,Button>)
+        Button btn = lookupButton(fieldId);
+        if (btn == null) return;
+        if (!btn.getStyleClass().contains("field-button-selected")) {
+            btn.getStyleClass().add("field-button-selected");
+        }
+        selectedFieldButtons.add(btn);
+    }
+
+    /**
+     * Called when the server confirms a DEOS (deselect) for fieldId.
+     */
+    public void unhighlightField(String fieldId) {
+        Button btn = lookupButton(fieldId);
+        if (btn == null) return;
+        btn.getStyleClass().remove("field-button-selected");
+        selectedFieldButtons.remove(btn);
+    }
+
+    private Button lookupButton(String fieldId) {
+        try {
+            Field f = getClass().getDeclaredField(fieldId);
+            f.setAccessible(true);
+            return (Button) f.get(this);
+        } catch (Exception e) {
+            System.err.println("No field-button with fx:id=" + fieldId);
+            return null;
+        }
+    }
+
 }

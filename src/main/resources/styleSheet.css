@@ -226,14 +226,14 @@
 
 .field-button:pressed {
     /* bright green border + slight fill on click */
-    -fx-border-color: #66bb6a;                   /* same as your focused state */
+    -fx-border-color: #ffea00;                   /* same as your focused state */
     -fx-border-width: 2px;
     -fx-background-color: rgba(102,187,106,0.2);
 }
 
 .field-button:focused {
     /* keyboard‐focus should also show the border */
-    -fx-border-color: #66bb6a;
+    -fx-border-color: #ffea00;
     -fx-border-width: 2px;
 }
 

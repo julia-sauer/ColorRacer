@@ -161,6 +161,9 @@ public class ProtocolReaderClient {
                     }
                     String fieldId = parts[1].trim();
                     System.out.println("Field " + fieldId + " selected.");
+                    Platform.runLater(() ->
+                            GameLobbyController.getInstance().highlightField(fieldId)
+                    );
                     break;
 
                 case MOVE:
@@ -190,6 +193,9 @@ public class ProtocolReaderClient {
                     String newcolors = parts[2].trim();
                     System.out.println("Field " + deselectedFieldId + " deselected.");
                     System.out.println("Your colors are " + newcolors);
+                    Platform.runLater(() ->
+                            GameLobbyController.getInstance().unhighlightField(deselectedFieldId)
+                    );
                     break;
 
                 case BROD:
