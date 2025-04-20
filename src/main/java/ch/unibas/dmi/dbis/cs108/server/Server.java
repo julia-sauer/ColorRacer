@@ -542,14 +542,14 @@ public class Server {
                     break;
                 }
             }
-        }
-
-        if (userlobby.getPlayers().size() == userlobby.winners.size()) {
             try {
                 protocolWriterServer.sendCommand(Command.FNSH);
             } catch (IOException e) {
                 System.err.println("Could not send Command.");
             }
+
+            Highscore highscore = new Highscore();
+            highscore.addHighscoreEntry(userlobby.getLobbyName(), new ArrayList<>(userlobby.winners));
         }
 
     }
