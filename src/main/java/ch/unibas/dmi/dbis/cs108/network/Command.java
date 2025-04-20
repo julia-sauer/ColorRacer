@@ -1,43 +1,107 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 /**
- * This class contains static methods that are defined in the network protocol (Protocol Document).
- * Each protocol command is represented by a method that outputs the name of the command in the console.
+ * The {@code Command} enum defines all supported protocol commands exchanged between
+ * clients and the server in the networked multiplayer game.
+ * <p>
+ * These commands are used to structure and identify different types of messages,
+ * such as joining a lobby, sending chat messages, performing game actions, and more.
+ * </p>
+ * <p>
+ * Each command represents a specific action or request. When a message is sent over the network,
+ * the command is usually prefixed, followed by a separator and any parameters needed.
+ * </p>
+ * Example format: {@code COMMAND%parameter1%parameter2}
+ * <br><br>
+ * All messages must use the defined {@link #SEPARATOR} to split values consistently.
  *
+ * @see ProtocolReaderClient
+ * @see ProtocolWriterClient
+ * @see ProtocolReaderServer
+ * @see ProtocolWriterServer
  * @author anasv
  * @since 21.03.25
  */
 public enum Command {
 
-    /**
-     * Here are all enum-constants defined
-     */
+    /** Server sends informational messages. */
     INFO,
+
+    /** Client joins a lobby. */
     JOIN,
+
+    /** Client selects a bike. */
     VELO,
+
+    /** Client signals they are ready. */
     RADY,
+
+    /** Host starts the game. */
     STRT,
+
+    /** Host restarts the game. */
     RSTT,
+
+    /** Client wants to leave the game. */
     QUIT,
+
+    /** Client confirms quit prompt. */
     QCNF,
+
+    /** Client requests to roll the dice. */
     ROLL,
+
+    /** Client selects a field. */
     CHOS,
+
+    /** Client confirms movement. */
     MOVE,
+
+    /** Client skips his turn. */
     NEXT,
+
+    /** Chat message sent to all members in the same lobby. */
     CHAT,
+
+    /** Client requests to change nickname. */
     NICK,
+
+    /** Server pings client to check connection. */
     PING,
+
+    /** Client responds to ping with pong to confirm it's still alive. */
     PONG,
+
+    /** Whisper (a private message) between two clients. */
     WISP,
+
+    /** Client deselects a previously selected field. */
     DEOS,
+
+    /** Client sends a global broadcast message to all users on the server. */
     BROD,
+
+    /** Server sends a list of all users on the server. */
     LIST,
+
+    /** Client creates a new lobby. */
     CRLO,
+
+    /** Server sends a list of all lobbies with its members. */
     LOME,
+
+    /** Server sends a list of all games and their status. */
     GLST,
+
+    /** Handles that the game has ended. Either the host stopped it or the game was finished. */
     FNSH;
 
-
+    /**
+     * The character used to separate command parts in a message.
+     * <p>
+     * Example usage: {@code Command.CHAT + Command.SEPARATOR + "Hello everyone!"}
+     * </p>
+     */
     public static final String SEPARATOR = "%"; // blank space als Separator
 
     /**

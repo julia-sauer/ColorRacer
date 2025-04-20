@@ -46,6 +46,7 @@ public class Lobby implements Runnable {
 
     /**
      * Constructs a new Lobby instance with the given name.
+     *
      * @param lobbyName the name of the lobby
      */
     public Lobby(String lobbyName) {
@@ -272,7 +273,8 @@ public class Lobby implements Runnable {
 
     /**
      * This method restarts the Game when the host and only the host types 'restart'.
-     * If the gamestate is 1 the game can not be restarted.
+     * If the game state is 1 the game can not be restarted.
+     *
      * @param userId The userId of the player who typed restart.
      */
     public synchronized void restartGame(int userId) {
@@ -354,6 +356,7 @@ public class Lobby implements Runnable {
 
     /**
      * creates a gameboard specific for the player with playerName
+     *
      * @param playerName Player name (of the Player for whom this Gameboard is).
      * @return the gameboard
      */
@@ -362,6 +365,7 @@ public class Lobby implements Runnable {
     }
 
     /** Checks whether it is the given player's current turn.
+     *
      * @param name Player name
      * @return true if it's his turn
      */
@@ -415,6 +419,7 @@ public class Lobby implements Runnable {
 
     /**
      * Adds a player who is at the finish line to the set winners.
+     *
      * @param nickname The nickname of the player at the finish line.
      */
     public void addWinner(String nickname) {
@@ -455,6 +460,7 @@ public class Lobby implements Runnable {
     }
     /**
      * Returns the currently active player (i.e., the one whose turn it is).
+     *
      * @return the username of the current player or null if no player is set
      */
     public String getCurrentPlayer() {

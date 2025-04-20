@@ -3,6 +3,7 @@ package ch.unibas.dmi.dbis.cs108.game;
 /**
  * The class Dice provides a method to roll the six dice by random generating
  * six numbers between 1 and 6 which then are connected to colors.
+ *
  * @author Jana
  */
 public class Dice {
@@ -10,6 +11,7 @@ public class Dice {
     /**
      * This method generates random numbers between 1 and 6.
      * The numbers are assigned to colors which then result in an array of six colors.
+     *
      * @return array with six rolled colors
      */
     public String[] roll() {
@@ -44,6 +46,7 @@ public class Dice {
 
     /**
      * Method that return number between 0 and 1
+     *
      * @return number between 0 and 1
      */
     public double getRandom() {

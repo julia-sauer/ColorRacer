@@ -6,30 +6,50 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * The {@code ClientHandler} class processes the communication between server and client.
- * It starts the {@link ProtocolReaderServer}, sends a welcome message and manages the client connection.
+ * The {@code ClientHandler} class handles an individual client connection to the server.
+ * It manages communication, initiates a {@link ProtocolReaderServer} for incoming messages,
+ * starts a {@link PingThread} for connection health monitoring, and handles disconnection logic.
+ * This class is run in its own thread for each client.
+ *
  * @author Jana
  */
 public class ClientHandler implements Runnable {
+
+    /** The socket for communication with the client. */
     private final Socket clientSocket;
+
+    /** The unique identifying number assigned to the client. */
     private final int clientNumber;
+
+    /** The user ID corresponding to this client. */
     private final int userId;
+
+    /** The ping thread responsible for sending PINGs and detecting lost connections. */
     private PingThread pingThread;
+
+    /** Input stream for reading data from the client. */
     private InputStream in;
+
+    /** Output stream for sending data to the client. */
     private OutputStream out;
+
+    /** Flag indicating if the handler is still running. */
     private boolean running = true;
+
+    /** List of all client output streams for broadcasting messages. */
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
 
     /**
-     * Constructor of the ClientHandler class
-     * @param clientNumber is the unique number of the client
-     * @param socket is the socket object for the client connection
+     * Constructs a new {@link  ClientHandler} for the given client.
+     *
+     * @param clientNumber The client’s unique number on the server
+     * @param socket The socket connected to the client
+     * @param userId The user ID for identification
      */
     public ClientHandler(int clientNumber, Socket socket, int userId) {
         this.clientNumber = clientNumber;
@@ -38,12 +58,15 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * Starts a {@link ProtocolReaderServer} for servers.
-     * Outputs a welcome message.
-     * Starts the {@link PingThread} and thus the Ping-Pong mechanism.
-     * The user is removed from the UserList and the server is notified that a client has left.
+     * The main run method of this client handler.
+     * <ul>
+     *     <li>Initializes input/output streams</li>
+     *     <li>Starts the {@link PingThread} for health monitoring</li>
+     *     <li>Starts the {@link ProtocolReaderServer} to handle client messages</li>
+     *     <li>Sends a welcome message</li>
+     *     <li>Handles clean disconnection on error or manual leave</li>
+     * </ul>
      */
-
     public void run() {
         try {
             in = clientSocket.getInputStream();
@@ -94,13 +117,25 @@ public class ClientHandler implements Runnable {
         }
     }
     /**
-     * Removes a user from the user list.
-     * @param clientNumber The ID of the user to be removed.
+     * Removes a user from the {@link UserList} based on their client number.
+     *
+     * @param clientNumber The ID of the user to be removed
      */
     private void removeUser(int clientNumber) {
 
         UserList.removeUser(clientNumber);
     }
+
+    /**
+     * Called when the client is detected to be disconnected or times out.
+     * This method handles full cleanup:
+     * <ul>
+     *     <li>Closes socket</li>
+     *     <li>Removes user from lobby and user list</li>
+     *     <li>Stops ping thread</li>
+     *     <li>Notifies the server of disconnection</li>
+     * </ul>
+     */
     public void disconnectClient() {
         try {
             running = false;
@@ -122,6 +157,4 @@ public class ClientHandler implements Runnable {
         removeUser(userId);       // aus UserList entfernen
         Server.ClientDisconnected(); // Counter runterzählen
     }
-
-
 }

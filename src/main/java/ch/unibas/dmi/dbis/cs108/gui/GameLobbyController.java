@@ -504,8 +504,12 @@ public class GameLobbyController {
     }
 
     /**
-     * Called when ANY player picks a bike (broadcast via VELO::<player>::<color>).
+     * Called when ANY player picks a bike so all users know what bikes the other players have so it can be shown
+     * on the gameboard.
      * Creates an ImageView for that player (if not already) and places it on the start field.
+     *
+     * @param player The player that has chosen a bike color.
+     * @param color The color that the player has chosen for his bike.
      */
     public void addPlayerBike(String player, String color) {
         Platform.runLater(() -> {
@@ -524,6 +528,9 @@ public class GameLobbyController {
 
     /**
      * Moves the existing bike ImageView of `player` to the button `fieldId`.
+     *
+     * @param player The name of the player that has moved his position.
+     * @param fieldId The field to which the player moved his bike.
      */
     public void updatePlayerPosition(String player, String fieldId) {
         ImageView iv = playerBikes.get(player);
@@ -546,7 +553,7 @@ public class GameLobbyController {
     }
 
     /**
-     * Enables/disables start & finish based on whether the user is the host.
+     * This method sets the host and also sets his special {@link Button}s which only the host can use.
      *
      * @param host The boolean whether the user is the host (first player in the lobby) or not
      */
