@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The class {@code PingThread} sends PING messages to clients and listens for PONG messages from the client.
@@ -20,9 +22,11 @@ public class PingThread extends Thread {
     private boolean running = true;
     private final InputStream in;
     private final OutputStream out;
-    private static final long PING_INTERVAL = 5000;
+    private static final long PING_INTERVAL = 10000;
     private volatile boolean pongReceived = false;// 15 seconds
     private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+    /** A hand‑off queue from ProtocolReaderServer.notifyPong() to here. */
+    private final ArrayBlockingQueue<Boolean> pongQueue = new ArrayBlockingQueue<>(1);
 
 
     /**
@@ -49,30 +53,27 @@ public class PingThread extends Thread {
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
         while (running && !clientSocket.isClosed()) {
             try {
-                protocolWriterServer.sendCommand(Command.PING); //Sends Ping
-                pongReceived = false;
+                // 1) send the PING
+                protocolWriterServer.sendCommand(Command.PING);
+                System.out.println("PING sent");
 
-                long startTime = System.currentTimeMillis();
-                while (System.currentTimeMillis() - startTime < PING_INTERVAL) {
-                    if (pongReceived) {
-                        break;
-                    }
-                }
-                Thread.sleep(100); // sleep briefly instead of busy waiting
+                // 2) wait up to PING_INTERVAL_MS for a notifyPong() call
+                Boolean pong = pongQueue.poll(PING_INTERVAL, TimeUnit.MILLISECONDS);
 
-                if (!pongReceived) {
+                if (pong == null) {
+                    // no PONG in time ⇒ timeout
                     System.out.println("Connection timed out for Client " + clientNumber);
-                    // Clean up: remove user and close the socket
-                    UserList.removeUser(clientNumber);
-                    Server.ClientDisconnected();
                     clientSocket.close();
                     break;
                 }
-                // Wait before sending the next PING
+                // 3) we got a PONG—now *pause* before sending the next PING
                 Thread.sleep(PING_INTERVAL);
 
-            } catch (IOException | InterruptedException e) {
-                System.err.println("Error, Could not send Command");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            } catch (IOException e) {
+                System.err.println("Error sending PING to Client " + clientNumber + ": " + e.getMessage());
                 break;
             }
         }
@@ -82,7 +83,7 @@ public class PingThread extends Thread {
      * Notifies the PingThread that a PONG has been received from the client.
      */
     public void notifyPong(){
-        pongReceived = true;
+        pongQueue.offer(Boolean.TRUE);
     }
 
     /**
