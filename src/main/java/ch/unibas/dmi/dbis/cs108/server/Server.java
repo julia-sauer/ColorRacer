@@ -336,7 +336,7 @@ public class Server {
             }
         }
 
-        if (newField.getFieldId().equals("blue10") || newField.getFieldId().equals("pink10")) {
+        if (newField.getFieldId().equals("purple2") || newField.getFieldId().equals("pink10")) {
             won(userId);
         }
 
@@ -528,7 +528,22 @@ public class Server {
                 break;
             }
         }
+
         Lobby userlobby = getLobbyOfPlayer(user.getNickname());
+        if (userlobby.getPlayers().size() - userlobby.winners.size() == 1) {
+            for (String player : userlobby.getPlayers()) {
+                if (!userlobby.winners.contains(player)) {
+                    userlobby.addWinner(player);
+                    try {
+                        protocolWriterServer.sendInfo(player + " is on the " + podestPlace + ". place!");
+                    } catch (IOException e) {
+                        System.err.println("Could not send Info.");
+                    }
+                    break;
+                }
+            }
+        }
+
         if (userlobby.getPlayers().size() == userlobby.winners.size()) {
             try {
                 protocolWriterServer.sendCommand(Command.FNSH);
