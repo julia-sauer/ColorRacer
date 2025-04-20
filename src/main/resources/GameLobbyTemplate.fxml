@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="1080.0" prefWidth="1554.0" stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.GameLobbyController">
+<BorderPane stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.GameLobbyController">
    <right>
       <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
          <children>
@@ -96,9 +96,9 @@
       </HBox>
    </bottom>
    <center>
-      <AnchorPane fx:id="gameBoard" prefHeight="200.0" prefWidth="200.0" styleClass="game-board" visible="false" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="gameBoard" styleClass="game-board" visible="false" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="874.0" fitWidth="1101.0" layoutX="57.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView layoutX="57.0" pickOnBounds="true" preserveRatio="true">
                <viewport>
                   <Rectangle2D />
                </viewport>

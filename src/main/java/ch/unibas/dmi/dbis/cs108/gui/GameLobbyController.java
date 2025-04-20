@@ -194,6 +194,8 @@ public class GameLobbyController {
      */
     private final Map<String, Image> bikeImages = new HashMap<>();
 
+    private Stage primaryStage;
+
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog immediately after joining.
      * It also sets the Map for the six Images for the dice colors.
@@ -217,6 +219,10 @@ public class GameLobbyController {
         bikeImages.put("darkblue", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
+    }
+
+    public void setPrimaryStage(Stage stage) {
+        this.primaryStage = stage;
     }
 
     /**
@@ -434,6 +440,7 @@ public class GameLobbyController {
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
+            dialogStage.initOwner(primaryStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Leave Lobby");
             dialogStage.setScene(new Scene(dialogPane));
@@ -475,6 +482,7 @@ public class GameLobbyController {
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
+            dialogStage.initOwner(primaryStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Select Your Bike");
             dialogStage.setScene(new Scene(dialogPane));

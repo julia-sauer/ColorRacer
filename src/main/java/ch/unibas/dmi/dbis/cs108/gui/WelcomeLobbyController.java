@@ -383,9 +383,11 @@ public class WelcomeLobbyController {
                 gameLobbyController.gamelist.setItems(gamelist.getItems());
                 gameLobbyController.lobbylist.setItems(lobbylist.getItems());
 
-                Scene scene = primaryStage.getScene(); // Replaces current WelcomeLobby scene
+                Scene scene = new Scene(gameLobbyRoot); // Replaces current WelcomeLobby scene
+                gameLobbyController.setPrimaryStage(primaryStage);
+                primaryStage.setScene(scene);
                 scene.setRoot(gameLobbyRoot);
-                primaryStage.setMaximized(true);
+                primaryStage.setFullScreen(true);
             } catch (IOException e) {
                 showError("Failed to load the GameLobby" + lobbyName, e.getMessage());
             }
