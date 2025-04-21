@@ -1,6 +1,7 @@
 Spiel 1 (cool):
 1. place: Jana1
 2. place: Jana
-Spiel 2 (lobster):
-1. place: Jana111
-2. place: Jana11
+
+Spiel 2 (crashis):
+1. place: Crash1
+2. place: Crash

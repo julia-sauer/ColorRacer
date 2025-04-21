@@ -31,7 +31,7 @@ public class Lobby implements Runnable {
     private int currentPlayerIndex = 0;
     private final Map<String, String> selectedColors = new HashMap<>();
     private String hostName; // Player who created the lobby
-    public final Set<String> winners = new HashSet<>();
+    public final List<String> winners = new ArrayList<>();
     private int podestPlace = 1;
 
     private GameBoard gameBoard = new GameBoard();
