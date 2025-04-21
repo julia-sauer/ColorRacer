@@ -194,6 +194,7 @@ public class GameLobbyController {
      */
     private final Map<String, Image> bikeImages = new HashMap<>();
 
+    //TODO
     private Stage primaryStage;
 
     /**
@@ -221,6 +222,7 @@ public class GameLobbyController {
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
 
+    //TODO
     public void setPrimaryStage(Stage stage) {
         this.primaryStage = stage;
     }

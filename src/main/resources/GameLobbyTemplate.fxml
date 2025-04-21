@@ -8,12 +8,12 @@
 
 <BorderPane stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.GameLobbyController">
    <right>
-      <VBox alignment="CENTER" fillWidth="false" focusTraversable="true" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" focusTraversable="true" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="lobbyNameDisplay" alignment="CENTER" prefHeight="45.0" prefWidth="323.0" styleClass="dialog-header" text="Lobby:" VBox.vgrow="NEVER" />
-            <TitledPane prefHeight="370.0" prefWidth="327.0" text="Chat">
+            <TitledPane text="Chat">
                <content>
-                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="275.0">
+                  <AnchorPane styleClass="anchor-pane">
                      <children>
                         <TextArea fx:id="chatArea" layoutX="7.0" layoutY="2.0" prefHeight="270.0" prefWidth="292.0" />
                         <TextField fx:id="txtUsermsg" layoutX="7.0" layoutY="279.0" onKeyPressed="#handleEnterPressed" prefHeight="43.0" prefWidth="220.0" promptText="Type your message here..." />
@@ -74,7 +74,7 @@
       </MenuBar>
    </top>
    <bottom>
-      <HBox alignment="CENTER" fillHeight="false" focusTraversable="true" spacing="20.0" styleClass="game-panel" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" focusTraversable="true" spacing="20.0" styleClass="game-panel" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
