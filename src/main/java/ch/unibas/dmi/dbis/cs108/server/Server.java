@@ -526,12 +526,6 @@ public class Server {
 
         userlobby.addWinner(nickname);
 
-        /**for (Lobby lobby : lobbies) {
-            if (lobby.getPlayers().contains(nickname)) {
-                lobby.addWinner(nickname);
-                break;
-            }
-        } */
         if (userlobby.getPlayers().size() - userlobby.winners.size() == 1) {
             for (String player : userlobby.getPlayers()) {
                 if (!userlobby.winners.contains(player)) {
