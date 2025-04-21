@@ -57,7 +57,7 @@
     -fx-background-color: #c5e1a5; /* grassy green */
     -fx-border-color: #81c784;
     -fx-border-width: 2;
-    -fx-padding: 10;
+    -fx-padding: 0;
 }
 
 /* List styling */

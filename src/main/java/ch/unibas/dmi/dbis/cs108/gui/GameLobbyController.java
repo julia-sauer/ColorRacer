@@ -127,6 +127,8 @@ public class GameLobbyController {
     @FXML
     private AnchorPane gameBoard;
 
+    @FXML private ImageView gameBoardImage;
+
     /**
      * Tracks all field buttons that have been selected by the user but not yet confirmed.
      */
@@ -587,6 +589,9 @@ public class GameLobbyController {
             finishButton.setVisible(true);
         }
         gameBoard.setVisible(true);
+        throwDiceButton.setVisible(true);
+        moveButton.setVisible(true);
+        skipButton.setVisible(true);
     }
 
     /**
