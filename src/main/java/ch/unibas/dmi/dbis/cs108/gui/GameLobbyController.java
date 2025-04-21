@@ -195,7 +195,7 @@ public class GameLobbyController {
     private final Map<String, Image> bikeImages = new HashMap<>();
 
     //TODO
-    private Stage primaryStage;
+    @FXML private Stage primaryStage;
 
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog immediately after joining.

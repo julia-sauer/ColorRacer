@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -15,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
@@ -377,17 +379,34 @@ public class WelcomeLobbyController {
                 client.setGameLobbyController(gameLobbyController);
                 gameLobbyController.setClient(client);
                 gameLobbyController.setNickname(nickname);
-                // add additional data here: client, protocolWriter, protocolReader
-
+                gameLobbyController.setPrimaryStage(primaryStage);
+                // sets the lists
                 gameLobbyController.listlist.setItems(listlist.getItems());
                 gameLobbyController.gamelist.setItems(gamelist.getItems());
                 gameLobbyController.lobbylist.setItems(lobbylist.getItems());
 
-                Scene scene = new Scene(gameLobbyRoot); // Replaces current WelcomeLobby scene
-                gameLobbyController.setPrimaryStage(primaryStage);
+                Scene scene = new Scene(gameLobbyRoot);
                 primaryStage.setScene(scene);
-                scene.setRoot(gameLobbyRoot);
-                primaryStage.setFullScreen(true);
+
+                // Gets screen bounds
+                Screen screen = Screen.getPrimary();
+                Rectangle2D bounds = screen.getVisualBounds();
+
+                // Sets full screen bounds (without fullscreen mode)
+                primaryStage.setX(bounds.getMinX());
+                primaryStage.setY(bounds.getMinY());
+                primaryStage.setWidth(bounds.getWidth());
+                primaryStage.setHeight(bounds.getHeight());
+
+                // Bind the root pane to the scene dimensions
+                gameLobbyRoot.prefWidthProperty().bind(scene.widthProperty());
+                gameLobbyRoot.prefHeightProperty().bind(scene.heightProperty());
+
+                // removes white gap background effect
+                scene.setFill(null);
+
+                // Show the window
+                primaryStage.show();
             } catch (IOException e) {
                 showError("Failed to load the GameLobby" + lobbyName, e.getMessage());
             }
