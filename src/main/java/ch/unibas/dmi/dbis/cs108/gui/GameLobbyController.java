@@ -214,10 +214,10 @@ public class GameLobbyController {
         diceImages.put("pink", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_pink_dummy.png"))));
         diceImages.put("purple", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_purple_dummy.png"))));
         diceImages.put("blue", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_blue_dummy.png"))));
-        bikeImages.put("black", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
-        bikeImages.put("magenta", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
-        bikeImages.put("green", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
-        bikeImages.put("darkblue", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bike_dummy.png"))));
+        bikeImages.put("black", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/blackbike.png"))));
+        bikeImages.put("magenta", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/magentabike.png"))));
+        bikeImages.put("green", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/greenbike.png"))));
+        bikeImages.put("darkblue", new Image(Objects.requireNonNull(getClass().getResourceAsStream("/darkbluebike.png"))));
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
