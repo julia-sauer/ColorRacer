@@ -510,32 +510,28 @@ public class Server {
         User user = UserList.getUser(userId);
         String nickname = user.getNickname();
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        Lobby userlobby = getLobbyOfPlayer(user.getNickname());
         try {
-            if(podestPlace == 1) {
+            if(userlobby.getPodestPlace() == 1) {
                 protocolWriterServer.sendInfo(nickname + " won the game!");
             }
             else {
-                protocolWriterServer.sendInfo(nickname + " is on the " + podestPlace + ". place!");
+                protocolWriterServer.sendInfo(nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
             }
         } catch (IOException e) {
             System.err.println("Could not send Info.");
         }
-        podestPlace++; //podestPlace gets incremented by 1.
 
-        for (Lobby lobby : lobbies) {
-            if (lobby.getPlayers().contains(nickname)) {
-                lobby.addWinner(nickname);
-                break;
-            }
-        }
+        userlobby.incrementPodestPlace(); //podestPlace gets incremented by 1.
 
-        Lobby userlobby = getLobbyOfPlayer(user.getNickname());
+        userlobby.addWinner(nickname);
+
         if (userlobby.getPlayers().size() - userlobby.winners.size() == 1) {
             for (String player : userlobby.getPlayers()) {
                 if (!userlobby.winners.contains(player)) {
                     userlobby.addWinner(player);
                     try {
-                        protocolWriterServer.sendInfo(player + " is on the " + podestPlace + ". place!");
+                        protocolWriterServer.sendInfo(player + " is on the " + userlobby.getPodestPlace() + ". place!");
                     } catch (IOException e) {
                         System.err.println("Could not send Info.");
                     }
@@ -550,6 +546,8 @@ public class Server {
 
             Highscore highscore = new Highscore();
             highscore.addHighscoreEntry(userlobby.getLobbyName(), new ArrayList<>(userlobby.winners));
+
+            userlobby.resetPodestPlae();
         }
 
     }
