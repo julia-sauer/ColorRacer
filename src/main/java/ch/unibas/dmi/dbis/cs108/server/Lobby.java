@@ -32,6 +32,7 @@ public class Lobby implements Runnable {
     private final Map<String, String> selectedColors = new HashMap<>();
     private String hostName; // Player who created the lobby
     public final Set<String> winners = new HashSet<>();
+    private int podestPlace = 1;
 
     private GameBoard gameBoard = new GameBoard();
     public final Map<String, Boolean> readyStatus = new ConcurrentHashMap<>();
@@ -54,6 +55,7 @@ public class Lobby implements Runnable {
         this.lobbyName = lobbyName;
         this.playerGameBoards = new HashMap<>();
         this.gamestate = 1; // Default state: open
+        this.podestPlace = 1;
     }
 
     /**
@@ -468,6 +470,18 @@ public class Lobby implements Runnable {
             return null;
         }
         return playerOrder.get(currentPlayerIndex);
+    }
+
+    public void resetPodestPlae() {
+        this.podestPlace = 1;
+    }
+
+    public int getPodestPlace() {
+        return podestPlace;
+    }
+
+    public void incrementPodestPlace() {
+        this.podestPlace++;
     }
 
 }
