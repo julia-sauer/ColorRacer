@@ -265,7 +265,6 @@ public class ProtocolReaderServer {
                     break;
 
                 case ROLL:
-                    if (!isMyTurn(protocolWriterServer)) break;
                     Server.rollTheDice(userId);
                     break;
 

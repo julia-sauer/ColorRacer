@@ -181,6 +181,32 @@ public class Server {
     public static void rollTheDice(int userId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        Lobby userlobby = getLobbyOfPlayer(user.getNickname());
+        if (userlobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+            try {
+                protocolWriterServer.sendInfo("You are not in a game. You are in the Welcomelobby.");
+            } catch (IOException e) {
+                System.err.println("Error sending Info that player is not in a correct lobby");
+            }
+            return;
+        }
+        if (!(userlobby.getGameState() == 2)) {
+            try {
+                protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
+            } catch (IOException e) {
+                System.err.println("Error sending info");
+            }
+            return;
+        }
+        if (!userlobby.isCurrentPlayer(user.getNickname())) {
+            try {
+                protocolWriterServer.sendInfo("It's not your turn!");
+            } catch (IOException e) {
+                System.err.println("Error sending Info that it's not this players turn.");
+            }
+            return;
+        }
+
         if (user.hasRolled()) {
             try {
                 protocolWriterServer.sendInfo("You already rolled.");
