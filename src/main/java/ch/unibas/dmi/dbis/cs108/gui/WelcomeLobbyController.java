@@ -385,25 +385,26 @@ public class WelcomeLobbyController {
                 gameLobbyController.gamelist.setItems(gamelist.getItems());
                 gameLobbyController.lobbylist.setItems(lobbylist.getItems());
 
+                primaryStage.setMaximized(true);
                 Scene scene = new Scene(gameLobbyRoot);
                 primaryStage.setScene(scene);
-
-                // Gets screen bounds
-                Screen screen = Screen.getPrimary();
-                Rectangle2D bounds = screen.getVisualBounds();
-
-                // Sets full screen bounds (without fullscreen mode)
-                primaryStage.setX(bounds.getMinX());
-                primaryStage.setY(bounds.getMinY());
-                primaryStage.setWidth(bounds.getWidth());
-                primaryStage.setHeight(bounds.getHeight());
-
-                // Bind the root pane to the scene dimensions
-                gameLobbyRoot.prefWidthProperty().bind(scene.widthProperty());
-                gameLobbyRoot.prefHeightProperty().bind(scene.heightProperty());
-
-                // removes white gap background effect
-                scene.setFill(null);
+//
+//                // Gets screen bounds
+//                Screen screen = Screen.getPrimary();
+//                Rectangle2D bounds = screen.getVisualBounds();
+//
+//                // Sets full screen bounds (without fullscreen mode)
+//                primaryStage.setX(bounds.getMinX());
+//                primaryStage.setY(bounds.getMinY());
+//                primaryStage.setWidth(bounds.getWidth());
+//                primaryStage.setHeight(bounds.getHeight());
+//
+//                // Bind the root pane to the scene dimensions
+//                gameLobbyRoot.prefWidthProperty().bind(scene.widthProperty());
+//                gameLobbyRoot.prefHeightProperty().bind(scene.heightProperty());
+//
+//                // removes white gap background effect
+//                scene.setFill(null);
 
                 // Show the window
                 primaryStage.show();
