@@ -41,15 +41,26 @@
     -fx-cursor: hand;
 }
 
-/* Bike buttons - flower colors with round shapes */
-.bike-button {
-    -fx-min-width: 80px;
-    -fx-min-height: 80px;
-    -fx-background-radius: 50;
-    -fx-border-radius: 50;
-    -fx-border-width: 3;
-    -fx-border-color: #aed581;
-    -fx-background-color: #ffccbc; /* peachy pink */
+/* Bike Image Button */
+.bike-image-button {
+    -fx-background-color: #c5e1a5; /* Soft green */
+    -fx-border-color: #81c784;
+    -fx-border-width: 3px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(100,100,100,0.4), 5, 0, 0, 3);
+    -fx-cursor: hand;
+}
+
+.bike-image-button:hover {
+    -fx-background-color: #aed581;
+    -fx-effect: dropshadow(three-pass-box, rgba(100,100,100,0.7), 8, 0, 0, 4);
+}
+
+.bike-image-button:pressed {
+    -fx-background-color: #9ccc65;
+    -fx-translate-y: 1px;
 }
 
 /* Game board */

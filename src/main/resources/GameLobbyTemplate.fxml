@@ -112,7 +112,7 @@
       <VBox alignment="CENTER" styleClass="game-panel" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="lobbyNameDisplay" alignment="CENTER" styleClass="dialog-header" text="Lobby:" />
-            <AnchorPane fx:id="gameBoard" styleClass="game-board" visible="true" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="gameBoard" styleClass="game-board" visible="true" BorderPane.alignment="CENTER" VBox.vgrow="NEVER">
                <children>
                   <ImageView fx:id="gameBoardImage" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <viewport>
