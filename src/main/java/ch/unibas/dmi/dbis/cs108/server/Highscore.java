@@ -50,4 +50,8 @@ public class Highscore {
             System.err.println("Error while saving Highscore");
         }
     }
+    public int getGameNumber() {
+        return gameNumber;
+    }
+
 }
