@@ -92,6 +92,10 @@ public class GameLobbyController {
     @FXML
     public Button finishButton;
 
+    //TODO
+    @FXML
+    public Menu bikeOption;
+
     /**
      * The {@link Button} that lets the player roll the dice.
      */
@@ -592,6 +596,7 @@ public class GameLobbyController {
         throwDiceButton.setVisible(true);
         moveButton.setVisible(true);
         skipButton.setVisible(true);
+        bikeOption.setDisable(true);
     }
 
     /**
