@@ -9,39 +9,41 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * The class {@code ProtocolReaderServer} reads incoming messages from the client
- * and forwards them to the server.
- * The class is also responsible for receiving and interpreting
- * messages that a client sends to the server via the network. These messages are
- * text-based and follow a specific network protocol.
+ * The class {@code ProtocolReaderServer} reads incoming messages from the client and forwards them
+ * to the server. The class is also responsible for receiving and interpreting messages that a
+ * client sends to the server via the network. These messages are text-based and follow a specific
+ * network protocol.
  * <p>
- * This class is instantiated per client connection and continuously reads new lines
- * (commands) from the connected client via a {@link BufferedReader}. Each line is regarded as a
- * complete message (ends with a line break ‘\n’). It works closely with the {@link ProtocolWriterServer}
- * to send responses when needed.
+ * This class is instantiated per client connection and continuously reads new lines (commands) from
+ * the connected client via a {@link BufferedReader}. Each line is regarded as a complete message
+ * (ends with a line break ‘\n’). It works closely with the {@link ProtocolWriterServer} to send
+ * responses when needed.
  * </p>
  *
  * @author anasv
  * @since 22.03.25
  */
 public class ProtocolReaderServer {
+
     private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
     private final int userId; // Die ID des Clients, der aktuell mit dem Server verbunden ist.
     private final OutputStream out;
     private final PingThread pingThread;// added reference
-    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(
+            new ArrayList<>());
     private static final Logger LOGGER = LogManager.getLogger(ProtocolReaderServer.class);
     private final Runnable disconnectCallback;
 
     /**
      * Creates a new {@code ProtocolReaderServer}.
      *
-     * @param in The InputStream from which the messages are to be read.
-     * @param out The OutputStream to which replies are written.
+     * @param in     The InputStream from which the messages are to be read.
+     * @param out    The OutputStream to which replies are written.
      * @param userId The unique ID of the user.
      * @throws IOException If an error occurs when creating the BufferedReader.
      */
-    public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread, Runnable disconnectCallback) throws IOException {
+    public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread,
+                                Runnable disconnectCallback) throws IOException {
         // Initialisierung des BufferedReaders
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         this.userId = userId;
@@ -49,9 +51,10 @@ public class ProtocolReaderServer {
         this.pingThread = pingThread;
         this.disconnectCallback = disconnectCallback;
     }
+
     /**
-     * Checks if the current user is allowed to perform a turn action.
-     * Sends an error to the client if it's not their turn.
+     * Checks if the current user is allowed to perform a turn action. Sends an error to the client if
+     * it's not their turn.
      *
      * @param writer The {@link ProtocolWriterServer} that is needed to send the information forward.
      * @return True if it's the player's turn, false otherwise.
@@ -68,11 +71,11 @@ public class ProtocolReaderServer {
     }
 
     /**
-     * Starts an endless loop that continuously reads messages (commands) from the client
-     * and processes them using the protocol.
+     * Starts an endless loop that continuously reads messages (commands) from the client and
+     * processes them using the protocol.
      * <p>
-     * Each message must begin with one of the defined {@link Command} enum values.
-     * The method decodes these commands and executes the corresponding server action.
+     * Each message must begin with one of the defined {@link Command} enum values. The method decodes
+     * these commands and executes the corresponding server action.
      * <p>
      * The network commands are processed using switch statements that the server receives from a
      * client. Each command (e.g. CHAT, NICK, PING, ...) is sent as a line of string from the client.
@@ -87,7 +90,9 @@ public class ProtocolReaderServer {
         Server server = new Server(Server.port);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
         while ((line = reader.readLine()) != null) {
-            if (line.trim().isEmpty()) continue;
+            if (line.trim().isEmpty()) {
+                continue;
+            }
 
             //LOGGER.error("server:  {}", line);
 
@@ -104,9 +109,9 @@ public class ProtocolReaderServer {
             // Processes the command with switch-case
 
             switch (command) {
-                 // Handels the JOIN-command from the client
+                // Handels the JOIN-command from the client
                 case JOIN: {
-                    if (parts.length < 2 || parts[1].trim().isEmpty()){
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         protocolWriterServer.sendInfo("-ERR lobbyName missing");
                         break;
                     }
@@ -120,7 +125,7 @@ public class ProtocolReaderServer {
                     break;
                 }
                 case CRLO: {
-                    if (parts.length < 2 || parts[1].trim().isEmpty()){
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         protocolWriterServer.sendInfo("-ERR lobbyName missing");
                         break;
                     }
@@ -143,7 +148,7 @@ public class ProtocolReaderServer {
                     Server.changeNickname(userId, newNick);
                     Server.updateAllClients();
                     break;
-                    // Aufruf der chatToAll methode für das Senden von einer Chatnachricht an alle Clients
+                // Aufruf der chatToAll methode für das Senden von einer Chatnachricht an alle Clients
                 case CHAT: {
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR Empty chat message from user ID " + userId);
@@ -181,7 +186,8 @@ public class ProtocolReaderServer {
                     for (String recipientName : lobbyPlayers) {
                         User recipient = UserList.getUserByName(recipientName);
                         if (recipient != null) {
-                            ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, recipient.getOut());
+                            ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters,
+                                    recipient.getOut());
                             writer.sendChat(message, sender);
                         }
                     }
@@ -189,7 +195,6 @@ public class ProtocolReaderServer {
                     System.out.println("[" + lobbyName + "] " + sender + ": " + message);
                     break;
                 }
-
 
                 case PONG:
                     System.out.println("PONG received from Client " + userId);
@@ -269,7 +274,9 @@ public class ProtocolReaderServer {
                     break;
 
                 case CHOS:
-                    if (!isMyTurn(protocolWriterServer)) break;
+                    if (!isMyTurn(protocolWriterServer)) {
+                        break;
+                    }
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR No FieldId from Client " + userId);
                         break;
@@ -280,12 +287,16 @@ public class ProtocolReaderServer {
                     }
 
                 case MOVE:
-                    if (!isMyTurn(protocolWriterServer)) break;
+                    if (!isMyTurn(protocolWriterServer)) {
+                        break;
+                    }
                     Server.moveToLastSelectedField(userId);
                     break;
 
                 case NEXT: {
-                    if (!isMyTurn(protocolWriterServer)) break;
+                    if (!isMyTurn(protocolWriterServer)) {
+                        break;
+                    }
 
                     nickname = UserList.getUserName(userId);
                     Lobby userLobby = Server.getLobbyOfPlayer(nickname);
@@ -302,7 +313,9 @@ public class ProtocolReaderServer {
                 }
 
                 case DEOS:
-                    if (!isMyTurn(protocolWriterServer)) break;
+                    if (!isMyTurn(protocolWriterServer)) {
+                        break;
+                    }
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR No FieldId from Client " + userId);
                         break;
@@ -323,12 +336,14 @@ public class ProtocolReaderServer {
                         }
                     }
                     if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                        protocolWriterServer.sendInfo("You are not currently in a lobby or still in the Welcome lobby and therefore can't choose a bike.");
+                        protocolWriterServer.sendInfo(
+                                "You are not currently in a lobby or still in the Welcome lobby and therefore can't choose a bike.");
                         break;
                     }
 
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
-                        protocolWriterServer.sendInfo("-ERR No color provided. Please select: black, green, magenta, darkblue.");
+                        protocolWriterServer.sendInfo(
+                                "-ERR No color provided. Please select: black, green, magenta, darkblue.");
                         break;
                     }
 
@@ -336,7 +351,8 @@ public class ProtocolReaderServer {
                     List<String> validColors = Arrays.asList("black", "green", "magenta", "darkblue");
 
                     if (!validColors.contains(color)) {
-                        protocolWriterServer.sendInfo("-ERR The color " + color + " is not selectable. Please choose one of: black, green, magenta, darkblue.");
+                        protocolWriterServer.sendInfo("-ERR The color " + color
+                                + " is not selectable. Please choose one of: black, green, magenta, darkblue.");
                         break;
                     }
 
@@ -353,7 +369,8 @@ public class ProtocolReaderServer {
                         assert lobby != null;
                         for (String member : lobby.getPlayers()) {
                             User u = UserList.getUserByName(member);
-                            ProtocolWriterServer w = new ProtocolWriterServer(clientWriters, Objects.requireNonNull(u).getOut());
+                            ProtocolWriterServer w = new ProtocolWriterServer(clientWriters,
+                                    Objects.requireNonNull(u).getOut());
                             w.sendCommandAndString(Command.VELO, sender + " " + color);
                         }
                         Server.updateAllClients();
@@ -386,7 +403,8 @@ public class ProtocolReaderServer {
                     }
 
                     if (playerLobbies.isEmpty()) {
-                        protocolWriterServer.sendInfo("You aren't part of a gameLobby. Please create a lobby or join an existing lobby to start a game.");
+                        protocolWriterServer.sendInfo(
+                                "You aren't part of a gameLobby. Please create a lobby or join an existing lobby to start a game.");
                         break;
                     }
 
@@ -395,7 +413,8 @@ public class ProtocolReaderServer {
                             .allMatch(l -> l.getLobbyName().equalsIgnoreCase("Welcome"));
 
                     if (onlyInWelcome) {
-                        protocolWriterServer.sendInfo("You aren't part of a gameLobby. Please create a lobby or join an existing lobby to start a game.");
+                        protocolWriterServer.sendInfo(
+                                "You aren't part of a gameLobby. Please create a lobby or join an existing lobby to start a game.");
                         break;
                     }
 
@@ -463,7 +482,8 @@ public class ProtocolReaderServer {
                         break;
                     }
 
-                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters,
+                            user.getOut());
 
                     // Get all connected usernames
                     List<String> allUsers = UserList.getAllUsernames();
@@ -476,7 +496,9 @@ public class ProtocolReaderServer {
 
                     // Show players in each lobby (excluding Welcome)
                     for (Lobby lobby : Server.lobbies) {
-                        if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) continue;
+                        if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                            continue;
+                        }
 
                         List<String> players = lobby.getPlayers();
 //                        try {
@@ -495,7 +517,8 @@ public class ProtocolReaderServer {
                         break;
                     }
 
-                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters,
+                            user.getOut());
                     String username = user.getNickname();
 
                     // Find lobby the user is in
@@ -531,7 +554,8 @@ public class ProtocolReaderServer {
                         break;
                     }
 
-                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
+                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters,
+                            user.getOut());
 
                     // Zähle "echte" Lobbys (≠ Welcome)
                     List<Lobby> realLobbies = Server.lobbies.stream()
@@ -577,7 +601,8 @@ public class ProtocolReaderServer {
                         }
                     }
                     if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                        protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby and therefore can't write ready.");
+                        protocolWriterServer.sendInfo(
+                                "You are not currently in a lobby or in the Welcome lobby and therefore can't write ready.");
                         break;
                     }
 
@@ -607,7 +632,7 @@ public class ProtocolReaderServer {
                         protocolWriterServer.sendInfo("You are not currently in a lobby or in the Welcome lobby");
                         break;
                     }
-                    if (username.trim().equalsIgnoreCase(userLobby.getHostName().trim()) || !userLobby.winners.isEmpty()){
+                    if (username.trim().equalsIgnoreCase(userLobby.getHostName().trim()) || !userLobby.winners.isEmpty()) {
                         userLobby.changeGameState(3);
                         for (String player : userLobby.getPlayers()) {
                             User u = UserList.getUserByName(player);
@@ -626,6 +651,9 @@ public class ProtocolReaderServer {
                     protocolWriterServer.sendInfo("You are not the host of the lobby and cannot end the game.");
                     break;
                 }
+                case HIGH:
+                    server.getHighscoreList(userId);
+                    break;
                 default:
                     System.out.println("Unknown command from user ID " + userId + ": " + line);
                     break;
@@ -634,8 +662,8 @@ public class ProtocolReaderServer {
     }
 
     /**
-     * This method checks if all players in the game are ready. If it returns true
-     * the host is able to start the game.
+     * This method checks if all players in the game are ready. If it returns true the host is able to
+     * start the game.
      *
      * @return True if all players are ready / false if not all players are ready.
      */
@@ -648,7 +676,8 @@ public class ProtocolReaderServer {
                 break;
             }
         }
-        if (!userLobby.readyStatus.isEmpty() && userLobby.readyStatus.values().stream().allMatch(Boolean::booleanValue)) {
+        if (!userLobby.readyStatus.isEmpty() && userLobby.readyStatus.values().stream()
+                .allMatch(Boolean::booleanValue)) {
             return true;
         }
         return false;
