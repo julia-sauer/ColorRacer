@@ -140,6 +140,11 @@ public enum Command {
   GLST,
 
   /**
+   * Server sends the Highscore list.
+   */
+  HIGH,
+
+  /**
    * Handles that the game has ended. Either the host stopped it or the game was finished.
    */
   FNSH;
@@ -318,5 +323,12 @@ public enum Command {
    */
   public static void FNSH() {
     System.out.println("FNSH");
+  }
+
+  /**
+   * Prints the Command "HIGH"
+   */
+  public static void HIGH() {
+       System.out.println("HIGH");
   }
 }

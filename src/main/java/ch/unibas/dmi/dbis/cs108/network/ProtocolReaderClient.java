@@ -287,12 +287,22 @@ public class ProtocolReaderClient {
               () -> GameLobbyController.getInstance().updateLobbyList(members));
           break;
 
-        default:
-          System.out.println("Unknown command from Server: " + line);
-          break;
-      }
+                case HIGH:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Error: No Data received.");
+                        break;
+                    }
+                    String data = parts[1].trim();
+                    System.out.println(data);
+                    display(data);
+                    break;
+
+                default:
+                    System.out.println("Unknown command from Server: " + line);
+                    break;
+            }
+        }
     }
-  }
 
   /**
    * This method constructs a formatted string in the form {@code "sender: message"} and prints it

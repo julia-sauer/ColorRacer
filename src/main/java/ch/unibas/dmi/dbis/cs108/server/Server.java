@@ -378,14 +378,13 @@ public class Server {
             continue;
         }
 
-      ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, otherUser.getOut());
-      try {
-        writer.sendCommandAndString(Command.INFO,
-            "+POS " + nickname + " moved to the Field " + newField.getFieldId());
-      } catch (IOException e) {
-        System.err.println("Error sending move info to " + playerName);
-      }
-    }
+            ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, otherUser.getOut());
+            try {
+                writer.sendCommandAndString(Command.INFO, "+POS " + nickname + " moved to the Field " + newField.getFieldId());
+            } catch (IOException e) {
+                System.err.println("Error sending move info to " + playerName);
+            }
+        }
 
     if (newField.getFieldId().equals("purple2") || newField.getFieldId().equals("pink10")) {
       won(userId);
@@ -697,9 +696,36 @@ public class Server {
     }
   }
 
-  public static int getActiveClientCount() {
-    return activeClients.get();
-  }
+    public static int getActiveClientCount() {
+        return activeClients.get();
+    }
+
+    /**
+     * Reads the data in the Highscore.txt-file and sends it to the Client via the ProtocolWirterServer
+     * @param userId The Id from the user that sent the request for the HighscoreList.
+     */
+    public void getHighscoreList(int userId) {
+        User user = UserList.getUser(userId);
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        String filePath = "../Highscore.txt"; //TODO Pfad anpassen sobald in Highscore.txt in resource ordner
+        try {
+            File file = new File(filePath);
+            if (file.exists()) {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                StringBuilder highscoreList = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    highscoreList.append(line).append("\n");
+                }
+                reader.close();
+                protocolWriterServer.sendData(highscoreList.toString());
+            } else {
+                protocolWriterServer.sendInfo("Highscore file not found.");
+            }
+        } catch (IOException e) {
+            System.err.println("Error sending Highscore file.");
+        }
+    }
 }
 
 

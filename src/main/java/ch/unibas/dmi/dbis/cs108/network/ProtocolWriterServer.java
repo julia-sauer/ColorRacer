@@ -109,4 +109,26 @@ public class ProtocolWriterServer {
       writer.flush();
     }
   }
+    /**
+     * This method sends a private (whisper) message to a specific user using the {@code WISP} command.
+     *
+     * @param message The message that should be sent.
+     * @param sender The nickname of the user who sent the message.
+     * @param receiver The nickname of the user who receives the message.
+     */
+    public void sendWhisper(String message, String sender, String receiver) {
+        String formatted = Command.WISP + Command.SEPARATOR + sender + Command.SEPARATOR + message;
+        if (receiver != null) {
+            writer.println(formatted);
+            writer.flush();
+        }
+    }
+
+    /**
+     * This method sends the data read from the Highscore.txt-file to the Client.
+     * @param data The data that is in the Highscore-file.
+     */
+    public void sendData (String data) {
+        sendToClient(Command.HIGH + Command.SEPARATOR + data);
+    }
 }
