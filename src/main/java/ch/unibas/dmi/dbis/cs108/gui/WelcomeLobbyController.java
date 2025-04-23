@@ -385,7 +385,7 @@ public class WelcomeLobbyController {
                 gameLobbyController.gamelist.setItems(gamelist.getItems());
                 gameLobbyController.lobbylist.setItems(lobbylist.getItems());
 
-                primaryStage.setMaximized(true);
+//                primaryStage.setMaximized(true);
                 Scene scene = new Scene(gameLobbyRoot);
                 primaryStage.setScene(scene);
 //
