@@ -60,7 +60,7 @@ public class GUI extends Application {
         client.getProtocolReader().setWelcomeController(welcomeController);
 
         // Setup and show the GUI
-        primaryStage.setMaximized(true);
+//        primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Welcome Lobby");
         primaryStage.show();
