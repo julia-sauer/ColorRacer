@@ -83,13 +83,13 @@ public class GameLobbyController {
    * The {@link Button} only for the host to start the game.
    */
   @FXML
-  public Button startButton;
+  public MenuItem startButton;
 
   /**
    * The {@link Button} only for the host to finish the game earlier.
    */
   @FXML
-  public Button finishButton;
+  public MenuItem finishButton;
 
   //TODO
   @FXML
@@ -129,9 +129,6 @@ public class GameLobbyController {
    */
   @FXML
   private AnchorPane gameBoard;
-
-  @FXML
-  private ImageView gameBoardImage;
 
   /**
    * Tracks all field buttons that have been selected by the user but not yet confirmed.
@@ -347,6 +344,7 @@ public class GameLobbyController {
     try {
       if (protocolReader.bike) {
         protocolWriter.sendReadyStatus();
+        readyButton.setVisible(false);
       }
     } catch (IOException e) {
       showError("Failed to send ready status", e.getMessage());
@@ -611,7 +609,7 @@ public class GameLobbyController {
    */
   public void gameOngoing() {
     if (isHost) {
-      finishButton.setVisible(true);
+      finishButton.setDisable(false);
     }
     gameBoard.setVisible(true);
     throwDiceButton.setVisible(true);

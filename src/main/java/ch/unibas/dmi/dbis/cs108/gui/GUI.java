@@ -3,7 +3,6 @@ package ch.unibas.dmi.dbis.cs108.gui;
 import ch.unibas.dmi.dbis.cs108.client.Client;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
@@ -63,7 +62,7 @@ public class GUI extends Application {
     client.getProtocolReader().setWelcomeController(welcomeController);
 
     // Setup and show the GUI
-//        primaryStage.setMaximized(true);
+    primaryStage.setMaximized(true);
     primaryStage.setScene(new Scene(root));
     primaryStage.setTitle("Welcome Lobby");
     primaryStage.show();
