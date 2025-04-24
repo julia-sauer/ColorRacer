@@ -229,13 +229,16 @@ public class ProtocolReaderClient {
                     gameLobbyController.displayChat(brodMsg);
                     break;
 
-                case STRT:
-                    System.out.println("The game starts now!");
-                    break;
+        case STRT:
+          System.out.println("The game starts now!");
+          gameLobbyController.startButton.setDisable(true);
+          break;
 
-                case RSTT:
-                    System.out.println("The game restarts!");
-                    break;
+        case RSTT:
+          System.out.println("The game restarts!");
+          gameLobbyController.finishButton.setDisable(false);
+          gameLobbyController.restartButton.setDisable(true);
+          break;
 
                 case VELO:
                     setBike(true);
@@ -247,9 +250,11 @@ public class ProtocolReaderClient {
                     );
                     break;
 
-                case FNSH:
-                    protocolWriterClient.sendCommand(Command.FNSH);
-                    break;
+        case FNSH:
+//          protocolWriterClient.sendCommand(Command.FNSH);
+          gameLobbyController.restartButton.setDisable(false);
+          gameLobbyController.finishButton.setDisable(true);
+          break;
 
                 case LIST:
                     // Expect the format: PLST::[player1, player2, ...]

@@ -569,42 +569,47 @@ public class Server {
   public static void won(int userId) {
     User user = UserList.getUser(userId);
     String nickname = user.getNickname();
-    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
-        user.getOut());
     Lobby userlobby = getLobbyOfPlayer(user.getNickname());
-    try {
-      if (userlobby.getPodestPlace() == 1) {
-        protocolWriterServer.sendInfo(nickname + " won the game!");
-      } else {
-        protocolWriterServer.sendInfo(
-            nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
+    for (String players : userlobby.getPlayers()) {
+      User users = UserList.getUserByName(players);
+      if (users != null) {
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(Server.clientWriters, users.getOut());
+        try {
+          if (userlobby.getPodestPlace() == 1) {
+            protocolWriterServer.sendInfo(nickname + " won the game!");
+          } else {
+            protocolWriterServer.sendInfo(
+                    nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
+          }
+        } catch (IOException e) {
+          System.err.println("Could not send Info.");
+        }
+
+        userlobby.incrementPodestPlace(); //podestPlace gets incremented by 1.
+
+        userlobby.addWinner(nickname);
+
+        if (userlobby.getPlayers().size() - userlobby.winners.size() == 1) {
+          for (String player : userlobby.getPlayers()) {
+            if (!userlobby.winners.contains(player)) {
+              userlobby.addWinner(player);
+              try {
+                protocolWriterServer.sendInfo(
+                        player + " is on the " + userlobby.getPodestPlace() + ". place!");
+              } catch (IOException e) {
+                System.err.println("Could not send Info.");
+              }
+              break;
+            }
+          }
+          try {
+            protocolWriterServer.sendCommand(Command.FNSH);
+          } catch (IOException e) {
+            System.err.println("Could not send Command.");
+          }
       }
-    } catch (IOException e) {
-      System.err.println("Could not send Info.");
     }
 
-    userlobby.incrementPodestPlace(); //podestPlace gets incremented by 1.
-
-    userlobby.addWinner(nickname);
-
-    if (userlobby.getPlayers().size() - userlobby.winners.size() == 1) {
-      for (String player : userlobby.getPlayers()) {
-        if (!userlobby.winners.contains(player)) {
-          userlobby.addWinner(player);
-          try {
-            protocolWriterServer.sendInfo(
-                player + " is on the " + userlobby.getPodestPlace() + ". place!");
-          } catch (IOException e) {
-            System.err.println("Could not send Info.");
-          }
-          break;
-        }
-      }
-      try {
-        protocolWriterServer.sendCommand(Command.FNSH);
-      } catch (IOException e) {
-        System.err.println("Could not send Command.");
-      }
 
       Highscore highscore = new Highscore();
       highscore.addHighscoreEntry(userlobby.getLobbyName(), new ArrayList<>(userlobby.winners));
