@@ -246,8 +246,7 @@ public class Server {
    */
   public static void checkField(Integer userId, String fieldId) {
     User user = UserList.getUser(userId);
-    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
-        user.getOut());
+    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
     if (!user.hasRolled()) {
       try {
         protocolWriterServer.sendInfo("You need to roll first.");
@@ -264,9 +263,9 @@ public class Server {
         break;
       }
     }
-      if (userLobby == null) {
-          return;
-      }
+    if (userLobby == null) {
+      return;
+    }
     GameBoard gameBoard = userLobby.getGameBoard(nickname);
     if (gameBoard.isValidField(fieldId)) {
       Field selectedField = gameBoard.getFieldById(fieldId);
@@ -299,9 +298,9 @@ public class Server {
         break;
       }
     }
-      if (userLobby == null) {
-          return;
-      }
+    if (userLobby == null) {
+      return;
+    }
     GameBoard gameBoard = userLobby.getGameBoard(nickname);
     Field deselectedField = gameBoard.getFieldById(fieldId);
     //see if selectedFields is empty
@@ -342,9 +341,9 @@ public class Server {
   public static void moveToLastSelectedField(int userId) throws IOException {
     User user = UserList.getUser(userId);
     ProtocolWriterServer writer1 = new ProtocolWriterServer(clientWriters, user.getOut());
-      if (user == null) {
-          return;
-      }
+    if (user == null) {
+      return;
+    }
 
     String nickname = user.getNickname();
     Lobby userLobby = null;
@@ -356,9 +355,9 @@ public class Server {
       }
     }
 
-      if (userLobby == null) {
-          return;
-      }
+    if (userLobby == null) {
+      return;
+    }
 
     GameBoard board = userLobby.getGameBoard(nickname);
     if (board.selectedFieldsEmpty()) {
@@ -374,17 +373,18 @@ public class Server {
     Field newField = board.getCurrentField();
     for (String playerName : userLobby.getPlayers()) {
       User otherUser = UserList.getUserByName(playerName);
-        if (otherUser == null) {
-            continue;
-        }
+      if (otherUser == null) {
+        continue;
+      }
 
-            ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, otherUser.getOut());
-            try {
-                writer.sendCommandAndString(Command.INFO, "+POS " + nickname + " moved to the Field " + newField.getFieldId());
-            } catch (IOException e) {
-                System.err.println("Error sending move info to " + playerName);
-            }
-        }
+      ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, otherUser.getOut());
+      try {
+        writer.sendCommandAndString(Command.INFO,
+            "+POS " + nickname + " moved to the Field " + newField.getFieldId());
+      } catch (IOException e) {
+        System.err.println("Error sending move info to " + playerName);
+      }
+    }
 
     if (newField.getFieldId().equals("purple2") || newField.getFieldId().equals("pink10")) {
       won(userId);
@@ -443,9 +443,9 @@ public class Server {
    */
   public static void joinLobby(String lobbyName, int userId) {
     User user = UserList.getUser(userId);
-      if (user == null) {
-          return;
-      }
+    if (user == null) {
+      return;
+    }
 
     ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
         user.getOut());
@@ -696,36 +696,51 @@ public class Server {
     }
   }
 
-    public static int getActiveClientCount() {
-        return activeClients.get();
-    }
+  public static int getActiveClientCount() {
+    return activeClients.get();
+  }
 
-    /**
-     * Reads the data in the Highscore.txt-file and sends it to the Client via the ProtocolWirterServer
-     * @param userId The Id from the user that sent the request for the HighscoreList.
-     */
-    public void getHighscoreList(int userId) {
-        User user = UserList.getUser(userId);
-        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
-        String filePath = "../Highscore.txt"; //TODO Pfad anpassen sobald in Highscore.txt in resource ordner
-        try {
-            File file = new File(filePath);
-            if (file.exists()) {
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                StringBuilder highscoreList = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    highscoreList.append(line).append("\n");
-                }
-                reader.close();
-                protocolWriterServer.sendData(highscoreList.toString());
-            } else {
-                protocolWriterServer.sendInfo("Highscore file not found.");
-            }
-        } catch (IOException e) {
-            System.err.println("Error sending Highscore file.");
-        }
+  public static void shutdownServerA() {
+    try {
+      if (echod != null && !echod.isClosed()) {
+        echod.close();
+      }
+      System.exit(0);
+    } catch (IOException e) {
+      System.err.println("Error when closing the Server: " + e.getMessage());
     }
+  }
+
+  /**
+   * Reads the data in the Highscore.txt-file and sends it to the Client via the
+   * ProtocolWirterServer
+   *
+   * @param userId The Id from the user that sent the request for the HighscoreList.
+   */
+  public void getHighscoreList(int userId) {
+    User user = UserList.getUser(userId);
+    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
+        user.getOut());
+    String filePath = "../Highscore.txt"; //TODO Pfad anpassen sobald in Highscore.txt in resource ordner
+    try {
+      File file = new File(filePath);
+      if (file.exists()) {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        StringBuilder highscoreList = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+          highscoreList.append(line).append("\n");
+        }
+        reader.close();
+        protocolWriterServer.sendData(highscoreList.toString());
+      } else {
+        protocolWriterServer.sendInfo("Highscore file not found.");
+      }
+    } catch (IOException e) {
+      System.err.println("Error sending Highscore file.");
+    }
+  }
+
 }
 
 
