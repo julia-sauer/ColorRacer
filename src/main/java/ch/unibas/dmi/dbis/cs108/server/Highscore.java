@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Highscore {
 
-  private static final String FILE_PATH = "highscore.txt";
+  private static final String FILE_PATH = "src/main/resources/highscore.txt";
   private List<String> highscoreList;
   private Integer gameNumber;
 
