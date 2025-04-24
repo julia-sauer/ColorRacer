@@ -719,17 +719,15 @@ public class Server {
    */
   public void getHighscoreList(int userId) {
     User user = UserList.getUser(userId);
-    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
-        user.getOut());
-    String filePath = "../Highscore.txt"; //TODO Pfad anpassen sobald in Highscore.txt in resource ordner
-    try {
-      File file = new File(filePath);
-      if (file.exists()) {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+
+    try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Highscore.txt")){
+      if (inputStream != null) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder highscoreList = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
-          highscoreList.append(line).append("\n");
+          highscoreList.append(line).append("|");
         }
         reader.close();
         protocolWriterServer.sendData(highscoreList.toString());

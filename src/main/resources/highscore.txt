@@ -1,3 +1,6 @@
 Spiel 1 (dinö):
 1. place: Stego
 2. place: Stego1
+Spiel 2 (dinö):
+1. place: Stego1
+2. place: Stego
