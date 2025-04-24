@@ -77,13 +77,14 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Highscore">
                <items>
-                  <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleHighscoreList" text="Show highscore list" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Start / Finish">
+            <Menu fx:id="hostButtons" disable="true" mnemonicParsing="false" text="Start / Finish">
               <items>
                 <MenuItem fx:id="startButton" mnemonicParsing="false" onAction="#handleStart" text="Start" />
                   <MenuItem fx:id="finishButton" disable="true" mnemonicParsing="false" onAction="#handleFinish" text="Finish" />
+                  <MenuItem fx:id="restartButton" disable="true" mnemonicParsing="false" onAction="#handleRestart" text="Restart" />
               </items>
             </Menu>
         </menus>

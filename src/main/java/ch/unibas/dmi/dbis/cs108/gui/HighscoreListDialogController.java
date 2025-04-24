@@ -1,0 +1,91 @@
+package ch.unibas.dmi.dbis.cs108.gui;
+
+import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+/**
+ * Controller class for the Highscore List Dialog.
+ * <p>
+ * This controller is responsible for displaying the content of the {@code highscore.txt} file
+ * in a JavaFX {@link ListView}. It is tied to the {@code HighscoreListDialogTemplate.fxml} layout.
+ * </p>
+ *
+ * @author julia
+ */
+public class HighscoreListDialogController {
+
+    /**
+     * The stage representing the dialog window.
+     */
+    private Stage dialogStage;
+
+    /**
+     * The {@link ListView} that displays the highscore entries.
+     */
+    @FXML
+    public ListView<String> highscoreListView;
+
+    /**
+     * Sets the dialog stage used for this controller.
+     *
+     * @param dialogStage The {@link Stage} object for the dialog.
+     */
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
+    }
+
+    /**
+     * Initializes the controller after the FXML file has been loaded.
+     * This method automatically loads the highscores from the file and populates the list.
+     */
+    @FXML
+    private void initialize() {
+        loadHighscores();
+    }
+
+    /**
+     * Loads the highscores from {@code highscore.txt} and displays them in the {@link ListView}.
+     * <p>
+     * If the file does not exist or an error occurs during reading, an appropriate message is shown instead.
+     * </p>
+     */
+    private void loadHighscores() {
+        Path scoreFile = Paths.get("highscore.txt");
+        try {
+            if (!Files.exists(scoreFile)) {
+                highscoreListView.setItems(FXCollections.observableArrayList(
+                        "No highscore file found."
+                ));
+                return;
+            }
+            List<String> lines = Files.readAllLines(scoreFile);
+            if (lines.isEmpty()) {
+                highscoreListView.setItems(FXCollections.observableArrayList(
+                        "Highscore list is empty."
+                ));
+            } else {
+                highscoreListView.setItems(FXCollections.observableArrayList(lines));
+            }
+        } catch (IOException e) {
+            highscoreListView.setItems(FXCollections.observableArrayList(
+                    "Error loading highscores: " + e.getMessage()
+            ));
+        }
+    }
+
+    /**
+     * Handles the action to close the dialog window.
+     */
+    @FXML
+    public void handleClose() {
+        dialogStage.close();
+    }
+}
