@@ -170,5 +170,7 @@ public class UserList {
     userMap.clear();
     userIdCounter.set(0);
   }
-
+  public static void setInstance(UserList userList) {
+    UserList instance = userList;
+  }
 }

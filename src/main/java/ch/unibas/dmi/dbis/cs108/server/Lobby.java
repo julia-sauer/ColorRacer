@@ -28,8 +28,8 @@ public class Lobby implements Runnable {
   private Server server;
   private String lobbyName;
   private final Map<String, GameBoard> playerGameBoards;
-  private final List<String> playerOrder = new ArrayList<>(); // order of players according to join-order
-  private int currentPlayerIndex = 0;
+  public final List<String> playerOrder = new ArrayList<>(); // order of players according to join-order
+  int currentPlayerIndex = 0;
   private final Map<String, String> selectedColors = new HashMap<>();
   private String hostName; // Player who created the lobby
   public final List<String> winners = new ArrayList<>();
@@ -55,6 +55,7 @@ public class Lobby implements Runnable {
     this.playerGameBoards = new HashMap<>();
     this.gamestate = 1; // Default state: open
     this.podestPlace = 1;
+    this.currentPlayerIndex = -1;
   }
 
   /**
@@ -106,6 +107,7 @@ public class Lobby implements Runnable {
    *
    * @param username the name of the player to mark as ready
    */
+  //TODO write test
   public void makeReady(String username) {
     if (readyStatus.containsKey(username)) {
       readyStatus.put(username, true);
@@ -203,6 +205,7 @@ public class Lobby implements Runnable {
    *
    * @param userId the ID of the user who requested to start the game
    */
+  //TODO write test
   public synchronized void startGame(int userId) {
     // Verify that the requesting user is the host.
     String requester = UserList.getUserName(userId);
@@ -299,6 +302,7 @@ public class Lobby implements Runnable {
    *
    * @param userId The userId of the player who typed restart.
    */
+  //TODO write test
   public synchronized void restartGame(int userId) {
     // Verify that the requesting user is the host.
     String requester = UserList.getUserName(userId);
@@ -396,21 +400,28 @@ public class Lobby implements Runnable {
    * @param name Player name
    * @return true if it's his turn
    */
+  //TODO write test
   public boolean isCurrentPlayer(String name) {
-      if (playerOrder.isEmpty()) {
-          return false;
-      }
+    if (playerOrder.isEmpty() || currentPlayerIndex < 0 || currentPlayerIndex >= playerOrder.size()) {
+      return false;
+    }
     return playerOrder.get(currentPlayerIndex).equals(name);
   }
+
 
   /**
    * Sets the next player as active (after turn or NEXT). It also sends the information message
    * whose turn it is to all players in the lobby.
    */
+  //TODO test
   public void advanceTurn() {
     System.out.println("Advancing turn. Current index before increment: " + currentPlayerIndex);
     int safety = 0;
     String currentPlayer;
+
+    if (currentPlayerIndex < 0) {
+      currentPlayerIndex = 0;
+    }
 
     do {
       currentPlayerIndex = (currentPlayerIndex + 1) % playerOrder.size();
@@ -491,7 +502,7 @@ public class Lobby implements Runnable {
 
   /**
    * Returns the currently active player (i.e., the one whose turn it is).
-   *
+   *dded a test for client handler
    * @return the username of the current player or null if no player is set
    */
   public String getCurrentPlayer() {
@@ -521,6 +532,10 @@ public class Lobby implements Runnable {
   public void setPlayers(List<String> players) {
     this.players.clear();
     this.players.addAll(players);
+  }
+
+  void setCurrentPlayerIndex(int index) {
+    this.currentPlayerIndex = index;
   }
 
 }

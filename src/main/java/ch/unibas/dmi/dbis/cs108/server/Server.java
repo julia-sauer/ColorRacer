@@ -31,7 +31,7 @@ public class Server {
   public static int port;
   public static List<Lobby> lobbies = new ArrayList<Lobby>();
   private static int podestPlace = 1;
-
+  public static Map<OutputStream, ProtocolWriterServer> protocolWriters = new HashMap<>();
 
   /**
    * Constructor of the server class
@@ -49,6 +49,7 @@ public class Server {
    * printed. When client connection is closed, it exits while loop, then connection to client is
    * closed (socket.close) then server is closed (echod.close).
    */
+
   public void start() {
     try {
       out.println("Waiting for port " + port + "...");
@@ -186,7 +187,7 @@ public class Server {
         receiverObject.getOut());
     protocolWriterServer.sendWhisper(message, sender, receiver);
   }
-
+//TODO write Test
   public static void rollTheDice(int userId) {
     User user = UserList.getUser(userId);
     ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
@@ -244,6 +245,7 @@ public class Server {
    * @param userId  The id of the user
    * @param fieldId the id of the chosen field
    */
+  //TODO write test
   public static void checkField(Integer userId, String fieldId) {
     User user = UserList.getUser(userId);
     ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
@@ -284,7 +286,7 @@ public class Server {
       }
     }
   }
-
+//TODO wrie test
   public static void deselectField(Integer userId, String fieldId) {
     User user = UserList.getUser(userId);
     ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
@@ -338,6 +340,7 @@ public class Server {
    *
    * @param userId userId the ID of the player executing the move
    */
+  //TODO write Test
   public static void moveToLastSelectedField(int userId) throws IOException {
     User user = UserList.getUser(userId);
     ProtocolWriterServer writer1 = new ProtocolWriterServer(clientWriters, user.getOut());
@@ -566,6 +569,7 @@ public class Server {
    *
    * @param userId The ID of the user that is currently on its turn.
    */
+  //TODO write Test
   public static void won(int userId) {
     User user = UserList.getUser(userId);
     String nickname = user.getNickname();

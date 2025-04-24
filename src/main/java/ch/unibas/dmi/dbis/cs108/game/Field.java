@@ -32,8 +32,12 @@ public class Field {
    * @param neighbor neighbor of the field
    */
   public void addNeighbor(Field neighbor) {
-    this.neighbors.add(neighbor);
+    if (neighbor != null) {
+      this.neighbors.add(neighbor);
+    }
   }
+
+
 
   /**
    * Method to get the identification of a field

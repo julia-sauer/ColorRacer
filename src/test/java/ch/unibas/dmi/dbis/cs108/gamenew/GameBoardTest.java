@@ -4,6 +4,9 @@ import ch.unibas.dmi.dbis.cs108.game.Field;
 import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 import ch.unibas.dmi.dbis.cs108.server.Server;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -190,25 +193,6 @@ class GameBoardTest {
   }
 
   /**
-   * Tests the full removal of all selected fields starting from a middle field.
-   */
-  @Test
-  void testDeselectFieldsRemovesMultipleFieldsCorrectly() {
-    Field first = board.getFieldById("purple1");
-    Field second = board.getFieldById("red1");
-    board.addSelectedField(first);
-    board.addSelectedField(second);
-
-    Server.colors = new String[]{null, "orange", "pink", "yellow", "green", "red", "purple"};
-
-    String newColors = board.deselectFields(first);
-
-    assertTrue(newColors.contains("purple"));
-    assertTrue(newColors.contains("red"));
-    assertTrue(board.selectedFieldsEmpty());
-  }
-
-  /**
    * Ensures that deselecting a non-existent field has no effect.
    */
   @Test
@@ -222,4 +206,145 @@ class GameBoardTest {
     assertEquals(beforeColors, afterColors,
         "Colors should remain unchanged if field was not found");
   }
+
+  @Test
+  void testIsValidFieldReturnsFalseIfNoConnection() {
+    boolean result = board.isValidField("blue10");
+    assertFalse(result, "Field should be invalid because it is not connected.");
+  }
+
+  @Test
+  void testIsValidFieldSelectedFieldHasNoNeighborConnection() {
+    Field selected = board.getFieldById("purple1");
+    board.addSelectedField(selected);
+
+    boolean result = board.isValidField("blue10");
+
+    assertFalse(result,
+        "Should return false if selectedField has no neighbor connection to targetField");
+  }
+
+  @Test
+  void testDeselectFieldsRemovesFromMatch() {
+    GameBoard board = new GameBoard();
+    Field purple1 = board.getFieldById("purple1");
+    board.addSelectedField(purple1);
+
+    Server.colors = new String[]{null, "orange", "pink", "yellow", "green", "red", "purple"};
+
+    String colorsBefore = Arrays.toString(Server.colors);
+    String result = board.deselectFields(purple1);
+
+    assertTrue(result.contains("purple"), "Color purple should be restored.");
+    assertTrue(board.selectedFieldsEmpty(), "Field should be removed from selection.");
+  }
+
+  @Test
+  void testDeselectFieldsRemovesAllAfterMatchedField() {
+    GameBoard board = new GameBoard();
+    Field purple1 = board.getFieldById("purple1");
+    Field red1 = board.getFieldById("red1");
+    board.addSelectedField(purple1);
+    board.addSelectedField(red1);
+
+    Server.colors = new String[]{null, null, "pink", "yellow", "green", "blue", "orange"};
+
+    String result = board.deselectFields(purple1);
+
+    assertTrue(result.contains("purple"), "purple should be restored");
+    assertTrue(result.contains("red"), "red should be restored");
+
+    assertTrue(board.selectedFieldsEmpty(), "All selected fields should be cleared");
+  }
+
+  @Test
+  void testDeselectFieldsCoversFoundEqualsTrueOnly() {
+    GameBoard board = new GameBoard();
+    Field purple1 = board.getFieldById("purple1");
+    Field red1 = board.getFieldById("red1");
+
+    board.addSelectedField(purple1);
+    board.addSelectedField(red1);
+
+    Server.colors = new String[]{null, null, "pink", "yellow", "green", "blue", "orange"};
+
+    String result = board.deselectFields(purple1);
+
+    assertTrue(result.contains("purple"));
+    assertTrue(result.contains("red"));
+    assertTrue(board.selectedFieldsEmpty());
+  }
+
+  @Test
+  void testAddNeighborSkipsNull() {
+    Field field = new Field("test1", "blue");
+    field.addNeighbor(null); // soll ignoriert werden
+
+    assertFalse(field.getNeighbors().contains(null), "null should not be in neighbors");
+  }
+
+
+
+  @Test
+  void testDeselectFieldsFoundTrueWithoutEqualsMatch() {
+    GameBoard board = new GameBoard();
+    Field purple1 = board.getFieldById("purple1");
+    Field red1 = board.getFieldById("red1");
+
+    board.addSelectedField(purple1);
+    board.addSelectedField(red1);
+
+    Server.colors = new String[]{null, null, "pink", "yellow", "green", "blue", "orange"};
+
+    board.deselectFields(purple1);
+
+    String result = board.deselectFields(red1);
+
+    assertTrue(result.contains("red"), "Color red should be restored");
+  }
+  @Test
+  void testDeselectFieldsTriggersFoundTrueAndSkipsEquals() {
+    GameBoard board = new GameBoard();
+    Field f1 = board.getFieldById("purple1");
+    Field f2 = board.getFieldById("red1");
+    Field f3 = board.getFieldById("blue1");
+
+
+    board.addSelectedField(f1);
+    board.addSelectedField(f2);
+    board.addSelectedField(f3);
+
+    Server.colors = new String[]{null, null, null, null, null, null, null};
+
+
+    String result = board.deselectFields(f1);
+
+    assertTrue(result.contains("purple"), "purple should be restored (direct match)");
+    assertTrue(result.contains("red"), "red should be restored (after found=true)");
+    assertTrue(result.contains("blue"), "blue should be restored (after found=true)");
+    assertTrue(board.selectedFieldsEmpty(), "All selected fields should be cleared");
+  }
+  @Test
+  void testInitializeNeighborsSkipsNullNeighbor() {
+    // Modify the neighborMap to include a null neighbor
+    Map<String, List<String>> neighborMap = new HashMap<>();
+    neighborMap.put("white1", Arrays.asList("purple1", null, "orange1"));
+
+    // Reflectively set the neighborMap to include the null neighbor
+    // This requires reflection to access the private field
+    try {
+      java.lang.reflect.Field field = GameBoard.class.getDeclaredField("neighborMap");
+      field.setAccessible(true);
+      field.set(board, neighborMap);
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
+
+    Field testField = board.getFieldById("white1");
+
+    for (Field neighbor : testField.getNeighbors()) {
+      assertNotNull(neighbor, "Null should not be added as neighbor");
+    }
+  }
+
 }
