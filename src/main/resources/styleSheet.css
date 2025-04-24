@@ -9,7 +9,7 @@
     -fx-font-size: 30px;
     -fx-font-weight: bold;
     -fx-text-fill: #2e7d32; /* Deep green */
-    -fx-effect: dropshadow(gaussian, rgba(46,125,50,0.3), 4, 0.4, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(46, 125, 50, 0.3), 4, 0.4, 0, 1);
 }
 
 /* Game and dialog panels */
@@ -20,7 +20,7 @@
     -fx-border-radius: 12;
     -fx-background-radius: 12;
     -fx-padding: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.2, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.2, 0, 2);
 }
 
 /* Game buttons */
@@ -49,13 +49,13 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
     -fx-padding: 5;
-    -fx-effect: dropshadow(three-pass-box, rgba(100,100,100,0.4), 5, 0, 0, 3);
+    -fx-effect: dropshadow(three-pass-box, rgba(100, 100, 100, 0.4), 5, 0, 0, 3);
     -fx-cursor: hand;
 }
 
 .bike-image-button:hover {
     -fx-background-color: #aed581;
-    -fx-effect: dropshadow(three-pass-box, rgba(100,100,100,0.7), 8, 0, 0, 4);
+    -fx-effect: dropshadow(three-pass-box, rgba(100, 100, 100, 0.7), 8, 0, 0, 4);
 }
 
 .bike-image-button:pressed {
@@ -128,7 +128,7 @@
 
 .text-field:focused, .text-area:focused {
     -fx-border-color: #66bb6a;
-    -fx-effect: dropshadow(gaussian, rgba(102,187,106,0.3), 4, 0.2, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(102, 187, 106, 0.3), 4, 0.2, 0, 2);
 }
 
 .titled-pane {
@@ -154,7 +154,7 @@
     -fx-border-color: #c8e6c9;
     -fx-border-radius: 10;
     -fx-padding: 0;
-    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.2), 3, 0.1, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.2), 3, 0.1, 0, 1);
 }
 
 
@@ -167,6 +167,7 @@
     -fx-background-color: #81c784;
     -fx-background-radius: 4;
 }
+
 .tab-pane {
     -fx-background-color: #dcedc8;
     -fx-border-color: #aed581;
@@ -220,26 +221,26 @@
 
 /* Game‐board field buttons */
 .field-button {
-    -fx-background-color: transparent;           /* invisible by default */
-    -fx-border-color: transparent;               /* no border until pressed */
-    -fx-background-radius: 6;                    /* match your rounded aesthetic */
+    -fx-background-color: transparent; /* invisible by default */
+    -fx-border-color: transparent; /* no border until pressed */
+    -fx-background-radius: 6; /* match your rounded aesthetic */
     -fx-border-radius: 6;
-    -fx-min-width: 40px;                         /* or whatever fits your tile */
+    -fx-min-width: 40px; /* or whatever fits your tile */
     -fx-min-height: 40px;
-    -fx-cursor: hand;                            /* pointer on hover */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0.1, 0, 1);
+    -fx-cursor: hand; /* pointer on hover */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.1, 0, 1);
 }
 
 .field-button:hover {
     /* subtle green overlay on hover */
-    -fx-background-color: rgba(76,175,80,0.15);
+    -fx-background-color: rgba(76, 175, 80, 0.15);
 }
 
 .field-button:pressed {
     /* bright green border + slight fill on click */
-    -fx-border-color: #ffea00;                   /* same as your focused state */
+    -fx-border-color: #ffea00; /* same as your focused state */
     -fx-border-width: 2px;
-    -fx-background-color: rgba(102,187,106,0.2);
+    -fx-background-color: rgba(102, 187, 106, 0.2);
 }
 
 .field-button:focused {
@@ -250,6 +251,6 @@
 
 /* Highlighted field stays green until cleared */
 .field-button-selected {
-    -fx-border-color: #66bb6a;    /* same green as click state */
+    -fx-border-color: #66bb6a; /* same green as click state */
     -fx-border-width: 3px;
 }

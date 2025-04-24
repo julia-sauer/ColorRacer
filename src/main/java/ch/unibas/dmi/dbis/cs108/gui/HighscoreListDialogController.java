@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -58,21 +55,23 @@ public class HighscoreListDialogController {
      * </p>
      */
     private void loadHighscores() {
-        Path scoreFile = Paths.get("highscore.txt");
         try {
-            if (!Files.exists(scoreFile)) {
+            InputStream inputStream = getClass().getResourceAsStream("/highscore.txt");
+            if (inputStream == null) {
                 highscoreListView.setItems(FXCollections.observableArrayList(
-                        "No highscore file found."
+                        "No highscore file found in resources."
                 ));
                 return;
             }
-            List<String> lines = Files.readAllLines(scoreFile);
-            if (lines.isEmpty()) {
-                highscoreListView.setItems(FXCollections.observableArrayList(
-                        "Highscore list is empty."
-                ));
-            } else {
-                highscoreListView.setItems(FXCollections.observableArrayList(lines));
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                List<String> lines = reader.lines().toList();
+                if (lines.isEmpty()) {
+                    highscoreListView.setItems(FXCollections.observableArrayList(
+                            "Highscore list is empty."
+                    ));
+                } else {
+                    highscoreListView.setItems(FXCollections.observableArrayList(lines));
+                }
             }
         } catch (IOException e) {
             highscoreListView.setItems(FXCollections.observableArrayList(

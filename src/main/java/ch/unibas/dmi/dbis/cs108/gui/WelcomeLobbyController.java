@@ -364,6 +364,37 @@ public class WelcomeLobbyController {
   }
 
   /**
+   * Handles the action to display the highscore list.
+   * <p>
+   * This method loads the HighscoreListDialogTemplate.fxml file and shows it in a modal dialog.
+   * It also passes the created Stage to the {@link HighscoreListDialogController} so the dialog
+   * can be programmatically closed from within the controller.
+   * </p>
+   * <p>
+   * The dialog is set to be modal to the primary stage, ensuring user focus remains
+   * within the highscore list window until it is closed.
+   * </p>
+   */
+  @FXML
+  public void handleHighscoreList() {
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/HighscoreListDialogTemplate.fxml"));
+      VBox dialogPane = fxmlLoader.load();
+
+      Stage dialogStage = new Stage();
+      dialogStage.initOwner(primaryStage);
+      dialogStage.initModality(Modality.WINDOW_MODAL);
+      dialogStage.setTitle("Highscore List");
+      dialogStage.setScene(new Scene(dialogPane));
+      HighscoreListDialogController highscoreListDialogController = fxmlLoader.getController();
+      highscoreListDialogController.setDialogStage(dialogStage);
+      dialogStage.showAndWait();
+    } catch (IOException e) {
+      showError("Error reading highscore", e.getMessage());
+    }
+  }
+
+  /**
    * This method transitions the scene to the GameLobby view for the given lobby.
    *
    * @param lobbyName The name of the lobby the user joined.
