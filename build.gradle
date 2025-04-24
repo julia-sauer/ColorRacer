@@ -62,7 +62,7 @@ dependencies {
     Mockito framework for JUNIT tests
      */
     testImplementation 'org.mockito:mockito-core:5.11.0'
-
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
 }
 
 test {

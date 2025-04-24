@@ -26,7 +26,7 @@ public class Lobby implements Runnable {
   public static final int MAX_PLAYERS = 4;
   public final List<String> players;
   private Server server;
-  private final String lobbyName;
+  private String lobbyName;
   private final Map<String, GameBoard> playerGameBoards;
   private final List<String> playerOrder = new ArrayList<>(); // order of players according to join-order
   private int currentPlayerIndex = 0;
@@ -143,12 +143,28 @@ public class Lobby implements Runnable {
   }
 
   /**
+   * Sets the gamestate.
+   * @param gamestate The gamestate the lobby should have.
+   */
+  public void setGameState(int gamestate) {
+    this.gamestate = gamestate;
+  }
+
+  /**
    * Gets the name of this lobby.
    *
    * @return the lobby name
    */
   public String getLobbyName() {
     return lobbyName;
+  }
+
+  /**
+   * Set the name of the lobby.
+   * @param lobbyName the name the lobby should have.
+   */
+  public void setLobbyName(String lobbyName) {
+    this.lobbyName = lobbyName;
   }
 
   /**
@@ -496,6 +512,15 @@ public class Lobby implements Runnable {
 
   public void incrementPodestPlace() {
     this.podestPlace++;
+  }
+
+  /**
+   * This method sets the players (used in J-Unit-Tests)
+   * @param players the list of players, that should be players
+   */
+  public void setPlayers(List<String> players) {
+    this.players.clear();
+    this.players.addAll(players);
   }
 
 }

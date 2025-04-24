@@ -5,20 +5,50 @@ import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.OutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 public class LobbyTest {
 
+  @Mock
+  private UserList userList;
+
+  @Mock
+  private Server server;
+
+  @Mock
+  private ProtocolWriterServer protocolWriterServer;
+
+  @InjectMocks
   private Lobby lobby;
 
+  private int userId;
+
   @BeforeEach
-  void setup() {
+  void setup() throws NoSuchFieldException, IllegalAccessException {
+    MockitoAnnotations.openMocks(this);
     lobby = new Lobby("TestLobby");
+    userId = 1;
+    setPrivateField(lobby, "gamestate", 1);
+    setPrivateField(lobby, "lobbyname", "TestLobby");
+    setPrivateField(lobby, "players", new ArrayList<>(List.of("host", "player2")));
+  }
+
+  private void setPrivateField(Object instance, String fieldName, Object value) throws NoSuchFieldException, IllegalAccessException {
+    Field field = instance.getClass().getDeclaredField(fieldName);
+    field.setAccessible(true);
+    field.set(instance, value);
   }
 
 
@@ -175,6 +205,90 @@ public class LobbyTest {
 
     assertEquals("white1", board.getCurrentField().getFieldId()); // should reset
     assertEquals(2, lobby.getGameState()); // state should be "running"
+  }
+
+  @Test
+  void testStartGame_NonHostUser() throws IOException {
+    User hostUser = mock(User.class);
+    User nonHostUser = mock(User.class);
+
+    when(hostUser.getOut()).thenReturn(mock(OutputStream.class));
+    when(nonHostUser.getOut()).thenReturn(mock(OutputStream.class));
+
+    when(userList.getUserName(userId)).thenReturn("nonHost");
+    when(userList.getUser(userId)).thenReturn(nonHostUser);
+    when(protocolWriterServer.sendInfo(anyString())).thenReturn(true);
+
+    lobby.startGame(userId);
+
+    verify(protocolWriterServer, times(1)).sendInfo("Only the host can start the game.");
+  }
+
+  @Test
+  void testStartGame_GameAlreadyStarted() throws IOException, NoSuchFieldException, IllegalAccessException {
+    User hostUser = mock(User.class);
+
+    when(hostUser.getOut()).thenReturn(mock(OutputStream.class));
+
+    when(userList.getUserName(userId)).thenReturn("host");
+    when(userList.getUser(userId)).thenReturn(hostUser);
+
+    setPrivateField(lobby, "gamestate", 2);
+
+    lobby.startGame(userId);
+
+    verify(protocolWriterServer, times(1)).sendInfo("Game has already started or is finished.");
+  }
+
+  @Test
+  void testStartGame_WelcomeLobby() throws IOException, NoSuchFieldException, IllegalAccessException {
+    User hostUser = mock(User.class);
+
+    when(hostUser.getOut()).thenReturn(mock(OutputStream.class));
+
+    when(userList.getUserName(userId)).thenReturn("host");
+    when(userList.getUser(userId)).thenReturn(hostUser);
+
+    setPrivateField(lobby, "lobbyName", "Welcome");
+
+    lobby.startGame(userId);
+
+    verify(protocolWriterServer, times(1)).sendInfo("You are not in a real lobby. Please join or create a lobby to start a game.");
+  }
+
+  @Test
+  void testStartGame_NotEnoughPlayers() throws IOException, NoSuchFieldException, IllegalAccessException {
+    User hostUser = mock(User.class);
+
+    when(hostUser.getOut()).thenReturn(mock(OutputStream.class));
+
+    when(userList.getUserName(userId)).thenReturn("host");
+    when(userList.getUser(userId)).thenReturn(hostUser);
+
+    setPrivateField(lobby, "players", new ArrayList<>(List.of("host")));
+
+    lobby.startGame(userId);
+
+    verify(protocolWriterServer, times(1)).sendInfo("At least 2 players are required to start the game.");
+  }
+
+  @Test
+  void testStartGame_SuccessfulStart() throws IOException {
+    User hostUser = mock(User.class);
+    User player2 = mock(User.class);
+
+    when(hostUser.getOut()).thenReturn(mock(OutputStream.class));
+    when(player2.getOut()).thenReturn(mock(OutputStream.class));
+
+    when(userList.getUserName(userId)).thenReturn("host");
+    when(userList.getUser(userId)).thenReturn(hostUser);
+    when(userList.getUserByName("host")).thenReturn(hostUser);
+    when(userList.getUserByName("player2")).thenReturn(player2);
+
+    lobby.startGame(userId);
+
+    assertEquals(2, lobby.getGameState());
+    verify(protocolWriterServer, times(2)).sendCommand(Command.STRT);
   }
 }
 
