@@ -295,5 +295,11 @@ public class GameBoard {
         String newColors = Arrays.toString(colors);
         return newColors;
     }
-
+    /**
+     * Clears all selected fields. Used for resetting the selected fields without moving.
+     */
+    public void clearSelectedFields() {
+        selectedFields.clear();
+        selectedFieldList.clear();
+    }
 }

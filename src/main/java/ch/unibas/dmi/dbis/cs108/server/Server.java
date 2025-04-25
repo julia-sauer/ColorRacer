@@ -358,12 +358,9 @@ public class Server {
     //TODO write Test
     public static void moveToLastSelectedField(int userId) throws IOException {
         User user = UserList.getUser(userId);
-        ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(user);
+        if (user == null) return;
 
-        if (user == null) {
-            return;
-        }
-
+        ProtocolWriterServer protocolWriterServer = getOrCreateWriter(user);
         String nickname = user.getNickname();
         Lobby userLobby = null;
 
