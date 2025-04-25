@@ -651,7 +651,7 @@ public class ProtocolReaderServer {
                         for (String player : userLobby.getPlayers()) {
                             User u = UserList.getUserByName(player);
                             if (u != null) {
-                                ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, u.getOut());
+                                ProtocolWriterServer writer = Server.getOrCreateWriter(u);
                                 try {
                                     writer.sendInfo("The game has stopped.");
                                 } catch (IOException e) {

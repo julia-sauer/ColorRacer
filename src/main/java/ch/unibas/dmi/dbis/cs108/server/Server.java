@@ -406,8 +406,7 @@ public class Server {
 
             ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, otherUser.getOut());
             try {
-                writer.sendCommandAndString(Command.INFO,
-                        "+POS " + nickname + " moved to the Field " + newField.getFieldId());
+                writer.sendCommandAndString(Command.INFO, "+POS " + nickname + " moved to the Field " + newField.getFieldId());
             } catch (IOException e) {
                 System.err.println("Error sending move info to " + playerName);
             }
@@ -639,12 +638,13 @@ public class Server {
                     break;
                 }
             }
-
+            boolean fnshSent = false;
             for (String player : userlobby.getPlayers()) {
                 User lobbyUser = UserList.getUserByName(player);
-                if (lobbyUser != null) {
+                if (lobbyUser != null && !fnshSent) {
                     ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, lobbyUser.getOut());                    try {
                         protocolWriterServer.sendCommand(Command.FNSH);
+                        fnshSent = true;
                     } catch (IOException e) {
                         System.err.println("Could not send Command.");
                     }
