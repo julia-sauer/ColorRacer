@@ -145,14 +145,6 @@ public class Lobby implements Runnable {
   }
 
   /**
-   * Sets the gamestate.
-   * @param gamestate The gamestate the lobby should have.
-   */
-  public void setGameState(int gamestate) {
-    this.gamestate = gamestate;
-  }
-
-  /**
    * Gets the name of this lobby.
    *
    * @return the lobby name
@@ -161,13 +153,6 @@ public class Lobby implements Runnable {
     return lobbyName;
   }
 
-  /**
-   * Set the name of the lobby.
-   * @param lobbyName the name the lobby should have.
-   */
-  public void setLobbyName(String lobbyName) {
-    this.lobbyName = lobbyName;
-  }
 
   /**
    * Gets a copy of the list of players currently in the lobby.
@@ -278,20 +263,7 @@ public class Lobby implements Runnable {
       }
     }
     currentPlayerIndex = -1;
-    //String currentPlayer = playerOrder.get(0);
-        /*for (String playerName : players) {
-            User u = UserList.getUserByName(playerName);
-            if (u != null) {
-                ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
-                try {
-                    writer.sendCommandAndString(Command.INFO, "It's " + currentPlayer + "'s turn");
-                } catch (IOException e) {
-                    System.err.println("Error sending INFO to " + playerName);
-                }
-            }
-        }
 
-         */
     advanceTurn();
     new Thread(this).start(); // Start game thread
   }
@@ -523,15 +495,6 @@ public class Lobby implements Runnable {
 
   public void incrementPodestPlace() {
     this.podestPlace++;
-  }
-
-  /**
-   * This method sets the players (used in J-Unit-Tests)
-   * @param players the list of players, that should be players
-   */
-  public void setPlayers(List<String> players) {
-    this.players.clear();
-    this.players.addAll(players);
   }
 
   void setCurrentPlayerIndex(int index) {
