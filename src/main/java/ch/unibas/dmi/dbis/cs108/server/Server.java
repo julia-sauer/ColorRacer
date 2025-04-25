@@ -192,8 +192,7 @@ public class Server {
     //TODO write Test
     public static void rollTheDice(int userId) {
         User user = UserList.getUser(userId);
-        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
-                user.getOut());
+        ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(user);
         Lobby userlobby = getLobbyOfPlayer(user.getNickname());
         if (userlobby.getLobbyName().equalsIgnoreCase("Welcome")) {
             try {
@@ -304,9 +303,11 @@ public class Server {
     //TODO wrie test
     public static void deselectField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
-        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
-                user.getOut());
-
+        ProtocolWriterServer protocolWriterServer = protocolWriters.get(user.getOut());
+        if (protocolWriterServer == null) {
+            protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+            protocolWriters.put(user.getOut(), protocolWriterServer);
+        }
         String nickname = user.getNickname();
         Lobby userLobby = null;
         for (Lobby lobby : lobbies) {
@@ -358,7 +359,8 @@ public class Server {
     //TODO write Test
     public static void moveToLastSelectedField(int userId) throws IOException {
         User user = UserList.getUser(userId);
-        ProtocolWriterServer writer1 = new ProtocolWriterServer(clientWriters, user.getOut());
+        ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(user);
+
         if (user == null) {
             return;
         }
@@ -380,7 +382,7 @@ public class Server {
         GameBoard board = userLobby.getGameBoard(nickname);
         if (board.selectedFieldsEmpty()) {
             try {
-                writer1.sendInfo(
+                protocolWriterServer.sendInfo(
                         "You need to select at least one field first. If you dont want or cant move use 'next'.");
             } catch (IOException e) {
                 System.err.println("Error sending Info that no field is selected.");
@@ -592,7 +594,7 @@ public class Server {
         for (String players : userlobby.getPlayers()) {
             User users = UserList.getUserByName(players);
             if (users != null) {
-                ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(Server.clientWriters, users.getOut());
+                ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(user);
                 try {
                     if (userlobby.getPodestPlace() == 1) {
                         protocolWriterServer.sendInfo(nickname + " won the game!");
@@ -761,6 +763,14 @@ public class Server {
         } catch (IOException e) {
             System.err.println("Error sending Highscore file.");
         }
+    }
+    public static ProtocolWriterServer getOrCreateWriter(User user) {
+        ProtocolWriterServer writer = protocolWriters.get(user.getOut());
+        if (writer == null) {
+            writer = new ProtocolWriterServer(clientWriters, user.getOut());
+            protocolWriters.put(user.getOut(), writer);
+        }
+        return writer;
     }
 
 }
