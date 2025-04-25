@@ -265,6 +265,10 @@ public class GameLobbyController {
      * @param nickname The nickname that the user has.
      */
     public void setNickname(String nickname) {
+        ImageView bike = playerBikes.remove(this.nickname);
+        if (bike != null) {
+            playerBikes.put(nickname, bike);
+        }
         this.nickname = nickname;
     }
 
@@ -568,6 +572,16 @@ public class GameLobbyController {
      */
     public void setBike(String color) {
         protocolWriter.sendBikeColor(color);
+        Image newBike = bikeImages.get(color.toLowerCase());
+        if (newBike == null) {
+            return;
+        }
+        ImageView bikeView = playerBikes.get(nickname);
+        if (bikeView != null) {
+            bikeView.setImage(newBike);
+        }
+        // place at starting field:
+        updatePlayerPosition(nickname, "white1");
     }
 
     /**
