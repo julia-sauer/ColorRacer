@@ -32,3 +32,5 @@ Spiel 14 (TestLobby):
 1. place: testPlayer
 Spiel 15 (TestLobby):
 1. place: testPlayer
+Spiel 16 (TestLobby):
+1. place: testPlayer

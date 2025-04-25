@@ -590,7 +590,7 @@ public class Server {
         for (String players : userlobby.getPlayers()) {
             User users = UserList.getUserByName(players);
             if (users != null) {
-                ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(user);
+                ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
                 try {
                     if (userlobby.getPodestPlace() == 1) {
                         protocolWriterServer.sendInfo(nickname + " won the game!");
