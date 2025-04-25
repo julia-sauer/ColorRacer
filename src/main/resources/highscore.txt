@@ -4,3 +4,13 @@ Spiel 1 (dinö):
 Spiel 2 (dinö):
 1. place: Stego1
 2. place: Stego
+Spiel 3 (NewLobby):
+1. place: Charlie
+2. place: Dana
+Spiel 4 (AnotherLobby):
+1. place: Eva
+Spiel 5 (NewLobby):
+1. place: Charlie
+2. place: Dana
+Spiel 6 (AnotherLobby):
+1. place: Eva

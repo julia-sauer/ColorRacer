@@ -250,7 +250,12 @@ public class Server {
     //TODO write test
     public static void checkField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
-        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        ProtocolWriterServer protocolWriterServer = protocolWriters.get(user.getOut());
+        if (protocolWriterServer == null) {
+            protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+            protocolWriters.put(user.getOut(), protocolWriterServer);
+        }
+
         if (!user.hasRolled()) {
             try {
                 protocolWriterServer.sendInfo("You need to roll first.");
