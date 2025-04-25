@@ -265,6 +265,7 @@ public class ProtocolReaderClient {
                 case FNSH:
                     gameLobbyController.restartButton.setDisable(false);
                     gameLobbyController.finishButton.setDisable(true);
+                    protocolWriterClient.sendCommand(Command.FNSH);
                     break;
 
                 case LIST:

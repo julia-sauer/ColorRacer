@@ -249,9 +249,19 @@ public class Server {
     public static void checkField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = protocolWriters.get(user.getOut());
+        Lobby userlobby = getLobbyOfPlayer(user.getNickname());
         if (protocolWriterServer == null) {
             protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
             protocolWriters.put(user.getOut(), protocolWriterServer);
+        }
+
+        if (!(userlobby.getGameState() == 2)) {
+            try {
+                protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
+            } catch (IOException e) {
+                System.err.println("Error sending info");
+            }
+            return;
         }
 
         if (!user.hasRolled()) {
@@ -587,46 +597,55 @@ public class Server {
         User user = UserList.getUser(userId);
         String nickname = user.getNickname();
         Lobby userlobby = getLobbyOfPlayer(user.getNickname());
-        for (String players : userlobby.getPlayers()) {
-            User users = UserList.getUserByName(players);
-            if (users != null) {
-                ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(user);
+        for (String player : userlobby.getPlayers()) {
+            User lobbyUser = UserList.getUserByName(player);
+            if (lobbyUser != null) {
+                ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(lobbyUser);
                 try {
                     if (userlobby.getPodestPlace() == 1) {
                         protocolWriterServer.sendInfo(nickname + " won the game!");
                     } else {
-                        protocolWriterServer.sendInfo(
-                                nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
+                        protocolWriterServer.sendInfo(nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
                     }
                 } catch (IOException e) {
                     System.err.println("Could not send Info.");
                 }
+            }
+        }
+        userlobby.addWinner(nickname);
+        userlobby.incrementPodestPlace(); //podestPlace gets incremented by 1.
 
-                userlobby.incrementPodestPlace(); //podestPlace gets incremented by 1.
 
-                userlobby.addWinner(nickname);
+        if (userlobby.getPlayers().size() - userlobby.winners.size() == 1) {
+            for (String player : userlobby.getPlayers()) {
+                if (!userlobby.winners.contains(player)) {
+                    userlobby.addWinner(player);
 
-                if (userlobby.getPlayers().size() - userlobby.winners.size() == 1) {
-                    for (String player : userlobby.getPlayers()) {
-                        if (!userlobby.winners.contains(player)) {
-                            userlobby.addWinner(player);
+                    for (String lobbyPlayer : userlobby.getPlayers()) {
+                        User lobbyUser = UserList.getUserByName(lobbyPlayer);
+                        if (lobbyUser != null) {
+                            ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(lobbyUser);
                             try {
-                                protocolWriterServer.sendInfo(
-                                        player + " is on the " + userlobby.getPodestPlace() + ". place!");
+                                protocolWriterServer.sendInfo(player + " is on the " + userlobby.getPodestPlace() + ". place!");
                             } catch (IOException e) {
                                 System.err.println("Could not send Info.");
                             }
-                            break;
                         }
                     }
-                    try {
+                    break;
+                }
+            }
+
+            for (String player : userlobby.getPlayers()) {
+                User lobbyUser = UserList.getUserByName(player);
+                if (lobbyUser != null) {
+                    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, lobbyUser.getOut());                    try {
                         protocolWriterServer.sendCommand(Command.FNSH);
                     } catch (IOException e) {
                         System.err.println("Could not send Command.");
                     }
                 }
             }
-
 
             Highscore highscore = new Highscore();
             highscore.addHighscoreEntry(userlobby.getLobbyName(), new ArrayList<>(userlobby.winners));
