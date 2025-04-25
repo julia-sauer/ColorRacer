@@ -287,6 +287,14 @@ public class ProtocolReaderServer {
                     }
 
                 case MOVE:
+                    nickname = UserList.getUserName(userId);
+                    Lobby userLob = Server.getLobbyOfPlayer(nickname);
+
+                    if (!(userLob.getGameState() == 2)) {
+                        protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
+                        break;
+                    }
+
                     if (!isMyTurn(protocolWriterServer)) {
                         break;
                     }
@@ -294,12 +302,18 @@ public class ProtocolReaderServer {
                     break;
 
                 case NEXT: {
+                    nickname = UserList.getUserName(userId);
+                    Lobby userLobby = Server.getLobbyOfPlayer(nickname);
+
+                    if (!(userLobby.getGameState() == 2)) {
+                        protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
+                        break;
+                    }
+
                     if (!isMyTurn(protocolWriterServer)) {
                         break;
                     }
 
-                    nickname = UserList.getUserName(userId);
-                    Lobby userLobby = Server.getLobbyOfPlayer(nickname);
 
                     if (userLobby == null) {
                         protocolWriterServer.sendInfo("-ERR You are not in a valid lobby.");
