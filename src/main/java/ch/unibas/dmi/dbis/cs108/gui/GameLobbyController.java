@@ -80,26 +80,32 @@ public class GameLobbyController {
     public Button readyButton;
 
     /**
-     * The {@link Button} only for the host to start the game.
+     * The {@link MenuItem} only for the host to start the game.
      */
     @FXML
     public MenuItem startButton;
 
     /**
-     * The {@link Button} only for the host to finish the game earlier.
+     * The {@link MenuItem} only for the host to finish the game earlier.
      */
     @FXML
     public MenuItem finishButton;
 
-    //TODO
+    /**
+     * The {@link MenuItem} for restarting a game.
+     */
     @FXML
     public MenuItem restartButton;
 
-    //TODO
+    /**
+     * The {@link Menu} for the buttons only the host is allowed to use (to start, finish or restart a game).
+     */
     @FXML
     public Menu hostButtons;
 
-    //TODO
+    /**
+     * The {@link Menu} for the bike selection dialog.
+     */
     @FXML
     public Menu bikeOption;
 
@@ -205,13 +211,15 @@ public class GameLobbyController {
      */
     private final Map<String, Image> bikeImages = new HashMap<>();
 
-    //TODO
+    /**
+     * The primary stage for the scene setup.
+     */
     @FXML
     private Stage primaryStage;
 
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog
-     * immediately after joining. It also sets the Map for the six Images for the dice colors.
+     * immediately after joining. It also sets the Map for the six images for the dice colors and for the 4 bike color images.
      */
     @FXML
     public void initialize() {
@@ -245,7 +253,11 @@ public class GameLobbyController {
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
 
-    //TODO
+    /**
+     * Sets the primary application stage for modal dialogs.
+     *
+     * @param stage The primary Stage
+     */
     public void setPrimaryStage(Stage stage) {
         this.primaryStage = stage;
     }
@@ -376,7 +388,12 @@ public class GameLobbyController {
         }
     }
 
-    //TODO
+    /**
+     * Handles the restart action triggered from the GUI.
+     * Sends a {@code RSTT} command to the server and resets all player bike positions.
+     * This method is typically bound to a restart button in the UI using JavaFX's {@code @FXML} annotation.
+     * If an I/O error occurs while sending the command, an error dialog is shown to the user.
+     */
     @FXML
     private void handleRestart() {
         try {
@@ -602,8 +619,8 @@ public class GameLobbyController {
                 return;
             }
             ImageView iv = new ImageView(img);
-            iv.setFitWidth(40);
-            iv.setFitHeight(40);
+            iv.setFitWidth(46);
+            iv.setFitHeight(32);
             playerBikes.put(player, iv);
             gameBoard.getChildren().add(iv);
             // place at starting field:
@@ -649,9 +666,7 @@ public class GameLobbyController {
      */
     public void setHost(boolean host) {
         this.isHost = host;
-        Platform.runLater(() -> {
-            hostButtons.setDisable(!host);
-        });
+        Platform.runLater(() -> hostButtons.setDisable(!host));
     }
 
     /**
@@ -733,7 +748,7 @@ public class GameLobbyController {
                 gamelist.getItems().addAll(newGames);
                 for (String entry : newGames) { // checks the users lobby status
                     if (extractLobbyName(entry).equalsIgnoreCase(lobbyname)) {
-                        int end = entry.indexOf("]"); // gets the text after the "]"
+                        int end = entry.indexOf("]");
                         String status = entry.substring(end + 1).trim();
                         if (status.equalsIgnoreCase("running")) {
                             gameOngoing();
@@ -768,7 +783,7 @@ public class GameLobbyController {
                 if (myEntry != null) {
                     List<String> players = extractPlayers(myEntry);
                     boolean amHost = !players.isEmpty()
-                            && players.get(0).equalsIgnoreCase(nickname);
+                            && players.getFirst().equalsIgnoreCase(nickname);
                     setHost(amHost);
                 }
             } catch (Exception e) {

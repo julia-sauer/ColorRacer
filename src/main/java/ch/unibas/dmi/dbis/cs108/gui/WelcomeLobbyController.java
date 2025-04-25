@@ -66,10 +66,19 @@ public class WelcomeLobbyController {
      */
     private ProtocolWriterClient protocolWriter;
 
+    /**
+     * The client that uses this Welcome Lobby.
+     */
     private Client client;
 
+    /**
+     * The primary stage for the scene setup.
+     */
     private Stage primaryStage;
 
+    /**
+     * The nickname of the user that uses this Welcome Lobby.
+     */
     public String nickname;
 
     /**
@@ -106,7 +115,7 @@ public class WelcomeLobbyController {
     /**
      * Sets the primary application stage for modal dialogs.
      *
-     * @param stage primary Stage
+     * @param stage The primary Stage
      */
     public void setPrimaryStage(Stage stage) {
         this.primaryStage = stage;
