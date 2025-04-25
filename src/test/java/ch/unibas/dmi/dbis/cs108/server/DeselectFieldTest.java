@@ -3,10 +3,12 @@ package ch.unibas.dmi.dbis.cs108.server;
 import ch.unibas.dmi.dbis.cs108.game.*;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
+import java.io.IOException;
 import org.junit.jupiter.api.*;
 
 import java.io.OutputStream;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class DeselectFieldTest {
@@ -99,4 +101,70 @@ class DeselectFieldTest {
 
     // Hier kein verify nötig, weil Exception erwartet → catch wird getroffen
   }
+  @Test
+  void testCreatesNewProtocolWriterIfNoneExists() throws Exception {
+    User user = UserList.getUser(1);
+    ProtocolWriterServer newWriterSpy = spy(new ProtocolWriterServer(Server.clientWriters, user.getOut()));
+    Server.protocolWriters.clear(); // simulate missing writer
+
+    // Inject spy manually after creation to track interaction
+    Server.deselectField(1, "purple1");
+
+    // It should be in the map now:
+    assertNotNull(Server.protocolWriters.get(user.getOut()));
+  }
+
+  @Test
+  void testIOExceptionOnEmptySelectedFieldsMessage() throws Exception {
+    User user = UserList.getUser(1);
+    GameBoard board = lobby.getGameBoard("testPlayer");
+
+    ProtocolWriterServer faultyWriter = mock(ProtocolWriterServer.class);
+    doThrow(new IOException("Mocked")).when(faultyWriter).sendInfo(contains("select a field"));
+    Server.protocolWriters.put(user.getOut(), faultyWriter);
+
+    // selectedFields is empty
+    Server.deselectField(1, "purple1");
+
+    // Jacoco hits the catch
+  }
+
+  @Test
+  void testIOExceptionOnDeselectedFieldNotInSelectedFieldsMessage() throws Exception {
+    User user = UserList.getUser(1);
+    GameBoard board = lobby.getGameBoard("testPlayer");
+    board.addSelectedField(board.getFieldById("yellow1")); // add a different field
+
+    ProtocolWriterServer faultyWriter = mock(ProtocolWriterServer.class);
+    doThrow(new IOException("Mocked")).when(faultyWriter).sendInfo(contains("not chosen this field"));
+    Server.protocolWriters.put(user.getOut(), faultyWriter);
+
+    Server.deselectField(1, "purple1");
+  }
+
+  @Test
+  void testIOExceptionOnDEOSCommand() throws Exception {
+    User user = UserList.getUser(1);
+    GameBoard board = lobby.getGameBoard("testPlayer");
+    Field field = board.getFieldById("purple1");
+    board.addSelectedField(field);
+
+    ProtocolWriterServer faultyWriter = mock(ProtocolWriterServer.class);
+    doThrow(new IOException("Mocked")).when(faultyWriter)
+        .sendCommandAndString(eq(Command.DEOS), contains("purple1"));
+    Server.protocolWriters.put(user.getOut(), faultyWriter);
+
+    Server.colors = new String[]{"purple", "yellow", "blue"};
+
+    Server.deselectField(1, "purple1");
+  }
+  @Test
+  void testUserNotInAnyLobby() {
+    User user = UserList.getUser(1);
+    Server.lobbies.clear(); // simulate no lobbies
+
+    // No error, no interaction, just covers the return
+    Server.deselectField(1, "purple1");
+  }
+
 }

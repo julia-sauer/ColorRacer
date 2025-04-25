@@ -246,7 +246,6 @@ public class Server {
      * @param userId  The id of the user
      * @param fieldId the id of the chosen field
      */
-    //TODO write test
     public static void checkField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = protocolWriters.get(user.getOut());
@@ -300,7 +299,7 @@ public class Server {
         }
     }
 
-    //TODO wrie test
+
     public static void deselectField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = protocolWriters.get(user.getOut());
