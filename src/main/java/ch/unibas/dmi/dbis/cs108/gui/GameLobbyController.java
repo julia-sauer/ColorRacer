@@ -438,14 +438,22 @@ public class GameLobbyController {
         Platform.runLater(() -> {
             ImageView[] views = {dice1, dice2, dice3, dice4, dice5, dice6};
 
-            setDiceVisible(true); //makes dice visible
-
-            for (int i = 0; i < colors.length && i < views.length; i++) {
-                Image img = diceImages.get(colors[i].toLowerCase());
-                if (img != null) {
-                    views[i].setImage(img);
+            for (int i = 0; i < views.length; i++) {
+                if (i < colors.length && colors[i] != null) {
+                    // Try to load the image
+                    Image img = diceImages.get(colors[i].toLowerCase());
+                    if (img != null) {
+                        views[i].setImage(img);
+                        views[i].setVisible(true);
+                    } else {
+                        // Color string was non-null, but no image found
+                        views[i].setImage(null);
+                        views[i].setVisible(false);
+                    }
                 } else {
-                    views[i].setImage(null); //fallback
+                    // No color at this index (or it's null) ⇒ hide the die
+                    views[i].setImage(null);
+                    views[i].setVisible(false);
                 }
             }
         });

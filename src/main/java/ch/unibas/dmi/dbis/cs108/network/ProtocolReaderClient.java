@@ -172,7 +172,14 @@ public class ProtocolReaderClient {
                         break;
                     }
                     String fieldId = parts[1].trim();
+                    String newColors = parts[2].trim();
                     System.out.println("Field " + fieldId + " selected.");
+                    System.out.println("Your colors are: " + newColors);
+                    List<String> colorlist = parseListFromString(newColors);
+                    String[] colorlistArray = colorlist.toArray(new String[0]);
+                    Platform.runLater(() ->
+                            GameLobbyController.getInstance().updateDice(colorlistArray)
+                    );
                     Platform.runLater(() ->
                             GameLobbyController.getInstance().highlightField(fieldId)
                     );
@@ -207,11 +214,16 @@ public class ProtocolReaderClient {
                         break;
                     }
                     String deselectedFieldId = parts[1].trim();
-                    String newcolors = parts[2].trim();
+                    String colorsDice = parts[2].trim();
                     System.out.println("Field " + deselectedFieldId + " deselected.");
-                    System.out.println("Your colors are " + newcolors);
+                    System.out.println("Your colors are " + colorsDice);
+                    List<String> colorsList = parseListFromString(colorsDice);
+                    String[] colorsListArray = colorsList.toArray(new String[0]);
                     Platform.runLater(() ->
                             GameLobbyController.getInstance().unhighlightField(deselectedFieldId)
+                    );
+                    Platform.runLater(() ->
+                            GameLobbyController.getInstance().updateDice(colorsListArray)
                     );
                     break;
 
@@ -229,16 +241,16 @@ public class ProtocolReaderClient {
                     gameLobbyController.displayChat(brodMsg);
                     break;
 
-        case STRT:
-          System.out.println("The game starts now!");
-          gameLobbyController.startButton.setDisable(true);
-          break;
+                case STRT:
+                    System.out.println("The game starts now!");
+                    gameLobbyController.startButton.setDisable(true);
+                    break;
 
-        case RSTT:
-          System.out.println("The game restarts!");
-          gameLobbyController.finishButton.setDisable(false);
-          gameLobbyController.restartButton.setDisable(true);
-          break;
+                case RSTT:
+                    System.out.println("The game restarts!");
+                    gameLobbyController.finishButton.setDisable(false);
+                    gameLobbyController.restartButton.setDisable(true);
+                    break;
 
                 case VELO:
                     setBike(true);
@@ -250,11 +262,10 @@ public class ProtocolReaderClient {
                     );
                     break;
 
-        case FNSH:
-//          protocolWriterClient.sendCommand(Command.FNSH);
-          gameLobbyController.restartButton.setDisable(false);
-          gameLobbyController.finishButton.setDisable(true);
-          break;
+                case FNSH:
+                    gameLobbyController.restartButton.setDisable(false);
+                    gameLobbyController.finishButton.setDisable(true);
+                    break;
 
                 case LIST:
                     // Expect the format: PLST::[player1, player2, ...]
