@@ -26,18 +26,15 @@ public class Server {
 
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
-    public static final List<PrintWriter> clientWriters = Collections.synchronizedList(
-            new ArrayList<>());
+    public static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
     public static String[] colors;
     public static int port;
-    public static List<Lobby> lobbies = new ArrayList<Lobby>();
-    private static int podestPlace = 1;
+    public static List<Lobby> lobbies = new ArrayList<>();
     public static Map<OutputStream, ProtocolWriterServer> protocolWriters = new HashMap<>();
 
     /**
      * Constructor of the server class
-     *
-     * @param port the port-number on which the Server is
+     * @param port the port number
      */
     public Server(int port) {
         this.port = port;
@@ -75,7 +72,7 @@ public class Server {
             }
 
         } catch (IOException e) {
-            System.err.println(e.toString());
+            System.err.println("Could not start!");
             System.exit(1);
         }
     }
@@ -194,6 +191,9 @@ public class Server {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(user);
         Lobby userlobby = getLobbyOfPlayer(user.getNickname());
+        if (userlobby == null) {
+            return;
+        }
         if (userlobby.getLobbyName().equalsIgnoreCase("Welcome")) {
             try {
                 protocolWriterServer.sendInfo("You are not in a game. You are in the Welcomelobby.");
@@ -253,6 +253,9 @@ public class Server {
         if (protocolWriterServer == null) {
             protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
             protocolWriters.put(user.getOut(), protocolWriterServer);
+        }
+        if (userlobby == null) {
+            return;
         }
 
         if (!(userlobby.getGameState() == 2)) {
@@ -366,21 +369,19 @@ public class Server {
      * @param userId userId the ID of the player executing the move
      */
     //TODO write Test
-    public static void moveToLastSelectedField(int userId) throws IOException {
+    public static void moveToLastSelectedField(int userId) {
         User user = UserList.getUser(userId);
         if (user == null) return;
 
         ProtocolWriterServer protocolWriterServer = getOrCreateWriter(user);
         String nickname = user.getNickname();
         Lobby userLobby = null;
-
         for (Lobby lobby : lobbies) {
             if (lobby.getPlayers().contains(nickname)) {
                 userLobby = lobby;
                 break;
             }
         }
-
         if (userLobby == null) {
             return;
         }
@@ -597,6 +598,9 @@ public class Server {
         User user = UserList.getUser(userId);
         String nickname = user.getNickname();
         Lobby userlobby = getLobbyOfPlayer(user.getNickname());
+        if (userlobby == null) {
+            return;
+        }
         for (String player : userlobby.getPlayers()) {
             User lobbyUser = UserList.getUserByName(player);
             if (lobbyUser != null) {
@@ -666,7 +670,7 @@ public class Server {
      */
     public static void updateAllClients() {
         List<String> allPlayers = UserList.getAllUsernames();
-        String playerListMessage = Command.LIST + Command.SEPARATOR + allPlayers.toString();
+        String playerListMessage = Command.LIST + Command.SEPARATOR + allPlayers;
 
         // builds the game lobby list update message
         List<Lobby> realLobbies = Server.lobbies.stream()
@@ -687,8 +691,8 @@ public class Server {
                     "[Lobby: " + lobby.getLobbyName() + "] " + stateText); // + " | Players: " + players);
             lobbyMembers.add("[Lobby: " + lobby.getLobbyName() + "] " + "Players: " + memberlist);
         }
-        String gameListMessage = "GLST" + Command.SEPARATOR + lobbyInfo.toString();
-        String lobbyMemberMessage = "LOME" + Command.SEPARATOR + lobbyMembers.toString();
+        String gameListMessage = "GLST" + Command.SEPARATOR + lobbyInfo;
+        String lobbyMemberMessage = "LOME" + Command.SEPARATOR + lobbyMembers;
         broadcast(playerListMessage);
         broadcast(gameListMessage);
         broadcast(lobbyMemberMessage);
@@ -724,14 +728,16 @@ public class Server {
                 break;
             }
         }
-        for (String player : userLobby.players) {
-            User u = UserList.getUserByName(player);
-            if (u != null) {
-                ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, u.getOut());
-                try {
-                    writer.sendInfo(message);
-                } catch (IOException e) {
-                    System.err.println("Error sending turn info to " + player);
+        if (userLobby != null) {
+            for (String player : userLobby.players) {
+                User u = UserList.getUserByName(player);
+                if (u != null) {
+                    ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, u.getOut());
+                    try {
+                        writer.sendInfo(message);
+                    } catch (IOException e) {
+                        System.err.println("Error sending turn info to " + player);
+                    }
                 }
             }
         }
