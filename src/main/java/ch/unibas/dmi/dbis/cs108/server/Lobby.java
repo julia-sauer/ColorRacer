@@ -178,6 +178,14 @@ public class Lobby implements Runnable {
     playerGameBoards.remove(playerName);
     readyStatus.remove(playerName);
     winners.remove(playerName);
+
+    if (playerName.equalsIgnoreCase(hostName)) {
+      if (!players.isEmpty()) {
+        hostName = players.getFirst();
+      } else {
+        hostName = null;
+      }
+    }
   }
 
   /**

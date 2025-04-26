@@ -195,11 +195,6 @@ public class GameLobbyController {
     private String lobbyname;
 
     /**
-     * Indicates whether this player is the host of the current lobby.
-     */
-    private boolean isHost = false;
-
-    /**
      * Maps each player's nickname to their corresponding {@link ImageView} bike icon.
      */
     private final Map<String, ImageView> playerBikes = new HashMap<>();
@@ -678,7 +673,6 @@ public class GameLobbyController {
      * @param host The boolean whether the user is the host (first player in the lobby) or not
      */
     public void setHost(boolean host) {
-        this.isHost = host;
         Platform.runLater(() -> hostButtons.setDisable(!host));
     }
 
