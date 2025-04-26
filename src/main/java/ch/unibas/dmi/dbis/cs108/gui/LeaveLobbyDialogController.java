@@ -12,42 +12,42 @@ import javafx.stage.Stage;
  */
 public class LeaveLobbyDialogController {
 
-  /**
-   * The stage representing the dialog window.
-   */
-  private Stage dialogStage;
+    /**
+     * The stage representing the dialog window.
+     */
+    private Stage dialogStage;
 
-  /**
-   * A flag indicating whether the user confirmed leaving the lobby. Defaults to {@code false},
-   * becomes {@code true} when "Leave" is clicked.
-   */
-  protected boolean isLeaving = false;
+    /**
+     * A flag indicating whether the user confirmed leaving the lobby. Defaults to {@code false},
+     * becomes {@code true} when "Leave" is clicked.
+     */
+    protected boolean isLeaving = false;
 
-  /**
-   * Sets the {@link Stage} for the dialog.
-   *
-   * @param dialogStage The stage of the dialog window.
-   */
-  public void setDialogStage(Stage dialogStage) {
-    this.dialogStage = dialogStage;
-  }
+    /**
+     * Sets the {@link Stage} for the dialog.
+     *
+     * @param dialogStage The stage of the dialog window.
+     */
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
+    }
 
-  /**
-   * Handles the "Leave" action {@link Button}. Sets {@code isLeaving} to {@code true} and closes
-   * the dialog.
-   */
-  @FXML
-  public void handleLeave() {
-    isLeaving = true;
-    dialogStage.close(); // Closes the dialog
-  }
+    /**
+     * Handles the "Leave" action {@link Button}. Sets {@code isLeaving} to {@code true} and closes
+     * the dialog.
+     */
+    @FXML
+    public void handleLeave() {
+        isLeaving = true;
+        dialogStage.close(); // Closes the dialog
+    }
 
-  /**
-   * Handles the "No" action {@link Button}. Simply closes the dialog without changing
-   * {@code isLeaving}.
-   */
-  @FXML
-  public void handleNo() {
-    dialogStage.close(); // Closes the dialog without leaving
-  }
+    /**
+     * Handles the "No" action {@link Button}. Simply closes the dialog without changing
+     * {@code isLeaving}.
+     */
+    @FXML
+    public void handleNo() {
+        dialogStage.close(); // Closes the dialog without leaving
+    }
 }

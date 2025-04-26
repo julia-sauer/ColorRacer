@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller class for the Highscore List Dialog.

@@ -897,7 +897,7 @@ public class GameLobbyController {
             btn.getStyleClass().add("field-button-selected");
         }
         selectedFieldButtons.add(btn);
-        moveButton.setDisable(selectedFieldButtons.isEmpty());
+        moveButton.setDisable(false);
     }
 
     /**
