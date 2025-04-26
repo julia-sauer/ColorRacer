@@ -642,7 +642,8 @@ public class Server {
             for (String player : userlobby.getPlayers()) {
                 User lobbyUser = UserList.getUserByName(player);
                 if (lobbyUser != null && !fnshSent) {
-                    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, lobbyUser.getOut());                    try {
+                    ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, lobbyUser.getOut());
+                    try {
                         protocolWriterServer.sendCommand(Command.FNSH);
                         fnshSent = true;
                     } catch (IOException e) {

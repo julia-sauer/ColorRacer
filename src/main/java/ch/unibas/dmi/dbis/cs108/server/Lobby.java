@@ -325,10 +325,16 @@ public class Lobby implements Runnable {
       board.setCurrentField(board.getFieldById("white1"));
     }
 
-    try {
-      protocolWriterServer.sendCommand(Command.RSTT);
-    } catch (IOException e) {
-      System.err.println("Error sending RSTT to user " + userId);
+    for (String player : players) {
+      User u = UserList.getUserByName(player);
+      if (u != null) {
+        ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
+        try {
+          writer.sendCommand(Command.RSTT);
+        } catch (IOException e) {
+          System.err.println("Error sending RSTT");
+        }
+      }
     }
 
     changeGameState(3); //ends the current game

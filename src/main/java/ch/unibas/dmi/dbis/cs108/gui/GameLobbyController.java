@@ -398,7 +398,6 @@ public class GameLobbyController {
         try {
             protocolWriter.sendCommand(Command.RSTT);
             // Reset all bike positions on restart
-            resetPlayerPositions();
         } catch (IOException e) {
             showError("Failed to restart the game", e.getMessage());
         }
@@ -407,7 +406,7 @@ public class GameLobbyController {
     /**
      * Resets all player bike positions to the starting field "white1".
      */
-    private void resetPlayerPositions() {
+    public void resetPlayerPositions() {
         // Ensure UI update runs on JavaFX Application Thread
         Platform.runLater(() -> {
             for (String player : playerBikes.keySet()) {
@@ -488,6 +487,7 @@ public class GameLobbyController {
             }
             selectedFieldButtons.clear();
             setDiceVisible(false);
+            moveButton.setDisable(true);
         } catch (IOException e) {
             showError("Failed to move to the field", e.getMessage());
         }
@@ -689,9 +689,6 @@ public class GameLobbyController {
      * the option to end the game prematurely.
      */
     public void gameOngoing() {
-        if (isHost) {
-            finishButton.setDisable(false);
-        }
         gameBoard.setVisible(true);
         throwDiceButton.setVisible(true);
         moveButton.setVisible(true);

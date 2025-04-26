@@ -244,12 +244,14 @@ public class ProtocolReaderClient {
                 case STRT:
                     System.out.println("The game starts now!");
                     gameLobbyController.startButton.setDisable(true);
+                    gameLobbyController.finishButton.setDisable(false);
                     break;
 
                 case RSTT:
                     System.out.println("The game restarts!");
                     gameLobbyController.finishButton.setDisable(false);
                     gameLobbyController.restartButton.setDisable(true);
+                    gameLobbyController.resetPlayerPositions();
                     break;
 
                 case VELO:
@@ -265,7 +267,6 @@ public class ProtocolReaderClient {
                 case FNSH:
                     gameLobbyController.restartButton.setDisable(false);
                     gameLobbyController.finishButton.setDisable(true);
-                    protocolWriterClient.sendCommand(Command.FNSH);
                     break;
 
                 case LIST:

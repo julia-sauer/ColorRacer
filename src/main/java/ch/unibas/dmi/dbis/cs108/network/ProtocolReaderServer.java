@@ -654,6 +654,7 @@ public class ProtocolReaderServer {
                                 ProtocolWriterServer writer = Server.getOrCreateWriter(u);
                                 try {
                                     writer.sendInfo("The game has stopped.");
+                                    writer.sendCommand(Command.FNSH);
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
