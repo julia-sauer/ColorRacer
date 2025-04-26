@@ -1,3 +1,6 @@
-
-
-
+Spiel 1 (highscoretest):
+1. place: Jenna
+2. place: Jenna1
+Spiel 2 (highscoreTest2):
+1. place: Jana1
+2. place: Jana

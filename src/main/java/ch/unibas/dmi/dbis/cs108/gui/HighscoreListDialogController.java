@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller class for the Highscore List Dialog.
@@ -18,6 +19,8 @@ import java.util.List;
  * @author julia
  */
 public class HighscoreListDialogController {
+
+    private static final String FILE_PATH = "src/main/resources/highscore.txt";
 
     /**
      * The stage representing the dialog window.
@@ -56,27 +59,15 @@ public class HighscoreListDialogController {
      */
     private void loadHighscores() {
         try {
-            InputStream inputStream = getClass().getResourceAsStream("/highscore.txt");
-            if (inputStream == null) {
-                highscoreListView.setItems(FXCollections.observableArrayList(
-                        "No highscore file found in resources."
-                ));
-                return;
-            }
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                List<String> lines = reader.lines().toList();
-                if (lines.isEmpty()) {
-                    highscoreListView.setItems(FXCollections.observableArrayList(
-                            "Highscore list is empty."
-                    ));
-                } else {
-                    highscoreListView.setItems(FXCollections.observableArrayList(lines));
-                }
+            BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH));
+            List<String> lines = reader.lines().toList();
+            if (lines.isEmpty()) {
+                highscoreListView.setItems(FXCollections.observableArrayList("Highscore list is empty."));
+            } else {
+                highscoreListView.setItems(FXCollections.observableArrayList(lines));
             }
         } catch (IOException e) {
-            highscoreListView.setItems(FXCollections.observableArrayList(
-                    "Error loading highscores: " + e.getMessage()
-            ));
+            highscoreListView.setItems(FXCollections.observableArrayList("Error loading highscore: " + e.getMessage()));
         }
     }
 
