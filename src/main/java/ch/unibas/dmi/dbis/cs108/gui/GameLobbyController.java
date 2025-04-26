@@ -61,13 +61,13 @@ public class GameLobbyController {
      * The {@link ListView} that displays a list of all players on the server.
      */
     @FXML
-    public ListView<String> listlist;
+    public ListView<String> listList;
 
     /**
      * The {@link ListView} that displays a list of all games with the status and the players.
      */
     @FXML
-    public ListView<String> gamelist;
+    public ListView<String> gameList;
 
     /**
      * The {@link ListView} that displays a list of all lobbies and its players.
@@ -154,23 +154,24 @@ public class GameLobbyController {
     /**
      * The colored field {@link Button}s grouped by color.
      */
-    @FXML
+
+    @FXML @SuppressWarnings("unused")
     private Button yellow1, yellow2, yellow3, yellow4, yellow5, yellow6, yellow7;
-    @FXML
+    @FXML @SuppressWarnings("unused")
     private Button red1, red2, red3, red4, red5, red6, red7;
-    @FXML
+    @FXML @SuppressWarnings("unused")
     private Button blue1, blue2, blue3, blue4, blue5, blue6, blue7, blue8, blue9, blue10;
-    @FXML
+    @FXML @SuppressWarnings("unused")
     private Button purple1, purple2, purple3, purple4, purple5, purple6, purple7, purple8, purple9, purple10;
-    @FXML
+    @FXML @SuppressWarnings("unused")
     private Button pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10;
-    @FXML
+    @FXML @SuppressWarnings("unused")
     private Button orange1, orange2, orange3, orange4, orange5, orange6, orange7, orange8, orange9, orange10;
 
     /**
      * The white starting field button for all players.
      */
-    @FXML
+    @FXML @SuppressWarnings("unused")
     private Button white1;
 
     /**
@@ -182,11 +183,6 @@ public class GameLobbyController {
      * The {@link ProtocolReaderClient} used to read incoming data from the server.
      */
     private ProtocolReaderClient protocolReader;
-
-    /**
-     * The {@link Client} instance holding the networking logic.
-     */
-    private Client client;
 
     /**
      * The nickname of the local player using this controller.
@@ -225,8 +221,8 @@ public class GameLobbyController {
      */
     @FXML
     public void initialize() {
-        listlist.setItems(FXCollections.observableArrayList());
-        gamelist.setItems(
+        listList.setItems(FXCollections.observableArrayList());
+        gameList.setItems(
                 FXCollections.observableArrayList()); // Initializes lists with observable array lists
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;  // Store the instance when initialized
@@ -294,7 +290,6 @@ public class GameLobbyController {
      * @param client the client instance
      */
     public void setClient(Client client) {
-        this.client = client;
         this.protocolWriter = client.getProtocolWriter();
         this.protocolReader = client.getProtocolReader();
     }
@@ -746,8 +741,8 @@ public class GameLobbyController {
     public void updatePlayerList(List<String> players) {
         Platform.runLater(() -> {
             try {
-                listlist.getItems().clear();
-                listlist.getItems().addAll(players);
+                listList.getItems().clear();
+                listList.getItems().addAll(players);
             } catch (Exception e) {
                 showError("Failed to update player list", e.getMessage());
             }
@@ -762,8 +757,8 @@ public class GameLobbyController {
     public void updateGameList(List<String> newGames) {
         Platform.runLater(() -> {
             try {
-                gamelist.getItems().clear();
-                gamelist.getItems().addAll(newGames);
+                gameList.getItems().clear();
+                gameList.getItems().addAll(newGames);
                 for (String entry : newGames) { // checks the users lobby status
                     if (extractLobbyName(entry).equalsIgnoreCase(lobbyname)) {
                         int end = entry.indexOf("]");

@@ -23,9 +23,9 @@
               BorderPane.alignment="CENTER">
             <children>
                 <Label styleClass="header-label" text="List"/>
-                <ListView fx:id="listlist" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS"/>
+                <ListView fx:id="listList" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS"/>
                 <Label styleClass="header-label" text="Game list"/>
-                <ListView fx:id="gamelist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                <ListView fx:id="gameList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
                 <Label styleClass="header-label" text="Lobby list"/>
                 <ListView fx:id="lobbylist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
             </children>

@@ -38,12 +38,12 @@
                     <tabs>
                         <Tab text="List">
                             <content>
-                                <ListView fx:id="listlist" prefHeight="200.0" />
+                                <ListView fx:id="listList" prefHeight="200.0" />
                             </content>
                         </Tab>
                         <Tab text="Game List">
                             <content>
-                                <ListView fx:id="gamelist" prefHeight="200.0" prefWidth="200.0" />
+                                <ListView fx:id="gameList" prefHeight="200.0" prefWidth="200.0" />
                             </content>
                         </Tab>
                         <Tab text="Lobby List">

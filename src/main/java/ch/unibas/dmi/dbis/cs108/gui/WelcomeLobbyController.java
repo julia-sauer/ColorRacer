@@ -35,13 +35,13 @@ public class WelcomeLobbyController {
      * The {@link ListView} that displays a list of all players on the server.
      */
     @FXML
-    public ListView<String> listlist;
+    public ListView<String> listList;
 
     /**
      * The {@link ListView} that displays a list of all games with the status and the players.
      */
     @FXML
-    private ListView<String> gamelist;
+    private ListView<String> gameList;
 
     /**
      * The {@link ListView} that displays a list of all lobbies and its players.
@@ -86,9 +86,9 @@ public class WelcomeLobbyController {
      */
     @FXML
     public void initialize() {
-        listlist.setItems(
+        listList.setItems(
                 FXCollections.observableArrayList()); // Initialize lists with observable array lists
-        gamelist.setItems(FXCollections.observableArrayList());
+        gameList.setItems(FXCollections.observableArrayList());
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;  // Store the instance when initialized
     }
@@ -140,8 +140,8 @@ public class WelcomeLobbyController {
     public void updatePlayerList(List<String> players) {
         Platform.runLater(() -> {
             try {
-                listlist.getItems().clear(); //
-                listlist.getItems().addAll(players);
+                listList.getItems().clear(); //
+                listList.getItems().addAll(players);
             } catch (Exception e) {
                 showError("Failed to update player list", e.getMessage());
             }
@@ -156,8 +156,8 @@ public class WelcomeLobbyController {
     public void updateGameList(List<String> newGames) {
         Platform.runLater(() -> {
             try {
-                gamelist.getItems().clear();
-                gamelist.getItems().addAll(newGames);
+                gameList.getItems().clear();
+                gameList.getItems().addAll(newGames);
             } catch (Exception e) {
                 showError("Failed to update game list", e.getMessage());
             }
@@ -319,9 +319,9 @@ public class WelcomeLobbyController {
      * Retrieves a list of available lobby names that are currently open (not running)
      * and have fewer than 4 players.
      *
-     * <p>This method combines information from the {@code gamelist} and {@code lobbylist} GUI components:
+     * <p>This method combines information from the {@code gameList} and {@code lobbylist} GUI components:
      * <ul>
-     *   <li>It checks the {@code gamelist} for lobbies marked as "open".</li>
+     *   <li>It checks the {@code gameList} for lobbies marked as "open".</li>
      *   <li>It then cross-references the {@code lobbylist} to ensure the lobby has less than 4 players.</li>
      * </ul>
      *
@@ -347,8 +347,8 @@ public class WelcomeLobbyController {
             }
         }
 
-        // Now filter gamelist entries by open status and player count < 4
-        return gamelist.getItems().stream()
+        // Now filter gameList entries by open status and player count < 4
+        return gameList.getItems().stream()
                 .map(String::trim)
                 .filter(entry -> entry.contains("open")) // only non-running
                 .map(entry -> entry.split("]")[0].replace("[Lobby: ", "").trim())
@@ -448,8 +448,8 @@ public class WelcomeLobbyController {
                 gameLobbyController.setNickname(nickname);
                 gameLobbyController.setPrimaryStage(primaryStage);
                 // sets the lists
-                gameLobbyController.listlist.setItems(listlist.getItems());
-                gameLobbyController.gamelist.setItems(gamelist.getItems());
+                gameLobbyController.listList.setItems(listList.getItems());
+                gameLobbyController.gameList.setItems(gameList.getItems());
                 gameLobbyController.lobbylist.setItems(lobbylist.getItems());
 
 //                primaryStage.setMaximized(true);
