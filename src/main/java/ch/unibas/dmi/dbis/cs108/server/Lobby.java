@@ -328,6 +328,7 @@ public class Lobby implements Runnable {
     for (String player : players) {
       User u = UserList.getUserByName(player);
       if (u != null) {
+        u.setHasRolled(false);
         ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
         try {
           writer.sendCommand(Command.RSTT);
@@ -337,8 +338,9 @@ public class Lobby implements Runnable {
       }
     }
 
-    changeGameState(3); //ends the current game
+//    changeGameState(3); //ends the current game
     changeGameState(1);
+    winners.clear();
     startGame(userId);
 
   }
