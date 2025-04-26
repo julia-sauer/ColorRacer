@@ -5,6 +5,8 @@ import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -249,6 +251,8 @@ public class GameLobbyController {
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/greenbike.png"))));
         bikeImages.put("darkblue",
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/darkbluebike.png"))));
+
+        moveButton.setDisable(true);   // start out disabled
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
@@ -645,6 +649,20 @@ public class GameLobbyController {
         }
         double x = fld.getLayoutX() + (fld.getWidth() - iv.getFitWidth()) / 2;
         double y = fld.getLayoutY() + (fld.getHeight() - iv.getFitHeight()) / 2;
+
+        // make the bike image use the very same rotation
+        DoubleBinding bikeAngle = (DoubleBinding) Bindings
+                .when(fld.rotateProperty().isEqualTo(180)).then(0.0)
+                .otherwise(fld.rotateProperty());
+        iv.rotateProperty().bind(bikeAngle);
+
+        // mirror horizontally when button at 180°
+        iv.scaleXProperty().bind(
+                Bindings.when(fld.rotateProperty().isEqualTo(180))
+                        .then(-1.0)
+                        .otherwise(1.0)
+        );
+
         Platform.runLater(() -> iv.relocate(x, y));
     }
 
@@ -879,6 +897,7 @@ public class GameLobbyController {
             btn.getStyleClass().add("field-button-selected");
         }
         selectedFieldButtons.add(btn);
+        moveButton.setDisable(selectedFieldButtons.isEmpty());
     }
 
     /**
@@ -895,6 +914,7 @@ public class GameLobbyController {
         }
         btn.getStyleClass().remove("field-button-selected");
         selectedFieldButtons.remove(btn);
+        moveButton.setDisable(selectedFieldButtons.isEmpty());
     }
 
     /**
