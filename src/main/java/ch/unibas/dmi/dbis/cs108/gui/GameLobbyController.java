@@ -420,6 +420,7 @@ public class GameLobbyController {
         try {
             protocolWriter.sendCommand(Command.FNSH);
             finishButton.setDisable(true);
+            restartButton.setDisable(false);
         } catch (IOException e) {
             showError("Failed to end the game", e.getMessage());
         }
