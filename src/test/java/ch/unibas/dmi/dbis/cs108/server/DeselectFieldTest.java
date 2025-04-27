@@ -24,7 +24,7 @@ class DeselectFieldTest {
   private GameBoard board;
 
   /**
-   * Setup the test environment before each test. This initializes mock objects for the User,
+   * Set up the test environment before each test. This initializes mock objects for the User,
    * ProtocolWriterServer, and the GameBoard to simulate game conditions.
    */
   @BeforeEach
