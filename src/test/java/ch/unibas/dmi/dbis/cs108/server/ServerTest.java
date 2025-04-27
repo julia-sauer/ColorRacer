@@ -1,22 +1,15 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
+import ch.unibas.dmi.dbis.cs108.game.*;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
-import ch.unibas.dmi.dbis.cs108.game.GameBoard;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Field;
-import java.net.ServerSocket;
-import java.nio.charset.StandardCharsets;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
+import org.junit.jupiter.api.*;
+
+import java.io.OutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,10 +17,13 @@ import static org.mockito.Mockito.*;
 /**
  * Full test suite for {@link Server} using real {@link Lobby} methods. This suite verifies the
  * behavior of user handling, nickname management, lobby lifecycle, broadcast functionality, and
- * game progression.
+ * game progression in the Server class.
  */
 public class ServerTest {
 
+  /**
+   * Setup before each test to clear server data and ensure a clean slate for each test.
+   */
   @BeforeEach
   void resetEnvironment() {
     Server.lobbies.clear();
@@ -36,74 +32,78 @@ public class ServerTest {
   }
 
   /**
-   * Verifies a new user is registered and correctly retrieved from UserList.
+   * Verifies that a new user is successfully registered and can be retrieved from UserList by user
+   * ID.
    */
   @Test
   void testAddNewUser() {
     OutputStream out = mock(OutputStream.class);
-    int id = Server.addNewUser("Tester", out);
-    assertEquals("Tester", UserList.getUserName(id));
+    int id = Server.addNewUser("Tester", out); // Add a new user
+    assertEquals("Tester", UserList.getUserName(id)); // Verify the user was added correctly
   }
 
   /**
-   * Validates lobby creation adds it to the list and responds correctly.
+   * Validates that a newly created lobby is added to the list of lobbies and the name is set
+   * correctly.
    */
   @Test
   void testCreateLobbyAddsIt() {
-    Server.createLobby("GameLobby", null);
-    assertEquals("GameLobby", Server.lobbies.get(0).getLobbyName());
+    Server.createLobby("GameLobby", null); // Create a new lobby
+    assertEquals("GameLobby", Server.lobbies.get(0).getLobbyName()); // Ensure the lobby is added
   }
 
   /**
-   * Confirms game state printing does not crash with mixed lobbies.
+   * Confirms that the printLobbyStates method runs without exceptions when multiple lobbies exist.
    */
   @Test
   void testPrintLobbyStatesRuns() {
     Server.lobbies.add(new Lobby("L1"));
     Server.lobbies.add(new Lobby("Welcome"));
-    assertDoesNotThrow(Server::printAllLobbyStates);
+    assertDoesNotThrow(Server::printAllLobbyStates); // Verify it runs without errors
   }
 
   /**
-   * Tests user joins existing and non-existing lobbies.
+   * Tests the behavior of a user joining both non-existing and existing lobbies. Verifies that the
+   * user can join an existing lobby and not a non-existing one.
    */
   @Test
   void testJoinLobbyBehavior() {
     int id = UserList.addUser("NewPlayer", mock(OutputStream.class));
-    Server.joinLobby("FakeLobby", id);
+    Server.joinLobby("FakeLobby", id); // Attempt to join a non-existing lobby
 
-    Server.createLobby("RealLobby", null);
-    Server.joinLobby("RealLobby", id);
+    Server.createLobby("RealLobby", null); // Create a real lobby
+    Server.joinLobby("RealLobby", id); // Join the real lobby
 
-    assertEquals("RealLobby", Server.getLobbyOfPlayer("NewPlayer").getLobbyName());
+    assertEquals("RealLobby", Server.getLobbyOfPlayer("NewPlayer")
+        .getLobbyName()); // Verify the player is in the correct lobby
   }
 
   /**
-   * Ensures broadcast sends formatted BROD message to all clients.
+   * Ensures that broadcast sends a correctly formatted BROD message to all clients.
    */
   @Test
   void testBroadcastToAll() {
     PrintWriter writer = mock(PrintWriter.class);
-    Server.clientWriters.add(writer);
-    Server.broadcastToAll("Announcement");
-    verify(writer).println(startsWith(Command.BROD.name()));
-    verify(writer).flush();
+    Server.clientWriters.add(writer); // Add the mock writer
+    Server.broadcastToAll("Announcement"); // Broadcast a message to all clients
+    verify(writer).println(startsWith(Command.BROD.name())); // Verify BROD command is sent
+    verify(writer).flush(); // Ensure that flush is called
   }
 
   /**
-   * Ensures raw broadcast string works correctly.
+   * Ensures that a simple broadcast message works correctly by sending it to all clients.
    */
   @Test
   void testSimpleBroadcast() {
     PrintWriter writer = mock(PrintWriter.class);
-    Server.clientWriters.add(writer);
-    Server.broadcast("Simple message");
-    verify(writer).println("Simple message");
-    verify(writer).flush();
+    Server.clientWriters.add(writer); // Add the mock writer
+    Server.broadcast("Simple message"); // Broadcast a simple message
+    verify(writer).println("Simple message"); // Verify the correct message was sent
+    verify(writer).flush(); // Ensure that flush is called
   }
 
   /**
-   * Ensures in-lobby broadcast delivers INFO message to correct users.
+   * Tests that an in-lobby broadcast sends INFO messages to the correct users in the lobby.
    */
   @Test
   void testBroadcastInLobby() {
@@ -111,66 +111,51 @@ public class ServerTest {
     Lobby lobby = new Lobby("LobbyX");
     lobby.addPlayers(id);
     Server.lobbies.add(lobby);
-    assertDoesNotThrow(() -> Server.broadcastInLobby("Message", "UserX"));
+
+    assertDoesNotThrow(() -> Server.broadcastInLobby("Message",
+        "UserX")); // Verify that no exceptions are thrown during in-lobby broadcasting
   }
 
   /**
-   * Simulates 1 disconnect and confirms shutdown thread starts.
+   * Simulates a client disconnect and verifies that the shutdown thread is triggered.
    */
   @Test
   void testDisconnectClientTriggersShutdown() throws InterruptedException {
-    Server.addNewUser("LeaveMe", mock(OutputStream.class));
-    Server.ClientDisconnected();
-    Thread.sleep(200);
-    assertTrue(Server.getActiveClientCount() <= 0);
+    Server.addNewUser("LeaveMe", mock(OutputStream.class)); // Add a new user
+    Server.ClientDisconnected(); // Simulate client disconnection
+    Thread.sleep(200); // Wait for potential shutdown to occur
+    assertTrue(Server.getActiveClientCount() <= 0); // Verify that the number of active clients is 0
   }
 
   /**
-   * Validates valid nickname change and ignores invalid ones.
+   * Validates that nickname changes are correctly handled and invalid nicknames are rejected.
    */
   @Test
   void testNicknameChangeValidAndInvalid() {
-    int id = UserList.addUser("Old", mock(OutputStream.class));
-    Server.changeNickname(id, "NewNick");
-    assertTrue(UserList.getUserName(id).startsWith("NewNick"));
+    int id = UserList.addUser("Old", mock(OutputStream.class)); // Add a user with an old nickname
+    Server.changeNickname(id, "NewNick"); // Change to a valid new nickname
+    assertTrue(UserList.getUserName(id).startsWith("NewNick")); // Verify the nickname was changed
 
-    Server.changeNickname(id, "!!");
-    assertNotEquals("!!", UserList.getUserName(id));
+    Server.changeNickname(id, "!!"); // Attempt to set an invalid nickname
+    assertNotEquals("!!", UserList.getUserName(id)); // Verify the nickname wasn't changed
   }
 
   /**
-   * Ensures dice roll triggers color assignment and updates user state.
-   */
-  //@Test
-  void testRollDiceValidGameState() {
-    int id = UserList.addUser("Roller", mock(OutputStream.class));
-    Lobby lobby = new Lobby("DiceGame");
-    lobby.addPlayers(id);
-    Server.lobbies.add(lobby);
-    lobby.changeGameState(2);
-    while (!lobby.getPlayers().get(0).equals("Roller")) {
-      lobby.advanceTurn(); // ensure Roller is current
-    }
-
-    Server.rollTheDice(id);
-    assertTrue(UserList.getUser(id).hasRolled());
-  }
-
-  /**
-   * Simulates selecting and deselecting a field.
+   * Simulates the field selection and deselection process, including user interaction with game
+   * fields.
    */
   @Test
   void testFieldSelectionAndDeselection() {
     OutputStream out = mock(OutputStream.class);
-    int userId = Server.addNewUser("FieldUser", out);
+    int userId = Server.addNewUser("FieldUser", out); // Add a new user
     Lobby lobby = new Lobby("DiceGame");
     lobby.addPlayers(userId);
     Server.lobbies.add(lobby);
 
-    // Set up the valid colors for the test
+    // Set the valid colors for the test
     Server.colors = new String[]{"purple", "blue", "red", "green", "orange", "pink", "yellow"};
 
-    // Set game state to 2 (running)
+    // Set the game state to 2 (running)
     lobby.changeGameState(2);
 
     // Set the user as having rolled
@@ -191,71 +176,76 @@ public class ServerTest {
     assertTrue(board.selectedFieldsEmpty(), "Selected field list should be empty after deselect");
   }
 
-
-
-
-
   /**
-   * Triggers server shutdown and ensures no exceptions.
+   * Verifies that the server shuts down gracefully and no exceptions are thrown.
    */
   @Test
   void testServerShutdownSafe() throws Exception {
-
     ServerSocket dummySocket = new ServerSocket(0);
 
+    // Use reflection to set the private field for the Server's "echod" to simulate server behavior
     Field echodField = Server.class.getDeclaredField("echod");
     echodField.setAccessible(true);
     echodField.set(null, dummySocket);
 
+    // Ensure that no exception is thrown during shutdown
     assertDoesNotThrow(Server::shutdownServerA);
   }
 
-
   /**
-   * Confirms Server.getLobbyOfPlayer() returns null for unknown name.
+   * Verifies that Server.getLobbyOfPlayer() returns null when the player is not in any lobby.
    */
   @Test
   void testLobbyLookupReturnsNull() {
+    // Ensure that querying a non-existent player returns null
     assertNull(Server.getLobbyOfPlayer("Ghost"));
   }
 
   /**
-   * Tests updateAllClients sends game and user updates.
+   * Tests that the updateAllClients method sends game and user updates correctly to all connected
+   * clients.
    */
   @Test
   void testUpdateClients() {
-    int id = UserList.addUser("Updater", mock(OutputStream.class));
+    int id = UserList.addUser("Updater",
+        mock(OutputStream.class)); // Add a user for the update test
     Lobby lobby = new Lobby("SyncRoom");
     lobby.addPlayers(id);
     Server.lobbies.add(lobby);
-    assertDoesNotThrow(Server::updateAllClients);
+    assertDoesNotThrow(
+        Server::updateAllClients); // Ensure no exceptions occur during the update process
   }
 
+  /**
+   * Verifies that moving a player to the last selected field works correctly and sends the proper
+   * movement info.
+   */
   @Test
   void testMoveToLastSelectedField_noPut_sendsMovementInfo() throws IOException {
-    // Vorbereitung
+    // Prepare mock users and their respective output streams
     Server.lobbies.clear();
     UserList.clear();
 
     OutputStream out1 = mock(OutputStream.class);
     OutputStream out2 = mock(OutputStream.class);
 
-    int id1 = UserList.addUser("Alice", out1);
-    int id2 = UserList.addUser("Bob", out2);
+    int id1 = UserList.addUser("Alice", out1); // Add first player
+    int id2 = UserList.addUser("Bob", out2); // Add second player
 
+    // Create a lobby and add the players
     Lobby lobby = new Lobby("TestLobby");
     lobby.addPlayers(id1);
     lobby.addPlayers(id2);
     Server.lobbies.add(lobby);
 
+    // Get the game board for Alice and simulate a field selection
     GameBoard board = lobby.getGameBoard("Alice");
-    board.addSelectedField(board.getFieldById("blue1"));  // Simuliere ausgewähltes Feld
+    board.addSelectedField(board.getFieldById("blue1"));
 
-    // Aktion
+    // Simulate the player moving to the last selected field
     Server.moveToLastSelectedField(id1);
 
-    // Ergebnisprüfung
+    // Verify that the player has moved to the correct field
     assertEquals("blue1", board.getCurrentField().getFieldId());
   }
-
 }
