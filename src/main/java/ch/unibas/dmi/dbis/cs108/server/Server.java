@@ -186,7 +186,16 @@ public class Server {
         protocolWriterServer.sendWhisper(message, sender, receiver);
     }
 
-    //TODO write Test
+    /**
+     * This method is called when a client presses the 'roll'-button.
+     * It first checks if the lobby of the user is null or the welcome lobby.
+     * Then it checks if the gamestate is 3 or 1.
+     * Then it checks if it is the players turn.
+     * Then it checks if the player has already rolled.
+     * If nothing of these are true then the method roll in the class Dice is called and the
+     * rolled colors are sent back to the client.
+     * @param userId the Id of the user from which the call of this method came
+     */
     public static void rollTheDice(int userId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = protocolWriters.get(user.getOut());
@@ -317,6 +326,12 @@ public class Server {
     }
 
 
+    /**
+     * This method removes a field from selectedfields and ensures that the color is back in the
+     * colors of the rolled dices.
+     * @param userId the id of the user that deselects a field
+     * @param fieldId  the field that got clicked on
+     */
     public static void deselectField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = protocolWriters.get(user.getOut());
@@ -747,10 +762,17 @@ public class Server {
         }
     }
 
+    /**
+     * This method return the number of active clients on the server.
+     * @return number of active clients
+     */
     public static int getActiveClientCount() {
         return activeClients.get();
     }
 
+    /**
+     * Shutsdown the server if it is not already closed.
+     */
     public static void shutdownServerA() {
         try {
             if (echod != null && !echod.isClosed()) {
@@ -789,6 +811,13 @@ public class Server {
             System.err.println("Error sending Highscore file.");
         }
     }
+
+    /**
+     * This method creates a protocolWriterServer for a specific client or get its
+     * protocolWriterServer if there is one.
+     * @param user the user for which a protocolWriter should be created
+     * @return the created protocolWriter.
+     */
     public static ProtocolWriterServer getOrCreateWriter(User user) {
         ProtocolWriterServer writer = protocolWriters.get(user.getOut());
         if (writer == null) {

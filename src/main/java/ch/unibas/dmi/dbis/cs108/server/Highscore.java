@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 /**
  * This class writes in to the highscore file when the winner order is determined.
+ * @author Jana
  */
 public class Highscore {
 

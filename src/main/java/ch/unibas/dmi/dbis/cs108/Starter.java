@@ -6,11 +6,14 @@ import ch.unibas.dmi.dbis.cs108.server.Server;
 import javafx.application.Application;
 
 /**
- * This method starts either the Server or the Client
+ * This class holds the main-method of the project that is needed to start the game.
  */
 public class Starter {
   //public static final Logger LOGGER = LogManager.getLogger();
 
+  /**
+   * This method starts either the Server or the Client
+   */
   public static void main(String[] args) {
     try {
       String input = args[0];

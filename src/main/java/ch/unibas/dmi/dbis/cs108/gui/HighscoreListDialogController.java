@@ -54,6 +54,10 @@ public class HighscoreListDialogController {
         loadHighscores();
     }
 
+    /**
+     * This method creates the correct file path of the highscore.txt file.
+     * @return the file path of the highscore.txt
+     */
     private static String getHighscoreFilePath() {
         String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
         return Paths.get(basePath, "src", "main", "resources", "highscore.txt").toString();

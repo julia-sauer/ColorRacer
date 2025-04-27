@@ -424,7 +424,6 @@ public class Lobby implements Runnable {
    * @param name Player name
    * @return true if it's his turn
    */
-  //TODO write test
   public boolean isCurrentPlayer(String name) {
     if (playerOrder.isEmpty() || currentPlayerIndex < 0 || currentPlayerIndex >= playerOrder.size()) {
       return false;
@@ -437,7 +436,6 @@ public class Lobby implements Runnable {
    * Sets the next player as active (after turn or NEXT). It also sends the information message
    * whose turn it is to all players in the lobby.
    */
-  //TODO test
   public void advanceTurn() {
     System.out.println("Advancing turn. Current index before increment: " + currentPlayerIndex);
     int safety = 0;
@@ -558,10 +556,6 @@ public class Lobby implements Runnable {
    */
   public void incrementPodestPlace() {
     this.podestPlace++;
-  }
-
-  void setCurrentPlayerIndex(int index) {
-    this.currentPlayerIndex = index;
   }
 
 }

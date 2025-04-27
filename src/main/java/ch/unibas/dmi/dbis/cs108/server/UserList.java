@@ -170,6 +170,11 @@ public class UserList {
     userMap.clear();
     userIdCounter.set(0);
   }
+
+  /**
+   * This method sets the instance.
+   * @param userList the given userList
+   */
   public static void setInstance(UserList userList) {
     UserList instance = userList;
   }
