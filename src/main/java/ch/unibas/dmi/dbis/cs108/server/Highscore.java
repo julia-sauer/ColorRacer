@@ -7,7 +7,7 @@ import java.util.List;
 public class Highscore {
 
   private static final String FILE_PATH = "src/main/resources/highscore.txt";
-  private List<String> highscoreList;
+  private final List<String> highscoreList;
   private Integer gameNumber;
 
   public Highscore() {
@@ -52,8 +52,8 @@ public class Highscore {
     }
   }
 
-  public int getGameNumber() {
+  /*public int getGameNumber() {
     return gameNumber;
-  }
+  }*/
 
 }
