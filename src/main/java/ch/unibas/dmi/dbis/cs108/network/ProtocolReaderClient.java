@@ -22,12 +22,25 @@ import java.util.List;
  */
 public class ProtocolReaderClient {
 
+    /** Reader for incoming UTF-8 text lines from the server. */
     private final BufferedReader reader; // reads character lines from client.
+
+    /** Underlying input stream from the server. */
     private final InputStream in;
+
+    /** Underlying output stream to the server. */
     private final OutputStream out;
-    private WelcomeLobbyController welcomeLobbyController; // Reference to the GUI welcomeLobbyController
+
+    /** Controller for the welcome-lobby GUI. */
+    private WelcomeLobbyController welcomeLobbyController;
+
+    /** Controller for the game-lobby GUI. */
     private GameLobbyController gameLobbyController;
+
+    /** Flag indicating whether a bike has been selected. */
     public boolean bike = false;
+
+    /** Flag indicating whether the client is currently in a game lobby. */
     public boolean gameLobby = false;
 
     /**
@@ -405,6 +418,9 @@ public class ProtocolReaderClient {
      * This method changes a boolean field so the client knows it needs to change the display of
      * messages to the GameLobby. It is called in the {@link WelcomeLobbyController} when the GUI
      * changes to the {@link GameLobbyController}.
+     *
+     * @param gameLobby The boolean that sets if the user changed to the welcome-lobby (false) or if the user
+     *                  changed to a game-lobby (true).
      */
     public void changesController(boolean gameLobby) {
         this.gameLobby = gameLobby;
