@@ -125,5 +125,4 @@ class RollTheDiceTest {
 
     // No exception should be thrown, we are testing the catch block
   }
-
 }

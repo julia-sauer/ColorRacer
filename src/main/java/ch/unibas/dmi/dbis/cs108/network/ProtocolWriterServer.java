@@ -117,4 +117,5 @@ public class ProtocolWriterServer {
     public void sendData (String data) {
         sendToClient(Command.HIGH + Command.SEPARATOR + data);
     }
+
 }
