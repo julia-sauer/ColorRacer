@@ -367,7 +367,6 @@ public class WelcomeLobbyController {
      */
     public void joinLobby(String lobbyName) {
         protocolWriter.sendJoin(lobbyName);
-        switchToGameLobby(lobbyName);
     }
 
     /**
