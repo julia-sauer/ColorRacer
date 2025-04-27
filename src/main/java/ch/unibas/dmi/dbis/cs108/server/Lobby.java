@@ -526,7 +526,7 @@ public class Lobby implements Runnable {
 
   /**
    * Returns the currently active player (i.e., the one whose turn it is).
-   *dded a test for client handler
+   *
    * @return the username of the current player or null if no player is set
    */
   public String getCurrentPlayer() {
@@ -537,14 +537,25 @@ public class Lobby implements Runnable {
     return playerOrder.get(currentPlayerIndex);
   }
 
-  public void resetPodestPlae() {
+  /**
+   * Resets the podium place counter back to 1.
+   */
+  public void resetPodestPlace() {
     this.podestPlace = 1;
   }
 
+  /**
+   * Returns the next podium place to assign.
+   *
+   * @return the podium place
+   */
   public int getPodestPlace() {
     return podestPlace;
   }
 
+  /**
+   * Increments the podium place counter.
+   */
   public void incrementPodestPlace() {
     this.podestPlace++;
   }
