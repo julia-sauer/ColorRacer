@@ -97,7 +97,7 @@ public class ProtocolReaderClient {
                         break;
                     } else {
                         System.out.println("You joined: " + lobbyName);
-                        //WelcomeLobbyController.getInstance().switchToGameLobby(lobbyName);
+                        WelcomeLobbyController.getInstance().switchToGameLobby(lobbyName);
                     }
                     break;
 
