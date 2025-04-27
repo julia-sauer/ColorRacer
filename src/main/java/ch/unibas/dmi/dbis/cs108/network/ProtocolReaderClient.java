@@ -155,7 +155,7 @@ public class ProtocolReaderClient {
                     String nickname = String.join(" ", parts[1]);
                     String message = String.join(" ", parts[2]);
                     String[] nicknameAndMessageParts = new String[]{nickname, message};
-                    if (nicknameAndMessageParts.length < 2 || nicknameAndMessageParts[1].trim().isEmpty()) {
+                    if (nicknameAndMessageParts[1].trim().isEmpty()) {
                         System.out.println("WISP received: [empty]");
                         break;
                     }

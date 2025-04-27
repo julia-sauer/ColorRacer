@@ -658,7 +658,7 @@ public class Server {
             Highscore highscore = new Highscore();
             highscore.addHighscoreEntry(userlobby.getLobbyName(), new ArrayList<>(userlobby.winners));
 
-            userlobby.resetPodestPlae();
+            userlobby.resetPodestPlace();
         }
 
     }
