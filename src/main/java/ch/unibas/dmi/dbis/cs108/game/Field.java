@@ -10,59 +10,58 @@ import java.util.*;
  */
 public class Field {
 
-  String fieldId;
-  String color;
-  Set<Field> neighbors;
+    String fieldId;
+    String color;
+    Set<Field> neighbors;
 
-  /**
-   * Constructor of the class Field
-   *
-   * @param fieldId the id of the field
-   * @param color   the color of the field
-   */
-  public Field(String fieldId, String color) {
-    this.fieldId = fieldId;
-    this.color = color;
-    this.neighbors = new HashSet<>();
-  }
-
-  /**
-   * Method to add a neighbor to the HashSet of neighbors of field.
-   *
-   * @param neighbor neighbor of the field
-   */
-  public void addNeighbor(Field neighbor) {
-    if (neighbor != null) {
-      this.neighbors.add(neighbor);
+    /**
+     * Constructor of the class Field
+     *
+     * @param fieldId the id of the field
+     * @param color   the color of the field
+     */
+    public Field(String fieldId, String color) {
+        this.fieldId = fieldId;
+        this.color = color;
+        this.neighbors = new HashSet<>();
     }
-  }
+
+    /**
+     * Method to add a neighbor to the HashSet of neighbors of field.
+     *
+     * @param neighbor neighbor of the field
+     */
+    public void addNeighbor(Field neighbor) {
+        if (neighbor != null) {
+            this.neighbors.add(neighbor);
+        }
+    }
 
 
+    /**
+     * Method to get the identification of a field
+     *
+     * @return the fieldId
+     */
+    public String getFieldId() {
+        return fieldId;
+    }
 
-  /**
-   * Method to get the identification of a field
-   *
-   * @return the fieldId
-   */
-  public String getFieldId() {
-    return fieldId;
-  }
+    /**
+     * Method to get color of a field
+     *
+     * @return the color
+     */
+    public String getColor() {
+        return color;
+    }
 
-  /**
-   * Method to get color of a field
-   *
-   * @return the color
-   */
-  public String getColor() {
-    return color;
-  }
-
-  /**
-   * Method to get the neighbors of a field
-   *
-   * @return the Set with all neighbors of a field
-   */
-  public Set<Field> getNeighbors() {
-    return neighbors;
-  }
+    /**
+     * Method to get the neighbors of a field
+     *
+     * @return the Set with all neighbors of a field
+     */
+    public Set<Field> getNeighbors() {
+        return neighbors;
+    }
 }

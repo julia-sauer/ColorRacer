@@ -383,7 +383,7 @@ public class ProtocolReaderServer {
                     User user = UserList.getUser(userId);
                     if (user != null) {
                         user.setBikeColor(color); // save in User
-                       // protocolWriterServer.sendInfo("+OK " + color + " bike is selected");
+                        // protocolWriterServer.sendInfo("+OK " + color + " bike is selected");
                         Lobby lobby = Server.getLobbyOfPlayer(sender);
                         assert lobby != null;
                         for (String member : lobby.getPlayers()) {

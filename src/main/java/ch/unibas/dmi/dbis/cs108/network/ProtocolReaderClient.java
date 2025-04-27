@@ -22,25 +22,39 @@ import java.util.List;
  */
 public class ProtocolReaderClient {
 
-    /** Reader for incoming UTF-8 text lines from the server. */
+    /**
+     * Reader for incoming UTF-8 text lines from the server.
+     */
     private final BufferedReader reader; // reads character lines from client.
 
-    /** Underlying input stream from the server. */
+    /**
+     * Underlying input stream from the server.
+     */
     private final InputStream in;
 
-    /** Underlying output stream to the server. */
+    /**
+     * Underlying output stream to the server.
+     */
     private final OutputStream out;
 
-    /** Controller for the welcome-lobby GUI. */
+    /**
+     * Controller for the welcome-lobby GUI.
+     */
     private WelcomeLobbyController welcomeLobbyController;
 
-    /** Controller for the game-lobby GUI. */
+    /**
+     * Controller for the game-lobby GUI.
+     */
     private GameLobbyController gameLobbyController;
 
-    /** Flag indicating whether a bike has been selected. */
+    /**
+     * Flag indicating whether a bike has been selected.
+     */
     public boolean bike = false;
 
-    /** Flag indicating whether the client is currently in a game lobby. */
+    /**
+     * Flag indicating whether the client is currently in a game lobby.
+     */
     public boolean gameLobby = false;
 
     /**
@@ -142,7 +156,7 @@ public class ProtocolReaderClient {
                     }
                     String newNick = parts[1].trim();
                     System.out.println("Your nickname is " + newNick);
-                    if (!gameLobby){
+                    if (!gameLobby) {
                         waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().nickname = newNick);
                     } else {
                         gameLobbyController.setNickname(newNick);

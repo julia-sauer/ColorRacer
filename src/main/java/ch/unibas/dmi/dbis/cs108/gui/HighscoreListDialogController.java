@@ -56,6 +56,7 @@ public class HighscoreListDialogController {
 
     /**
      * This method creates the correct file path of the highscore.txt file.
+     *
      * @return the file path of the highscore.txt
      */
     private static String getHighscoreFilePath() {

@@ -34,6 +34,7 @@ public class Server {
 
     /**
      * Constructor of the server class
+     *
      * @param port the port number
      */
     public Server(int port) {
@@ -194,6 +195,7 @@ public class Server {
      * Then it checks if the player has already rolled.
      * If nothing of these are true then the method roll in the class Dice is called and the
      * rolled colors are sent back to the client.
+     *
      * @param userId the Id of the user from which the call of this method came
      */
     public static void rollTheDice(int userId) {
@@ -329,8 +331,9 @@ public class Server {
     /**
      * This method removes a field from selectedfields and ensures that the color is back in the
      * colors of the rolled dices.
-     * @param userId the id of the user that deselects a field
-     * @param fieldId  the field that got clicked on
+     *
+     * @param userId  the id of the user that deselects a field
+     * @param fieldId the field that got clicked on
      */
     public static void deselectField(Integer userId, String fieldId) {
         User user = UserList.getUser(userId);
@@ -764,6 +767,7 @@ public class Server {
 
     /**
      * This method return the number of active clients on the server.
+     *
      * @return number of active clients
      */
     public static int getActiveClientCount() {
@@ -815,6 +819,7 @@ public class Server {
     /**
      * This method creates a protocolWriterServer for a specific client or get its
      * protocolWriterServer if there is one.
+     *
      * @param user the user for which a protocolWriter should be created
      * @return the created protocolWriter.
      */
