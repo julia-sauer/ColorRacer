@@ -346,5 +346,30 @@ class GameBoardTest {
       assertNotNull(neighbor, "Null should not be added as neighbor");
     }
   }
+  /**
+   * Tests that clearSelectedFields() correctly clears both selectedFields and selectedFieldList.
+   */
+  /**
+   * Tests that clearSelectedFields() correctly clears both selectedFields and selectedFieldList.
+   */
+  @Test
+  void testClearSelectedFields() {
+    // Add fields to the selection
+    Field purple1 = board.getFieldById("purple1");
+    Field blue1 = board.getFieldById("blue1");
+    board.addSelectedField(purple1);
+    board.addSelectedField(blue1);
+
+    // Ensure the fields are added
+    assertFalse(board.selectedFieldsEmpty(), "selectedFields should not be empty before clearing");
+
+    // Call clearSelectedFields() to clear the selected fields
+    board.clearSelectedFields();
+
+    // Verify that both selectedFields and selectedFieldList are empty
+    assertTrue(board.selectedFieldsEmpty(), "selectedFields should be empty after clearing");
+    assertNull(board.getLastSelectedField(), "getLastSelectedField should return null after clearing");
+  }
+
 
 }

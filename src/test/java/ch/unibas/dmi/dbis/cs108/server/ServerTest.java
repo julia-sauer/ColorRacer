@@ -167,19 +167,30 @@ public class ServerTest {
     lobby.addPlayers(userId);
     Server.lobbies.add(lobby);
 
+    // Set up the valid colors for the test
     Server.colors = new String[]{"purple", "blue", "red", "green", "orange", "pink", "yellow"};
 
+    // Set game state to 2 (running)
+    lobby.changeGameState(2);
+
+    // Set the user as having rolled
     UserList.getUser(userId).setHasRolled(true);
 
+    // Perform the action to check the field
     Server.checkField(userId, "purple1");
 
     GameBoard board = lobby.getGameBoard("FieldUser");
+
+    // Ensure the field is selected after the checkField call
     assertTrue(board.inSelectedField(board.getFieldById("purple1")), "Field should be selected");
 
+    // Deselect the field
     Server.deselectField(userId, "purple1");
 
+    // Ensure the selected fields are empty after deselection
     assertTrue(board.selectedFieldsEmpty(), "Selected field list should be empty after deselect");
   }
+
 
 
 
