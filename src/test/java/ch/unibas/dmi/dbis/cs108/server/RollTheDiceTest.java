@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Test class for testing the rollTheDice method in the Server class.
- * This class contains tests for various scenarios, including game state, player actions, and dice rolls.
+ * Test class for testing the rollTheDice method in the Server class. This class contains tests for
+ * various scenarios, including game state, player actions, and dice rolls.
  */
 class RollTheDiceTest {
 
@@ -24,8 +24,8 @@ class RollTheDiceTest {
   private GameBoard board;
 
   /**
-   * Setup the test environment before each test.
-   * Mocks the user, output stream, and protocol writer, and sets up the game environment.
+   * Setup the test environment before each test. Mocks the user, output stream, and protocol
+   * writer, and sets up the game environment.
    */
   @BeforeEach
   void setup() {
@@ -33,12 +33,14 @@ class RollTheDiceTest {
     mockUser = mock(User.class);  // Mock User object
 
     // Mock User methods
-    when(mockUser.getOut()).thenReturn(mockOut);  // Ensuring `getOut()` returns the mock OutputStream
+    when(mockUser.getOut()).thenReturn(
+        mockOut);  // Ensuring `getOut()` returns the mock OutputStream
     when(mockUser.getNickname()).thenReturn("testPlayer");  // Mock getNickname()
 
     // Clear and add the user to UserList
     UserList.clear();
-    UserList.addUser("testPlayer", mockOut);  // Adds a real User instance to UserList (mock ignored here)
+    UserList.addUser("testPlayer",
+        mockOut);  // Adds a real User instance to UserList (mock ignored here)
 
     // Create a Lobby and add the player
     lobby = new Lobby("TestLobby");
@@ -59,8 +61,8 @@ class RollTheDiceTest {
 
 
   /**
-   * Cleanup the test environment after each test.
-   * Clears the Server's lobbies and users to ensure tests do not interfere with each other.
+   * Cleanup the test environment after each test. Clears the Server's lobbies and users to ensure
+   * tests do not interfere with each other.
    */
   @AfterEach
   void cleanup() {
@@ -70,10 +72,9 @@ class RollTheDiceTest {
   }
 
 
-
   /**
-   * Test when the game has not started yet or is already finished.
-   * Verifies that the appropriate message is sent when the user tries to roll the dice before the game starts.
+   * Test when the game has not started yet or is already finished. Verifies that the appropriate
+   * message is sent when the user tries to roll the dice before the game starts.
    */
   @Test
   void testRollTheDiceGameNotStarted() throws Exception {
@@ -89,8 +90,8 @@ class RollTheDiceTest {
   }
 
   /**
-   * Test when the sendInfo method throws an IOException during dice roll.
-   * Verifies that the exception is handled and doesn't affect the flow.
+   * Test when the sendInfo method throws an IOException during dice roll. Verifies that the
+   * exception is handled and doesn't affect the flow.
    */
   @Test
   void testRollTheDiceInfoIOException() throws Exception {
@@ -107,8 +108,8 @@ class RollTheDiceTest {
   }
 
   /**
-   * Test when the sendCommandAndString method throws an IOException during dice roll.
-   * Verifies that the exception is handled and doesn't affect the flow.
+   * Test when the sendCommandAndString method throws an IOException during dice roll. Verifies that
+   * the exception is handled and doesn't affect the flow.
    */
   @Test
   void testRollTheDiceCommandIOException() throws Exception {
@@ -116,7 +117,8 @@ class RollTheDiceTest {
     UserList.getUser(1).setHasRolled(false); // The user hasn't rolled yet
 
     // Simulate an IOException when sending the rolled colors
-    doThrow(new IOException("Simulated IO error")).when(mockWriter).sendCommandAndString(eq(Command.ROLL), anyString());
+    doThrow(new IOException("Simulated IO error")).when(mockWriter)
+        .sendCommandAndString(eq(Command.ROLL), anyString());
 
     // Call rollTheDice
     Server.rollTheDice(1);

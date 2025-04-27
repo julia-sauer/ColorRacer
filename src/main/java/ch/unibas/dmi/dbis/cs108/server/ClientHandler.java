@@ -95,9 +95,7 @@ public class ClientHandler implements Runnable {
       pingThread.start();
 
       // Generates a Thread for reading messages
-      ProtocolReaderServer protocolReader = new ProtocolReaderServer(
-          in, userId, out, pingThread, this::disconnectClient // Pass disconnect callback
-      );
+      ProtocolReaderServer protocolReader = new ProtocolReaderServer(in, userId, out, pingThread,this, this::disconnectClient); // Pass disconnect callback
 
       Thread readerThread = new Thread(() -> {
         try {

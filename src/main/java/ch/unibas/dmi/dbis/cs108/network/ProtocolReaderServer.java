@@ -33,6 +33,7 @@ public class ProtocolReaderServer {
             new ArrayList<>());
     private static final Logger LOGGER = LogManager.getLogger(ProtocolReaderServer.class);
     private final Runnable disconnectCallback;
+    private ClientHandler clientHandler;
 
     /**
      * Creates a new {@code ProtocolReaderServer}.
@@ -43,12 +44,13 @@ public class ProtocolReaderServer {
      * @throws IOException If an error occurs when creating the BufferedReader.
      */
     public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread,
-                                Runnable disconnectCallback) throws IOException {
+                                ClientHandler clientHandler, Runnable disconnectCallback) throws IOException {
         // Initialisierung des BufferedReaders
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         this.userId = userId;
         this.out = out;
         this.pingThread = pingThread;
+        this.clientHandler = clientHandler;
         this.disconnectCallback = disconnectCallback;
     }
 
@@ -235,6 +237,7 @@ public class ProtocolReaderServer {
                         userLobby.removePlayer(nickname);
 
                         // 🧹 2. Jetzt sauberen Disconnect durchführen
+                        clientHandler.disconnectClient();
                         if (disconnectCallback != null) {
                             disconnectCallback.run();
                             Server.updateAllClients();
