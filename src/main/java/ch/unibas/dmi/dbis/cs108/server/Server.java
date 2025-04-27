@@ -431,7 +431,7 @@ public class Server {
             }
         }
 
-        if (newField.getFieldId().equals("purple2") || newField.getFieldId().equals("pink10")) {
+        if (newField.getFieldId().equals("blue10") || newField.getFieldId().equals("pink10")) {
             won(userId);
         }
 
