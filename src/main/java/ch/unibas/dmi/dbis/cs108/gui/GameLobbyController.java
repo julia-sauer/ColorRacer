@@ -598,7 +598,6 @@ public class GameLobbyController {
                 protocolWriter.sendJoin("Welcome");
 
                 // Setup and show the GUI
-                primaryStage.setMaximized(true);
                 primaryStage.setScene(new Scene(welcomeLobby));
                 primaryStage.setTitle("Welcome Lobby");
                 primaryStage.show();

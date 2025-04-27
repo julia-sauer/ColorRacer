@@ -137,7 +137,6 @@ public class ProtocolReaderClient {
                     }
                     String msg = parts[1].trim();
                     System.out.println(msg);
-                    display(msg);
                     if (parts[1].startsWith("+POS ")) {
                         // parse "+POS Alice moved to the Field red3"
                         String[] tok = parts[1].split(" ");
@@ -147,6 +146,8 @@ public class ProtocolReaderClient {
                                 GameLobbyController.getInstance().updatePlayerPosition(whoMoved, fieldId)
                         );
                         break;
+                    } else {
+                        display(msg);
                     }
                     break;
 

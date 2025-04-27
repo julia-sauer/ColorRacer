@@ -15,80 +15,62 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1158.0" prefWidth="1793.0"
-            stylesheets="@WelcomeLobbyStyleSheet.css" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" stylesheets="@WelcomeLobbyStyleSheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController">
     <left>
-        <VBox prefHeight="1013.0" prefWidth="406.0" spacing="10.0" styleClass="game-panel"
-              BorderPane.alignment="CENTER">
+        <VBox prefWidth="406.0" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
             <children>
-                <Label styleClass="header-label" text="List"/>
-                <ListView fx:id="listList" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS"/>
-                <Label styleClass="header-label" text="Game list"/>
-                <ListView fx:id="gameList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
-                <Label styleClass="header-label" text="Lobby list"/>
-                <ListView fx:id="lobbylist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                <Label styleClass="header-label" text="List" />
+                <ListView fx:id="listList" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS" />
+                <Label styleClass="header-label" text="Game list" />
+                <ListView fx:id="gameList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                <Label styleClass="header-label" text="Lobby list" />
+                <ListView fx:id="lobbylist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
             </children>
             <padding>
-                <Insets left="10.0" top="10.0"/>
+                <Insets left="10.0" top="10.0" />
             </padding>
         </VBox>
     </left>
     <center>
-        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" styleClass="game-panel"
-              BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER" spacing="20.0" styleClass="game-panel" BorderPane.alignment="CENTER">
             <padding>
-                <Insets top="20.0"/>
+                <Insets top="20.0" />
             </padding>
             <children>
-                <Label styleClass="welcome-text" text="Welcome to Color Racer"/>
-                <Button mnemonicParsing="false" onAction="#handleCreateLobby" styleClass="game-button"
-                        text="Create Lobby"/>
-                <Button layoutX="414.0" layoutY="534.0" mnemonicParsing="false" onAction="#handleJoinLobby"
-                        styleClass="game-button" text="Join Lobby"/>
+                <Label styleClass="welcome-text" text="Welcome to Color Racer" />
+                <Button mnemonicParsing="false" onAction="#handleCreateLobby" styleClass="game-button" text="Create Lobby" />
+                <Button layoutX="414.0" layoutY="534.0" mnemonicParsing="false" onAction="#handleJoinLobby" styleClass="game-button" text="Join Lobby" />
             </children>
         </VBox>
     </center>
     <right>
-        <VBox alignment="TOP_CENTER" prefHeight="974.0" prefWidth="412.0" styleClass="game-panel"
-              BorderPane.alignment="TOP_RIGHT">
+        <VBox alignment="TOP_CENTER" styleClass="game-panel" BorderPane.alignment="TOP_RIGHT">
             <children>
-                <TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="597.0"
-                            prefWidth="372.0" styleClass="titled-pane" text="Chat">
+                <TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="597.0" prefWidth="372.0" styleClass="titled-pane" text="Chat">
                     <content>
-                        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0"
-                                    prefHeight="587.0" prefWidth="370.0" styleClass="anchor-pane">
+                        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="587.0" prefWidth="370.0" styleClass="anchor-pane">
                             <children>
-                                <TextArea fx:id="chatArea" layoutX="5.0" layoutY="14.0" prefHeight="458.0"
-                                          prefWidth="360.0" styleClass="text-area" AnchorPane.leftAnchor="5.0"
-                                          AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                <TextArea fx:id="chatArea" layoutX="5.0" layoutY="14.0" prefHeight="458.0" prefWidth="360.0" styleClass="text-area" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
                                 </TextArea>
-                                <TextField fx:id="txtUsermsg" layoutX="16.0" layoutY="478.0" maxHeight="-Infinity"
-                                           maxWidth="-Infinity" onKeyPressed="#handleEnterPressed" prefHeight="45.0"
-                                           prefWidth="269.0" promptText="Type your message here..."
-                                           styleClass="text-field" AnchorPane.bottomAnchor="2.0"
-                                           AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="85.0">
+                                <TextField fx:id="txtUsermsg" layoutX="16.0" layoutY="478.0" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#handleEnterPressed" prefHeight="45.0" prefWidth="269.0" promptText="Type your message here..." styleClass="text-field" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="85.0">
                                     <padding>
-                                        <Insets left="5.0" right="5.0"/>
+                                        <Insets left="5.0" right="5.0" />
                                     </padding>
                                 </TextField>
-                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="288.0" layoutY="475.0"
-                                        mnemonicParsing="false" onAction="#handleBroadcast" prefHeight="52.0"
-                                        prefWidth="74.0" styleClass="game-button" text="All" textAlignment="CENTER"
-                                        wrapText="true" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="5.0"/>
+                                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="288.0" layoutY="475.0" mnemonicParsing="false" onAction="#handleBroadcast" prefHeight="52.0" prefWidth="74.0" styleClass="game-button" text="All" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="5.0" />
                             </children>
                         </AnchorPane>
                     </content>
                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
                 </TitledPane>
             </children>
             <padding>
-                <Insets right="10.0"/>
+                <Insets right="10.0" />
             </padding>
         </VBox>
     </right>
@@ -97,23 +79,23 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Leave">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleLeave" text="Leave Server"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleLeave" text="Leave Server" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Nickname">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleNicknameChange" text="Change nickname"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleNicknameChange" text="Change nickname" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Highscore">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleHighscoreList" text="Show highscore list"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleHighscoreList" text="Show highscore list" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
     </top>
     <effect>
-        <Blend mode="MULTIPLY"/>
+        <Blend mode="MULTIPLY" />
     </effect>
 </BorderPane>
