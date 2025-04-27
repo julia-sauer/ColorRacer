@@ -19,7 +19,7 @@ public class Highscore {
 
   private static String getHighscoreFilePath() {
     String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
-    return Paths.get(basePath, "src", "main", "resources", "highscores.txt").toString();
+    return Paths.get(basePath, "src", "main", "resources", "highscore.txt").toString();
   }
 
   private void loadHighscore() {
