@@ -18,8 +18,8 @@ Julia]]></description>
         <option id="color.recent"><![CDATA[#33ffff #006666 #ffff00]]></option>
     </view>
     <view id="resource-table">
-        <field id="0" name="Ressource" width="210" order="0"/>
-        <field id="1" name="Rolle" width="86" order="1"/>
+        <field id="0" name="Ressource" width="199" order="0"/>
+        <field id="1" name="Rolle" width="82" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -57,6 +57,10 @@ Mockup]]></notes>
         </task>
         <task id="13" uid="10c7d14c6b8a42daa2327b60e4ad591a" name="Powerpoint 1" meeting="false" start="2025-03-01" duration="4" complete="100" expand="true"/>
         <task id="10" uid="e395478dd0514d0ca7a53c3e87834c7e" name="Meilenstein 5" meeting="true" start="2025-05-12" duration="0" complete="0" priority="4" expand="true"/>
+        <task id="57" uid="58f05d9d93254864a0cc5665659e2e5b" name="Finishing GUIs design" meeting="false" start="2025-05-01" duration="1" complete="0" expand="true"/>
+        <task id="58" uid="274939ff1e4f478ba2287602d0f90fed" name="Pixelart" meeting="false" start="2025-04-14" duration="17" complete="0" expand="true">
+            <depend id="57" type="2" difference="0" hardness="Strong"/>
+        </task>
         <task id="8" uid="3e31520b8c8e4c27ad9fab2ba74783f6" name="Meilenstein 3" meeting="true" start="2025-04-07" duration="0" complete="0" priority="4" expand="true"/>
         <task id="7" uid="1e7d857dbd8c46468aa93b0fe1e7c9d7" name="Meilenstein 2" meeting="true" start="2025-03-24" duration="0" complete="0" priority="4" expand="true"/>
         <task id="9" uid="a0a2336b202049298fafb122129c2902" name="Meilenstein 4" meeting="true" start="2025-04-28" duration="0" complete="0" priority="4" expand="true"/>
@@ -124,17 +128,19 @@ Mockup]]></notes>
         </task>
         <task id="24" uid="4993c29cc3284aff954556ba4e77bc73" name="outwritten manual" meeting="false" start="2025-04-03" duration="4" complete="100" expand="true"/>
         <task id="25" uid="4e77328cec3a4c4daff2f85471e7fbc5" name="QA concept" meeting="false" start="2025-04-01" duration="5" complete="100" expand="true"/>
-        <task id="27" uid="8ac76885e0e04b89a4b9918a031af07c" name="GUI is put together and shows no bugs" meeting="false" start="2025-04-19" duration="6" complete="70" priority="4" expand="true"/>
-        <task id="54" uid="f20ce4c9c9bd41bfb631cd12a2a82b80" name="Fixing last bugs" meeting="false" start="2025-04-21" duration="5" complete="0" expand="true"/>
-        <task id="55" uid="10096bb7830b4bb6af95fd60cf781f92" name="Handling errors accordingly" meeting="false" start="2025-04-21" duration="5" complete="0" expand="true"/>
+        <task id="27" uid="8ac76885e0e04b89a4b9918a031af07c" name="GUI is put together and shows no bugs" meeting="false" start="2025-04-19" duration="6" complete="100" priority="4" expand="true">
+            <depend id="57" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="54" uid="f20ce4c9c9bd41bfb631cd12a2a82b80" name="Fixing last bugs" meeting="false" start="2025-04-21" duration="5" complete="100" expand="true"/>
+        <task id="55" uid="10096bb7830b4bb6af95fd60cf781f92" name="Handling errors accordingly" meeting="false" start="2025-04-29" duration="6" complete="0" expand="true"/>
         <task id="49" uid="f0a607768b8a48cb9213d1d354b735b1" name="Mainlobby GUI" meeting="false" start="2025-04-10" duration="9" complete="100" priority="2" expand="true">
             <depend id="27" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="50" uid="2a12bbd3582548b4be2a9d2b4ec1d700" name="Game GUI" meeting="false" start="2025-04-10" duration="9" complete="90" priority="2" expand="true">
+        <task id="50" uid="2a12bbd3582548b4be2a9d2b4ec1d700" name="Game GUI" meeting="false" start="2025-04-10" duration="9" complete="100" priority="2" expand="true">
             <depend id="27" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="28" uid="9195c31ba1d942fbad3c04bb03729c20" name="highscore list" meeting="false" start="2025-04-14" duration="6" complete="100" expand="true"/>
-        <task id="29" uid="8475b49dd6da4e259a6c2e7fd0d4dc1a" name="unit-tests" meeting="false" start="2025-04-09" duration="22" complete="50" expand="true"/>
+        <task id="29" uid="8475b49dd6da4e259a6c2e7fd0d4dc1a" name="unit-tests" meeting="false" start="2025-04-09" duration="22" complete="90" expand="true"/>
         <task id="48" uid="27b0f7cb00c544ebbaf26dad38c09e42" name="winner/loser-implementation" meeting="false" start="2025-04-23" duration="4" complete="100" expand="true"/>
         <task id="30" uid="b39038629b86437485d99c6dbb0d1258" name="Logo design" meeting="false" start="2025-05-02" duration="6" complete="0" expand="true">
             <depend id="51" type="2" difference="0" hardness="Strong"/>
@@ -154,6 +160,7 @@ Mockup]]></notes>
         <task id="51" uid="30aec566b094405c93ce23d29c7c0fae" name="clean-up repository" meeting="false" start="2025-05-10" duration="3" complete="0" expand="true"/>
         <task id="52" uid="8c19421fc5a74d2089af270dc57e5b88" name="clean-up the code" meeting="false" start="2025-05-05" duration="3" complete="0" expand="true"/>
         <task id="53" uid="d805c1f8cdf04c6c9a8622c9c546946e" name="last fixes of implementation if necessary" shape="1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0" meeting="false" start="2025-04-28" duration="14" complete="0" expand="true"/>
+        <task id="56" uid="d25a38b2def644b1a9f69d0ed6a3cc85" name="Loggers einbauen" meeting="false" start="2025-04-28" duration="6" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="Ana" function="Default:0" contacts="ana.svalina@stud.unibas.ch" phone=""/>
@@ -170,12 +177,17 @@ Mockup]]></notes>
         <allocation task-id="42" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="24" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="39" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
-        <allocation task-id="47" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="47" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="21" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="54" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="58" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="15" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="20" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="45" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="25" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="29" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="47" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="54" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="38" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="18" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="15" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
@@ -186,12 +198,22 @@ Mockup]]></notes>
         <allocation task-id="45" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="47" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="21" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="29" resource-id="2" function="Default:0" responsible="false" load="15.0"/>
+        <allocation task-id="28" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="54" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="48" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="18" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="40" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="26" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="44" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="46" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="15" resource-id="3" function="Default:0" responsible="false" load="25.0"/>
+        <allocation task-id="49" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="50" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="47" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="27" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="54" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="57" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
     </allocations>
     <vacations>
         <vacation start="2025-03-29" end="2025-04-02" resourceid="1"/>
