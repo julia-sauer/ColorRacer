@@ -5,12 +5,13 @@ import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import org.junit.jupiter.api.*;
 import java.io.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Test class for testing the checkField method in the Server class.
- * This class contains tests for various scenarios, including user actions and game state.
+ * Test class for testing the checkField method in the Server class. This class contains tests for
+ * various scenarios, including user actions and game state.
  */
 class CheckFieldTest {
 
@@ -21,8 +22,8 @@ class CheckFieldTest {
   private GameBoard board;
 
   /**
-   * Setup the test environment before each test.
-   * Mocks the user, output stream, and protocol writer, and sets up the game environment.
+   * Setup the test environment before each test. Mocks the user, output stream, and protocol
+   * writer, and sets up the game environment.
    */
   @BeforeEach
   void setup() {
@@ -32,7 +33,8 @@ class CheckFieldTest {
     when(mockUser.getNickname()).thenReturn("testPlayer");
 
     UserList.clear();
-    UserList.addUser("testPlayer", mockOut); // Adds a real User instance to UserList (mock is ignored here)
+    UserList.addUser("testPlayer",
+        mockOut); // Adds a real User instance to UserList (mock is ignored here)
 
     lobby = new Lobby("TestLobby");
     lobby.addPlayers(1);
@@ -47,8 +49,8 @@ class CheckFieldTest {
   }
 
   /**
-   * Cleanup the test environment after each test.
-   * Clears the Server's lobbies and users to ensure tests do not interfere with each other.
+   * Cleanup the test environment after each test. Clears the Server's lobbies and users to ensure
+   * tests do not interfere with each other.
    */
   @AfterEach
   void cleanup() {
@@ -58,8 +60,8 @@ class CheckFieldTest {
   }
 
   /**
-   * Test the scenario where the user has not rolled yet.
-   * Verifies that the appropriate message is sent when the user tries to check a field without rolling first.
+   * Test the scenario where the user has not rolled yet. Verifies that the appropriate message is
+   * sent when the user tries to check a field without rolling first.
    */
   @Test
   void testCheckFieldUserHasNotRolled() throws Exception {
@@ -77,8 +79,8 @@ class CheckFieldTest {
   }
 
   /**
-   * Test the scenario where the user checks a valid field.
-   * Verifies that the correct message is sent when the user rolls and selects a valid field.
+   * Test the scenario where the user checks a valid field. Verifies that the correct message is
+   * sent when the user rolls and selects a valid field.
    */
   @Test
   void testCheckFieldValidField() throws Exception {
@@ -90,7 +92,8 @@ class CheckFieldTest {
 
     // Create a mock ProtocolWriterServer to return when needed
     ProtocolWriterServer mockWriter = mock(ProtocolWriterServer.class);
-    doThrow(new IOException("Simulated IO exception")).when(mockWriter).sendCommandAndString(eq(Command.CHOS), anyString());
+    doThrow(new IOException("Simulated IO exception")).when(mockWriter)
+        .sendCommandAndString(eq(Command.CHOS), anyString());
     Server.protocolWriters.put(mockOut, mockWriter);
 
     // Perform the action to check the field
@@ -101,8 +104,8 @@ class CheckFieldTest {
   }
 
   /**
-   * Test the scenario where the user checks an invalid field.
-   * Verifies that the correct error message is sent when the user selects an invalid field.
+   * Test the scenario where the user checks an invalid field. Verifies that the correct error
+   * message is sent when the user selects an invalid field.
    */
   @Test
   void testCheckFieldInvalidField() throws Exception {
@@ -118,8 +121,8 @@ class CheckFieldTest {
   }
 
   /**
-   * Test the scenario where the sendInfo method throws an IOException.
-   * This test ensures that an IOException does not cause the method to throw an uncaught exception.
+   * Test the scenario where the sendInfo method throws an IOException. This test ensures that an
+   * IOException does not cause the method to throw an uncaught exception.
    */
   @Test
   void testCheckFieldRollMessageThrowsIOException() throws Exception {
@@ -136,8 +139,8 @@ class CheckFieldTest {
   }
 
   /**
-   * Test the scenario where the user is not in any lobby.
-   * Verifies that the method simply returns if the user is not part of any lobby.
+   * Test the scenario where the user is not in any lobby. Verifies that the method simply returns
+   * if the user is not part of any lobby.
    */
   @Test
   void testCheckFieldUserNotInLobby() throws Exception {
@@ -153,8 +156,8 @@ class CheckFieldTest {
   }
 
   /**
-   * Test the scenario where the sendCommandAndString method throws an IOException while sending CHOS.
-   * This test ensures that an IOException during sending CHOS is properly handled.
+   * Test the scenario where the sendCommandAndString method throws an IOException while sending
+   * CHOS. This test ensures that an IOException during sending CHOS is properly handled.
    */
   @Test
   void testCheckFieldCHOSThrowsIOException() throws Exception {
@@ -177,8 +180,9 @@ class CheckFieldTest {
   }
 
   /**
-   * Test the scenario where the sendCommandAndString method throws an IOException for an invalid field check.
-   * Verifies that the IOException is properly handled during the error message sending.
+   * Test the scenario where the sendCommandAndString method throws an IOException for an invalid
+   * field check. Verifies that the IOException is properly handled during the error message
+   * sending.
    */
   @Test
   void testCheckFieldInvalidFieldIOException() throws Exception {
