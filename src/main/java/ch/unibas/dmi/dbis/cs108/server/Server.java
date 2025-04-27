@@ -596,7 +596,6 @@ public class Server {
      *
      * @param userId The ID of the user that is currently on its turn.
      */
-    //TODO write Test
     public static void won(int userId) {
         User user = UserList.getUser(userId);
         String nickname = user.getNickname();
@@ -607,7 +606,7 @@ public class Server {
         for (String player : userlobby.getPlayers()) {
             User lobbyUser = UserList.getUserByName(player);
             if (lobbyUser != null) {
-                ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+                ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, lobbyUser.getOut());
                 try {
                     if (userlobby.getPodestPlace() == 1) {
                         protocolWriterServer.sendInfo(nickname + " won the game!");
