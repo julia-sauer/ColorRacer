@@ -33,7 +33,7 @@ public class ProtocolReaderServer {
             new ArrayList<>());
     private static final Logger LOGGER = LogManager.getLogger(ProtocolReaderServer.class);
     private final Runnable disconnectCallback;
-    private ClientHandler clientHandler;
+    private final ClientHandler clientHandler;
 
     /**
      * Creates a new {@code ProtocolReaderServer}.
@@ -234,7 +234,9 @@ public class ProtocolReaderServer {
                                 break;
                             }
                         }
-                        userLobby.removePlayer(nickname);
+                        if (userLobby != null) {
+                            userLobby.removePlayer(nickname);
+                        }
 
                         // 🧹 2. Jetzt sauberen Disconnect durchführen
                         clientHandler.disconnectClient();
@@ -266,7 +268,7 @@ public class ProtocolReaderServer {
                     String senderName = UserList.getUserName(userId);
                     String receiverName = nicknameAndMessageParts[0].trim();
                     if (senderName != null && receiverName != null) {
-                        server.chatToOne(whisperMessage, senderName, receiverName);
+                        Server.chatToOne(whisperMessage, senderName, receiverName);
                     } else {
                         System.err.println("-ERR Unknown user ID: " + userId);
                     }
@@ -290,43 +292,43 @@ public class ProtocolReaderServer {
                     }
 
                 case MOVE:
-                    nickname = UserList.getUserName(userId);
-                    Lobby userLob = Server.getLobbyOfPlayer(nickname);
+                    String nick = UserList.getUserName(userId);
+                    Lobby userLob = Server.getLobbyOfPlayer(nick);
 
-                    if (!(userLob.getGameState() == 2)) {
-                        protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
+                    if (userLob != null) {
+                        if (!(userLob.getGameState() == 2)) {
+                            protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
+                            break;
+                        }
+
+                        if (!isMyTurn(protocolWriterServer)) {
+                            break;
+                        }
+                        Server.moveToLastSelectedField(userId);
                         break;
                     }
-
-                    if (!isMyTurn(protocolWriterServer)) {
-                        break;
-                    }
-                    Server.moveToLastSelectedField(userId);
-                    break;
 
                 case NEXT: {
-                    nickname = UserList.getUserName(userId);
-                    Lobby userLobby = Server.getLobbyOfPlayer(nickname);
+                    String nickn = UserList.getUserName(userId);
+                    Lobby userLobby = Server.getLobbyOfPlayer(nickn);
+                    if (userLobby != null) {
+                        if (!(userLobby.getGameState() == 2)) {
+                            protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
+                            break;
+                        }
 
-                    if (!(userLobby.getGameState() == 2)) {
-                        protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
+                        if (!isMyTurn(protocolWriterServer)) {
+                            break;
+                        }
+
+                        protocolWriterServer.sendInfo("You skipped your turn.");
+                        userLobby.advanceTurn();  // next player
+
                         break;
-                    }
-
-                    if (!isMyTurn(protocolWriterServer)) {
-                        break;
-                    }
-
-
-                    if (userLobby == null) {
+                    } else {
                         protocolWriterServer.sendInfo("-ERR You are not in a valid lobby.");
                         break;
                     }
-
-                    protocolWriterServer.sendInfo("You skipped your turn.");
-                    userLobby.advanceTurn();  // next player
-
-                    break;
                 }
 
                 case DEOS:
@@ -499,32 +501,12 @@ public class ProtocolReaderServer {
                         break;
                     }
 
-                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters,
-                            user.getOut());
-
-                    // Get all connected usernames
-                    List<String> allUsers = UserList.getAllUsernames();
-//                    try {
-//                        writer.sendInfo("Connected users (" + allUsers.size() + "): " + allUsers);
-//                    } catch (IOException e) {
-//                        System.err.println("Error sending user list to user " + userId);
-//                        break;
-//                    }
-
                     // Show players in each lobby (excluding Welcome)
                     for (Lobby lobby : Server.lobbies) {
                         if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                            continue;
+                            break;
                         }
-
-                        List<String> players = lobby.getPlayers();
-//                        try {
-//                            writer.sendInfo("[Lobby: " + lobby.getLobbyName() + "] Players (" + players.size() + "): " + players);
-//                        } catch (IOException e) {
-//                            System.err.println("Error sending lobby list to user " + userId);
-//                        }
                     }
-
                     break;
                 }
                 case LOME: {
@@ -555,13 +537,6 @@ public class ProtocolReaderServer {
                         }
                         break;
                     }
-
-                    List<String> members = userLobby.getPlayers();
-//                    try {
-//                        writer.sendInfo("Players in [" + userLobby.getLobbyName() + "] (" + members.size() + "): " + members);
-//                    } catch (IOException e) {
-//                        System.err.println("Error sending lobby member list to user " + userId);
-//                    }
                     break;
                 }
                 case GLST: {
@@ -570,21 +545,12 @@ public class ProtocolReaderServer {
                         System.err.println("-ERR No user found for ID " + userId);
                         break;
                     }
-
-                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters,
-                            user.getOut());
-
                     // Zähle "echte" Lobbys (≠ Welcome)
                     List<Lobby> realLobbies = Server.lobbies.stream()
                             .filter(l -> !l.getLobbyName().equalsIgnoreCase("Welcome"))
                             .toList();
 
                     if (realLobbies.isEmpty()) {
-//                        try {
-//                            writer.sendInfo("There are currently no active game lobbies.");
-//                        } catch (IOException e) {
-//                            System.err.println("Error sending empty game list info to user " + userId);
-//                        }
                         break;
                     }
 
@@ -597,12 +563,6 @@ public class ProtocolReaderServer {
                             case 3 -> "finished";
                             default -> "unknown";
                         };
-
-//                        try {
-//                            writer.sendInfo("[Lobby: " + lobby.getLobbyName() + "] " + stateText + " | Players (" + players.size() + "): " + players);
-//                        } catch (IOException e) {
-//                            System.err.println("Error sending GLST info to user " + userId);
-//                        }
                     }
 
                     break;
@@ -628,10 +588,8 @@ public class ProtocolReaderServer {
                         break;
                     }
 
-                    User user = UserList.getUser(userId);
                     userLobby.makeReady(userName);
                     System.out.println(userName + " is ready!");
-                    ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, user.getOut());
                     String info = userName + " is ready.";
                     Server.broadcastInLobby(info, userName);
                     break;
@@ -693,9 +651,10 @@ public class ProtocolReaderServer {
                 break;
             }
         }
-        if (!userLobby.readyStatus.isEmpty() && userLobby.readyStatus.values().stream()
-                .allMatch(Boolean::booleanValue)) {
-            return true;
+        if (userLobby != null) {
+            if (!userLobby.readyStatus.isEmpty() && userLobby.readyStatus.values().stream().allMatch(Boolean::booleanValue)) {
+                return true;
+            }
         }
         return false;
     }

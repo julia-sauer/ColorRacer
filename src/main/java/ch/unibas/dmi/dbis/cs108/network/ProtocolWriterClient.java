@@ -116,10 +116,8 @@ public class ProtocolWriterClient {
 
   /**
    * Sends a {@code QUIT} command to the server indicating client termination.
-   *
-   * @param out The OutputStream to which the command is written.
    */
-  public void leave(OutputStream out) {
+  public void leave() {
     try {
       sendCommand(Command.QUIT);
     } catch (IOException e) {

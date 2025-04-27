@@ -12,9 +12,9 @@ import static ch.unibas.dmi.dbis.cs108.server.Server.colors;
  */
 public class GameBoard {
 
-    private Map<String, Field> fields;
+    private final Map<String, Field> fields;
     private Field currentField;
-    private Set<Field> selectedFields;
+    private final Set<Field> selectedFields;
     private final List<Field> selectedFieldList = new ArrayList<>();
 
     /**

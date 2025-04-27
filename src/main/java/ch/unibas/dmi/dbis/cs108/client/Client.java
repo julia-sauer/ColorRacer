@@ -133,7 +133,7 @@ public class Client {
                 line = conin.readLine();
                 if (line.equalsIgnoreCase("leave")) {
                     // closing connection and sending a QUIT-command
-                    protocolClient.leave(out);
+                    protocolClient.leave();
                 } else if (line.equalsIgnoreCase("YES")) {
                     protocolClient.sendCommandAndString(Command.QCNF, "YES");
                     System.out.println("You confirmed to leave the game.");

@@ -18,7 +18,6 @@ public class Dice {
     for (int i = 0; i < 6; i++) {
       double randomValue = getRandom();
       // generates [0 .. 1)
-      double scaled = randomValue * 6;     // gives [0 .. 6)
       int ceiled = (int) (randomValue * 6) + 1;
       // gives {1, 2, 3, 4, 5, 6}
       if (ceiled == 1) {

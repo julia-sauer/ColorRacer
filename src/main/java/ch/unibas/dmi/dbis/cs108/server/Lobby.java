@@ -36,7 +36,7 @@ public class Lobby implements Runnable {
   /**
    * The name of the lobby.
    */
-  private String lobbyName;
+  private final String lobbyName;
 
   /**
    * Mapping from player names to their personal game board.
@@ -51,7 +51,7 @@ public class Lobby implements Runnable {
   /**
    * Index of the current player in {@link #playerOrder} whose turn it is.
    */
-  int currentPlayerIndex = 0;
+  int currentPlayerIndex;
 
 //  private final Map<String, String> selectedColors = new HashMap<>();
   /**
@@ -67,7 +67,7 @@ public class Lobby implements Runnable {
   /**
    * The first podium place to assign when a player finishes.
    */
-  private int podestPlace = 1;
+  private int podestPlace;
 
   /**
    * Readiness status of each player, keyed by player name (true = ready).

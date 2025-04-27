@@ -58,16 +58,6 @@ public class UserList {
   }
 
   /**
-   * Returns the total number of users in the list.
-   *
-   * @return The number of users.
-   */
-
-  public static int getUserCount() {
-    return userMap.size();
-  }
-
-  /**
    * Checks whether a nickname already exists in the UserList.
    *
    * @param nickname The nickname to check.
@@ -89,18 +79,16 @@ public class UserList {
   public static void updateUserName(int userId, String newNickname) {
     User user = userMap.get(userId);
     String oldNickname = user.getNickname();
-    if (user != null) {
-      user.setNickname(newNickname);
-      Lobby userLobby = null;
-      for (Lobby lobby : lobbies) {
-        if (lobby.getPlayers().contains(oldNickname)) {
-          userLobby = lobby;
-          break;
-        }
+    user.setNickname(newNickname);
+    Lobby userLobby = null;
+    for (Lobby lobby : lobbies) {
+      if (lobby.getPlayers().contains(oldNickname)) {
+        userLobby = lobby;
+        break;
       }
-      if (userLobby != null) {
-        userLobby.updateUsername(oldNickname, newNickname);
-      }
+    }
+    if (userLobby != null) {
+      userLobby.updateUsername(oldNickname, newNickname);
     }
   }
 
@@ -169,13 +157,5 @@ public class UserList {
   public static void clear() {
     userMap.clear();
     userIdCounter.set(0);
-  }
-
-  /**
-   * This method sets the instance.
-   * @param userList the given userList
-   */
-  public static void setInstance(UserList userList) {
-    UserList instance = userList;
   }
 }

@@ -25,7 +25,6 @@ public class PingThread extends Thread {
   private final InputStream in;
   private final OutputStream out;
   private static final long PING_INTERVAL = 10000;
-  private volatile boolean pongReceived = false;// 15 seconds
   private static final List<PrintWriter> clientWriters = Collections.synchronizedList(
       new ArrayList<>());
   /**
@@ -90,25 +89,6 @@ public class PingThread extends Thread {
    */
   public void notifyPong() {
     pongQueue.offer(Boolean.TRUE);
-  }
-
-  /**
-   * Checks whether a PONG message has been received.
-   *
-   * @return {@code true} if a PONG message has been received, otherwise {@code false}.
-   */
-  private boolean hasReceivedPong() {
-    try {
-      BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-      if (reader.ready()) {
-        if (reader.readLine().trim().equals("PONG")) {
-          return true;
-        }
-      }
-    } catch (IOException e) {
-      System.err.println("Error checking for PONG");
-    }
-    return false;
   }
 
   /**
