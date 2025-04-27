@@ -150,7 +150,7 @@ public class GameLobbyController {
     /**
      * Tracks all field buttons that have been selected by the user but not yet confirmed.
      */
-    private final Set<Button> selectedFieldButtons = new HashSet<>();
+    private final List<Button> selectedFieldButtons = new ArrayList<>();
 
     /**
      * The colored field {@link Button}s grouped by color.
@@ -953,8 +953,9 @@ public class GameLobbyController {
         if (btn == null) {
             return;
         }
-        if (!btn.getStyleClass().contains("field-button-selected")) {
+        if (!selectedFieldButtons.contains(btn)) {
             btn.getStyleClass().add("field-button-selected");
+
         }
         selectedFieldButtons.add(btn);
         moveButton.setDisable(false);
@@ -963,7 +964,9 @@ public class GameLobbyController {
     /**
      * Removes the highlight of a field {@link Button} in the GUI by its field ID. This method is
      * called when the server confirms a deselection with the command {@code DEOS}. The corresponding
-     * {@link Button} will be visually reset and removed from the {@code selectedFieldButtons}.
+     * {@link Button} will be visually reset and removed from the {@code selectedFieldButtons}. All fields that
+     * have been selected after the field that is now deselected also lose their highlight because they
+     * automatically get deselected as well.
      *
      * @param fieldId The {@code fx:id} of the {@link Button} representing the deselected field.
      */
@@ -972,8 +975,15 @@ public class GameLobbyController {
         if (btn == null) {
             return;
         }
-        btn.getStyleClass().remove("field-button-selected");
-        selectedFieldButtons.remove(btn);
+        int idx = selectedFieldButtons.indexOf(btn);
+        if (idx == -1) {
+            return; // not in our list
+        }
+        for (int i = selectedFieldButtons.size() - 1; i >= idx; i--) {
+            Button toUnhighlight = selectedFieldButtons.get(i);
+            toUnhighlight.getStyleClass().remove("field-button-selected");
+            selectedFieldButtons.remove(i);
+        }
         moveButton.setDisable(selectedFieldButtons.isEmpty());
     }
 
