@@ -865,7 +865,6 @@ public class GameLobbyController {
                     boolean amHost = !players.isEmpty()
                             && players.getFirst().equalsIgnoreCase(nickname);
                     setHost(amHost);
-                    displayChat("Controller nickname is: " + nickname);
                 }
             } catch (Exception e) {
                 showError("Failed to update lobby list", e.getMessage());
