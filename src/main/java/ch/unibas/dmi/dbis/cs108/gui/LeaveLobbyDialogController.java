@@ -2,6 +2,7 @@ package ch.unibas.dmi.dbis.cs108.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -18,7 +19,13 @@ public class LeaveLobbyDialogController {
     private Stage dialogStage;
 
     /**
-     * A flag indicating whether the user confirmed leaving the lobby. Defaults to {@code false},
+     * The text that asks if the user wants to leave the lobby, respectively the server.
+     */
+    @FXML
+    private Text leaveStatement;
+
+    /**
+     * A flag indicating whether the user confirmed leaving the lobby/server. Defaults to {@code false},
      * becomes {@code true} when "Leave" is clicked.
      */
     protected boolean isLeaving = false;
@@ -30,6 +37,16 @@ public class LeaveLobbyDialogController {
      */
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
+    }
+
+    /**
+     * Sets the {@link Text} in the dialog that asks either if the user wants to leave the lobby or
+     * if the user wants to leave the server.
+     *
+     * @param statement The string of the question depending on whether the user wants to leave the lobby or the server.
+     */
+    public void setLeaveStatement(String statement) {
+        leaveStatement.setText(statement);
     }
 
     /**

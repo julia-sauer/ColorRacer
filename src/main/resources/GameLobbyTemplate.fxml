@@ -62,6 +62,7 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Leave">
                     <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleLeaveLobby" text="Leave Lobby" />
                         <MenuItem mnemonicParsing="false" onAction="#handleLeave" text="Leave Server" />
                     </items>
                 </Menu>

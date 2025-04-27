@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -154,24 +155,30 @@ public class GameLobbyController {
     /**
      * The colored field {@link Button}s grouped by color.
      */
-
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button yellow1, yellow2, yellow3, yellow4, yellow5, yellow6, yellow7;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button red1, red2, red3, red4, red5, red6, red7;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button blue1, blue2, blue3, blue4, blue5, blue6, blue7, blue8, blue9, blue10;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button purple1, purple2, purple3, purple4, purple5, purple6, purple7, purple8, purple9, purple10;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button orange1, orange2, orange3, orange4, orange5, orange6, orange7, orange8, orange9, orange10;
 
     /**
      * The white starting field button for all players.
      */
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button white1;
 
     /**
@@ -193,6 +200,11 @@ public class GameLobbyController {
      * The name of the lobby this player is currently in.
      */
     private String lobbyname;
+
+    /**
+     * The client that uses this Lobby.
+     */
+    private Client client;
 
     /**
      * Maps each player's nickname to their corresponding {@link ImageView} bike icon.
@@ -280,11 +292,12 @@ public class GameLobbyController {
     }
 
     /**
-     * Configures the client and its protocol writer for network operations.
+     * Configures the client and its {@link ProtocolWriterClient} for network operations.
      *
-     * @param client the client instance
+     * @param client The client instance.
      */
     public void setClient(Client client) {
+        this.client = client;
         this.protocolWriter = client.getProtocolWriter();
         this.protocolReader = client.getProtocolReader();
     }
@@ -473,7 +486,7 @@ public class GameLobbyController {
 
     /**
      * Sends the {@code MOVE} command to the server to confirm movement to the selected field(s).
-     * After the move, all highlighted fields are cleared and the dice are hidden.
+     * After the move, all highlighted fields are cleared, the dice are hidden and the move button is disabled.
      */
     @FXML
     private void handleMoveToField() {
@@ -506,10 +519,41 @@ public class GameLobbyController {
 
     /**
      * This method opens a dialog to ask the user if they want to leave the server. If the user wants
-     * to leave a message is sent over the {@link ProtocolWriterClient} and the window closes.
+     * to leave a {@code QCNF} command is sent over the {@link ProtocolWriterClient} to the server and the window closes.
      */
     @FXML
     private void handleLeave() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LeaveLobbyDialogTemplate.fxml"));
+            VBox dialogPane = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.initOwner(primaryStage);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setTitle("Leave Server");
+            dialogStage.setScene(new Scene(dialogPane));
+
+            LeaveLobbyDialogController controller = loader.getController(); // sets controller
+            controller.setDialogStage(dialogStage);
+            controller.setLeaveStatement("Would you like to leave the server?");
+
+            dialogStage.showAndWait();
+
+            if (controller.isLeaving) {
+                protocolWriter.sendCommandAndString(Command.QCNF, "YES");
+                Platform.exit();
+            }
+        } catch (IOException e) {
+            showError("Failed to open leave lobby dialog", e.getMessage());
+        }
+    }
+
+    /**
+     * This method opens a dialog to ask the user if they want to leave the lobby. If the user wants
+     * to leave the {@code switchToWelcomeLobby} method is called and the window closes.
+     */
+    @FXML
+    private void handleLeaveLobby() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/LeaveLobbyDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
@@ -522,16 +566,46 @@ public class GameLobbyController {
 
             LeaveLobbyDialogController controller = loader.getController(); // sets controller
             controller.setDialogStage(dialogStage);
+            controller.setLeaveStatement("Would you like to leave this lobby?");
 
             dialogStage.showAndWait();
 
             if (controller.isLeaving) {
-                protocolWriter.sendCommandAndString(Command.QCNF, "YES");
-                Platform.exit();
+                switchToWelcomeLobby();
             }
         } catch (IOException e) {
             showError("Failed to open leave lobby dialog", e.getMessage());
         }
+    }
+
+    /**
+     * This method transitions the scene to the WelcomeLobby view and sets all instances of
+     * the network back to the {@link WelcomeLobbyController}.
+     */
+    public void switchToWelcomeLobby() {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeLobbyTemplate.fxml"));
+                BorderPane welcomeLobby = loader.load();
+
+                WelcomeLobbyController welcomeController = loader.getController();
+                // Set all instances
+                welcomeController.setClient(client);
+                welcomeController.setPrimaryStage(primaryStage);
+                welcomeController.setProtocolWriter(client.getProtocolWriter());
+                client.setWelcomeController(welcomeController);
+                client.getProtocolReader().setWelcomeController(welcomeController);
+                protocolWriter.sendJoin("Welcome");
+
+                // Setup and show the GUI
+                primaryStage.setMaximized(true);
+                primaryStage.setScene(new Scene(welcomeLobby));
+                primaryStage.setTitle("Welcome Lobby");
+                primaryStage.show();
+            } catch (IOException e) {
+                showError("Failed to load the WelcomeLobby", e.getMessage());
+            }
+        });
     }
 
     /**
@@ -625,7 +699,8 @@ public class GameLobbyController {
     }
 
     /**
-     * Moves the existing bike ImageView of `player` to the button `fieldId`.
+     * Moves the existing bike ImageView of a player to the right fieldId and sets the rotation
+     * so the bike stands in the right direction.
      *
      * @param player  The name of the player that has moved his position.
      * @param fieldId The field to which the player moved his bike.
@@ -661,7 +736,7 @@ public class GameLobbyController {
     /**
      * Sets the {@link Label} that displays the lobby name.
      *
-     * @param name The name of the lobby
+     * @param name The name of the lobby.
      */
     public void setLobbyName(String name) {
         Platform.runLater(() -> lobbyNameDisplay.setText("Lobby: " + name));
@@ -680,9 +755,7 @@ public class GameLobbyController {
 
     /**
      * Activates the game board GUI when the game status becomes "running". This method is called when
-     * the game officially starts. It ensures that the game board is visible to all players. If the
-     * current player is the host, it also makes the {@code finishButton} visible so that the host has
-     * the option to end the game prematurely.
+     * the game officially starts. It ensures that the game board is visible to all players.
      */
     public void gameOngoing() {
         gameBoard.setVisible(true);
@@ -711,8 +784,8 @@ public class GameLobbyController {
     /**
      * Shows an error alert with specified header and content.
      *
-     * @param header  The header text
-     * @param content The content text
+     * @param header  The header text.
+     * @param content The content text.
      */
     private void showError(String header, String content) {
         Platform.runLater(() -> {
@@ -729,7 +802,7 @@ public class GameLobbyController {
      * user quits or changes their nickname, and then it reproduces it with the new updated list
      * version.
      *
-     * @param players The list of current player names received from the {@link ProtocolReaderClient}
+     * @param players The list of current player names received from the {@link ProtocolReaderClient}.
      */
     public void updatePlayerList(List<String> players) {
         Platform.runLater(() -> {
@@ -743,7 +816,8 @@ public class GameLobbyController {
     }
 
     /**
-     * This method merges and updates the list of all games by lobby name.
+     * This method merges and updates the list of all games by lobby name. It calls the method {@code gameOngoing} when
+     * the lobby has the status 'running' so it sets everything visible that is needed.
      *
      * @param newGames The formatted list of game lobby entries.
      */
@@ -800,13 +874,12 @@ public class GameLobbyController {
 
     /**
      * Extracts a list of player names from a formatted lobby entry string. The expected input format
-     * is something like: {@code "[Lobby: LobbyName] Players: [Jana | Ana | Flo | Julia]"}. This
-     * method will extract the part after {@code "Players:"}, remove the square brackets, and split
+     * is for example: {@code "[Lobby: LobbyName] Players: Jana | Ana | Flo | Julia"}. This
+     * method will extract the part after {@code "Players:"} and split
      * the names by the pipe character {@code |}, trimming any extra spaces.
      *
      * @param entry The full lobby entry string containing the list of players.
-     * @return A list of player names. Returns an empty list if the format is invalid or no players
-     * found.
+     * @return A list of player names. Returns an empty list if the format is invalid or no players found.
      */
     private List<String> extractPlayers(String entry) {
         int idx = entry.indexOf("Players:");

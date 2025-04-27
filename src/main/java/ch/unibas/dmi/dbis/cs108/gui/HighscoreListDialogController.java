@@ -19,6 +19,9 @@ import java.util.List;
  */
 public class HighscoreListDialogController {
 
+    /**
+     * The file path of where the {@code highscore.txt} file is saved.
+     */
     private static final String FILE_PATH = "src/main/resources/highscore.txt";
 
     /**

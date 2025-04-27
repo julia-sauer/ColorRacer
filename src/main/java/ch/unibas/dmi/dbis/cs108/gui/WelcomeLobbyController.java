@@ -23,6 +23,8 @@ import java.util.*;
 /**
  * This class is the controller for the Welcome Lobby view. Manages display and interaction for
  * player lists, game lists, lobby member lists, chat, and transitioning to specific game lobbies.
+ *
+ * @author julia
  */
 public class WelcomeLobbyController {
 
@@ -96,16 +98,16 @@ public class WelcomeLobbyController {
     /**
      * Returns the static instance of this controller.
      *
-     * @return WelcomeLobbyController instance
+     * @return The {@link WelcomeLobbyController} instance.
      */
     public static WelcomeLobbyController getInstance() {
         return instance;
     }
 
     /**
-     * Configures the client and its protocol writer for network operations.
+     * Configures the client and its {@link ProtocolWriterClient} for network operations.
      *
-     * @param client the client instance
+     * @param client The client instance.
      */
     public void setClient(Client client) {
         this.client = client;
@@ -122,7 +124,7 @@ public class WelcomeLobbyController {
     }
 
     /**
-     * Directly sets the protocol writer for server communication.
+     * Directly sets the {@link ProtocolWriterClient} for server communication.
      *
      * @param protocolWriter ProtocolWriterClient instance
      */
@@ -135,7 +137,7 @@ public class WelcomeLobbyController {
      * user quits or changes their nickname, and then it reproduces it with the new updated list
      * version.
      *
-     * @param players The list of current player names received from the {@link ProtocolReaderClient}
+     * @param players The list of current player names received from the {@link ProtocolReaderClient}.
      */
     public void updatePlayerList(List<String> players) {
         Platform.runLater(() -> {
@@ -182,7 +184,7 @@ public class WelcomeLobbyController {
 
     /**
      * This method opens a dialog to ask the user if they want to leave the server. If the user wants
-     * to leave a message is sent over the {@link ProtocolWriterClient} and the window closes.
+     * to leave a {@code QCNF} command is sent over the {@link ProtocolWriterClient} to the server and the window closes.
      */
     @FXML
     private void handleLeave() {
@@ -198,6 +200,7 @@ public class WelcomeLobbyController {
 
             LeaveLobbyDialogController controller = loader.getController();// Sets controller
             controller.setDialogStage(dialogStage);
+            controller.setLeaveStatement("Would you like to leave the server?");
 
             dialogStage.showAndWait();
 
@@ -253,12 +256,12 @@ public class WelcomeLobbyController {
     }
 
     /**
-     * Displays a new chat message in the chat area. This method is typically called from the
-     * {@link ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient} when a new message is received.
+     * Displays a new chat message in the {@code chatArea}. This method is called from the
+     * {@link ProtocolReaderClient} when a new message is received.
      * To ensure that the GUI is updated on the JavaFX Application Thread, the update is wrapped in a
      * call to {@link Platform#runLater(Runnable)}.
      *
-     * @param message the chat message to be displayed.
+     * @param message The chat message to be displayed.
      */
     public void displayChat(String message) {
         Platform.runLater(() -> chatArea.appendText(message + "\n"));
@@ -266,7 +269,7 @@ public class WelcomeLobbyController {
 
     /**
      * This method opens a dialog where the user can input a name to which a lobby is created and
-     * sends this over to the server with the {@link ProtocolWriterClient}.
+     * sends this with the command {@code CRLO} over to the server with the {@link ProtocolWriterClient}.
      */
     @FXML
     private void handleCreateLobby() {
@@ -357,8 +360,8 @@ public class WelcomeLobbyController {
     }
 
     /**
-     * This method sends a JOIN command over with the {@link ProtocolWriterClient} and activates the
-     * method that changes to the GameLobby view.
+     * This method sends a {@code JOIN} command over to the server with the {@link ProtocolWriterClient} and activates
+     * the method that changes to the Game Lobby view.
      *
      * @param lobbyName The name of the lobby the user wants to join.
      */
@@ -370,8 +373,8 @@ public class WelcomeLobbyController {
     /**
      * Shows an error alert with specified header and content.
      *
-     * @param header  The header text
-     * @param content The content text
+     * @param header  The header text.
+     * @param content The content text.
      */
     private void showError(String header, String content) {
         Platform.runLater(() -> {
@@ -384,7 +387,7 @@ public class WelcomeLobbyController {
     }
 
     /**
-     * This method handles a {@link Button} {@link java.awt.event.ActionEvent} when a user wants the
+     * This method handles a {@link Button} next to the chat. This button handles when a user wants the
      * message to be sent to all users.
      */
     @FXML
@@ -430,7 +433,8 @@ public class WelcomeLobbyController {
     }
 
     /**
-     * This method transitions the scene to the GameLobby view for the given lobby.
+     * This method transitions the scene to the Game Lobby view for the given lobby and sets all instances needed for
+     * the Welcome Lobby.
      *
      * @param lobbyName The name of the lobby the user joined.
      */
@@ -452,26 +456,9 @@ public class WelcomeLobbyController {
                 gameLobbyController.gameList.setItems(gameList.getItems());
                 gameLobbyController.lobbylist.setItems(lobbylist.getItems());
 
-//                primaryStage.setMaximized(true);
+                //primaryStage.setMaximized(true);
                 Scene scene = new Scene(gameLobbyRoot);
                 primaryStage.setScene(scene);
-//
-//                // Gets screen bounds
-//                Screen screen = Screen.getPrimary();
-//                Rectangle2D bounds = screen.getVisualBounds();
-//
-//                // Sets full screen bounds (without fullscreen mode)
-//                primaryStage.setX(bounds.getMinX());
-//                primaryStage.setY(bounds.getMinY());
-//                primaryStage.setWidth(bounds.getWidth());
-//                primaryStage.setHeight(bounds.getHeight());
-//
-//                // Bind the root pane to the scene dimensions
-//                gameLobbyRoot.prefWidthProperty().bind(scene.widthProperty());
-//                gameLobbyRoot.prefHeightProperty().bind(scene.heightProperty());
-//
-//                // removes white gap background effect
-//                scene.setFill(null);
 
                 // Show the window
                 primaryStage.show();
