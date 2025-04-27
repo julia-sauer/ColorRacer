@@ -18,7 +18,7 @@ class FieldTest {
   private Field neighbor;
 
   /**
-   * Setup a base field and a neighboring field before each test.
+   * Set up a base field and a neighboring field before each test.
    */
   @BeforeEach
   void setUp() {
