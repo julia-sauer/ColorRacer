@@ -35,7 +35,6 @@ public class SelectBikeDialogController {
      *
      * @param dialogStage The stage used for the dialog window.
      */
-
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
@@ -44,7 +43,7 @@ public class SelectBikeDialogController {
      * Handles the bike selection by determining which {@link Button} was clicked. Sets the selected
      * bike color accordingly and closes the dialog.
      *
-     * @param event the {@link ActionEvent} triggered by the {@link Button} press
+     * @param event The {@link ActionEvent} triggered by the {@link Button} press.
      */
     @FXML
     private void handleBikeSelection(ActionEvent event) {

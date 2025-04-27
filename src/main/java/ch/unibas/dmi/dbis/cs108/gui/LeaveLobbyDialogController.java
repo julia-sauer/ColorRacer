@@ -18,11 +18,14 @@ public class LeaveLobbyDialogController {
      */
     private Stage dialogStage;
 
+    /**
+     * The text that asks if the user wants to leave the lobby, respectively the server.
+     */
     @FXML
     private Text leaveStatement;
 
     /**
-     * A flag indicating whether the user confirmed leaving the lobby. Defaults to {@code false},
+     * A flag indicating whether the user confirmed leaving the lobby/server. Defaults to {@code false},
      * becomes {@code true} when "Leave" is clicked.
      */
     protected boolean isLeaving = false;
@@ -36,6 +39,12 @@ public class LeaveLobbyDialogController {
         this.dialogStage = dialogStage;
     }
 
+    /**
+     * Sets the {@link Text} in the dialog that asks either if the user wants to leave the lobby or
+     * if the user wants to leave the server.
+     *
+     * @param statement The string of the question depending on whether the user wants to leave the lobby or the server.
+     */
     public void setLeaveStatement(String statement) {
         leaveStatement.setText(statement);
     }
