@@ -189,7 +189,11 @@ public class Server {
     //TODO write Test
     public static void rollTheDice(int userId) {
         User user = UserList.getUser(userId);
-        ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(user);
+        ProtocolWriterServer protocolWriterServer = protocolWriters.get(user.getOut());
+        if (protocolWriterServer == null) {
+            protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+            protocolWriters.put(user.getOut(), protocolWriterServer);
+        }
         Lobby userlobby = getLobbyOfPlayer(user.getNickname());
         if (userlobby == null) {
             return;
@@ -368,7 +372,7 @@ public class Server {
      *
      * @param userId userId the ID of the player executing the move
      */
-    //TODO write Test
+
     public static void moveToLastSelectedField(int userId) {
         User user = UserList.getUser(userId);
         if (user == null) return;
@@ -603,7 +607,7 @@ public class Server {
         for (String player : userlobby.getPlayers()) {
             User lobbyUser = UserList.getUserByName(player);
             if (lobbyUser != null) {
-                ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(lobbyUser);
+                ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
                 try {
                     if (userlobby.getPodestPlace() == 1) {
                         protocolWriterServer.sendInfo(nickname + " won the game!");
