@@ -112,9 +112,8 @@ public class ClientHandler implements Runnable {
       String welcomeMsg = "Welcome to the Server!\n"; //Welcome message
       protocolWriterServer.sendInfo(welcomeMsg);
 
-      // TODO
       while (running) {
-        //out.write((String.valueOf((char) c)).getBytes(StandardCharsets.UTF_8));
+
       }
 
       System.out.println("Connection closed for Client " + clientNumber);
