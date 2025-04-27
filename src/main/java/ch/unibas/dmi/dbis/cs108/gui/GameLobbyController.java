@@ -419,6 +419,7 @@ public class GameLobbyController {
     private void handleFinish() {
         try {
             protocolWriter.sendCommand(Command.FNSH);
+            finishButton.setDisable(true);
         } catch (IOException e) {
             showError("Failed to end the game", e.getMessage());
         }
