@@ -132,6 +132,10 @@ public class WelcomeLobbyController {
         this.protocolWriter = protocolWriter;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     /**
      * This method updates the list of all players. First it clears the list which is important when a
      * user quits or changes their nickname, and then it reproduces it with the new updated list

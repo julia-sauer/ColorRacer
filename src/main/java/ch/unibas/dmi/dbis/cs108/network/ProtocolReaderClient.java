@@ -94,6 +94,9 @@ public class ProtocolReaderClient {
                     }
                     String lobbyName = parts[1].trim();
                     if (lobbyName.equals("Welcome")) {
+                        if (gameLobbyController != null) {
+                            gameLobbyController.switchToWelcomeLobby();
+                        }
                         break;
                     } else {
                         System.out.println("You joined: " + lobbyName);
@@ -139,7 +142,11 @@ public class ProtocolReaderClient {
                     }
                     String newNick = parts[1].trim();
                     System.out.println("Your nickname is " + newNick);
-                    waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().nickname = newNick);
+                    if (!gameLobby){
+                        waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().nickname = newNick);
+                    } else {
+                        gameLobbyController.setNickname(newNick);
+                    }
                     display("Your nickname is " + newNick);
                     break;
 

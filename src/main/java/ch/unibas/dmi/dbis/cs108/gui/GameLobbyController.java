@@ -352,6 +352,7 @@ public class GameLobbyController {
             }
             txtUsermsg.clear();
         }
+
     }
 
     /**
@@ -571,7 +572,7 @@ public class GameLobbyController {
             dialogStage.showAndWait();
 
             if (controller.isLeaving) {
-                switchToWelcomeLobby();
+                protocolWriter.sendJoin("Welcome");
             }
         } catch (IOException e) {
             showError("Failed to open leave lobby dialog", e.getMessage());
@@ -593,9 +594,9 @@ public class GameLobbyController {
                 welcomeController.setClient(client);
                 welcomeController.setPrimaryStage(primaryStage);
                 welcomeController.setProtocolWriter(client.getProtocolWriter());
+                welcomeController.setNickname(nickname);
                 client.setWelcomeController(welcomeController);
                 client.getProtocolReader().setWelcomeController(welcomeController);
-                protocolWriter.sendJoin("Welcome");
 
                 // Setup and show the GUI
                 primaryStage.setScene(new Scene(welcomeLobby));
@@ -864,6 +865,7 @@ public class GameLobbyController {
                     boolean amHost = !players.isEmpty()
                             && players.getFirst().equalsIgnoreCase(nickname);
                     setHost(amHost);
+                    displayChat("Controller nickname is: " + nickname);
                 }
             } catch (Exception e) {
                 showError("Failed to update lobby list", e.getMessage());
