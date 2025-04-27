@@ -14,7 +14,7 @@ Julia]]></description>
         <option id="filter.dueTodayTasks" value="false"/>
         <option id="filter.overdueTasks" value="false"/>
         <option id="filter.inProgressTodayTasks" value="false"/>
-        <timeline><![CDATA[9,10]]></timeline>
+        <timeline><![CDATA[10,9]]></timeline>
         <option id="color.recent"><![CDATA[#33ffff #006666 #ffff00]]></option>
     </view>
     <view id="resource-table">
@@ -102,7 +102,7 @@ Mockup]]></notes>
         </task>
         <task id="45" uid="a4fa18d3a3194141b962f6ecbc5e3ba4" name="Multiple lobbies possible" meeting="false" start="2025-04-02" duration="5" complete="100" priority="2" expand="true"/>
         <task id="46" uid="41e5ecb17c364325b491c9cfa2e57172" name="Game Lists" meeting="false" start="2025-04-03" duration="4" complete="100" expand="true"/>
-        <task id="47" uid="b56adfb2a97749a88acbe7d533a341f1" name="Game implementation is finished and put together without any bugs" meeting="false" start="2025-04-12" duration="3" complete="0" expand="true"/>
+        <task id="47" uid="b56adfb2a97749a88acbe7d533a341f1" name="Game implementation is finished and put together without any bugs" meeting="false" start="2025-04-12" duration="3" complete="100" expand="true"/>
         <task id="21" uid="5112d7c03a1d463eb7aac2f56cfa3935" name="Finish outline of the game" meeting="false" start="2025-03-31" duration="7" complete="100" expand="true">
             <notes><![CDATA[The main logic of the game and its fundamental mechanics are present and the game is playable.]]></notes>
             <depend id="39" type="2" difference="0" hardness="Strong"/>
@@ -124,18 +124,18 @@ Mockup]]></notes>
         </task>
         <task id="24" uid="4993c29cc3284aff954556ba4e77bc73" name="outwritten manual" meeting="false" start="2025-04-03" duration="4" complete="100" expand="true"/>
         <task id="25" uid="4e77328cec3a4c4daff2f85471e7fbc5" name="QA concept" meeting="false" start="2025-04-01" duration="5" complete="100" expand="true"/>
-        <task id="27" uid="8ac76885e0e04b89a4b9918a031af07c" name="GUI is put together and shows no bugs" meeting="false" start="2025-04-19" duration="6" complete="0" priority="4" expand="true"/>
+        <task id="27" uid="8ac76885e0e04b89a4b9918a031af07c" name="GUI is put together and shows no bugs" meeting="false" start="2025-04-19" duration="6" complete="70" priority="4" expand="true"/>
         <task id="54" uid="f20ce4c9c9bd41bfb631cd12a2a82b80" name="Fixing last bugs" meeting="false" start="2025-04-21" duration="5" complete="0" expand="true"/>
         <task id="55" uid="10096bb7830b4bb6af95fd60cf781f92" name="Handling errors accordingly" meeting="false" start="2025-04-21" duration="5" complete="0" expand="true"/>
-        <task id="49" uid="f0a607768b8a48cb9213d1d354b735b1" name="Mainlobby GUI" meeting="false" start="2025-04-10" duration="9" complete="0" priority="2" expand="true">
+        <task id="49" uid="f0a607768b8a48cb9213d1d354b735b1" name="Mainlobby GUI" meeting="false" start="2025-04-10" duration="9" complete="100" priority="2" expand="true">
             <depend id="27" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="50" uid="2a12bbd3582548b4be2a9d2b4ec1d700" name="Game GUI" meeting="false" start="2025-04-10" duration="9" complete="0" priority="2" expand="true">
+        <task id="50" uid="2a12bbd3582548b4be2a9d2b4ec1d700" name="Game GUI" meeting="false" start="2025-04-10" duration="9" complete="90" priority="2" expand="true">
             <depend id="27" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="28" uid="9195c31ba1d942fbad3c04bb03729c20" name="highscore list" meeting="false" start="2025-04-14" duration="6" complete="0" expand="true"/>
-        <task id="29" uid="8475b49dd6da4e259a6c2e7fd0d4dc1a" name="unit-tests" meeting="false" start="2025-04-09" duration="8" complete="0" expand="true"/>
-        <task id="48" uid="27b0f7cb00c544ebbaf26dad38c09e42" name="winner/loser-implementation" meeting="false" start="2025-04-23" duration="4" complete="0" expand="true"/>
+        <task id="28" uid="9195c31ba1d942fbad3c04bb03729c20" name="highscore list" meeting="false" start="2025-04-14" duration="6" complete="100" expand="true"/>
+        <task id="29" uid="8475b49dd6da4e259a6c2e7fd0d4dc1a" name="unit-tests" meeting="false" start="2025-04-09" duration="22" complete="50" expand="true"/>
+        <task id="48" uid="27b0f7cb00c544ebbaf26dad38c09e42" name="winner/loser-implementation" meeting="false" start="2025-04-23" duration="4" complete="100" expand="true"/>
         <task id="30" uid="b39038629b86437485d99c6dbb0d1258" name="Logo design" meeting="false" start="2025-05-02" duration="6" complete="0" expand="true">
             <depend id="51" type="2" difference="0" hardness="Strong"/>
         </task>
