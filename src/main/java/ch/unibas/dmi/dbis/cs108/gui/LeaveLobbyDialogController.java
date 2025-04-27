@@ -2,6 +2,7 @@ package ch.unibas.dmi.dbis.cs108.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -17,6 +18,9 @@ public class LeaveLobbyDialogController {
      */
     private Stage dialogStage;
 
+    @FXML
+    private Text leaveStatement;
+
     /**
      * A flag indicating whether the user confirmed leaving the lobby. Defaults to {@code false},
      * becomes {@code true} when "Leave" is clicked.
@@ -30,6 +34,10 @@ public class LeaveLobbyDialogController {
      */
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
+    }
+
+    public void setLeaveStatement(String statement) {
+        leaveStatement.setText(statement);
     }
 
     /**

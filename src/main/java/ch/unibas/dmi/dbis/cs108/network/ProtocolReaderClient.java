@@ -28,7 +28,7 @@ public class ProtocolReaderClient {
     private WelcomeLobbyController welcomeLobbyController; // Reference to the GUI welcomeLobbyController
     private GameLobbyController gameLobbyController;
     public boolean bike = false;
-    public boolean lobbyChanged = false;
+    public boolean gameLobby = false;
 
     /**
      * Creates a new {@code ProtocolReaderClient}.
@@ -234,7 +234,7 @@ public class ProtocolReaderClient {
                     }
                     String brodMsg = parts[1].trim();
                     //System.out.println(brodMsg); // Überprüfung über das Terminal
-                    if (!lobbyChanged) {
+                    if (!gameLobby) {
                         welcomeLobbyController.displayChat(brodMsg);
                         break;
                     }
@@ -274,7 +274,7 @@ public class ProtocolReaderClient {
                     // Expect the format: PLST::[player1, player2, ...]
                     String playersStr = parts[1];
                     List<String> players = parseListFromString(playersStr);
-                    if (!lobbyChanged) {
+                    if (!gameLobby) {
                         waitForControllerAndUpdate(
                                 () -> WelcomeLobbyController.getInstance().updatePlayerList(players));
                         break;
@@ -286,7 +286,7 @@ public class ProtocolReaderClient {
                 case GLST:
                     String gamesStr = parts[1];
                     List<String> games = parseListFromString(gamesStr);
-                    if (!lobbyChanged) {
+                    if (!gameLobby) {
                         waitForControllerAndUpdate(
                                 () -> WelcomeLobbyController.getInstance().updateGameList(games));
                         break;
@@ -298,7 +298,7 @@ public class ProtocolReaderClient {
                     // Expect: LOME::lobbyName::[member1, member2, ...]
                     String lobbyMembersStr = parts[1];
                     List<String> members = parseListFromString(lobbyMembersStr);
-                    if (!lobbyChanged) {
+                    if (!gameLobby) {
                         waitForControllerAndUpdate(
                                 () -> WelcomeLobbyController.getInstance().updateLobbyList(members));
                         break;
@@ -337,7 +337,7 @@ public class ProtocolReaderClient {
     private void displayChat(String message, String sender) {
         String formattedMessage = sender + ": " + message;
         //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
-        if (!lobbyChanged) {
+        if (!gameLobby) {
             welcomeLobbyController.displayChat(formattedMessage);
         } else {
             gameLobbyController.displayChat(formattedMessage);
@@ -357,7 +357,7 @@ public class ProtocolReaderClient {
     private void displayWhisp(String message, String sender) {
         String formattedMessage = "Whisper from " + sender + ": " + message;
         //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
-        if (!lobbyChanged) {
+        if (!gameLobby) {
             welcomeLobbyController.displayChat(formattedMessage);
         } else {
             gameLobbyController.displayChat(formattedMessage);
@@ -371,7 +371,7 @@ public class ProtocolReaderClient {
      * @param message The message that should be displayed in the Chat GUI.
      */
     private void display(String message) {
-        if (!lobbyChanged) {
+        if (!gameLobby) {
             waitForControllerAndUpdate(() -> WelcomeLobbyController.getInstance().displayChat(message));
         } else {
             waitForControllerAndUpdate(() -> GameLobbyController.getInstance().displayChat(message));
@@ -405,8 +405,8 @@ public class ProtocolReaderClient {
      * messages to the GameLobby. It is called in the {@link WelcomeLobbyController} when the GUI
      * changes to the {@link GameLobbyController}.
      */
-    public void changesController() {
-        this.lobbyChanged = true;
+    public void changesController(boolean gameLobby) {
+        this.gameLobby = gameLobby;
     }
 
     /**

@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -155,23 +156,30 @@ public class GameLobbyController {
      * The colored field {@link Button}s grouped by color.
      */
 
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button yellow1, yellow2, yellow3, yellow4, yellow5, yellow6, yellow7;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button red1, red2, red3, red4, red5, red6, red7;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button blue1, blue2, blue3, blue4, blue5, blue6, blue7, blue8, blue9, blue10;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button purple1, purple2, purple3, purple4, purple5, purple6, purple7, purple8, purple9, purple10;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10;
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button orange1, orange2, orange3, orange4, orange5, orange6, orange7, orange8, orange9, orange10;
 
     /**
      * The white starting field button for all players.
      */
-    @FXML @SuppressWarnings("unused")
+    @FXML
+    @SuppressWarnings("unused")
     private Button white1;
 
     /**
@@ -193,6 +201,11 @@ public class GameLobbyController {
      * The name of the lobby this player is currently in.
      */
     private String lobbyname;
+
+    /**
+     * The client that uses this Lobby.
+     */
+    private Client client;
 
     /**
      * Maps each player's nickname to their corresponding {@link ImageView} bike icon.
@@ -285,6 +298,7 @@ public class GameLobbyController {
      * @param client the client instance
      */
     public void setClient(Client client) {
+        this.client = client;
         this.protocolWriter = client.getProtocolWriter();
         this.protocolReader = client.getProtocolReader();
     }
@@ -517,11 +531,12 @@ public class GameLobbyController {
             Stage dialogStage = new Stage();
             dialogStage.initOwner(primaryStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.setTitle("Leave Lobby");
+            dialogStage.setTitle("Leave Server");
             dialogStage.setScene(new Scene(dialogPane));
 
             LeaveLobbyDialogController controller = loader.getController(); // sets controller
             controller.setDialogStage(dialogStage);
+            controller.setLeaveStatement("Would you like to leave the server?");
 
             dialogStage.showAndWait();
 
@@ -532,6 +547,59 @@ public class GameLobbyController {
         } catch (IOException e) {
             showError("Failed to open leave lobby dialog", e.getMessage());
         }
+    }
+
+    @FXML
+    private void handleLeaveLobby() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LeaveLobbyDialogTemplate.fxml"));
+            VBox dialogPane = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.initOwner(primaryStage);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setTitle("Leave Lobby");
+            dialogStage.setScene(new Scene(dialogPane));
+
+            LeaveLobbyDialogController controller = loader.getController(); // sets controller
+            controller.setDialogStage(dialogStage);
+            controller.setLeaveStatement("Would you like to leave this lobby?");
+
+            dialogStage.showAndWait();
+
+            if (controller.isLeaving) {
+                switchToWelcomeLobby();
+            }
+        } catch (IOException e) {
+            showError("Failed to open leave lobby dialog", e.getMessage());
+        }
+    }
+
+    public void switchToWelcomeLobby() {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeLobbyTemplate.fxml"));
+                BorderPane welcomeLobby = loader.load();
+
+                // Get the controller instance from the FXML loader
+                WelcomeLobbyController welcomeController = loader.getController();
+                welcomeController.setClient(client);
+                welcomeController.setPrimaryStage(primaryStage);
+                // Inject the ProtocolWriterClient into the ChatController.
+                welcomeController.setProtocolWriter(client.getProtocolWriter());
+                client.setWelcomeController(welcomeController);
+                client.getProtocolReader().setWelcomeController(welcomeController);
+                protocolWriter.sendJoin("Welcome");
+
+                // Setup and show the GUI
+                primaryStage.setMaximized(true);
+                primaryStage.setScene(new Scene(welcomeLobby));
+                primaryStage.setTitle("Welcome Lobby");
+                primaryStage.show();
+            } catch (IOException e) {
+                showError("Failed to load the WelcomeLobby", e.getMessage());
+            }
+        });
     }
 
     /**
