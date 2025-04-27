@@ -3,10 +3,11 @@ package ch.unibas.dmi.dbis.cs108.server;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.file.Paths;
 
 public class Highscore {
 
-  private static final String FILE_PATH = "src/main/resources/highscore.txt";
+  private static final String FILE_PATH = getHighscoreFilePath();
   private final List<String> highscoreList;
   private Integer gameNumber;
 
@@ -14,6 +15,11 @@ public class Highscore {
     highscoreList = new ArrayList<>();
     gameNumber = 1;
     loadHighscore();
+  }
+
+  private static String getHighscoreFilePath() {
+    String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
+    return Paths.get(basePath, "src", "main", "resources", "highscores.txt").toString();
   }
 
   private void loadHighscore() {

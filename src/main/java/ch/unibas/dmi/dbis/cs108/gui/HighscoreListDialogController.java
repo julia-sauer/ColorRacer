@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.List;
+import java.nio.file.Paths;
 
 /**
  * Controller class for the Highscore List Dialog.
@@ -22,7 +23,7 @@ public class HighscoreListDialogController {
     /**
      * The file path of where the {@code highscore.txt} file is saved.
      */
-    private static final String FILE_PATH = "src/main/resources/highscore.txt";
+    private static final String FILE_PATH = getHighscoreFilePath();
 
     /**
      * The stage representing the dialog window.
@@ -51,6 +52,11 @@ public class HighscoreListDialogController {
     @FXML
     private void initialize() {
         loadHighscores();
+    }
+
+    private static String getHighscoreFilePath() {
+        String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
+        return Paths.get(basePath, "src", "main", "resources", "highscore.txt").toString();
     }
 
     /**
