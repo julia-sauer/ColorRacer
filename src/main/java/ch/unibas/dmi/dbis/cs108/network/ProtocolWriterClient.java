@@ -198,6 +198,9 @@ public class ProtocolWriterClient {
     // Display whisper in sender's GUI
     if (welcomeLobbyController != null) {
       welcomeLobbyController.displayChat("Whisper sent to " + receiverNickname + ": " + message);
+      if (gameLobbyController != null) {
+        gameLobbyController.displayChat("Whisper sent to " + receiverNickname + ": " + message);
+      }
     }
   }
   // Create a whisper message with recipientId and message content
