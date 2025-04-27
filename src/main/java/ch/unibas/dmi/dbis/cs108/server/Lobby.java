@@ -23,19 +23,55 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Lobby implements Runnable {
 
+  /**
+   * Maximum number of players allowed in a lobby.
+   */
   public static final int MAX_PLAYERS = 4;
+
+  /**
+   * List of players' names currently in the lobby.
+   */
   public final List<String> players;
-  private Server server;
+
+  /**
+   * The name of the lobby.
+   */
   private String lobbyName;
+
+  /**
+   * Mapping from player names to their personal game board.
+   */
   private final Map<String, GameBoard> playerGameBoards;
-  public final List<String> playerOrder = new ArrayList<>(); // order of players according to join-order
+
+  /**
+   * The order of players according to their join order.
+   */
+  public final List<String> playerOrder = new ArrayList<>();
+
+  /**
+   * Index of the current player in {@link #playerOrder} whose turn it is.
+   */
   int currentPlayerIndex = 0;
-  private final Map<String, String> selectedColors = new HashMap<>();
-  private String hostName; // Player who created the lobby
+
+//  private final Map<String, String> selectedColors = new HashMap<>();
+  /**
+   * The name of the host (player who joined the lobby first).
+   */
+  private String hostName;
+
+  /**
+   * A list of winners at the end of the game.
+   */
   public final List<String> winners = new ArrayList<>();
+
+  /**
+   * The first podium place to assign when a player finishes.
+   */
   private int podestPlace = 1;
 
-  private GameBoard gameBoard = new GameBoard();
+  /**
+   * Readiness status of each player, keyed by player name (true = ready).
+   */
   public final Map<String, Boolean> readyStatus = new ConcurrentHashMap<>();
 
   /**
@@ -174,7 +210,7 @@ public class Lobby implements Runnable {
   public synchronized void removePlayer(String playerName) {
     players.remove(playerName);
     playerOrder.remove(playerName); // Player removed from sequence too
-    selectedColors.remove(playerName);
+//    selectedColors.remove(playerName);
     playerGameBoards.remove(playerName);
     readyStatus.remove(playerName);
     winners.remove(playerName);
@@ -373,7 +409,7 @@ public class Lobby implements Runnable {
   }
 
   /**
-   * creates a gameboard specific for the player with playerName
+   * Creates a gameboard specific for the player with playerName
    *
    * @param playerName Player name (of the Player for whom this Gameboard is).
    * @return the gameboard
