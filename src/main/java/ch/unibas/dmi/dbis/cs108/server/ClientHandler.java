@@ -114,14 +114,14 @@ public class ClientHandler implements Runnable {
 
             }
 
-            System.out.println("Connection closed for Client " + clientNumber);
-            clientSocket.close();
-            if (pingThread != null) {
-                pingThread.stopPinging();
-            }
-            removeUser(clientNumber); // the invocation of the method removeUser
-            Server.updateAllClients();
-            Server.ClientDisconnected();
+//            System.out.println("Connection closed for Client " + clientNumber);
+//            clientSocket.close();
+//            if (pingThread != null) {
+//                pingThread.stopPinging();
+//            }
+//            removeUser(clientNumber); // the invocation of the method removeUser
+//            Server.updateAllClients();
+//            Server.ClientDisconnected();
 
         } catch (IOException e) {
             System.err.println("Error with Client " + clientNumber + ": " + e.getMessage());
@@ -151,9 +151,14 @@ public class ClientHandler implements Runnable {
     public void disconnectClient() {
         try {
             running = false;
-            if (!clientSocket.isClosed()) {
-                clientSocket.close();  // Verbindung trennen
+            System.out.println("Connection closed for Client " + clientNumber);
+            clientSocket.close();
+            if (pingThread != null) {
+                pingThread.stopPinging();
             }
+            removeUser(clientNumber); // the invocation of the method removeUser
+            Server.updateAllClients();
+            Server.ClientDisconnected();
         } catch (IOException e) {
             System.err.println("Error while closing client socket: " + e.getMessage());
         }
@@ -163,10 +168,5 @@ public class ClientHandler implements Runnable {
             userLobby.removePlayer(nickname);
             System.out.println("User '" + nickname + "' removed from lobby: " + userLobby.getLobbyName());
         }
-        if (pingThread != null) {
-            pingThread.stopPinging();
-        } // Ping stoppen
-        removeUser(userId);       // aus UserList entfernen
-        Server.ClientDisconnected(); // Counter runterzählen
     }
 }

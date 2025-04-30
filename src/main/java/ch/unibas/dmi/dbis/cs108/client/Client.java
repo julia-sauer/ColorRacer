@@ -5,6 +5,7 @@ import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
+import javafx.application.Platform;
 
 import java.net.*;
 import java.io.*;
@@ -43,6 +44,11 @@ public class Client {
      */
     private ProtocolWriterClient protocolWriterClient;
 
+    //TODO JavaDOC
+    private Socket sock;
+    private InputStream in;
+    private OutputStream out;
+
     /**
      * Constructs a new {@code Client} with the specified host, port, and username. If the username is
      * {@code null} or empty, a default name with the system's username is used.
@@ -70,9 +76,9 @@ public class Client {
     public void start() {
         try {
             // Verbindung zum Server herstellen
-            Socket sock = new Socket(host, port);
-            InputStream in = sock.getInputStream();
-            OutputStream out = sock.getOutputStream();
+            this.sock = new Socket(host, port);
+            this.in   = sock.getInputStream();
+            this.out  = sock.getOutputStream();
 
             this.protocolWriterClient = new ProtocolWriterClient(out);
 
@@ -82,6 +88,7 @@ public class Client {
                 try {
                     protocolReader.readLoop();
                 } catch (IOException e) {
+                    disconnect();
                     System.err.println("Error when reading messages: " + e.getMessage());
                 }
             });
@@ -137,6 +144,7 @@ public class Client {
                 } else if (line.equalsIgnoreCase("YES")) {
                     protocolClient.sendCommandAndString(Command.QCNF, "YES");
                     System.out.println("You confirmed to leave the game.");
+                    disconnect();
                     break;
                 } else if (line.equalsIgnoreCase("NO")) {
                     protocolClient.sendCommandAndString(Command.QCNF, "NO");
@@ -289,5 +297,30 @@ public class Client {
      */
     public ProtocolWriterClient getProtocolWriter() {
         return protocolWriterClient;
+    }
+
+    //TODO JavaDOC
+    public void disconnect() {
+        try {
+            // Sag dem Server, dass wir gehen:
+            if (protocolWriterClient != null) {
+                protocolWriterClient.sendCommandAndString(Command.QCNF, "YES");
+            }
+        } catch (IOException ignored) { }
+
+        stopClient();  // schließt Streams + Socket + Platform.exit()
+    }
+
+    //TODO JavaDOC
+    private void stopClient() {
+        try {
+            in.close();
+            out.close();
+            sock.close();
+            Platform.exit();
+            System.exit(0);
+        } catch (IOException e) {
+            System.err.println("Error closing client: " + e.getMessage());
+        }
     }
 }

@@ -209,8 +209,7 @@ public class WelcomeLobbyController {
             dialogStage.showAndWait();
 
             if (controller.isLeaving) {
-                protocolWriter.sendCommandAndString(Command.QCNF, "YES");
-                Platform.exit();
+                client.disconnect();
             }
         } catch (IOException e) {
             showError("Failed to open leave lobby dialog", e.getMessage());

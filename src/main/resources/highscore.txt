@@ -7,3 +7,7 @@ Spiel 2 (highscoreTest2):
 Spiel 3 (testhigh):
 1. place: jana
 2. place: stego
+Spiel 4 (lobster):
+1. place: Jana
+2. place: Julia
+3. place: Ana

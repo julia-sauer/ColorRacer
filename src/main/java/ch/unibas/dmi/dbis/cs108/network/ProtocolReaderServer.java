@@ -231,7 +231,6 @@ public class ProtocolReaderServer {
                         for (Lobby lobby : Server.lobbies) {
                             if (lobby.getPlayers().contains(nickname)) {
                                 userLobby = lobby;
-                                break;
                             }
                         }
                         if (userLobby != null) {
@@ -240,10 +239,10 @@ public class ProtocolReaderServer {
 
                         // 🧹 2. Jetzt sauberen Disconnect durchführen
                         clientHandler.disconnectClient();
-                        if (disconnectCallback != null) {
-                            disconnectCallback.run();
-                            Server.updateAllClients();
-                        }
+//                        if (disconnectCallback != null) {
+//                            disconnectCallback.run();
+//                            Server.updateAllClients();
+//                        }
 
                     } else if ("NO".equals(confirmation)) {
                         // do nothing, just notify user
