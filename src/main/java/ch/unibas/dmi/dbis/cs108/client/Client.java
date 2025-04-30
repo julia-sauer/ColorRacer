@@ -299,28 +299,28 @@ public class Client {
         return protocolWriterClient;
     }
 
-    //TODO JavaDOC
+    /**
+     * Disconnects the client from the server.
+     * This method performs the following steps:
+     *     <li>Sends a {@code QCNF YES} command to inform the server of the client's intention to leave the server.</li>
+     *     <li>Closes the input and output streams as well as the socket connection.</li>
+     *     <li>Terminates the JavaFX application via {@link javafx.application.Platform#exit()}.</li>
+     *     <li>Terminates the Java Virtual Machine with {@code System.exit(0)}.</li>
+     * This ensures that both the network connection and the graphical interface are closed cleanly,
+     * and the entire application exits.
+     */
     public void disconnect() {
         try {
-            // Sag dem Server, dass wir gehen:
             if (protocolWriterClient != null) {
                 protocolWriterClient.sendCommandAndString(Command.QCNF, "YES");
             }
-        } catch (IOException ignored) { }
-
-        stopClient();  // schließt Streams + Socket + Platform.exit()
-    }
-
-    //TODO JavaDOC
-    private void stopClient() {
-        try {
             in.close();
             out.close();
             sock.close();
             Platform.exit();
             System.exit(0);
         } catch (IOException e) {
-            System.err.println("Error closing client: " + e.getMessage());
+            System.err.println("Error closing connection: " + e.getMessage());
         }
     }
 }
