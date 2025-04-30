@@ -18,6 +18,7 @@ public class User {
     private final OutputStream out; // OutputStream for communication with client
     private String bikeColor;
     private boolean hasRolled;
+    private int rollCount;
 
     /**
      * Constructor for creating a new user.
@@ -32,6 +33,7 @@ public class User {
         this.nickname = nickname;
         this.out = out;
         this.hasRolled = false;
+        this.rollCount = 0;
     }
 
     /**
@@ -104,6 +106,21 @@ public class User {
      */
     public void setHasRolled(boolean hasRolled) {
         this.hasRolled = hasRolled;
+    }
+
+    /**
+     * This method increases the rollCount of the user by 1.
+     */
+    public void setRollCount() {
+        rollCount += 1;
+    }
+
+    /**
+     * This method returns the rollCount of the user.
+     * @return How often the user rolled the dice.
+     */
+    public int getRollCount() {
+        return rollCount;
     }
 
 }

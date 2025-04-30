@@ -252,6 +252,7 @@ public class Server {
         } catch (IOException e) {
             System.err.println("Error sending rolled colors");
         }
+        user.setRollCount();
     }
 
 
@@ -628,6 +629,7 @@ public class Server {
                 try {
                     if (userlobby.getPodestPlace() == 1) {
                         protocolWriterServer.sendInfo(nickname + " won the game!");
+                        protocolWriterServer.sendInfo("You needed " + user.getRollCount() + " rolls.");
                     } else {
                         protocolWriterServer.sendInfo(nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
                     }
