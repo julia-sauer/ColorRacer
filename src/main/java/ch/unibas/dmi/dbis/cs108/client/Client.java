@@ -44,9 +44,22 @@ public class Client {
      */
     private ProtocolWriterClient protocolWriterClient;
 
-    //TODO JavaDOC
+    /**
+     * The socket representing the client's TCP connection to the server.
+     * Used to send and receive data over the network.
+     */
     private Socket sock;
+
+    /**
+     * The input stream for receiving data from the server.
+     * Wraps the socket's input stream and is used by the {@link ProtocolReaderClient}.
+     */
     private InputStream in;
+
+    /**
+     * The output stream for sending data to the server.
+     * Wraps the socket's output stream and is used by the {@link ProtocolWriterClient}.
+     */
     private OutputStream out;
 
     /**
