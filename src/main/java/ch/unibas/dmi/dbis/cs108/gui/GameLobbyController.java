@@ -24,6 +24,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.animation.TranslateTransition;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -786,7 +788,31 @@ public class GameLobbyController {
                 double factor = i - (n-1)/2.0;
                 double bx = fieldCenterX + factor*stepX - bike.getFitWidth()/2;
                 double by = fieldCenterY + factor*stepY - bike.getFitHeight()/2;
-                bike.relocate(bx, by);
+
+                // get the bike’s current on‑screen position:
+                double currentX = bike.getLayoutX();
+                double currentY = bike.getLayoutY();
+
+                // clear any previous translate offsets
+                bike.setTranslateX(0);
+                bike.setTranslateY(0);
+
+                // schedule an animation from (0,0) → (targetX−currentX, targetY−currentY)
+                TranslateTransition move = new TranslateTransition(Duration.millis(300), bike);
+                move.setFromX(0);
+                move.setFromY(0);
+                move.setToX(bx - currentX);
+                move.setToY(by - currentY);
+
+                // when the animation finishes, snap the bike node to exactly the target layout:
+                move.setOnFinished(evt -> {
+                    bike.setTranslateX(0);
+                    bike.setTranslateY(0);
+                    bike.setLayoutX(bx);
+                    bike.setLayoutY(by);
+                });
+                // play!
+                move.play();
 
                 Label nameLbl = null;
                 for (var e : playerLabels.entrySet()) {
