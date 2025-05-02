@@ -19,6 +19,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -1111,5 +1112,29 @@ public class GameLobbyController {
         } catch (IOException e) {
             showError("Error reading highscore", e.getMessage());
         }
+    }
+
+    @FXML
+    public void displayWinners(List<String> podium) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WinnersListTemplate.fxml"));
+            StackPane dialogPane = fxmlLoader.load();
+
+            Stage dialogStage = new Stage(StageStyle.TRANSPARENT);
+            dialogStage.initStyle(StageStyle.UNDECORATED);
+            dialogStage.initOwner(primaryStage);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setTitle("Winner");
+            dialogStage.setScene(new Scene(dialogPane));
+            WinnersListController winnersListController = fxmlLoader.getController();
+            winnersListController.setWinnersList(podium);
+            winnersListController.setDialogStage(dialogStage);
+
+            dialogStage.show();
+            winnersListController.launchConfettiFromSides();
+        } catch (IOException e) {
+            showError("Error reading winners", e.getMessage());
+        }
+
     }
 }

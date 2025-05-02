@@ -360,6 +360,19 @@ public class ProtocolReaderClient {
                     display(data.replace("|", "\n"));
                     break;
 
+                case WINN:
+                    if (parts.length < 2 || parts[1].trim().isEmpty()) {
+                        System.err.println("Error: No Data received.");
+                    }
+                    String[] names = parts[1].split(",");
+                    List<String> podium = new ArrayList<>();
+                    for (int i = 0; i < names.length; i++) {
+                        podium.add((i + 1) + ". " + names[i]);
+                    }
+                    Platform.runLater(() ->
+                            GameLobbyController.getInstance().displayWinners(podium)
+                    );
+
                 default:
                     System.out.println("Unknown command from Server: " + line);
                     break;

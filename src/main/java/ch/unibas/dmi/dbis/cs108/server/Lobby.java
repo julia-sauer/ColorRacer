@@ -53,7 +53,6 @@ public class Lobby implements Runnable {
      */
     int currentPlayerIndex;
 
-//  private final Map<String, String> selectedColors = new HashMap<>();
     /**
      * The name of the host (player who joined the lobby first).
      */
@@ -210,7 +209,6 @@ public class Lobby implements Runnable {
     public synchronized void removePlayer(String playerName) {
         players.remove(playerName);
         playerOrder.remove(playerName); // Player removed from sequence too
-//    selectedColors.remove(playerName);
         playerGameBoards.remove(playerName);
         readyStatus.remove(playerName);
         winners.remove(playerName);

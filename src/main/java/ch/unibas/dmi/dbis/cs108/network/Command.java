@@ -145,6 +145,11 @@ public enum Command {
     HIGH,
 
     /**
+     * Server sends the winner list.
+     */
+    WINN,
+
+    /**
      * Handles that the game has ended. Either the host stopped it or the game was finished.
      */
     FNSH;

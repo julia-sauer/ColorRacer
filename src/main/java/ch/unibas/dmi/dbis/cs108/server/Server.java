@@ -674,6 +674,8 @@ public class Server {
                             ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(lobbyUser);
                             try {
                                 protocolWriterServer.sendInfo(player + " is on the " + userlobby.getPodestPlace() + ". place!");
+                                String winnersList = String.join(", ", userlobby.winners);
+                                protocolWriterServer.sendCommandAndString(Command.WINN, winnersList);
                             } catch (IOException e) {
                                 System.err.println("Could not send Info.");
                             }
