@@ -212,6 +212,12 @@ public class GameLobbyController {
     private final Map<String, ImageView> playerBikes = new HashMap<>();
 
     /**
+     * Maps each player's nickname to their corresponding {@link Label} that displays their name on the board above
+     * their bike image.
+     */
+    private final Map<String,Label>    playerLabels = new HashMap<>();
+
+    /**
      * Maps each selectable bike color to its corresponding {@link Image} graphic.
      */
     private final Map<String, Image> bikeImages = new HashMap<>();
@@ -690,8 +696,14 @@ public class GameLobbyController {
             ImageView iv = new ImageView(img);
             iv.setFitWidth(46);
             iv.setFitHeight(32);
+
+            Label lbl = new Label(player);
+            lbl.setMouseTransparent(true);
+            lbl.setStyle("-fx-font-size: 10px;");
+
             playerBikes.put(player, iv);
-            gameBoard.getChildren().add(iv);
+            playerLabels.put(player, lbl);
+            gameBoard.getChildren().addAll(iv, lbl);
             // place at starting field:
             updatePlayerPosition(player, "white1");
         });
@@ -706,30 +718,67 @@ public class GameLobbyController {
      */
     public void updatePlayerPosition(String player, String fieldId) {
         ImageView iv = playerBikes.get(player);
-        if (iv == null) {
+        Label     lbl = playerLabels.get(player);
+        if (iv == null || lbl == null) {
             return;
         }
         Button fld = lookupButton(fieldId);
         if (fld == null) {
             return;
         }
-        double x = fld.getLayoutX() + (fld.getWidth() - iv.getFitWidth()) / 2;
-        double y = fld.getLayoutY() + (fld.getHeight() - iv.getFitHeight()) / 2;
+        double fieldCenterX = fld.getLayoutX() + fld.getWidth()  / 2;
+        double fieldCenterY = fld.getLayoutY() + fld.getHeight() / 2;
 
-        // make the bike image use the very same rotation
         DoubleBinding bikeAngle = (DoubleBinding) Bindings
                 .when(fld.rotateProperty().isEqualTo(180)).then(0.0)
                 .otherwise(fld.rotateProperty());
         iv.rotateProperty().bind(bikeAngle);
 
-        // mirror horizontally when button at 180°
         iv.scaleXProperty().bind(
                 Bindings.when(fld.rotateProperty().isEqualTo(180))
                         .then(-1.0)
                         .otherwise(1.0)
         );
+        Platform.runLater(() -> {
+            List<ImageView> group = new ArrayList<>();
+            for (ImageView other : playerBikes.values()) {
+                double cx = other.getLayoutX() + other.getFitWidth()/2;
+                double cy = other.getLayoutY() + other.getFitHeight()/2;
+                if (Math.abs(cx - fieldCenterX) < 1 && Math.abs(cy - fieldCenterY) < 1) {
+                    group.add(other);
+                }
+            }
+            if (!group.contains(iv)) group.add(iv);
 
-        Platform.runLater(() -> iv.relocate(x, y));
+            int   n    = group.size();
+            double stepX = 10;
+            double stepY = 5;
+
+            for (int i = 0; i < n; i++) {
+                ImageView bike = group.get(i);
+                double factor = i - (n-1)/2.0;
+                double bx = fieldCenterX + factor*stepX - bike.getFitWidth()/2;
+                double by = fieldCenterY + factor*stepY - bike.getFitHeight()/2;
+                bike.relocate(bx, by);
+
+                Label nameLbl = null;
+                for (var e : playerLabels.entrySet()) {
+                    if (playerBikes.get(e.getKey()) == bike) {
+                        nameLbl = e.getValue();
+                        break;
+                    }
+                }
+                if (nameLbl != null) {
+                    nameLbl.applyCss();
+                    nameLbl.layout();
+                    double lw = nameLbl.prefWidth(-1), lh = nameLbl.prefHeight(-1);
+                    double lx = bx + (bike.getFitWidth() - lw)/2;
+                    double ly = by - lh - 2;
+                    nameLbl.resize(lw, lh);
+                    nameLbl.relocate(lx, ly);
+                }
+            }
+        });
     }
 
     /**
