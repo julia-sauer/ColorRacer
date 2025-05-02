@@ -1,12 +1,22 @@
+@font-face {
+    font-family: 'VT323';
+    src: url('VT323-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Pixel Emulator';
+    src: url('PixelEmulator-xq08.ttf');
+}
+
 /* Root: soft sky background with grassy vibes */
 .root {
     -fx-background-color: linear-gradient(to bottom, #d4f4dd, #ffffff);
-    -fx-font-family: "Press Start 2P", "Pixel Emulator", "monospace";
 }
 
 /* Welcome and header text */
 .welcome-text, .header-label, .dialog-header {
-    -fx-font-size: 30px;
+    -fx-font-family: "Pixel Emulator";
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #2e7d32; /* Deep green */
     -fx-effect: dropshadow(gaussian, rgba(46, 125, 50, 0.3), 4, 0.4, 0, 1);
@@ -25,9 +35,10 @@
 
 /* Game buttons */
 .game-button {
+    -fx-font-family: 'VT323';
     -fx-background-color: linear-gradient(to bottom, #66bb6a, #43a047);
     -fx-text-fill: #fff;
-    -fx-font-size: 20px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-padding: 10 20;
     -fx-background-radius: 10;
@@ -79,9 +90,10 @@
 }
 
 .list-cell {
+    -fx-font-family: 'VT323';
     -fx-background-color: transparent;
     -fx-text-fill: #2e7d32;
-    -fx-font-size: 13px;
+    -fx-font-size: 16px;
     -fx-wrap-text: false;
 }
 
@@ -101,8 +113,10 @@
 }
 
 .menu {
+    -fx-font-family: 'VT323';
     -fx-text-fill: #2e7d32;
     -fx-font-weight: bold;
+    -fx-font-size: 16;
 }
 
 .menu-item {
@@ -116,6 +130,7 @@
 
 /* TextField and TextArea */
 .text-field, .text-area {
+    -fx-font-family: 'VT323';
     -fx-background-color: #ffffff;
     -fx-border-color: #a5d6a7;
     -fx-border-width: 2;
@@ -132,6 +147,7 @@
 }
 
 .titled-pane {
+    -fx-font-family: 'VT323';
     -fx-background-color: #f1f8e9;
     -fx-border-color: #aed581;
     -fx-border-width: 2;
@@ -141,6 +157,7 @@
 }
 
 .titled-pane > .title {
+    -fx-font-family: 'VT323';
     -fx-background-color: #a5d6a7;
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -174,12 +191,13 @@
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-padding: 10;
-    -fx-font-family: "Press Start 2P", "Pixel Emulator", "monospace";
+    -fx-font-family: 'VT323';
     -fx-font-size: 18px;
 }
 
 /* This styles the tab header area (where the tabs themselves are) */
 .tab-pane > .tab-header-area {
+    -fx-font-family: 'VT323';
     -fx-background-color: linear-gradient(to bottom, #c5e1a5, #a5d6a7);
     -fx-border-color: #aed581;
     -fx-border-width: 0 0 2 0;
@@ -190,6 +208,7 @@
 
 /* Styles individual tabs */
 .tab-pane .tab {
+    -fx-font-family: 'VT323';
     -fx-background-color: transparent;
     -fx-padding: 6 12;
     -fx-text-fill: #2e7d32;
@@ -236,22 +255,20 @@
     -fx-background-color: rgba(76, 175, 80, 0.15);
 }
 
-/*.field-button:pressed {*/
-/*    !* bright green border + slight fill on click *!*/
-/*    -fx-border-color: #ffea00; !* same as your focused state *!*/
-/*    -fx-border-width: 2px;*/
-/*    -fx-background-color: rgba(102, 187, 106, 0.2);*/
-/*}*/
-
-/*.field-button:focused {*/
-/*    !* keyboard‐focus should also show the border *!*/
-/*    -fx-border-color: #ffea00;*/
-/*    -fx-border-width: 2px;*/
-/*}*/
-
 /* Highlighted field stays green until cleared */
 .field-button-selected {
     -fx-border-color: #66bb6a; /* same green as click state */
     -fx-border-width: 3px;
     -fx-background-color: rgba(102, 187, 106, 0.25);
+}
+
+.nickname-label {
+    -fx-font-family: 'VT323';
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 0.4, 0, 1);
+    -fx-padding: 2 4;
+    -fx-background-color: rgba(0, 0, 0, 0.13);
+    -fx-background-radius: 4;
 }

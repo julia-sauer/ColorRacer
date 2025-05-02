@@ -699,7 +699,7 @@ public class GameLobbyController {
 
             Label lbl = new Label(player);
             lbl.setMouseTransparent(true);
-            lbl.setStyle("-fx-font-size: 10px;");
+            lbl.getStyleClass().add("nickname-label");
 
             playerBikes.put(player, iv);
             playerLabels.put(player, lbl);
@@ -773,7 +773,7 @@ public class GameLobbyController {
                     nameLbl.layout();
                     double lw = nameLbl.prefWidth(-1), lh = nameLbl.prefHeight(-1);
                     double lx = bx + (bike.getFitWidth() - lw)/2;
-                    double ly = by - lh - 2;
+                    double ly = by - lh - 6;
                     nameLbl.resize(lw, lh);
                     nameLbl.relocate(lx, ly);
                 }
