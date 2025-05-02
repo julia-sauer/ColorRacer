@@ -21,7 +21,8 @@ public class WinnersListController {
      * The root pane container loaded from the FXML file.
      * Used as the parent for GUI elements, including confetti.
      */
-    @FXML private StackPane rootPane;
+    @FXML
+    private StackPane rootPane;
 
     /**
      * The confetti animation component used to celebrate winners.

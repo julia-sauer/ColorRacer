@@ -4,6 +4,9 @@ import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -11,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -117,6 +121,11 @@ public class GameLobbyController {
     public Menu bikeOption;
 
     /**
+     * The {@link StackPane} that is used for displaying whose turn it is.
+     */
+    public StackPane overlayPane;
+
+    /**
      * The {@link Button} that lets the player roll the dice.
      */
     @FXML
@@ -219,7 +228,7 @@ public class GameLobbyController {
      * Maps each player's nickname to their corresponding {@link Label} that displays their name on the board above
      * their bike image.
      */
-    private final Map<String,Label>    playerLabels = new HashMap<>();
+    private final Map<String, Label> playerLabels = new HashMap<>();
 
     /**
      * Maps each selectable bike color to its corresponding {@link Image} graphic.
@@ -266,6 +275,7 @@ public class GameLobbyController {
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/darkbluebike.png"))));
 
         moveButton.setDisable(true);   // start out disabled
+        overlayPane.setMouseTransparent(true);
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
@@ -528,6 +538,57 @@ public class GameLobbyController {
     }
 
     /**
+     * Displays a temporary "It's ...'s turn" notification centered on the game board.
+     * <p>
+     * The notification appears with a fade-in animation, remains visible for a short
+     * duration, then fades out and disappears automatically. If the provided player name
+     * matches the local player's nickname, the message is replaced with "It’s Your turn!".
+     * <p>
+     * This method ensures UI updates are run on the JavaFX Application Thread using {@code Platform.runLater}.
+     *
+     * @param turnNotification The message to display, typically in the format "It’s X’s turn!"
+     *                         where X is the player's name (e.g., "It’s Alice’s turn!").
+     */
+    public void showTurnNotification(String turnNotification) {
+        Platform.runLater(() -> {
+            Label turnLabel = new Label();
+            String[] separate = turnNotification.split(" ");
+            String[] name = separate[1].split("'");
+            if (name[0].trim().equals(nickname.trim())) {
+                turnLabel.setText("It’s Your turn!");
+            } else {
+                turnLabel.setText(turnNotification);
+            }
+            turnLabel.setStyle("""
+                        -fx-font-size: 24px;
+                        -fx-font-family: 'VT323';
+                        -fx-font-weight: bold;
+                        -fx-text-fill: white;
+                        -fx-background-color: rgba(0,0,0,0.7);
+                        -fx-padding: 10px 20px;
+                        -fx-background-radius: 8px;
+                    """);
+            // StackPane auto-centers its children
+            overlayPane.getChildren().add(turnLabel);
+            StackPane.setAlignment(turnLabel, Pos.CENTER);
+
+            // build the fade‑in → pause → fade‑out
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(300), turnLabel);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+
+            PauseTransition stay = new PauseTransition(Duration.seconds(2));
+
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(300), turnLabel);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+            fadeOut.setOnFinished(e -> overlayPane.getChildren().remove(turnLabel));
+
+            new SequentialTransition(fadeIn, stay, fadeOut).play();
+        });
+    }
+
+    /**
      * This method opens a dialog to ask the user if they want to leave the server. If the user wants
      * to leave a {@code QCNF} command is sent over the {@link ProtocolWriterClient} to the server and the window closes.
      */
@@ -747,7 +808,7 @@ public class GameLobbyController {
      */
     public void updatePlayerPosition(String player, String fieldId) {
         ImageView iv = playerBikes.get(player);
-        Label     lbl = playerLabels.get(player);
+        Label lbl = playerLabels.get(player);
         if (iv == null || lbl == null) {
             return;
         }
@@ -755,7 +816,7 @@ public class GameLobbyController {
         if (fld == null) {
             return;
         }
-        double fieldCenterX = fld.getLayoutX() + fld.getWidth()  / 2;
+        double fieldCenterX = fld.getLayoutX() + fld.getWidth() / 2;
         double fieldCenterY = fld.getLayoutY() + fld.getHeight() / 2;
 
         DoubleBinding bikeAngle = (DoubleBinding) Bindings
@@ -771,23 +832,23 @@ public class GameLobbyController {
         Platform.runLater(() -> {
             List<ImageView> group = new ArrayList<>();
             for (ImageView other : playerBikes.values()) {
-                double cx = other.getLayoutX() + other.getFitWidth()/2;
-                double cy = other.getLayoutY() + other.getFitHeight()/2;
+                double cx = other.getLayoutX() + other.getFitWidth() / 2;
+                double cy = other.getLayoutY() + other.getFitHeight() / 2;
                 if (Math.abs(cx - fieldCenterX) < 1 && Math.abs(cy - fieldCenterY) < 1) {
                     group.add(other);
                 }
             }
             if (!group.contains(iv)) group.add(iv);
 
-            int   n    = group.size();
+            int n = group.size();
             double stepX = 10;
             double stepY = 5;
 
             for (int i = 0; i < n; i++) {
                 ImageView bike = group.get(i);
-                double factor = i - (n-1)/2.0;
-                double bx = fieldCenterX + factor*stepX - bike.getFitWidth()/2;
-                double by = fieldCenterY + factor*stepY - bike.getFitHeight()/2;
+                double factor = i - (n - 1) / 2.0;
+                double bx = fieldCenterX + factor * stepX - bike.getFitWidth() / 2;
+                double by = fieldCenterY + factor * stepY - bike.getFitHeight() / 2;
 
                 // get the bike’s current on‑screen position:
                 double currentX = bike.getLayoutX();
@@ -825,7 +886,7 @@ public class GameLobbyController {
                     nameLbl.applyCss();
                     nameLbl.layout();
                     double lw = nameLbl.prefWidth(-1), lh = nameLbl.prefHeight(-1);
-                    double lx = bx + (bike.getFitWidth() - lw)/2;
+                    double lx = bx + (bike.getFitWidth() - lw) / 2;
                     double ly = by - lh - 6;
                     nameLbl.resize(lw, lh);
                     nameLbl.relocate(lx, ly);
@@ -1140,6 +1201,17 @@ public class GameLobbyController {
         }
     }
 
+    /**
+     * Displays a modal dialog showing the list of winners.
+     * <p>
+     * Loads the {@code WinnersListTemplate.fxml}, sets up a new undecorated and transparent
+     * modal stage, and injects the given list of winner names into the corresponding controller.
+     * It also triggers a visual confetti animation once the dialog is shown.
+     * <p>
+     * If the FXML resource fails to load, an error dialog is shown instead.
+     *
+     * @param podium A list of player names representing the winners, ordered by placement (e.g., 1st to 4th)
+     */
     @FXML
     public void displayWinners(List<String> podium) {
         try {

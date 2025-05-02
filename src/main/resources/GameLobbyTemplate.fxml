@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" stylesheets="@styleSheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.GameLobbyController">
@@ -179,6 +180,7 @@
                         <Button fx:id="blue9" layoutX="495.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="41.0" prefWidth="65.0" styleClass="field-button" />
                         <Button fx:id="blue10" layoutX="353.0" layoutY="358.0" minWidth="38.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="61.0" prefWidth="40.0" styleClass="field-button" />
                         <Button fx:id="white1" layoutX="312.0" layoutY="298.0" minWidth="39.0" mnemonicParsing="false" prefHeight="122.0" prefWidth="40.0" styleClass="field-button" />
+                  <StackPane fx:id="overlayPane" prefHeight="455.0" prefWidth="680.0" />
                     </children>
                 </AnchorPane>
             </children>

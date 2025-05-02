@@ -184,10 +184,14 @@ public class ProtocolReaderClient {
                         String[] nickChange = parts[1].split(" ");
                         String oldNick = nickChange[1];
                         String newestNick = nickChange[6];
-                        if(gameLobby) {
+                        if (gameLobby) {
                             GameLobbyController.getInstance().updatePlayersName(oldNick, newestNick);
                         }
                         display(msg);
+                    } else if (parts[1].startsWith("It's ")) {
+                        Platform.runLater(() ->
+                                GameLobbyController.getInstance().showTurnNotification(msg)
+                        );
                     } else {
                         display(msg);
                     }

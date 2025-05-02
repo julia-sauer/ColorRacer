@@ -67,10 +67,18 @@ public class GUI extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Called when the JavaFX application is stopping for example when closing the window with the x in the top right corner of the window.
+     * <p>
+     * Ensures that the client is properly disconnected before the application exits,
+     * preventing potential resource leaks or hanging network connections.
+     *
+     * @throws Exception if an error occurs during shutdown.
+     */
     @Override
     public void stop() throws Exception {
         super.stop();
-        client.disconnect();    // ensure we always disconnect
+        client.disconnect();
     }
 
     /**
