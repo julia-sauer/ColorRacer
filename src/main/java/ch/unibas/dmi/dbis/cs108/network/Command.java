@@ -336,4 +336,11 @@ public enum Command {
     public static void HIGH() {
         System.out.println("HIGH");
     }
+
+    /**
+     * Prints the Command "WINN"
+     */
+    public static void WINN() {
+        System.out.println("WINN");
+    }
 }
