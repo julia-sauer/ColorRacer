@@ -48,7 +48,6 @@ public class GUI extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Font.loadFont(getClass().getResourceAsStream("PixelEmulator-xq08.ttf"), 12);
         // Load the FXML file (ensure the correct resource path is used)
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeLobbyTemplate.fxml"));
         BorderPane root = loader.load();

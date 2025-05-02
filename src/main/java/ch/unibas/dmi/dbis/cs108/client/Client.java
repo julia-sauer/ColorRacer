@@ -315,10 +315,10 @@ public class Client {
     /**
      * Disconnects the client from the server.
      * This method performs the following steps:
-     *     <li>Sends a {@code QCNF YES} command to inform the server of the client's intention to leave the server.</li>
-     *     <li>Closes the input and output streams as well as the socket connection.</li>
-     *     <li>Terminates the JavaFX application via {@link javafx.application.Platform#exit()}.</li>
-     *     <li>Terminates the Java Virtual Machine with {@code System.exit(0)}.</li>
+     * Sends a {@code QCNF YES} command to inform the server of the client's intention to leave the server.
+     * Closes the input and output streams as well as the socket connection.
+     * Terminates the JavaFX application via {@link javafx.application.Platform#exit()}.
+     * Terminates the Java Virtual Machine with {@code System.exit(0)}.
      * This ensures that both the network connection and the graphical interface are closed cleanly,
      * and the entire application exits.
      */

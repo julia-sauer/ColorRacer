@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'VT323';
+    src: url('VT323-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Pixel Emulator';
+    src: url('PixelEmulator-xq08.ttf');
+}
+
 /* Root pane: full-window background image */
 .root {
     -fx-background-image: url('Lobby_background.png');
@@ -18,6 +28,7 @@
 
 /* Header labels above lists */
 .header-label {
+    -fx-font-family: "Pixel Emulator";
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
@@ -26,6 +37,7 @@
 
 /* Main welcome text */
 .welcome-text {
+    -fx-font-family: "Pixel Emulator";
     -fx-font-size: 32px;
     -fx-font-weight: bold;
     -fx-text-fill: #222222;
@@ -34,6 +46,7 @@
 
 /* Buttons for create/join lobby and chat send */
 .game-button {
+    -fx-font-family: "Pixel Emulator";
     -fx-font-size: 14px;
     -fx-font-weight: semi-bold;
     -fx-text-fill: white;
@@ -56,6 +69,7 @@
 }
 
 .titled-pane > .title {
+    -fx-font-family: "VT323";
     -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: #333;
@@ -70,7 +84,8 @@
 
 /* Text area for chat history */
 .text-area {
-    -fx-font-size: 13px;
+    -fx-font-family: "VT323";
+    -fx-font-size: 18px;
     -fx-control-inner-background: rgba(255, 255, 255, 0.9);
     -fx-background-radius: 5;
     -fx-border-color: #ccc;
@@ -80,7 +95,8 @@
 
 /* Text field for user message input */
 .text-field {
-    -fx-font-size: 14px;
+    -fx-font-family: "VT323";
+    -fx-font-size: 16px;
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
     -fx-control-inner-background: rgba(255, 255, 255, 0.9);
     -fx-background-radius: 5;
@@ -94,10 +110,16 @@
 }
 
 .menu-bar .menu {
+    -fx-font-family: "VT323";
     -fx-text-fill: #333;
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
 }
 
 .menu-bar .menu:hover {
     -fx-background-color: rgba(240, 240, 240, 0.9);
+}
+
+.list-view {
+    -fx-font-family: 'VT323';
+    -fx-font-size: 16px;
 }

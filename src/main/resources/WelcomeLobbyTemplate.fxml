@@ -14,17 +14,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" stylesheets="@WelcomeLobbyStyleSheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController">
     <left>
         <VBox prefWidth="406.0" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
             <children>
                 <Label styleClass="header-label" text="List" />
-                <ListView fx:id="listList" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS" />
+                <ListView fx:id="listList" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS" styleClass="list-view"/>
                 <Label styleClass="header-label" text="Game list" />
-                <ListView fx:id="gameList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                <ListView fx:id="gameList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" styleClass="list-view"/>
                 <Label styleClass="header-label" text="Lobby list" />
-                <ListView fx:id="lobbylist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                <ListView fx:id="lobbylist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" styleClass="list-view"/>
             </children>
             <padding>
                 <Insets left="10.0" top="10.0" />
@@ -37,7 +38,10 @@
                 <Insets top="20.0" />
             </padding>
             <children>
-                <Label styleClass="welcome-text" text="Welcome to Color Racer" />
+                <Label styleClass="welcome-text" text="Welcome to Color Racer">
+               <font>
+                  <Font name="Pixel Emulator"/>
+               </font></Label>
                 <Button mnemonicParsing="false" onAction="#handleCreateLobby" styleClass="game-button" text="Create Lobby" />
                 <Button layoutX="414.0" layoutY="534.0" mnemonicParsing="false" onAction="#handleJoinLobby" styleClass="game-button" text="Join Lobby" />
             </children>
