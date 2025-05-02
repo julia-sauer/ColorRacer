@@ -66,6 +66,7 @@
 /* Chat pane titled pane style */
 .titled-pane {
     -fx-collapsible: false;
+    -fx-font-size: 16px;
 }
 
 .titled-pane > .title {

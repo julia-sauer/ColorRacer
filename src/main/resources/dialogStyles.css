@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'VT323';
+    src: url('VT323-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Pixel Emulator';
+    src: url('PixelEmulator-xq08.ttf');
+}
+
+/* Dialog container panels */
+.dialog-panel {
+    -fx-background-color: #ECEFF1;       /* light stone, matches game-panel */
+    -fx-border-color: #81C784;           /* green accent from main lobby */
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 20;                     /* ample padding inside dialogs */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0.3, 0, 3);
+}
+
+/* Dialog headers (Labels or Text) */
+.dialog-header {
+    -fx-font-family: "Pixel Emulator";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #37474F;               /* dark slate gray for contrast */
+    -fx-effect: dropshadow(gaussian, rgba(55,71,79,0.4), 3, 0.3, 0, 1);
+    -fx-padding: 4 0 12 0;                /* space below header */
+}
+
+/* Shared button styles (in dialogs reuse game-button) */
+.game-button {
+    -fx-background-color: linear-gradient(to bottom, #64B5F6, #2196F3);
+    -fx-font-family: "Pixel Emulator";
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 24;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #90CAF9;
+    -fx-border-width: 1;
+}
+.game-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #90CAF9, #64B5F6);
+}
+.game-button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #1E88E5, #1565C0);
+}
+
+/* Bike selection buttons reuse bike-image-button */
+.bike-image-button {
+    -fx-background-color: #CFD8DC;        /* soft stone backdrop */
+    -fx-border-color: #81C784;
+    -fx-border-width: 3;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(100,100,100,0.4), 5, 0, 0, 3);
+    -fx-cursor: hand;
+}
+.bike-image-button:hover {
+    -fx-background-color: #E0F2F1;
+    -fx-effect: dropshadow(three-pass-box, rgba(100,100,100,0.7), 8, 0, 0, 4);
+}
+.bike-image-button:pressed {
+    -fx-background-color: #B2DFDB;
+    -fx-translate-y: 1px;
+}
+
+/* ListView inside dialogs */
+.list-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #B0BEC5;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+.list-cell {
+    -fx-font-size: 16px;
+    -fx-font-family: "VT323";
+    -fx-text-fill: #37474F;
+    -fx-padding: 4;
+}
+.list-cell:filled:selected {
+    -fx-background-color: #A5D6A7;
+    -fx-text-fill: white;
+}
+.list-cell:filled:hover {
+    -fx-background-color: #C8E6C9;
+}
+
+/* GridPane for bike selection alignment */
+.grid-pane {
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+/* HBox button group spacing */
+.hbox {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}

@@ -68,6 +68,12 @@ public class GUI extends Application {
         primaryStage.show();
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        client.disconnect();    // ensure we always disconnect
+    }
+
     /**
      * Sets the {@code Client} instance that will be used by the GUI.
      *

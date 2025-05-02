@@ -22,6 +22,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -422,7 +423,6 @@ public class GameLobbyController {
      * Resets all player bike positions to the starting field "white1".
      */
     public void resetPlayerPositions() {
-        // Ensure UI update runs on JavaFX Application Thread
         Platform.runLater(() -> {
             for (String player : playerBikes.keySet()) {
                 // Move each bike back to white1
@@ -535,6 +535,7 @@ public class GameLobbyController {
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.initOwner(primaryStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Leave Server");
@@ -565,6 +566,7 @@ public class GameLobbyController {
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.initOwner(primaryStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Leave Lobby");
@@ -637,6 +639,7 @@ public class GameLobbyController {
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.initOwner(primaryStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Select Your Bike");
@@ -1097,6 +1100,7 @@ public class GameLobbyController {
             VBox dialogPane = fxmlLoader.load();
 
             Stage dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.initOwner(primaryStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Highscore List");

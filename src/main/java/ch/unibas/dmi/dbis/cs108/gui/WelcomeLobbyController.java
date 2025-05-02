@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.*;
@@ -197,7 +198,8 @@ public class WelcomeLobbyController {
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
-            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initStyle(StageStyle.UNDECORATED);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.initOwner(primaryStage);
             dialogStage.setTitle("Leave Lobby");
             dialogStage.setScene(new Scene(dialogPane));
@@ -301,6 +303,7 @@ public class WelcomeLobbyController {
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             dialogStage.setTitle("Join Lobby");
@@ -422,6 +425,7 @@ public class WelcomeLobbyController {
             VBox dialogPane = fxmlLoader.load();
 
             Stage dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.UNDECORATED);
             dialogStage.initOwner(primaryStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Highscore List");
