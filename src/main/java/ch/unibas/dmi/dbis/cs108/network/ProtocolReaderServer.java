@@ -236,13 +236,7 @@ public class ProtocolReaderServer {
                         if (userLobby != null) {
                             userLobby.removePlayer(nickname);
                         }
-
-                        // 🧹 2. Jetzt sauberen Disconnect durchführen
                         clientHandler.disconnectClient();
-//                        if (disconnectCallback != null) {
-//                            disconnectCallback.run();
-//                            Server.updateAllClients();
-//                        }
 
                     } else if ("NO".equals(confirmation)) {
                         // do nothing, just notify user

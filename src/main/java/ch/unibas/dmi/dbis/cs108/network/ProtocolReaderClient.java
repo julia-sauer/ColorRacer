@@ -180,6 +180,14 @@ public class ProtocolReaderClient {
                                 GameLobbyController.getInstance().updatePlayerPosition(whoMoved, fieldId)
                         );
                         break;
+                    } else if (parts[1].startsWith("Player ")) {
+                        String[] nickChange = parts[1].split(" ");
+                        String oldNick = nickChange[1];
+                        String newestNick = nickChange[6];
+                        if(gameLobby) {
+                            GameLobbyController.getInstance().updatePlayersName(oldNick, newestNick);
+                        }
+                        display(msg);
                     } else {
                         display(msg);
                     }

@@ -677,6 +677,27 @@ public class GameLobbyController {
     }
 
     /**
+     * Called when any player (not just this client) changes their nickname.
+     * We must re‑key our maps and update the Label above the bike so on the gameboard everything gets updated.
+     *
+     * @param oldNick The previous nickname.
+     * @param newNick The new nickname.
+     */
+    public void updatePlayersName(String oldNick, String newNick) {
+        Platform.runLater(() -> {
+            ImageView iv = playerBikes.remove(oldNick);
+            if (iv != null) {
+                playerBikes.put(newNick, iv);
+            }
+            Label lbl = playerLabels.remove(oldNick);
+            if (lbl != null) {
+                lbl.setText(newNick);
+                playerLabels.put(newNick, lbl);
+            }
+        });
+    }
+
+    /**
      * Called when ANY player picks a bike so all users know what bikes the other players have so it
      * can be shown on the gameboard. Creates an ImageView for that player (if not already) and places
      * it on the start field.
@@ -686,11 +707,13 @@ public class GameLobbyController {
      */
     public void addPlayerBike(String player, String color) {
         Platform.runLater(() -> {
-            if (playerBikes.containsKey(player)) {
-                return;  // already have them
-            }
             Image img = bikeImages.get(color.toLowerCase());
             if (img == null) {
+                return;
+            }
+            if (playerBikes.containsKey(player)) {
+                ImageView existing = playerBikes.get(player);
+                existing.setImage(img);
                 return;
             }
             ImageView iv = new ImageView(img);

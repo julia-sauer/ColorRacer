@@ -519,6 +519,26 @@ public class Lobby implements Runnable {
         if (players.contains(oldUsername) && !oldUsername.equals(newUsername)) {
             int index = players.indexOf(oldUsername);
             players.set(index, newUsername);
+
+            if (isHost(oldUsername)) {
+                this.hostName = newUsername;
+            }
+
+            GameBoard board = playerGameBoards.remove(oldUsername);
+            if (board != null) {
+                playerGameBoards.put(newUsername, board);
+            }
+
+            int ordIdx = playerOrder.indexOf(oldUsername);
+            if (ordIdx >= 0) {
+                playerOrder.set(ordIdx, newUsername);
+            }
+
+            for (int i = 0; i < winners.size(); i++) {
+                if (winners.get(i).equals(oldUsername)) {
+                    winners.set(i, newUsername);
+                }
+            }
         }
     }
 

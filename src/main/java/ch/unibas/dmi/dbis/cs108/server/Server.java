@@ -159,6 +159,28 @@ public class Server {
         while (UserList.containsUserName(finalNick)) {
             finalNick = finalNick + suffix;
         }
+
+        String oldNickname = user.getNickname();
+        Lobby userLobby = null;
+        for (Lobby lobby : lobbies) {
+            if (lobby.getPlayers().contains(oldNickname)) {
+                userLobby = lobby;
+                break;
+            }
+        }
+        if (userLobby != null) {
+            for (String player : userLobby.players) {
+                User u = UserList.getUserByName(player);
+                if (u != null) {
+                    ProtocolWriterServer writer = new ProtocolWriterServer(clientWriters, u.getOut());
+                    try {
+                        writer.sendInfo("Player " + oldNickname + " changed their nickname to: " + finalNick);
+                    } catch (IOException e) {
+                        System.err.println("Error sending nickname info to " + player);
+                    }
+                }
+            }
+        }
         // updates nickname
         UserList.updateUserName(userId, finalNick);
         // sends message to client
@@ -167,7 +189,6 @@ public class Server {
         } catch (IOException e) {
             System.err.println("Error while sending NICK " + finalNick + " to user " + userId);
         }
-
     }
 
     /**
