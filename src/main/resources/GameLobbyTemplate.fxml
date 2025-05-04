@@ -122,7 +122,7 @@
                     <children>
                         <ImageView fitHeight="600.0" fitWidth="680.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@gameboard_sizeposition.png" />
+                                <Image url="@ColorRacer_background_pixelart.png" />
                             </image>
                         </ImageView>
                         <Button fx:id="yellow1" layoutX="237.0" layoutY="338.0" minHeight="37.0" mnemonicParsing="false" onAction="#handleFieldChoice" prefHeight="43.0" prefWidth="76.0" styleClass="field-button" />

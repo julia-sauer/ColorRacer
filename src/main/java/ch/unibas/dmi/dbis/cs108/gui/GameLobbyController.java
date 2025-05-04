@@ -254,17 +254,18 @@ public class GameLobbyController {
         instance = this;  // Store the instance when initialized
         diceImages = new HashMap<>(); // Load all dice‐color images into a map:
         diceImages.put("yellow", new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/dice_yellow_dummy.png"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/yellow dice.png"))));
         diceImages.put("orange", new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/dice_orange_dummy.png"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/orange dice.png"))));
         diceImages.put("red",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_red_dummy.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/red dice.png"))));
         diceImages.put("pink",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_pink_dummy.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pink dice.png"))));
         diceImages.put("purple", new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/dice_purple_dummy.png"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/purple dice.png"))));
         diceImages.put("blue",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dice_blue_dummy.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/blue dice.png"))));
+
         bikeImages.put("black",
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/blackbike.png"))));
         bikeImages.put("magenta",
