@@ -688,13 +688,6 @@ public class Server {
                     break;
                 }
             }
-//            for (String player : userlobby.winners) {
-//                User userForHighscore = UserList.getUserByName(player);
-//                if (userForHighscore != null) {
-//                    setHighscore(userForHighscore.getNickname(), userForHighscore.getRollCount());
-//                }
-//            }
-
 
             boolean fnshSent = false;
             for (String player : userlobby.getPlayers()) {
@@ -830,22 +823,31 @@ public class Server {
     public void getHighscoreList(int userId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        File highscoreFile = new File("highscore.txt");
 
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Highscore.txt")) {
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        if (highscoreFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(highscoreFile))) {
                 StringBuilder highscoreList = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
                     highscoreList.append(line).append("|");
                 }
-                reader.close();
                 protocolWriterServer.sendData(highscoreList.toString());
-            } else {
-                protocolWriterServer.sendInfo("Highscore file not found.");
+            } catch (IOException e) {
+                System.err.println("Error reading Highscore file.");
+                try {
+                    protocolWriterServer.sendInfo("Error reading highscore.");
+                } catch (IOException s){
+                    System.err.println(("Error could not send info"));
+                }
             }
-        } catch (IOException e) {
-            System.err.println("Error sending Highscore file.");
+        }
+        else {
+            try {
+                protocolWriterServer.sendInfo("Highscore file not found.");
+            } catch (IOException e) {
+                System.err.println("Could not send info.");
+            }
         }
     }
 
@@ -866,7 +868,6 @@ public class Server {
     }
 
     public static void setHighscore(String nickname, int rollCount) {
-        System.out.println("setHighscore aufgerufen");
         Highscore highscore = new Highscore();
         highscore.addHighscoreEntry(nickname, rollCount);
     }

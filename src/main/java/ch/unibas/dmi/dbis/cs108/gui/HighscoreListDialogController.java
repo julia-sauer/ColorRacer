@@ -23,7 +23,7 @@ public class HighscoreListDialogController {
     /**
      * The file path of where the {@code highscore.txt} file is saved.
      */
-    private static final String FILE_PATH = getHighscoreFilePath();
+    private static final String FILE_PATH = "highscore.txt";
 
     /**
      * The stage representing the dialog window.
@@ -52,16 +52,6 @@ public class HighscoreListDialogController {
     @FXML
     private void initialize() {
         loadHighscores();
-    }
-
-    /**
-     * This method creates the correct file path of the highscore.txt file.
-     *
-     * @return the file path of the highscore.txt
-     */
-    private static String getHighscoreFilePath() {
-        String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
-        return Paths.get(basePath, "src", "main", "resources", "highscore.txt").toString();
     }
 
     /**

@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.nio.file.Paths;
+import java.net.URL;
 
 /**
  * This class writes in to the highscore file when the winner order is determined.
@@ -12,7 +13,7 @@ import java.nio.file.Paths;
  */
 public class Highscore {
 
-    private static final String FILE_PATH = getHighscoreFilePath();
+    private static final String FILE_PATH = "highscore.txt";
     private List<String> highscoreList;
     private Integer gameNumber;
 
@@ -23,16 +24,6 @@ public class Highscore {
         highscoreList = new ArrayList<>();
         gameNumber = 1;
         loadHighscore();
-    }
-
-    /**
-     * This method creates the correct file path of the highscore.txt file.
-     *
-     * @return the file path of the highscore.txt
-     */
-    private static String getHighscoreFilePath() {
-        String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
-        return Paths.get(basePath, "src", "main", "resources", "highscore.txt").toString();
     }
 
     /**
@@ -107,6 +98,11 @@ public class Highscore {
         }
     }
 
+    /**
+     * This method extracts the number of rolls of the entries already in the highscore.txt
+     * @param entry the entry from which we want the roll number
+     * @return the number of rolls
+     */
     private int extractRollCount(String entry) {
         String[] parts = entry.split(", rolls: ");
         if (parts.length == 2) {
