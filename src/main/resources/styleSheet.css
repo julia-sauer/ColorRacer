@@ -272,3 +272,8 @@
     -fx-background-color: rgba(0, 0, 0, 0.13);
     -fx-background-radius: 4;
 }
+
+.grid-pane {
+    -fx-background-image: url('ColorRacer_background_pixelart.png');
+    -fx-background-size: 100% 100%;
+}

@@ -14,17 +14,19 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Scale;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -124,6 +126,14 @@ public class GameLobbyController {
      * The {@link StackPane} that is used for displaying whose turn it is.
      */
     public StackPane overlayPane;
+
+    //TODO
+    @FXML public BorderPane borderRoot;
+
+    @FXML public Group zoomGroup;
+
+    //TODO
+    @FXML private VBox centerVBox;
 
     /**
      * The {@link Button} that lets the player roll the dice.
@@ -247,6 +257,31 @@ public class GameLobbyController {
      */
     @FXML
     public void initialize() {
+        // 1) Let the AnchorPane fill the VBox
+        centerVBox.setFillWidth(true);
+        VBox.setVgrow(gameBoard, Priority.ALWAYS);
+        gameBoard.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        // 2) clip the AnchorPane so nothing draws or picks outside its bounds
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(gameBoard.widthProperty());
+        clip.heightProperty().bind(gameBoard.heightProperty());
+        gameBoard.setClip(clip);
+
+        // 3) compute scale = min(widthRatio, heightRatio)
+        DoubleBinding widthRatio  = gameBoard.widthProperty().divide(662);
+        DoubleBinding heightRatio = gameBoard.heightProperty().divide(449);
+        DoubleBinding scaleFactor = (DoubleBinding) Bindings.min(widthRatio, heightRatio);
+
+        // 4) apply that uniform Scale transform to the zoomGroup
+        Scale scale = new Scale();
+        scale.setPivotX(0);
+        scale.setPivotY(0);
+        scale.xProperty().bind(scaleFactor);
+        scale.yProperty().bind(scaleFactor);
+        zoomGroup.getTransforms().add(scale);
+
+
         listList.setItems(FXCollections.observableArrayList());
         gameList.setItems(
                 FXCollections.observableArrayList()); // Initializes lists with observable array lists
@@ -427,7 +462,6 @@ public class GameLobbyController {
     private void handleRestart() {
         try {
             protocolWriter.sendCommand(Command.RSTT);
-            // Reset all bike positions on restart
         } catch (IOException e) {
             showError("Failed to restart the game", e.getMessage());
         }
@@ -439,7 +473,6 @@ public class GameLobbyController {
     public void resetPlayerPositions() {
         Platform.runLater(() -> {
             for (String player : playerBikes.keySet()) {
-                // Move each bike back to white1
                 updatePlayerPosition(player, "white1");
             }
         });
@@ -817,8 +850,6 @@ public class GameLobbyController {
         if (fld == null) {
             return;
         }
-        double fieldCenterX = fld.getLayoutX() + fld.getWidth() / 2;
-        double fieldCenterY = fld.getLayoutY() + fld.getHeight() / 2;
 
         DoubleBinding bikeAngle = (DoubleBinding) Bindings
                 .when(fld.rotateProperty().isEqualTo(180)).then(0.0)
@@ -830,16 +861,29 @@ public class GameLobbyController {
                         .then(-1.0)
                         .otherwise(1.0)
         );
+
+        Bounds fb = fld.localToScene(fld.getBoundsInLocal());
+        double sceneCenterX = fb.getMinX() + fb.getWidth()  / 2;
+        double sceneCenterY = fb.getMinY() + fb.getHeight() / 2;
+
+        Point2D boardCenter = gameBoard.sceneToLocal(sceneCenterX, sceneCenterY);
+
+        double baseX = boardCenter.getX() - iv.getFitWidth()  / 2;
+        double baseY = boardCenter.getY() - iv.getFitHeight() / 2;
+
         Platform.runLater(() -> {
             List<ImageView> group = new ArrayList<>();
             for (ImageView other : playerBikes.values()) {
                 double cx = other.getLayoutX() + other.getFitWidth() / 2;
                 double cy = other.getLayoutY() + other.getFitHeight() / 2;
-                if (Math.abs(cx - fieldCenterX) < 1 && Math.abs(cy - fieldCenterY) < 1) {
+                if (Math.abs(cx - baseX - iv.getFitWidth()/2) < 1 &&
+                        Math.abs(cy - baseY - iv.getFitHeight()/2) < 1) {
                     group.add(other);
                 }
             }
-            if (!group.contains(iv)) group.add(iv);
+            if (!group.contains(iv)) {
+                group.add(iv);
+            }
 
             int n = group.size();
             double stepX = 10;
@@ -848,32 +892,25 @@ public class GameLobbyController {
             for (int i = 0; i < n; i++) {
                 ImageView bike = group.get(i);
                 double factor = i - (n - 1) / 2.0;
-                double bx = fieldCenterX + factor * stepX - bike.getFitWidth() / 2;
-                double by = fieldCenterY + factor * stepY - bike.getFitHeight() / 2;
+                double offsetRawX = baseX + factor * stepX;
+                double offsetRawY = baseY + factor * stepY;
 
-                // get the bike’s current on‑screen position:
-                double currentX = bike.getLayoutX();
-                double currentY = bike.getLayoutY();
-
-                // clear any previous translate offsets
+                double deltaX = offsetRawX - bike.getLayoutX();
+                double deltaY = offsetRawY - bike.getLayoutY();
                 bike.setTranslateX(0);
                 bike.setTranslateY(0);
 
-                // schedule an animation from (0,0) → (targetX−currentX, targetY−currentY)
                 TranslateTransition move = new TranslateTransition(Duration.millis(300), bike);
                 move.setFromX(0);
                 move.setFromY(0);
-                move.setToX(bx - currentX);
-                move.setToY(by - currentY);
-
-                // when the animation finishes, snap the bike node to exactly the target layout:
+                move.setToX(deltaX);
+                move.setToY(deltaY);
                 move.setOnFinished(evt -> {
                     bike.setTranslateX(0);
                     bike.setTranslateY(0);
-                    bike.setLayoutX(bx);
-                    bike.setLayoutY(by);
+                    bike.setLayoutX(offsetRawX);
+                    bike.setLayoutY(offsetRawY);
                 });
-                // play!
                 move.play();
 
                 Label nameLbl = null;
@@ -887,8 +924,8 @@ public class GameLobbyController {
                     nameLbl.applyCss();
                     nameLbl.layout();
                     double lw = nameLbl.prefWidth(-1), lh = nameLbl.prefHeight(-1);
-                    double lx = bx + (bike.getFitWidth() - lw) / 2;
-                    double ly = by - lh - 6;
+                    double lx = offsetRawX  + (bike.getFitWidth() - lw) / 2;
+                    double ly = offsetRawY  - lh - 6;
                     nameLbl.resize(lw, lh);
                     nameLbl.relocate(lx, ly);
                 }

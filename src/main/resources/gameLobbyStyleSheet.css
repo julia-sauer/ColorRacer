@@ -1,0 +1,250 @@
+@font-face {
+    font-family: 'VT323';
+    src: url('VT323-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Pixel Emulator';
+    src: url('PixelEmulator-xq08.ttf');
+}
+
+/* Root: soft beige gradient */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #EFE7E0, #C6B3A4, #A89280);
+}
+
+/* Header bar: marquee style with glow and brick tone */
+.header-label, .welcome-text {
+    -fx-font-family: "Pixel Emulator";
+    -fx-font-size: 20px;
+    -fx-text-fill: #8B7B6B; /* brown accent */
+    -fx-background-color: linear-gradient(to right, #C6B3A4, #EFE7E0);
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-border-color: #A89280;
+    -fx-border-width: 3;
+    -fx-border-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0.2, 0, 2);
+}
+
+/* Game and dialog panels: chalkboard poster in beige tones */
+.game-panel, .dialog-panel {
+    -fx-background-color: linear-gradient(to bottom, #F5EFEB, #EFE7E0);
+    -fx-border-color: #A89280;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 5, 0.1, 0, 2);
+}
+
+.dialog-panel {
+    -fx-border-style: dashed;
+}
+
+/* Game buttons in muted brown with beige highlights */
+.game-button {
+    -fx-font-family: 'VT323';
+    -fx-background-color: linear-gradient(to bottom, #C6B3A4, #A89280);
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #8B7B6B;
+    -fx-border-width: 1;
+}
+
+.game-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #D8C4B5, #B39A85);
+    -fx-cursor: hand;
+}
+
+.game-button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #B39A85, #8B7B6B);
+}
+
+/* Bike Image Button */
+.bike-image-button {
+    -fx-background-color: #EFE7E0;
+    -fx-border-color: #A89280;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
+    -fx-cursor: hand;
+}
+
+.bike-image-button:hover {
+    -fx-background-color: #F5EFEB;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 6, 0, 0, 3);
+}
+
+.bike-image-button:pressed {
+    -fx-background-color: #E8DDD4;
+    -fx-translate-y: 1px;
+}
+
+/* Game board background */
+.game-board {
+    -fx-background-color: #EFE7E0;
+    -fx-border-color: #A89280;
+    -fx-border-width: 2;
+}
+
+/* List styling */
+.list-view {
+    -fx-background-color: #F5EFEB;
+    -fx-background-radius: 6;
+    -fx-border-color: #EFE7E0;
+}
+
+.list-cell {
+    -fx-font-family: 'VT323';
+    -fx-background-color: transparent;
+    -fx-text-fill: #8B7B6B;
+    -fx-font-size: 16px;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #A89280;
+    -fx-text-fill: white;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #D8C4B5;
+}
+
+/* Menu bar and items */
+.menu-bar {
+    -fx-background-color: linear-gradient(to right, #D8C4B5, #EFE7E0);
+    -fx-padding: 6 12;
+}
+
+.menu, .menu-item {
+    -fx-font-family: 'VT323';
+    -fx-text-fill: #8B7B6B;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.menu-item:hover {
+    -fx-background-color: #F5EFEB;
+}
+
+/* TextField and TextArea */
+.text-field, .text-area {
+    -fx-font-family: 'VT323';
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #EFE7E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6;
+    -fx-font-size: 18px;
+    -fx-text-fill: #8B7B6B;
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-border-color: #C6B3A4;
+    -fx-effect: dropshadow(gaussian, rgba(198, 179, 164, 0.3), 4, 0.2, 0, 2);
+}
+
+/* Titled pane */
+.titled-pane {
+    -fx-font-family: 'VT323';
+    -fx-background-color: #F5EFEB;
+    -fx-border-color: #EFE7E0;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #D8C4B5;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-padding: 6;
+    -fx-background-radius: 10 10 0 0;
+}
+
+/* Field buttons (tiles) */
+.field-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 2, 0.1, 0, 1);
+}
+
+.field-button:hover {
+    -fx-background-color: rgba(168, 146, 128, 0.15);
+}
+
+.field-button-selected {
+    -fx-border-color: #A89280;
+    -fx-border-width: 3;
+    -fx-background-color: rgba(168, 146, 128, 0.25);
+}
+
+/* Nickname label */
+.nickname-label {
+    -fx-font-family: 'VT323';
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 0.4, 0, 1);
+    -fx-padding: 2 4;
+    -fx-background-color: rgba(0, 0, 0, 0.13);
+    -fx-background-radius: 4;
+}
+
+/* TabPane styling: beige arcade tabs */
+.tab-pane {
+    -fx-background-color: #EFE7E0;
+    -fx-border-color: #A89280;
+    -fx-border-width: 2;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.tab-pane > .tab-header-area {
+    -fx-background-color: linear-gradient(to bottom, #C6B3A4, #A89280);
+    -fx-padding: 6;
+    -fx-border-color: #8B7B6B;
+    -fx-border-width: 0 0 2 0;
+}
+
+.tab-pane .tab {
+    -fx-font-family: 'VT323';
+    -fx-font-size: 16px;
+    -fx-text-fill: #8B7B6B;
+    -fx-background-color: transparent;
+    -fx-padding: 6 12;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #8B7B6B;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-radius: 6 6 0 0;
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: #A89280;
+    -fx-text-fill: #FFFFFF;
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: #F5EFEB;
+    -fx-padding: 10;
+    -fx-border-color: #A89280;
+    -fx-border-width: 2;
+    -fx-border-radius: 0 0 8 8;
+    -fx-background-radius: 0 0 8 8;
+}

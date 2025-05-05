@@ -292,6 +292,7 @@ public class ProtocolReaderClient {
                     System.out.println("The game starts now!");
                     gameLobbyController.startButton.setDisable(true);
                     gameLobbyController.finishButton.setDisable(false);
+                    gameLobbyController.resetPlayerPositions();
                     break;
 
                 case RSTT:

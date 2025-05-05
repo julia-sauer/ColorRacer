@@ -38,7 +38,7 @@
                 <Insets top="20.0" />
             </padding>
             <children>
-                <Label styleClass="welcome-text" text="Welcome to Color Racer">
+                <Label styleClass="welcome-text" text="Welcome to Color Racer" wrapText="true">
                <font>
                   <Font name="Pixel Emulator"/>
                </font></Label>
