@@ -4,6 +4,9 @@ Spiel 1 (highscoretest):
 Spiel 2 (highscoreTest2):
 1. place: Jana1
 2. place: Jana
+Spiel 3 (hi):
+1. place: Guest_milo
+2. place: Guest_milo1
 Spiel 3 (testhigh):
 1. place: jana
 2. place: stego
