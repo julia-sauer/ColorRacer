@@ -123,4 +123,11 @@ public class User {
         return rollCount;
     }
 
+    /**
+     * This method sets the rollCount of the user back to zero.
+     */
+    public void setBackRollCount() {
+        rollCount = 0;
+    }
+
 }

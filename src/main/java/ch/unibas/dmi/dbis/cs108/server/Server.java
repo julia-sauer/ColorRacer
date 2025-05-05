@@ -643,6 +643,7 @@ public class Server {
         if (userlobby == null) {
             return;
         }
+        boolean setHigh = false;
         for (String player : userlobby.getPlayers()) {
             User lobbyUser = UserList.getUserByName(player);
             if (lobbyUser != null) {
@@ -650,9 +651,12 @@ public class Server {
                 try {
                     if (userlobby.getPodestPlace() == 1) {
                         protocolWriterServer.sendInfo(nickname + " won the game!");
-                        protocolWriterServer.sendInfo("You needed " + user.getRollCount() + " rolls.");
                     } else {
                         protocolWriterServer.sendInfo(nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
+                    }
+                    if (!setHigh) {
+                        setHighscore(nickname, user.getRollCount());
+                        setHigh = true;
                     }
                 } catch (IOException e) {
                     System.err.println("Could not send Info.");
@@ -684,6 +688,14 @@ public class Server {
                     break;
                 }
             }
+//            for (String player : userlobby.winners) {
+//                User userForHighscore = UserList.getUserByName(player);
+//                if (userForHighscore != null) {
+//                    setHighscore(userForHighscore.getNickname(), userForHighscore.getRollCount());
+//                }
+//            }
+
+
             boolean fnshSent = false;
             for (String player : userlobby.getPlayers()) {
                 User lobbyUser = UserList.getUserByName(player);
@@ -697,10 +709,6 @@ public class Server {
                     }
                 }
             }
-
-            Highscore highscore = new Highscore();
-            highscore.addHighscoreEntry(userlobby.getLobbyName(), new ArrayList<>(userlobby.winners));
-
             userlobby.resetPodestPlace();
         }
 
@@ -855,6 +863,12 @@ public class Server {
             protocolWriters.put(user.getOut(), writer);
         }
         return writer;
+    }
+
+    public static void setHighscore(String nickname, int rollCount) {
+        System.out.println("setHighscore aufgerufen");
+        Highscore highscore = new Highscore();
+        highscore.addHighscoreEntry(nickname, rollCount);
     }
 
 }

@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 public class Highscore {
 
     private static final String FILE_PATH = getHighscoreFilePath();
-    private final List<String> highscoreList;
+    private List<String> highscoreList;
     private Integer gameNumber;
 
     /**
@@ -57,15 +57,39 @@ public class Highscore {
     /**
      * This methods adds a new entry in to the highscore.txt. And calls the method saveHighscore.
      *
-     * @param lobbyname The name of the lobby in which the game was played.
-     * @param winners   The list of the winner order.
+     * @param nickname The name of the user who won the game.
+     * @param rollCount  The number of dice rolls the player needed.
      */
-    public synchronized void addHighscoreEntry(String lobbyname, List<String> winners) {
-        highscoreList.add("Spiel " + gameNumber + " (" + lobbyname + "):");
-        for (int i = 0; i < winners.size(); i++) {
-            highscoreList.add((i + 1) + ". place: " + winners.get(i));
+    public synchronized void addHighscoreEntry(String nickname, int rollCount) {
+        if (highscoreList.isEmpty()) {
+            highscoreList.add("1. " + nickname + ", rolls: " + rollCount);
         }
-        gameNumber++;
+        else {
+            boolean inserted = false;
+            for (int i = 0; i < highscoreList.size(); i++) {
+                String entry = highscoreList.get(i);
+                int existingRollCount = extractRollCount(entry);
+                if (rollCount < existingRollCount) {
+                    highscoreList.add(i, (i + 1) + ". " + nickname + ", rolls: " + rollCount);
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted && highscoreList.size() < 10) {
+                highscoreList.add((highscoreList.size() + 1) + ". " + nickname + ", rolls: " + rollCount);
+            }
+        }
+
+        for (int i = 0; i < highscoreList.size(); i++) {
+            String entry = highscoreList.get(i);
+            if (!entry.startsWith((i + 1)+ ". ")) {
+                highscoreList.set(i, (i + 1) + ". " + entry.substring(entry.indexOf(' ') + 1));
+            }
+        }
+
+        if (highscoreList.size() > 10) {
+            highscoreList = highscoreList.subList(0,10);
+        }
         saveHighscore();
     }
 
@@ -81,5 +105,13 @@ public class Highscore {
         } catch (IOException e) {
             System.err.println("Error while saving Highscore");
         }
+    }
+
+    private int extractRollCount(String entry) {
+        String[] parts = entry.split(", rolls: ");
+        if (parts.length == 2) {
+            return Integer.parseInt(parts[1].trim());
+        }
+        throw new IllegalArgumentException("Invalid highscore entry format: " + entry);
     }
 }

@@ -142,7 +142,6 @@ public class Lobby implements Runnable {
      *
      * @param username the name of the player to mark as ready
      */
-    //TODO write test
     public void makeReady(String username) {
         if (readyStatus.containsKey(username)) {
             readyStatus.put(username, true);
@@ -232,7 +231,6 @@ public class Lobby implements Runnable {
      *
      * @param userId the ID of the user who requested to start the game
      */
-    //TODO write test
     public synchronized void startGame(int userId) {
         // Verify that the requesting user is the host.
         String requester = UserList.getUserName(userId);
@@ -316,7 +314,6 @@ public class Lobby implements Runnable {
      *
      * @param userId The userId of the player who typed restart.
      */
-    //TODO write test
     public synchronized void restartGame(int userId) {
         // Verify that the requesting user is the host.
         String requester = UserList.getUserName(userId);
@@ -371,6 +368,7 @@ public class Lobby implements Runnable {
             User u = UserList.getUserByName(player);
             if (u != null) {
                 u.setHasRolled(false);
+                u.setBackRollCount();
                 ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
                 try {
                     writer.sendCommand(Command.RSTT);
