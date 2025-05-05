@@ -394,8 +394,8 @@ public class Lobby implements Runnable {
         System.out.println("[Lobby: " + lobbyName + "] Game loop started.");
 
         try {
-            // Simulate a 5-minute game session for testing purposes
-            Thread.sleep(5 * 60 * 1000);
+            // Starts 60-minute game session
+            Thread.sleep(60 * 60 * 1000);
         } catch (InterruptedException e) {
             System.err.println("[Lobby: " + lobbyName + "] Game loop was interrupted.");
         }
