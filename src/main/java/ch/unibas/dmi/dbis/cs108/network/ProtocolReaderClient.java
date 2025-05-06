@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
 import ch.unibas.dmi.dbis.cs108.gui.GameLobbyController;
+import ch.unibas.dmi.dbis.cs108.gui.HighscoreListDialogController;
 import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
 import javafx.application.Platform;
 
@@ -11,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -361,6 +363,14 @@ public class ProtocolReaderClient {
                         break;
                     }
                     String data = parts[1].trim();
+                    List<String> dataList = Arrays.asList(data.split("\\|"));
+                    waitForControllerAndUpdate(() -> {
+                                HighscoreListDialogController ctrl = HighscoreListDialogController.getInstance();
+                                if (ctrl != null) {
+                                    ctrl.setHighscoreList(dataList);
+                                }
+                            }
+                    );
                     System.out.println(data.replace("|", "\n"));
                     display(data.replace("|", "\n"));
                     break;

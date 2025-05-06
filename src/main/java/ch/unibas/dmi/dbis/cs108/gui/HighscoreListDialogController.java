@@ -1,13 +1,12 @@
 package ch.unibas.dmi.dbis.cs108.gui;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-import java.io.*;
 import java.util.List;
-import java.nio.file.Paths;
 
 /**
  * Controller class for the Highscore List Dialog.
@@ -21,11 +20,6 @@ import java.nio.file.Paths;
 public class HighscoreListDialogController {
 
     /**
-     * The file path of where the {@code highscore.txt} file is saved.
-     */
-    private static final String FILE_PATH = "highscore.txt";
-
-    /**
      * The stage representing the dialog window.
      */
     private Stage dialogStage;
@@ -35,6 +29,16 @@ public class HighscoreListDialogController {
      */
     @FXML
     public ListView<String> highscoreListView;
+
+    private static HighscoreListDialogController instance;
+    public static HighscoreListDialogController getInstance() {
+        return instance;
+    }
+
+    /** this will be called by FXMLLoader when it creates the controller */
+    public HighscoreListDialogController() {
+        instance = this;
+    }
 
     /**
      * Sets the dialog stage used for this controller.
@@ -51,27 +55,14 @@ public class HighscoreListDialogController {
      */
     @FXML
     private void initialize() {
-        loadHighscores();
+        highscoreListView.setItems(FXCollections.observableArrayList());
     }
 
-    /**
-     * Loads the highscores from {@code highscore.txt} and displays them in the {@link ListView}.
-     * <p>
-     * If the file does not exist or an error occurs during reading, an appropriate message is shown instead.
-     * </p>
-     */
-    private void loadHighscores() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH));
-            List<String> lines = reader.lines().toList();
-            if (lines.isEmpty()) {
-                highscoreListView.setItems(FXCollections.observableArrayList("Highscore list is empty."));
-            } else {
-                highscoreListView.setItems(FXCollections.observableArrayList(lines));
-            }
-        } catch (IOException e) {
-            highscoreListView.setItems(FXCollections.observableArrayList("Error loading highscore: " + e.getMessage()));
-        }
+    public void setHighscoreList(List<String> highscoreList) {
+        // make sure we’re on FX‑thread
+        Platform.runLater(() -> {
+            highscoreListView.setItems(FXCollections.observableArrayList(highscoreList));
+        });
     }
 
     /**

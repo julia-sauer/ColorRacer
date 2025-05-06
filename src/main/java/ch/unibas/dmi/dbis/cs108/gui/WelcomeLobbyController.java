@@ -89,11 +89,10 @@ public class WelcomeLobbyController {
      */
     @FXML
     public void initialize() {
-        listList.setItems(
-                FXCollections.observableArrayList()); // Initialize lists with observable array lists
+        listList.setItems(FXCollections.observableArrayList());
         gameList.setItems(FXCollections.observableArrayList());
         lobbylist.setItems(FXCollections.observableArrayList());
-        instance = this;  // Store the instance when initialized
+        instance = this;
     }
 
     /**
@@ -422,6 +421,7 @@ public class WelcomeLobbyController {
     public void handleHighscoreList() {
         try {
             protocolWriter.sendCommand(Command.HIGH);
+
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/HighscoreListDialogTemplate.fxml"));
             VBox dialogPane = fxmlLoader.load();
 
@@ -431,8 +431,10 @@ public class WelcomeLobbyController {
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Highscore List");
             dialogStage.setScene(new Scene(dialogPane));
+
             HighscoreListDialogController highscoreListDialogController = fxmlLoader.getController();
             highscoreListDialogController.setDialogStage(dialogStage);
+
             dialogStage.showAndWait();
         } catch (IOException e) {
             showError("Error reading highscore", e.getMessage());

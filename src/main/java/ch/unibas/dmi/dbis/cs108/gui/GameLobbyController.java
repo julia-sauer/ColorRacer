@@ -1237,6 +1237,7 @@ public class GameLobbyController {
     public void handleHighscoreList() {
         try {
             protocolWriter.sendCommand(Command.HIGH);
+
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/HighscoreListDialogTemplate.fxml"));
             VBox dialogPane = fxmlLoader.load();
 
@@ -1246,8 +1247,10 @@ public class GameLobbyController {
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setTitle("Highscore List");
             dialogStage.setScene(new Scene(dialogPane));
+
             HighscoreListDialogController highscoreListDialogController = fxmlLoader.getController();
             highscoreListDialogController.setDialogStage(dialogStage);
+
             dialogStage.showAndWait();
         } catch (IOException e) {
             showError("Error reading highscore", e.getMessage());
