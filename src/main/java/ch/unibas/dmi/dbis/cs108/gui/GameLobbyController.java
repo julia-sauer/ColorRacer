@@ -1236,6 +1236,7 @@ public class GameLobbyController {
     @FXML
     public void handleHighscoreList() {
         try {
+            protocolWriter.sendCommand(Command.HIGH);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/HighscoreListDialogTemplate.fxml"));
             VBox dialogPane = fxmlLoader.load();
 
