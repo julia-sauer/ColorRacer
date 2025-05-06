@@ -21,11 +21,11 @@
         <VBox prefWidth="406.0" spacing="10.0" styleClass="game-panel" BorderPane.alignment="CENTER">
             <children>
                 <Label styleClass="header-label" text="List" />
-                <ListView fx:id="listList" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+                <ListView fx:id="listList" minWidth="-Infinity" prefHeight="200.0" styleClass="list-view" VBox.vgrow="ALWAYS" />
                 <Label styleClass="header-label" text="Game list" />
-                <ListView fx:id="gameList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+                <ListView fx:id="gameList" prefHeight="200.0" prefWidth="200.0" styleClass="list-view" VBox.vgrow="ALWAYS" />
                 <Label styleClass="header-label" text="Lobby list" />
-                <ListView fx:id="lobbylist" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+                <ListView fx:id="lobbylist" prefHeight="200.0" prefWidth="200.0" styleClass="list-view" VBox.vgrow="ALWAYS" />
             </children>
             <padding>
                 <Insets left="10.0" top="10.0" />
@@ -38,9 +38,9 @@
                 <Insets top="20.0" />
             </padding>
             <children>
-                <Label styleClass="welcome-text" text="Welcome to Color Racer" wrapText="true">
+                <Label alignment="CENTER" styleClass="welcome-text" text="Welcome to Color Racer" textAlignment="CENTER" wrapText="true">
                <font>
-                  <Font name="Pixel Emulator"/>
+                  <Font name="Pixel Emulator" />
                </font></Label>
                 <Button mnemonicParsing="false" onAction="#handleCreateLobby" styleClass="game-button" text="Create Lobby" />
                 <Button layoutX="414.0" layoutY="534.0" mnemonicParsing="false" onAction="#handleJoinLobby" styleClass="game-button" text="Join Lobby" />

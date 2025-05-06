@@ -125,15 +125,35 @@ public class GameLobbyController {
     /**
      * The {@link StackPane} that is used for displaying whose turn it is.
      */
+    @FXML
     public StackPane overlayPane;
 
-    //TODO
-    @FXML public BorderPane borderRoot;
+    /**
+     * The root {@link BorderPane} of the scene.  Used to manage the overall layout regions.
+     */
+    @FXML
+    public BorderPane borderRoot;
 
-    @FXML public Group zoomGroup;
+    /**
+     * A {@link Group} node that wraps the game board content (field-buttons, image of the board) and receives a scale transform
+     * to implement a responsive zooming of the game field.
+     */
+    @FXML
+    public Group zoomGroup;
 
-    //TODO
-    @FXML private VBox centerVBox;
+    /**
+     * The {@link ImageView} displaying the game board background.  Used to determine aspect ratio and
+     * to bind pane sizing so the board image remains centered and proportionally scaled for bigger screens.
+     */
+    @FXML
+    public ImageView boardImage;
+
+    /**
+     * The {@link VBox} in the center region of the BorderPane.  Hosts the gameBoard {@link AnchorPane} (via {@code zoomGroup})
+     * and provides vertical growth behavior.
+     */
+    @FXML
+    private VBox centerVBox;
 
     /**
      * The {@link Button} that lets the player roll the dice.
@@ -254,40 +274,47 @@ public class GameLobbyController {
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog
      * immediately after joining. It also sets the Map for the six images for the dice colors and for the 4 bike color images.
+     * It sets the correct proportion of the gameboard so it fits perfectly to every screen size.
      */
     @FXML
     public void initialize() {
-        // 1) Let the AnchorPane fill the VBox
+        // fitting gameboard size
         centerVBox.setFillWidth(true);
         VBox.setVgrow(gameBoard, Priority.ALWAYS);
         gameBoard.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        // 2) clip the AnchorPane so nothing draws or picks outside its bounds
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(gameBoard.widthProperty());
         clip.heightProperty().bind(gameBoard.heightProperty());
         gameBoard.setClip(clip);
 
-        // 3) compute scale = min(widthRatio, heightRatio)
-        DoubleBinding widthRatio  = gameBoard.widthProperty().divide(662);
+        DoubleBinding widthRatio = gameBoard.widthProperty().divide(662);
         DoubleBinding heightRatio = gameBoard.heightProperty().divide(449);
         DoubleBinding scaleFactor = (DoubleBinding) Bindings.min(widthRatio, heightRatio);
 
-        // 4) apply that uniform Scale transform to the zoomGroup
         Scale scale = new Scale();
         scale.setPivotX(0);
         scale.setPivotY(0);
         scale.xProperty().bind(scaleFactor);
         scale.yProperty().bind(scaleFactor);
         zoomGroup.getTransforms().add(scale);
+        Image img = boardImage.getImage();
+        double aspect = img.getHeight() / img.getWidth();
 
+        gameBoard.prefWidthProperty().bind(
+                gameBoard.heightProperty().multiply(1.0 / aspect)
+        );
+        gameBoard.minWidthProperty().bind(gameBoard.prefWidthProperty());
+        gameBoard.maxWidthProperty().bind(gameBoard.prefWidthProperty());
 
+        // loading lists
         listList.setItems(FXCollections.observableArrayList());
         gameList.setItems(
-                FXCollections.observableArrayList()); // Initializes lists with observable array lists
+                FXCollections.observableArrayList());
         lobbylist.setItems(FXCollections.observableArrayList());
-        instance = this;  // Store the instance when initialized
-        diceImages = new HashMap<>(); // Load all dice‐color images into a map:
+        instance = this;
+        // setting the dice images
+        diceImages = new HashMap<>();
         diceImages.put("yellow", new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/yellow dice.png"))));
         diceImages.put("orange", new Image(
@@ -300,7 +327,7 @@ public class GameLobbyController {
                 Objects.requireNonNull(getClass().getResourceAsStream("/purple dice.png"))));
         diceImages.put("blue",
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/blue dice.png"))));
-
+        // setting the bike images
         bikeImages.put("black",
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/blackbike.png"))));
         bikeImages.put("magenta",
@@ -309,8 +336,8 @@ public class GameLobbyController {
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/greenbike.png"))));
         bikeImages.put("darkblue",
                 new Image(Objects.requireNonNull(getClass().getResourceAsStream("/darkbluebike.png"))));
-
-        moveButton.setDisable(true);   // start out disabled
+        // setting correct usage
+        moveButton.setDisable(true);
         overlayPane.setMouseTransparent(true);
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
@@ -863,12 +890,12 @@ public class GameLobbyController {
         );
 
         Bounds fb = fld.localToScene(fld.getBoundsInLocal());
-        double sceneCenterX = fb.getMinX() + fb.getWidth()  / 2;
+        double sceneCenterX = fb.getMinX() + fb.getWidth() / 2;
         double sceneCenterY = fb.getMinY() + fb.getHeight() / 2;
 
         Point2D boardCenter = gameBoard.sceneToLocal(sceneCenterX, sceneCenterY);
 
-        double baseX = boardCenter.getX() - iv.getFitWidth()  / 2;
+        double baseX = boardCenter.getX() - iv.getFitWidth() / 2;
         double baseY = boardCenter.getY() - iv.getFitHeight() / 2;
 
         Platform.runLater(() -> {
@@ -876,8 +903,8 @@ public class GameLobbyController {
             for (ImageView other : playerBikes.values()) {
                 double cx = other.getLayoutX() + other.getFitWidth() / 2;
                 double cy = other.getLayoutY() + other.getFitHeight() / 2;
-                if (Math.abs(cx - baseX - iv.getFitWidth()/2) < 1 &&
-                        Math.abs(cy - baseY - iv.getFitHeight()/2) < 1) {
+                if (Math.abs(cx - baseX - iv.getFitWidth() / 2) < 1 &&
+                        Math.abs(cy - baseY - iv.getFitHeight() / 2) < 1) {
                     group.add(other);
                 }
             }
@@ -924,8 +951,8 @@ public class GameLobbyController {
                     nameLbl.applyCss();
                     nameLbl.layout();
                     double lw = nameLbl.prefWidth(-1), lh = nameLbl.prefHeight(-1);
-                    double lx = offsetRawX  + (bike.getFitWidth() - lw) / 2;
-                    double ly = offsetRawY  - lh - 6;
+                    double lx = offsetRawX + (bike.getFitWidth() - lw) / 2;
+                    double ly = offsetRawY - lh - 6;
                     nameLbl.resize(lw, lh);
                     nameLbl.relocate(lx, ly);
                 }
