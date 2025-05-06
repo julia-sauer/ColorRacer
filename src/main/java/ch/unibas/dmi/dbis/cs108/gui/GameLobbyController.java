@@ -316,26 +316,26 @@ public class GameLobbyController {
         // setting the dice images
         diceImages = new HashMap<>();
         diceImages.put("yellow", new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/yellow dice.png"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/dice/yellow dice.png"))));
         diceImages.put("orange", new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/orange dice.png"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/dice/orange dice.png"))));
         diceImages.put("red",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/red dice.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/dice/red dice.png"))));
         diceImages.put("pink",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pink dice.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/dice/pink dice.png"))));
         diceImages.put("purple", new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/purple dice.png"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/dice/purple dice.png"))));
         diceImages.put("blue",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/blue dice.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/dice/blue dice.png"))));
         // setting the bike images
         bikeImages.put("black",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/blackbike.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/bikes/blackbike.png"))));
         bikeImages.put("magenta",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/magentabike.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/bikes/magentabike.png"))));
         bikeImages.put("green",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/greenbike.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/bikes/greenbike.png"))));
         bikeImages.put("darkblue",
-                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/darkbluebike.png"))));
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/bikes/darkbluebike.png"))));
         // setting correct usage
         moveButton.setDisable(true);
         overlayPane.setMouseTransparent(true);
@@ -646,7 +646,7 @@ public class GameLobbyController {
     @FXML
     private void handleLeave() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LeaveLobbyDialogTemplate.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/LeaveLobbyDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
@@ -677,7 +677,7 @@ public class GameLobbyController {
     @FXML
     private void handleLeaveLobby() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LeaveLobbyDialogTemplate.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/LeaveLobbyDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
@@ -708,7 +708,7 @@ public class GameLobbyController {
     public void switchToWelcomeLobby() {
         Platform.runLater(() -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeLobbyTemplate.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/WelcomeLobbyTemplate.fxml"));
                 BorderPane welcomeLobby = loader.load();
 
                 WelcomeLobbyController welcomeController = loader.getController();
@@ -750,7 +750,7 @@ public class GameLobbyController {
     @FXML
     private void handleBikeSelection() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SelectBikeDialogTemplate.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/SelectBikeDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
@@ -1236,7 +1236,7 @@ public class GameLobbyController {
     @FXML
     public void handleHighscoreList() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/HighscoreListDialogTemplate.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/HighscoreListDialogTemplate.fxml"));
             VBox dialogPane = fxmlLoader.load();
 
             Stage dialogStage = new Stage();
@@ -1267,7 +1267,7 @@ public class GameLobbyController {
     @FXML
     public void displayWinners(List<String> podium) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WinnersListTemplate.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/WinnersListTemplate.fxml"));
             StackPane dialogPane = fxmlLoader.load();
 
             Stage dialogStage = new Stage(StageStyle.TRANSPARENT);

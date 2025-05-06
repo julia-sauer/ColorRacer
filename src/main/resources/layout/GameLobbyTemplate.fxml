@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="borderRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0"
-            minWidth="0.0" stylesheets="@gameLobbyStyleSheet.css" xmlns="http://javafx.com/javafx/23.0.1"
+            minWidth="0.0" stylesheets="@styles/gameLobbyStyleSheet.css" xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.GameLobbyController">
     <right>
         <VBox alignment="TOP_CENTER" spacing="5.0" styleClass="game-panel" BorderPane.alignment="TOP_CENTER">
@@ -150,7 +150,7 @@
                                 <ImageView fx:id="boardImage" fitHeight="600.0" fitWidth="680.0"
                                            nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@ColorRacer_background_pixelart.png"/>
+                                        <Image url="@../images/ColorRacer_background_pixelart.png"/>
                                     </image>
                                 </ImageView>
                                 <Button fx:id="yellow1" layoutX="237.0" layoutY="338.0" minHeight="37.0"
