@@ -740,6 +740,14 @@ public class GameLobbyController {
         dialog.setTitle("Choose Your Nickname");
         dialog.setHeaderText("Enter nickname:");
         dialog.setContentText("Name:");
+        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(primaryStage);
+
+        dialog.getDialogPane()
+                .getStylesheets()
+                .add(Objects.requireNonNull(getClass().getResource("/layout/styles/defaultStyle.css")).toExternalForm());
+
         dialog.showAndWait().ifPresent(nickname -> protocolWriter.changeNickname(nickname));
     }
 

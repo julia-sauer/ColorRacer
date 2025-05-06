@@ -132,6 +132,11 @@ public class WelcomeLobbyController {
         this.protocolWriter = protocolWriter;
     }
 
+    /**
+     * Sets the nickname of the user that's connected with this {@link WelcomeLobbyController}.
+     *
+     * @param nickname The nickname that the user uses.
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -227,6 +232,13 @@ public class WelcomeLobbyController {
         dialog.setTitle("Choose Your Nickname");
         dialog.setHeaderText("Enter nickname:");
         dialog.setContentText("Name:");
+        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(primaryStage);
+
+        dialog.getDialogPane()
+                .getStylesheets()
+                .add(Objects.requireNonNull(getClass().getResource("/layout/styles/defaultStyle.css")).toExternalForm());
 
         dialog.showAndWait().ifPresent(nickname -> protocolWriter.changeNickname(nickname));
     }
@@ -281,6 +293,14 @@ public class WelcomeLobbyController {
         dialog.setTitle("Create Lobby");
         dialog.setHeaderText("Enter lobby name:");
         dialog.setContentText("Name:");
+
+        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(primaryStage);
+
+        dialog.getDialogPane()
+                .getStylesheets()
+                .add(Objects.requireNonNull(getClass().getResource("/layout/styles/defaultStyle.css")).toExternalForm());
 
         dialog.showAndWait().ifPresent(lobbyName -> {
             try {
