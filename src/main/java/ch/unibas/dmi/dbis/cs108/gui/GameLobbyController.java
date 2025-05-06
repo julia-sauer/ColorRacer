@@ -620,20 +620,10 @@ public class GameLobbyController {
             } else {
                 turnLabel.setText(turnNotification);
             }
-            turnLabel.setStyle("""
-                        -fx-font-size: 24px;
-                        -fx-font-family: 'VT323';
-                        -fx-font-weight: bold;
-                        -fx-text-fill: white;
-                        -fx-background-color: rgba(0,0,0,0.7);
-                        -fx-padding: 10px 20px;
-                        -fx-background-radius: 8px;
-                    """);
-            // StackPane auto-centers its children
+            turnLabel.getStyleClass().add("turn-notification");
             overlayPane.getChildren().add(turnLabel);
             StackPane.setAlignment(turnLabel, Pos.CENTER);
 
-            // build the fade‑in → pause → fade‑out
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), turnLabel);
             fadeIn.setFromValue(0);
             fadeIn.setToValue(1);
@@ -854,7 +844,7 @@ public class GameLobbyController {
 
             playerBikes.put(player, iv);
             playerLabels.put(player, lbl);
-            gameBoard.getChildren().addAll(iv, lbl);
+            zoomGroup.getChildren().addAll(iv, lbl);
             // place at starting field:
             updatePlayerPosition(player, "white1");
         });
@@ -882,7 +872,6 @@ public class GameLobbyController {
                 .when(fld.rotateProperty().isEqualTo(180)).then(0.0)
                 .otherwise(fld.rotateProperty());
         iv.rotateProperty().bind(bikeAngle);
-
         iv.scaleXProperty().bind(
                 Bindings.when(fld.rotateProperty().isEqualTo(180))
                         .then(-1.0)
@@ -893,18 +882,21 @@ public class GameLobbyController {
         double sceneCenterX = fb.getMinX() + fb.getWidth() / 2;
         double sceneCenterY = fb.getMinY() + fb.getHeight() / 2;
 
-        Point2D boardCenter = gameBoard.sceneToLocal(sceneCenterX, sceneCenterY);
-
+        Point2D boardCenter = zoomGroup.sceneToLocal(sceneCenterX, sceneCenterY);
         double baseX = boardCenter.getX() - iv.getFitWidth() / 2;
         double baseY = boardCenter.getY() - iv.getFitHeight() / 2;
 
         Platform.runLater(() -> {
+            double stepX = 10, stepY = 5;
+            double tolX = stepX / 2;
+            double tolY = stepY / 2;
+
             List<ImageView> group = new ArrayList<>();
             for (ImageView other : playerBikes.values()) {
                 double cx = other.getLayoutX() + other.getFitWidth() / 2;
                 double cy = other.getLayoutY() + other.getFitHeight() / 2;
-                if (Math.abs(cx - baseX - iv.getFitWidth() / 2) < 1 &&
-                        Math.abs(cy - baseY - iv.getFitHeight() / 2) < 1) {
+                if (Math.abs(cx - (baseX + iv.getFitWidth() / 2)) < tolX &&
+                        Math.abs(cy - (baseY + iv.getFitHeight() / 2)) < tolY) {
                     group.add(other);
                 }
             }
@@ -913,9 +905,6 @@ public class GameLobbyController {
             }
 
             int n = group.size();
-            double stepX = 10;
-            double stepY = 5;
-
             for (int i = 0; i < n; i++) {
                 ImageView bike = group.get(i);
                 double factor = i - (n - 1) / 2.0;
@@ -1005,8 +994,6 @@ public class GameLobbyController {
         dice5.setVisible(visible);
         dice6.setVisible(visible);
     }
-
-    //TODO include this method for all action methods for security.
 
     /**
      * Shows an error alert with specified header and content.

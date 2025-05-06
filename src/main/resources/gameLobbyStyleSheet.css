@@ -205,6 +205,17 @@
     -fx-background-radius: 4;
 }
 
+/* Label for the turn notification*/
+.turn-notification {
+    -fx-font-size: 24px;
+    -fx-font-family: 'VT323';
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(0,0,0,0.7);
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 8px;
+}
+
 /* TabPane styling: beige arcade tabs */
 .tab-pane {
     -fx-background-color: #EFE7E0;
