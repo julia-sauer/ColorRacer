@@ -823,31 +823,22 @@ public class Server {
     public void getHighscoreList(int userId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
-        File highscoreFile = new File("highscore.txt");
 
-        if (highscoreFile.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(highscoreFile))) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Highscore.txt")) {
+            if (inputStream != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder highscoreList = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
                     highscoreList.append(line).append("|");
                 }
+                reader.close();
                 protocolWriterServer.sendData(highscoreList.toString());
-            } catch (IOException e) {
-                System.err.println("Error reading Highscore file.");
-                try {
-                    protocolWriterServer.sendInfo("Error reading highscore.");
-                } catch (IOException s){
-                    System.err.println(("Error could not send info"));
-                }
-            }
-        }
-        else {
-            try {
+            } else {
                 protocolWriterServer.sendInfo("Highscore file not found.");
-            } catch (IOException e) {
-                System.err.println("Could not send info.");
             }
+        } catch (IOException e) {
+            System.err.println("Error sending Highscore file.");
         }
     }
 
