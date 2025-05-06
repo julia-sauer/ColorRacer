@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" styleClass="dialog-panel" stylesheets="@dialogStyles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.SelectBikeDialogController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" styleClass="dialog-panel" stylesheets="@styles/dialogStyles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.unibas.dmi.dbis.cs108.gui.SelectBikeDialogController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -30,7 +30,7 @@
                     <graphic>
                         <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@blackbike.png" />
+                                <Image url="@../images/bikes/blackbike.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -39,7 +39,7 @@
                     <graphic>
                         <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@magentabike.png" />
+                                <Image url="@../images/bikes/magentabike.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -48,7 +48,7 @@
                     <graphic>
                         <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@greenbike.png" />
+                                <Image url="@../images/bikes/greenbike.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -57,7 +57,7 @@
                     <graphic>
                         <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@darkbluebike.png" />
+                                <Image url="@../images/bikes/darkbluebike.png" />
                             </image>
                         </ImageView>
                     </graphic>

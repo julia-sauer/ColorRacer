@@ -1,16 +1,16 @@
 @font-face {
     font-family: 'VT323';
-    src: url('VT323-Regular.ttf');
+    src: url('../../fonts/VT323-Regular.ttf');
 }
 
 @font-face {
     font-family: 'Pixel Emulator';
-    src: url('PixelEmulator-xq08.ttf');
+    src: url('../../fonts/PixelEmulator-xq08.ttf');
 }
 
 /* Root pane: full-window background image */
 .root {
-    -fx-background-image: url('Lobby_background.png');
+    -fx-background-image: url('../../images/Lobby_background.png');
     /*-fx-background-repeat: no-repeat;*/
     -fx-background-size: 100% 100%; /* scale to fill */
     /*-fx-background-position: center center;*/

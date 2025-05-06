@@ -194,7 +194,7 @@ public class WelcomeLobbyController {
     @FXML
     private void handleLeave() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LeaveLobbyDialogTemplate.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/LeaveLobbyDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
@@ -299,7 +299,7 @@ public class WelcomeLobbyController {
     @FXML
     private void handleJoinLobby() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/joinLobbyDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/joinLobbyDialog.fxml"));
             VBox dialogPane = loader.load();
 
             Stage dialogStage = new Stage();
@@ -421,7 +421,7 @@ public class WelcomeLobbyController {
     @FXML
     public void handleHighscoreList() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/HighscoreListDialogTemplate.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/HighscoreListDialogTemplate.fxml"));
             VBox dialogPane = fxmlLoader.load();
 
             Stage dialogStage = new Stage();
@@ -447,7 +447,7 @@ public class WelcomeLobbyController {
     public void switchToGameLobby(String lobbyName) {
         Platform.runLater(() -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameLobbyTemplate.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/GameLobbyTemplate.fxml"));
                 BorderPane gameLobbyRoot = loader.load();
 
                 GameLobbyController gameLobbyController = loader.getController();
