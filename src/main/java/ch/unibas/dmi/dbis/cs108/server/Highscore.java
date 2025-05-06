@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.nio.file.Paths;
-import java.net.URL;
 
 /**
  * This class writes in to the highscore file when the winner order is determined.
@@ -13,7 +12,7 @@ import java.net.URL;
  */
 public class Highscore {
 
-    private static final String FILE_PATH = "highscore.txt";
+    private static final String FILE_PATH = getHighscoreFilePath();
     private List<String> highscoreList;
     private Integer gameNumber;
 
@@ -25,6 +24,15 @@ public class Highscore {
         gameNumber = 1;
         loadHighscore();
     }
+
+  /**
+   * This method creates the correct file path of the highscore.txt file.
+   * @return the file path of the highscore.txt
+   */
+  public static String getHighscoreFilePath() {
+    String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
+    return Paths.get(basePath, "src", "main", "resources", "highscore.txt").toString();
+  }
 
     /**
      * This method loads/reads the highscore.txt file. If the line starts with "Spiel" the game number is incremented by one.

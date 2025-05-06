@@ -824,7 +824,7 @@ public class Server {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
 
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Highscore.txt")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("highscore.txt")) {
             if (inputStream != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder highscoreList = new StringBuilder();

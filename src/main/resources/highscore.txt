@@ -1,5 +1,2 @@
-1. Stego, rolls: 5
-2. Jana, rolls: 7
-3. Bronto, rolls: 7
-4. Bronto, rolls: 7
-5. Bronto, rolls: 8
+1. Carno, rolls: 6
+2. Carno, rolls: 8
