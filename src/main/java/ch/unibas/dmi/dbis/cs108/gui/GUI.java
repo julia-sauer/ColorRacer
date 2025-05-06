@@ -5,10 +5,12 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The {@code GUI} class is a JavaFX Application that loads the welcome lobby defined in the FXML
@@ -48,7 +50,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Load the FXML file (ensure the correct resource path is used)
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/WelcomeLobbyTemplate.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/WelcomeLobbyTemplate.fxml"));
         BorderPane root = loader.load();
 
         // Get the controller instance from the FXML loader
@@ -59,6 +61,11 @@ public class GUI extends Application {
         welcomeController.setProtocolWriter(client.getProtocolWriter());
         client.setWelcomeController(welcomeController);
         client.getProtocolReader().setWelcomeController(welcomeController);
+
+        Image icon = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/images/logo.jpg"))
+        );
+        primaryStage.getIcons().add(icon);
 
         // Setup and show the GUI
         primaryStage.setMaximized(true);
