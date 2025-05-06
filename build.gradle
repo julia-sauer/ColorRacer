@@ -51,6 +51,7 @@ dependencies {
     This is another example - it imports the javafx-controls dependency
      */
     implementation 'org.openjfx:javafx-controls:19.0.2.1'
+    implementation 'org.openjfx:javafx-controls:23.0.1'
 
     // JUNIT
     /*

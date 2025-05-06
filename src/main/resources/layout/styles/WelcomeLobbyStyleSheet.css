@@ -48,7 +48,7 @@
 .game-button {
     -fx-font-family: "Pixel Emulator";
     -fx-font-size: 14px;
-    -fx-font-weight: semi-bold;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #8cc6ff, #6faeff);
     -fx-background-radius: 6;
