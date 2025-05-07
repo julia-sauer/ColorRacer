@@ -371,7 +371,7 @@ public class ProtocolReaderClient {
                             }
                     );
                     System.out.println(data.replace("|", "\n"));
-                    display(data.replace("|", "\n"));
+                    //display(data.replace("|", "\n"));
                     saveHighscoreLocally(dataList);
                     break;
 
