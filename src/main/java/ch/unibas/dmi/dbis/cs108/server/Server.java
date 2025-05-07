@@ -827,18 +827,17 @@ public class Server {
         String path = Highscore.getHighscoreFilePath();
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            if (path != null) {
-                StringBuilder highscoreList = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    highscoreList.append(line).append("|");
-                }
-                br.close();
-                protocolWriterServer.sendData(highscoreList.toString());
-                broadcast(Command.HIGH + Command.SEPARATOR + highscoreList.toString());
-            } else {
-                protocolWriterServer.sendInfo("Highscore file not found.");
+            StringBuilder highscoreList = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                highscoreList.append(line).append("|");
             }
+            br.close();
+            protocolWriterServer.sendData(highscoreList.toString());
+            broadcast(Command.HIGH + Command.SEPARATOR + highscoreList.toString());
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Highscore file not found.");
         } catch (IOException e) {
             System.err.println("Error sending Highscore file.");
         }
