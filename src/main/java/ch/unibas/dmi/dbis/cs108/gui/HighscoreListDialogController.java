@@ -30,12 +30,24 @@ public class HighscoreListDialogController {
     @FXML
     public ListView<String> highscoreListView;
 
+    /**
+     * The instance of this controller. Stored so other parts of the client can update the view.
+     */
     private static HighscoreListDialogController instance;
+
+    /**
+     * Returns the instance of this controller.
+     *
+     * @return The HighscoreListDialogController instance.
+     */
     public static HighscoreListDialogController getInstance() {
         return instance;
     }
 
-    /** this will be called by FXMLLoader when it creates the controller */
+    /**
+     * Constructor called by FXMLLoader when creating the controller.
+     * Stores the created instance for later retrieval.
+     */
     public HighscoreListDialogController() {
         instance = this;
     }
@@ -58,6 +70,14 @@ public class HighscoreListDialogController {
         highscoreListView.setItems(FXCollections.observableArrayList());
     }
 
+    /**
+     * Updates the ListView with the given highscore entries.
+     * <p>
+     * Ensures the update runs on the JavaFX Application Thread using {@link Platform#runLater(Runnable)}.
+     * </p>
+     *
+     * @param highscoreList the list of highscore entries to display
+     */
     public void setHighscoreList(List<String> highscoreList) {
         // make sure we’re on FX‑thread
         Platform.runLater(() -> {

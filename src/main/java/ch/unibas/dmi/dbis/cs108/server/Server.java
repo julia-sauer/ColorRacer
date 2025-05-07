@@ -342,8 +342,7 @@ public class Server {
             }
         } else {
             try {
-                protocolWriterServer.sendCommandAndString(Command.INFO,
-                        "Field is invalid. Choose a Field that touches the current field or an already selected Field and that matches a rolled color.");
+                protocolWriterServer.sendCommandAndString(Command.INFO, "Field is invalid.");
             } catch (IOException e) {
                 System.err.println("Error sending error message.");
             }
@@ -651,9 +650,9 @@ public class Server {
                 ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, lobbyUser.getOut());
                 try {
                     if (userlobby.getPodestPlace() == 1) {
-                        protocolWriterServer.sendInfo(nickname + " won the game!");
+                        protocolWriterServer.sendInfo("+WINN " + nickname + " won the game!");
                     } else {
-                        protocolWriterServer.sendInfo(nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
+                        protocolWriterServer.sendInfo("+WINN " + nickname + " is on the " + userlobby.getPodestPlace() + ". place!");
                     }
                     if (!setHigh) {
                         setHighscore(nickname, user.getRollCount());
@@ -678,7 +677,7 @@ public class Server {
                         if (lobbyUser != null) {
                             ProtocolWriterServer protocolWriterServer = Server.getOrCreateWriter(lobbyUser);
                             try {
-                                protocolWriterServer.sendInfo(player + " is on the " + userlobby.getPodestPlace() + ". place!");
+                                protocolWriterServer.sendInfo("+WINN " + player + " is on the " + userlobby.getPodestPlace() + ". place!");
                                 String winnersList = String.join(", ", userlobby.winners);
                                 protocolWriterServer.sendCommandAndString(Command.WINN, winnersList);
                             } catch (IOException e) {

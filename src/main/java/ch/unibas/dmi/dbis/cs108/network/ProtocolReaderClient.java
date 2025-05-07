@@ -193,6 +193,16 @@ public class ProtocolReaderClient {
                         Platform.runLater(() ->
                                 GameLobbyController.getInstance().showTurnNotification(msg)
                         );
+                    } else if (parts[1].startsWith("+WINN ")) {
+                        break;
+                    } else if (parts[1].startsWith("Field is invalid.")) {
+                        Platform.runLater(() ->
+                                GameLobbyController.getInstance().showTurnNotification(msg)
+                        );
+                    } else if (parts[1].startsWith("You need to roll first.")) {
+                        Platform.runLater(() ->
+                                GameLobbyController.getInstance().showTurnNotification(msg)
+                        );
                     } else {
                         display(msg);
                     }
@@ -549,7 +559,7 @@ public class ProtocolReaderClient {
     private void saveHighscoreLocally(List<String> dataList) {
         Highscore highscore = new Highscore();
         String path = highscore.getHighscoreFilePath();
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
             for (String data : dataList) {
                 writer.write(data);
                 writer.newLine();

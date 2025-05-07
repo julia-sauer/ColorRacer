@@ -25,14 +25,15 @@ public class Highscore {
         loadHighscore();
     }
 
-  /**
-   * This method creates the correct file path of the highscore.txt file.
-   * @return the file path of the highscore.txt
-   */
-  public static String getHighscoreFilePath() {
-    String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
-    return Paths.get(basePath, "src", "main", "resources", "highscore.txt").toString();
-  }
+    /**
+     * This method creates the correct file path of the highscore.txt file.
+     *
+     * @return the file path of the highscore.txt
+     */
+    public static String getHighscoreFilePath() {
+        String basePath = Paths.get("..", "..").toAbsolutePath().normalize().toString();
+        return Paths.get(basePath, "src", "main", "resources", "highscore.txt").toString();
+    }
 
     /**
      * This method loads/reads the highscore.txt file. If the line starts with "Spiel" the game number is incremented by one.
@@ -54,16 +55,15 @@ public class Highscore {
     }
 
     /**
-     * This methods adds a new entry in to the highscore.txt. And calls the method saveHighscore.
+     * This method adds a new entry in to the highscore.txt. And calls the method saveHighscore.
      *
-     * @param nickname The name of the user who won the game.
-     * @param rollCount  The number of dice rolls the player needed.
+     * @param nickname  The name of the user who won the game.
+     * @param rollCount The number of dice rolls the player needed.
      */
     public synchronized void addHighscoreEntry(String nickname, int rollCount) {
         if (highscoreList.isEmpty()) {
             highscoreList.add("1. " + nickname + ", rolls: " + rollCount);
-        }
-        else {
+        } else {
             boolean inserted = false;
             for (int i = 0; i < highscoreList.size(); i++) {
                 String entry = highscoreList.get(i);
@@ -81,7 +81,7 @@ public class Highscore {
 
         for (int i = 0; i < highscoreList.size(); i++) {
             String entry = highscoreList.get(i);
-            if (!entry.startsWith((i + 1)+ ". ")) {
+            if (!entry.startsWith((i + 1) + ". ")) {
                 highscoreList.set(i, (i + 1) + ". " + entry.substring(entry.indexOf(' ') + 1));
             }
         }
@@ -93,7 +93,7 @@ public class Highscore {
     }
 
     /**
-     * This mehtod save the highscore.txt. It acutally writes the entry in to the file.
+     * This method save the highscore.txt. It actually writes the entry in to the file.
      */
     private void saveHighscore() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
@@ -108,6 +108,7 @@ public class Highscore {
 
     /**
      * This method extracts the number of rolls of the entries already in the highscore.txt
+     *
      * @param entry the entry from which we want the roll number
      * @return the number of rolls
      */

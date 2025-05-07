@@ -66,7 +66,7 @@ public class ProtocolReaderServer {
         Lobby lobby = Server.getLobbyOfPlayer(nickname);
 
         if (lobby == null || !lobby.isCurrentPlayer(nickname)) {
-            writer.sendInfo("-ERR It's not your turn.");
+            writer.sendInfo("It's not your turn.");
             return false;
         }
         return true;
@@ -313,8 +313,6 @@ public class ProtocolReaderServer {
                         if (!isMyTurn(protocolWriterServer)) {
                             break;
                         }
-
-                        protocolWriterServer.sendInfo("You skipped your turn.");
                         userLobby.advanceTurn();  // next player
 
                         break;

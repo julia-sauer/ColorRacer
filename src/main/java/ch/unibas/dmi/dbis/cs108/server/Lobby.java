@@ -467,8 +467,6 @@ public class Lobby implements Runnable {
                 ProtocolWriterServer writer = new ProtocolWriterServer(Server.clientWriters, u.getOut());
                 try {
                     writer.sendCommandAndString(Command.INFO, "It's " + currentPlayer + "'s turn");
-                    writer.sendCommandAndString(Command.INFO,
-                            currentPlayer + " is at: " + currentField.getFieldId());
                 } catch (IOException e) {
                     System.err.println("Error sending turn info to " + player);
                 }
