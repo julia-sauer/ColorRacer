@@ -25,6 +25,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Modality;
@@ -272,9 +274,14 @@ public class GameLobbyController {
     private Stage primaryStage;
 
     /**
+     * The {@link MediaPlayer} that plays the background music on a loop.
+     */
+    private MediaPlayer bgmPlayer;
+
+    /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog
      * immediately after joining. It also sets the Map for the six images for the dice colors and for the 4 bike color images.
-     * It sets the correct proportion of the gameboard so it fits perfectly to every screen size.
+     * It sets the correct proportion of the gameboard so it fits perfectly to every screen size and also starts the background music.
      */
     @FXML
     public void initialize() {
@@ -339,6 +346,13 @@ public class GameLobbyController {
         // setting correct usage
         moveButton.setDisable(true);
         overlayPane.setMouseTransparent(true);
+
+        Media bgm = new Media(Objects.requireNonNull(getClass().getResource("/audio/GameLobbyMusic.mp3")).toExternalForm());
+
+        bgmPlayer = new MediaPlayer(bgm);
+        bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        bgmPlayer.setVolume(0.5);
+        bgmPlayer.play();
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
@@ -720,6 +734,10 @@ public class GameLobbyController {
                 client.setWelcomeController(welcomeController);
                 client.getProtocolReader().setWelcomeController(welcomeController);
 
+                if (bgmPlayer != null) {
+                    bgmPlayer.stop();
+                    bgmPlayer.dispose();
+                }
                 // Setup and show the GUI
                 primaryStage.setScene(new Scene(welcomeLobby));
                 primaryStage.setTitle("Welcome Lobby");

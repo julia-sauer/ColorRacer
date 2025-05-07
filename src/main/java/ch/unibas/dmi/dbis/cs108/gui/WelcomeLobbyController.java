@@ -18,6 +18,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -85,7 +88,13 @@ public class WelcomeLobbyController {
     public String nickname;
 
     /**
-     * This method initializes the lists and stores the static instance reference.
+     * The {@link MediaPlayer} that plays the background music on a loop.
+     */
+    private MediaPlayer bgmPlayer;
+
+    /**
+     * This method initializes the lists and stores the static instance reference. It also starts the {@link MediaPlayer}
+     * that plays the background music on a loop.
      */
     @FXML
     public void initialize() {
@@ -93,6 +102,13 @@ public class WelcomeLobbyController {
         gameList.setItems(FXCollections.observableArrayList());
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;
+
+        Media bgm = new Media(Objects.requireNonNull(getClass().getResource("/audio/WelcomeLobbyMusic.mp3")).toExternalForm());
+
+        bgmPlayer = new MediaPlayer(bgm);
+        bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        bgmPlayer.setVolume(0.5);
+        bgmPlayer.play();
     }
 
     /**
@@ -485,6 +501,10 @@ public class WelcomeLobbyController {
                 gameLobbyController.gameList.setItems(gameList.getItems());
                 gameLobbyController.lobbylist.setItems(lobbylist.getItems());
 
+                if (bgmPlayer != null) {
+                    bgmPlayer.stop();
+                    bgmPlayer.dispose();
+                }
                 //primaryStage.setMaximized(true);
                 Scene scene = new Scene(gameLobbyRoot);
                 primaryStage.setScene(scene);
