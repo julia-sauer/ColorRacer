@@ -6,6 +6,7 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 
+import java.nio.file.Paths;
 import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.net.*;
@@ -834,6 +835,7 @@ public class Server {
                 }
                 reader.close();
                 protocolWriterServer.sendData(highscoreList.toString());
+                broadcast(Command.HIGH + Command.SEPARATOR + highscoreList.toString());
             } else {
                 protocolWriterServer.sendInfo("Highscore file not found.");
             }
