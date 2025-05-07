@@ -3,14 +3,13 @@ package ch.unibas.dmi.dbis.cs108.network;
 import ch.unibas.dmi.dbis.cs108.gui.GameLobbyController;
 import ch.unibas.dmi.dbis.cs108.gui.HighscoreListDialogController;
 import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
+import ch.unibas.dmi.dbis.cs108.server.Highscore;
 import javafx.application.Platform;
 
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -373,6 +372,7 @@ public class ProtocolReaderClient {
                     );
                     System.out.println(data.replace("|", "\n"));
                     display(data.replace("|", "\n"));
+                    saveHighscoreLocally(dataList);
                     break;
 
                 case WINN:
@@ -544,5 +544,18 @@ public class ProtocolReaderClient {
             }
             Platform.runLater(updateAction);
         }).start();
+    }
+
+    private void saveHighscoreLocally(List<String> dataList) {
+        Highscore highscore = new Highscore();
+        String path = highscore.getHighscoreFilePath();
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            for (String data : dataList) {
+                writer.write(data);
+                writer.newLine();
+            }
+        } catch (IOException ex) {
+            System.err.println("Failed to save highscore");
+        }
     }
 }
