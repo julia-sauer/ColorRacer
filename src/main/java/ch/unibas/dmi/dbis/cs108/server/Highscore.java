@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 public class Highscore {
 
     private static final String FILE_PATH = getHighscoreFilePath();
-    private List<String> highscoreList;
+    private final List<String> highscoreList;
     private Integer gameNumber;
 
     /**
@@ -87,7 +87,7 @@ public class Highscore {
         }
 
         if (highscoreList.size() > 10) {
-            highscoreList = highscoreList.subList(0,10);
+            highscoreList.subList(10, highscoreList.size()).clear();
         }
         saveHighscore();
     }
