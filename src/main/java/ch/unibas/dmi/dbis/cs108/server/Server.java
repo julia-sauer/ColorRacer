@@ -824,16 +824,16 @@ public class Server {
     public void getHighscoreList(int userId) {
         User user = UserList.getUser(userId);
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
+        String path = Highscore.getHighscoreFilePath();
 
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("highscore.txt")) {
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            if (path != null) {
                 StringBuilder highscoreList = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     highscoreList.append(line).append("|");
                 }
-                reader.close();
+                br.close();
                 protocolWriterServer.sendData(highscoreList.toString());
                 broadcast(Command.HIGH + Command.SEPARATOR + highscoreList.toString());
             } else {

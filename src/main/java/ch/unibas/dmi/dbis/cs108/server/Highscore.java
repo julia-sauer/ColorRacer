@@ -118,4 +118,8 @@ public class Highscore {
         }
         throw new IllegalArgumentException("Invalid highscore entry format: " + entry);
     }
+
+    public List<String> getHighscoreList() {
+        return highscoreList;
+    }
 }
