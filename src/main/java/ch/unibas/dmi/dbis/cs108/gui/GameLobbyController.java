@@ -285,6 +285,12 @@ public class GameLobbyController {
             new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
 
     /**
+     * The “Fullscreen Mode” {@link MenuItem} in the {@link MenuBar}.
+     */
+    @FXML
+    private CheckMenuItem fullscreenMode;
+
+    /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog
      * immediately after joining. It also sets the Map for the six images for the dice colors and for the 4 bike color images.
      * It sets the correct proportion of the gameboard so it fits perfectly to every screen size and also starts the background music.
@@ -1347,6 +1353,13 @@ public class GameLobbyController {
         } catch (IOException e) {
             showError("Error reading winners", e.getMessage());
         }
+    }
 
+    /**
+     * Toggles the stage’s fullscreen state whenever the “Fullscreen Mode” {@link CheckMenuItem} is clicked.
+     */
+    @FXML
+    private void onToggleFullscreen() {
+        primaryStage.setFullScreen(fullscreenMode.isSelected());
     }
 }

@@ -99,6 +99,12 @@ public class WelcomeLobbyController {
             new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
 
     /**
+     * The “Fullscreen Mode” {@link MenuItem} in the {@link MenuBar}.
+     */
+    @FXML
+    private CheckMenuItem fullscreenMode;
+
+    /**
      * This method initializes the lists and stores the static instance reference. It also starts the {@link MediaPlayer}
      * that plays the background music on a loop.
      */
@@ -498,6 +504,14 @@ public class WelcomeLobbyController {
         } catch (IOException e) {
             showError("Error reading highscore", e.getMessage());
         }
+    }
+
+    /**
+     * Toggles the stage’s fullscreen state whenever the “Fullscreen Mode” {@link CheckMenuItem} is clicked.
+     */
+    @FXML
+    private void onToggleFullscreen() {
+        primaryStage.setFullScreen(fullscreenMode.isSelected());
     }
 
     /**
