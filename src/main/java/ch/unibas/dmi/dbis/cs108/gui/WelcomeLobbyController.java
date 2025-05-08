@@ -93,6 +93,12 @@ public class WelcomeLobbyController {
     private MediaPlayer bgmPlayer;
 
     /**
+     * The {@link Media} of the click sound that we created.
+     */
+    private final Media clickMedia =
+            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
+
+    /**
      * This method initializes the lists and stores the static instance reference. It also starts the {@link MediaPlayer}
      * that plays the background music on a loop.
      */
@@ -109,6 +115,16 @@ public class WelcomeLobbyController {
         bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         bgmPlayer.setVolume(0.5);
         bgmPlayer.play();
+    }
+
+    /**
+     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
+     */
+    private void playClickThen() {
+        MediaPlayer p = new MediaPlayer(clickMedia);
+        p.setOnEndOfMedia(p::dispose);
+        p.setVolume(0.5);
+        p.play();
     }
 
     /**
@@ -214,6 +230,7 @@ public class WelcomeLobbyController {
     @FXML
     private void handleLeave() {
         try {
+            playClickThen();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/LeaveLobbyDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
 
@@ -244,6 +261,7 @@ public class WelcomeLobbyController {
      */
     @FXML
     private void handleNicknameChange() {
+        playClickThen();
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Choose Your Nickname");
         dialog.setHeaderText("Enter nickname:");
@@ -268,6 +286,7 @@ public class WelcomeLobbyController {
     @FXML
     private void handleEnterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
+            playClickThen();
             sendMessage();
         }
     }
@@ -305,6 +324,7 @@ public class WelcomeLobbyController {
      */
     @FXML
     private void handleCreateLobby() {
+        playClickThen();
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Create Lobby");
         dialog.setHeaderText("Enter lobby name:");
@@ -334,6 +354,7 @@ public class WelcomeLobbyController {
     @FXML
     private void handleJoinLobby() {
         try {
+            playClickThen();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/joinLobbyDialog.fxml"));
             VBox dialogPane = loader.load();
 
@@ -432,6 +453,7 @@ public class WelcomeLobbyController {
      */
     @FXML
     private void handleBroadcast() {
+        playClickThen();
         String message = txtUsermsg.getText().trim();
         if (!message.isEmpty()) {
             if (protocolWriter != null) {
@@ -456,6 +478,7 @@ public class WelcomeLobbyController {
     @FXML
     public void handleHighscoreList() {
         try {
+            playClickThen();
             protocolWriter.sendCommand(Command.HIGH);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/HighscoreListDialogTemplate.fxml"));

@@ -94,3 +94,24 @@
 .dialog-pane .list-view .list-cell:filled:hover {
     -fx-background-color: rgba(212,75,90,0.2);
 }
+.dialog-pane .text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #7A1F2E;
+    -fx-font-family: "VT323";
+    -fx-font-size: 16px;
+    -fx-border-color: #D44B5A;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+    -fx-prompt-text-fill: rgba(122,31,46,0.6);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0.2, 0, 2);
+}
+.dialog-pane .text-field:hover {
+    -fx-border-color: #A82A3A;
+    -fx-effect: dropshadow(gaussian, rgba(212,75,90,0.4), 6, 0.3, 0, 3);
+}
+.dialog-pane .text-field:focused {
+    -fx-border-color: #7A1F2E;
+    -fx-effect: dropshadow(three-pass-box, rgba(212,75,90,0.5), 8, 0, 0, 4);
+}

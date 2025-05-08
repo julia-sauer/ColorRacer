@@ -4,9 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This is the controller class for handling the "Join" lobby dialog window. This controller allows
@@ -31,6 +34,12 @@ public class JoinLobbyDialogController {
      * The lobby name selected by the user to join.
      */
     private String selectedLobby;
+
+    /**
+     * The {@link Media} of the click sound that we created.
+     */
+    private final Media clickMedia =
+            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
 
     /**
      * Sets the dialog stage used for this controller.
@@ -65,6 +74,7 @@ public class JoinLobbyDialogController {
      */
     @FXML
     private void handleJoin() {
+        playClickThen();
         selectedLobby = availableLobbies.getSelectionModel().getSelectedItem();
         dialogStage.close(); // Closes the dialog
     }
@@ -74,7 +84,18 @@ public class JoinLobbyDialogController {
      */
     @FXML
     private void handleCancel() {
+        playClickThen();
         selectedLobby = null;
         dialogStage.close(); // Closes the dialog without joining
+    }
+
+    /**
+     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
+     */
+    private void playClickThen() {
+        MediaPlayer p = new MediaPlayer(clickMedia);
+        p.setOnEndOfMedia(p::dispose);
+        p.setVolume(0.5);
+        p.play();
     }
 }

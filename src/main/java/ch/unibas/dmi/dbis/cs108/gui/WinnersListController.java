@@ -4,9 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This is the Controller class for displaying the list of winners in a dialog when the game has been won.
@@ -38,6 +41,12 @@ public class WinnersListController {
      */
     @FXML
     public ListView<String> winnersList;
+
+    /**
+     * The {@link Media} of the click sound that we created.
+     */
+    private final Media clickMedia =
+            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
 
     /**
      * Populates the {@link ListView} with the winners ranks.
@@ -89,7 +98,18 @@ public class WinnersListController {
      */
     @FXML
     public void handleClose() {
+        playClickThen();
         dialogStage.close();
+    }
+
+    /**
+     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
+     */
+    private void playClickThen() {
+        MediaPlayer p = new MediaPlayer(clickMedia);
+        p.setOnEndOfMedia(p::dispose);
+        p.setVolume(0.5);
+        p.play();
     }
 
 }

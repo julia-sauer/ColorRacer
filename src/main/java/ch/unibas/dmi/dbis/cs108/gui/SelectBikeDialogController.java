@@ -3,7 +3,11 @@ package ch.unibas.dmi.dbis.cs108.gui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 /**
  * This is the controller class for the "Select Bike" dialog. This dialog allows the user to choose
@@ -31,6 +35,12 @@ public class SelectBikeDialogController {
     private String selectedBike;
 
     /**
+     * The {@link Media} of the click sound that we created.
+     */
+    private final Media clickMedia =
+            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
+
+    /**
      * Sets the dialog stage associated with this controller.
      *
      * @param dialogStage The stage used for the dialog window.
@@ -47,6 +57,7 @@ public class SelectBikeDialogController {
      */
     @FXML
     private void handleBikeSelection(ActionEvent event) {
+        playClickThen();
         Object source = event.getSource();
         if (source == blackBike) {
             selectedBike = "black";
@@ -67,5 +78,15 @@ public class SelectBikeDialogController {
      */
     public String getSelectedBike() {
         return selectedBike;
+    }
+
+    /**
+     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
+     */
+    private void playClickThen() {
+        MediaPlayer p = new MediaPlayer(clickMedia);
+        p.setOnEndOfMedia(p::dispose);
+        p.setVolume(0.5);
+        p.play();
     }
 }

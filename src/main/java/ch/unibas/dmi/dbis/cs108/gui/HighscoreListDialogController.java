@@ -4,9 +4,12 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller class for the Highscore List Dialog.
@@ -34,6 +37,12 @@ public class HighscoreListDialogController {
      * The instance of this controller. Stored so other parts of the client can update the view.
      */
     private static HighscoreListDialogController instance;
+
+    /**
+     * The {@link Media} of the click sound that we created.
+     */
+    private final Media clickMedia =
+            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
 
     /**
      * Returns the instance of this controller.
@@ -80,9 +89,7 @@ public class HighscoreListDialogController {
      */
     public void setHighscoreList(List<String> highscoreList) {
         // make sure we’re on FX‑thread
-        Platform.runLater(() -> {
-            highscoreListView.setItems(FXCollections.observableArrayList(highscoreList));
-        });
+        Platform.runLater(() -> highscoreListView.setItems(FXCollections.observableArrayList(highscoreList)));
     }
 
     /**
@@ -90,6 +97,17 @@ public class HighscoreListDialogController {
      */
     @FXML
     public void handleClose() {
+        playClickThen();
         dialogStage.close();
+    }
+
+    /**
+     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
+     */
+    private void playClickThen() {
+        MediaPlayer p = new MediaPlayer(clickMedia);
+        p.setOnEndOfMedia(p::dispose);
+        p.setVolume(0.5);
+        p.play();
     }
 }

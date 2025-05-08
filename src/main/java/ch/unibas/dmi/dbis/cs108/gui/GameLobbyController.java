@@ -7,6 +7,7 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -32,7 +33,6 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -279,6 +279,12 @@ public class GameLobbyController {
     private MediaPlayer bgmPlayer;
 
     /**
+     * The {@link Media} of the click sound that we created.
+     */
+    private final Media clickMedia =
+            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
+
+    /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog
      * immediately after joining. It also sets the Map for the six images for the dice colors and for the 4 bike color images.
      * It sets the correct proportion of the gameboard so it fits perfectly to every screen size and also starts the background music.
@@ -358,6 +364,16 @@ public class GameLobbyController {
     }
 
     /**
+     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
+     */
+    private void playClickThen() {
+        MediaPlayer p = new MediaPlayer(clickMedia);
+        p.setOnEndOfMedia(p::dispose);
+        p.setVolume(0.5);
+        p.play();
+    }
+
+    /**
      * Sets the primary application stage for modal dialogs.
      *
      * @param stage The primary Stage
@@ -414,6 +430,7 @@ public class GameLobbyController {
      */
     @FXML
     private void handleBroadcast() {
+        playClickThen();
         String message = txtUsermsg.getText().trim();
         if (!message.isEmpty()) {
             if (protocolWriter != null) {
@@ -432,6 +449,7 @@ public class GameLobbyController {
     @FXML
     private void handleEnterPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
+            playClickThen();
             sendMessage();
         }
     }
@@ -472,6 +490,7 @@ public class GameLobbyController {
     private void handleReady() {
         try {
             if (protocolReader.bike) {
+                playClickThen();
                 protocolWriter.sendReadyStatus();
                 readyButton.setVisible(false);
             }
@@ -487,6 +506,7 @@ public class GameLobbyController {
     @FXML
     private void handleStart() {
         try {
+            playClickThen();
             protocolWriter.sendCommand(Command.STRT);
         } catch (IOException e) {
             showError("Failed to start the game", e.getMessage());
@@ -502,6 +522,7 @@ public class GameLobbyController {
     @FXML
     private void handleRestart() {
         try {
+            playClickThen();
             protocolWriter.sendCommand(Command.RSTT);
         } catch (IOException e) {
             showError("Failed to restart the game", e.getMessage());
@@ -526,6 +547,7 @@ public class GameLobbyController {
     @FXML
     private void handleFinish() {
         try {
+            playClickThen();
             protocolWriter.sendCommand(Command.FNSH);
             finishButton.setDisable(true);
             restartButton.setDisable(false);
@@ -541,6 +563,7 @@ public class GameLobbyController {
     @FXML
     private void handleThrowDice() {
         try {
+            playClickThen();
             protocolWriter.sendCommand(Command.ROLL);
         } catch (IOException e) {
             showError("Failed to throw the dices", e.getMessage());
@@ -586,6 +609,7 @@ public class GameLobbyController {
     @FXML
     private void handleMoveToField() {
         try {
+            playClickThen();
             protocolWriter.sendCommand(Command.MOVE);
             for (Button btn : selectedFieldButtons) { //clears highlight of the buttons
                 btn.getStyleClass().remove("field-button-selected");
@@ -605,6 +629,7 @@ public class GameLobbyController {
     @FXML
     private void handleSkip() {
         try {
+            playClickThen();
             protocolWriter.sendCommand(Command.NEXT);
             setDiceVisible(false);
         } catch (IOException e) {
@@ -660,6 +685,7 @@ public class GameLobbyController {
     @FXML
     private void handleLeave() {
         try {
+            playClickThen();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/LeaveLobbyDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
 
@@ -691,6 +717,7 @@ public class GameLobbyController {
     @FXML
     private void handleLeaveLobby() {
         try {
+            playClickThen();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/LeaveLobbyDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
 
@@ -754,6 +781,7 @@ public class GameLobbyController {
      */
     @FXML
     private void handleNicknameChange() {
+        playClickThen();
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Choose Your Nickname");
         dialog.setHeaderText("Enter nickname:");
@@ -776,6 +804,7 @@ public class GameLobbyController {
     @FXML
     private void handleBikeSelection() {
         try {
+            playClickThen();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/SelectBikeDialogTemplate.fxml"));
             VBox dialogPane = loader.load();
 
@@ -1169,6 +1198,7 @@ public class GameLobbyController {
      */
     @FXML
     public void handleFieldChoice(ActionEvent event) {
+        playClickThen();
         Button btn = (Button) event.getSource();
         String fieldId = btn.getId();
         try {
@@ -1262,6 +1292,7 @@ public class GameLobbyController {
     @FXML
     public void handleHighscoreList() {
         try {
+            playClickThen();
             protocolWriter.sendCommand(Command.HIGH);
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/HighscoreListDialogTemplate.fxml"));
@@ -1297,6 +1328,7 @@ public class GameLobbyController {
     @FXML
     public void displayWinners(List<String> podium) {
         try {
+            playClickThen();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layout/WinnersListTemplate.fxml"));
             StackPane dialogPane = fxmlLoader.load();
 
