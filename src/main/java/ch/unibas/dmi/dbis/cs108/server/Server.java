@@ -6,7 +6,6 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 
-import java.nio.file.Paths;
 import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.net.*;
@@ -212,13 +211,13 @@ public class Server {
     /**
      * This method is called when a client presses the 'roll'-button.
      * It first checks if the lobby of the user is null or the welcome lobby.
-     * Then it checks if the gamestate is 3 or 1.
+     * Then it checks if the game state is 3 or 1.
      * Then it checks if it is the players turn.
      * Then it checks if the player has already rolled.
      * If nothing of these are true then the method roll in the class Dice is called and the
      * rolled colors are sent back to the client.
      *
-     * @param userId the Id of the user from which the call of this method came
+     * @param userId the ID of the user from which the call of this method came
      */
     public static void rollTheDice(int userId) {
         User user = UserList.getUser(userId);
@@ -470,7 +469,7 @@ public class Server {
      * and a separator to the given message. It then iterates over all client writers and sends the
      * formatted message to each client.
      *
-     * @param message the message to be broadcasted to all clients.
+     * @param message the message to be broadcast to all clients.
      */
     public static void broadcastToAll(String message) {
         String broadcastMessage = Command.BROD.name() + Command.SEPARATOR + message;
@@ -481,11 +480,25 @@ public class Server {
     }
 
     /**
-     * Creates a new lobby with the given name and adds it to the global list of lobbies.
+     * Creates a new lobby with the given name and adds it to the global list of lobbies if the name does not already exist.
      *
      * @param lobbyName the name of the lobby to create
      */
     public static void createLobby(String lobbyName, Integer userId) {
+        for (Lobby lobby : lobbies) {
+            if (lobbyName.equalsIgnoreCase(lobby.getLobbyName())) {
+                if (userId != null) {
+                    User user = UserList.getUser(userId);
+                    ProtocolWriterServer writer = getOrCreateWriter(user);
+                    try {
+                        writer.sendInfo("This lobby already exists.");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return;
+            }
+        }
         Lobby lobby = new Lobby(lobbyName);
         lobbies.add(lobby);
         if (userId != null) {
@@ -550,8 +563,7 @@ public class Server {
                                 }
                             }
                             if (!lobbyName.equalsIgnoreCase("Welcome")) {
-                                protocolWriterServer.sendInfo(
-                                        "Please select a bike using: selectbike <black/magenta/green/darkblue> and then enter ready");
+                                protocolWriterServer.sendInfo("Please select a bike!");
                             }
                         } catch (IOException e) {
                             System.err.println("Error sending JOIN or INFO to user " + userId);
@@ -801,7 +813,7 @@ public class Server {
     }
 
     /**
-     * Shutsdown the server if it is not already closed.
+     * Shuts down the server if it is not already closed.
      */
     public static void shutdownServerA() {
         try {
@@ -816,9 +828,9 @@ public class Server {
 
     /**
      * Reads the data in the Highscore.txt-file and sends it to the Client via the
-     * ProtocolWirterServer
+     * ProtocolWriterServer
      *
-     * @param userId The Id from the user that sent the request for the HighscoreList.
+     * @param userId The ID from the user that sent the request for the HighscoreList.
      */
     public void getHighscoreList(int userId) {
         User user = UserList.getUser(userId);
