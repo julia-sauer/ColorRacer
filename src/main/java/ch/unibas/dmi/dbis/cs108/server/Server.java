@@ -116,7 +116,6 @@ public class Server {
     /**
      * Shuts down the server.
      */
-
     public static void shutdownServer() {
         try {
             echod.close();
@@ -820,7 +819,6 @@ public class Server {
             if (echod != null && !echod.isClosed()) {
                 echod.close();
             }
-            System.exit(0);
         } catch (IOException e) {
             System.err.println("Error when closing the Server: " + e.getMessage());
         }
