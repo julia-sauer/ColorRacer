@@ -366,8 +366,8 @@ public class ProtocolReaderServer {
                         break;
                     }
 
-                    if (userLobby.getGameState() != 1) {
-                        protocolWriterServer.sendInfo("-ERR The game already started or is already finished.");
+                    if (userLobby.getGameState() == 2) {
+                        protocolWriterServer.sendInfo("-ERR The game already started.");
                         break;
                     }
 
@@ -441,7 +441,6 @@ public class ProtocolReaderServer {
                     if (!allPlayersReady()) {
                         protocolWriterServer.sendInfo("Not all players are ready to play.");
                     }
-
                     break;
                 }
 
@@ -473,16 +472,19 @@ public class ProtocolReaderServer {
                         protocolWriterServer.sendInfo("You aren't part of a gameLobby.");
                         break;
                     }
-
-                    for (Lobby lobby : playerLobbies) {
-                        if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
-                            lobby.restartGame(userId);
-                            Server.updateAllClients();
-                            break;
+                    if (allPlayersReady()) {
+                        for (Lobby lobby : playerLobbies) {
+                            if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
+                                lobby.restartGame(userId);
+                                Server.updateAllClients();
+                                break;
+                            }
                         }
                     }
+                    if (!allPlayersReady()) {
+                        protocolWriterServer.sendInfo("Not all players are ready to play.");
+                    }
                     break;
-
                 }
 
                 case LIST: {
@@ -574,8 +576,8 @@ public class ProtocolReaderServer {
                         break;
                     }
 
-                    if (userLobby.getGameState() != 1) {
-                        protocolWriterServer.sendInfo("The game already started or is finished.");
+                    if (userLobby.getGameState() == 2) {
+                        protocolWriterServer.sendInfo("The game already started.");
                         break;
                     }
 
@@ -600,6 +602,10 @@ public class ProtocolReaderServer {
                     }
                     if (username.trim().equalsIgnoreCase(userLobby.getHostName().trim()) || !userLobby.winners.isEmpty()) {
                         userLobby.changeGameState(3);
+                        userLobby.readyStatus.clear();
+                        for (String player : userLobby.players) {
+                            userLobby.readyStatus.put(player, false);
+                        }
                         for (String player : userLobby.getPlayers()) {
                             User u = UserList.getUserByName(player);
                             if (u != null) {

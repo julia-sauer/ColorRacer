@@ -421,7 +421,7 @@ public class WelcomeLobbyController {
         // Now filter gameList entries by open status and player count < 4
         return gameList.getItems().stream()
                 .map(String::trim)
-                .filter(entry -> entry.contains("open")) // only non-running
+                .filter(entry -> entry.contains("open") || entry.contains("finished")) // only non-running
                 .map(entry -> entry.split("]")[0].replace("[Lobby: ", "").trim())
                 .filter(lobbyName -> playerCountMap.getOrDefault(lobbyName, 0) < 4)
                 .toList();

@@ -203,6 +203,9 @@ public class ProtocolReaderClient {
                         Platform.runLater(() ->
                                 GameLobbyController.getInstance().showTurnNotification(msg)
                         );
+                    } else if (parts[1].startsWith("The game has stopped.")) {
+                        gameLobbyController.readyButton.setVisible(true);
+                        display(msg);
                     } else {
                         display(msg);
                     }
@@ -327,6 +330,7 @@ public class ProtocolReaderClient {
                     gameLobbyController.restartButton.setDisable(false);
                     gameLobbyController.finishButton.setDisable(true);
                     protocolWriterClient.sendCommand(Command.FNSH);
+                    gameLobbyController.readyButton.setVisible(true);
                     break;
 
                 case LIST:
