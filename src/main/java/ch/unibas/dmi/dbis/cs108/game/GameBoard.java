@@ -2,8 +2,6 @@ package ch.unibas.dmi.dbis.cs108.game;
 
 import java.util.*;
 
-import static ch.unibas.dmi.dbis.cs108.server.Server.colors;
-
 /**
  * This class specifies the GameBoard with its fields. Every player has its own object of this
  * class.
@@ -16,6 +14,7 @@ public class GameBoard {
     private Field currentField;
     private final Set<Field> selectedFields;
     private final List<Field> selectedFieldList = new ArrayList<>();
+    public String[] colors;
 
     /**
      * Constructor of the class GameBoard. Defines the Map over the fields. Defines the Set over the
@@ -302,5 +301,35 @@ public class GameBoard {
     public void clearSelectedFields() {
         selectedFields.clear();
         selectedFieldList.clear();
+    }
+
+    /**
+     * Stores the result of the latest dice roll for this board.
+     *
+     * @param colors An array of color names (length 6) representing the dice roll.
+     */
+    public void setLastRoll(String[] colors) {
+        this.colors = colors;
+    }
+
+    /**
+     * Returns and clears the stored dice roll, preventing reuse after a MOVE.
+     *
+     * @return the array of colors from the last roll, or null if no roll is stored
+     */
+    public String[] consumeLastRoll() {
+        String[] tmp = colors;
+        colors = null;
+        return tmp;
+    }
+
+    /**
+     * Returns the stored dice roll without clearing it, allowing multiple
+     * field selections from the same roll before a MOVE.
+     *
+     * @return The array of colors from the last roll, or null if no roll is stored.
+     */
+    public String[] peekLastRoll() {
+        return colors;
     }
 }

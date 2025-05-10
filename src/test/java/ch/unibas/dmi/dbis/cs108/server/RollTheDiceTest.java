@@ -51,7 +51,7 @@ class RollTheDiceTest {
     board = lobby.getGameBoard("testPlayer");
 
     // Set available colors
-    Server.colors = new String[]{"purple", "yellow", "blue"};
+    board.colors = new String[]{"purple", "yellow", "blue"};
 
     // Mock ProtocolWriterServer and add it to the server's protocolWriters map
     mockWriter = mock(ProtocolWriterServer.class);

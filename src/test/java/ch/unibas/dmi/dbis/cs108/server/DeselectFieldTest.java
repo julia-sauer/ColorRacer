@@ -51,7 +51,7 @@ class DeselectFieldTest {
     board = lobby.getGameBoard("testPlayer");
 
     // Setting up colors, otherwise it will throw a NullPointerException
-    Server.colors = new String[]{"purple", "yellow", "blue"};
+    board.colors = new String[]{"purple", "yellow", "blue"};
   }
 
   /**
@@ -217,7 +217,7 @@ class DeselectFieldTest {
         .sendCommandAndString(eq(Command.DEOS), contains("purple1"));
     Server.protocolWriters.put(user.getOut(), faultyWriter);
 
-    Server.colors = new String[]{"purple", "yellow", "blue"};
+    board.colors = new String[]{"purple", "yellow", "blue"};
 
     // Call deselectField to trigger the IOException in the catch block
     Server.deselectField(1, "purple1");

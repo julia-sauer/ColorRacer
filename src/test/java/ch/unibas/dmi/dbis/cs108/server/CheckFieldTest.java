@@ -41,7 +41,7 @@ class CheckFieldTest {
     Server.lobbies.add(lobby);
 
     board = lobby.getGameBoard("testPlayer");
-    Server.colors = new String[]{"purple", "yellow", "blue"};
+    board.colors = new String[]{"purple", "yellow", "blue"};
 
     mockWriter = mock(ProtocolWriterServer.class);
     Server.protocolWriters.clear();
@@ -168,7 +168,7 @@ class CheckFieldTest {
     Field purple1 = board.getFieldById("purple1");
     board.setCurrentField(purple1); // Set the currentField
 
-    Server.colors = new String[]{"purple", "yellow", "blue"};
+    board.colors = new String[]{"purple", "yellow", "blue"};
 
     ProtocolWriterServer mockWriter = mock(ProtocolWriterServer.class);
     doThrow(new IOException("Simulated CHOS error"))

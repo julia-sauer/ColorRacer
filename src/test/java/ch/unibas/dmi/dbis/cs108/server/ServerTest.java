@@ -152,8 +152,10 @@ public class ServerTest {
     lobby.addPlayers(userId);
     Server.lobbies.add(lobby);
 
+    GameBoard board = lobby.getGameBoard("FieldUser");
+
     // Set the valid colors for the test
-    Server.colors = new String[]{"purple", "blue", "red", "green", "orange", "pink", "yellow"};
+    board.colors = new String[]{"purple", "blue", "red", "green", "orange", "pink", "yellow"};
 
     // Set the game state to 2 (running)
     lobby.changeGameState(2);
@@ -163,8 +165,6 @@ public class ServerTest {
 
     // Perform the action to check the field
     Server.checkField(userId, "purple1");
-
-    GameBoard board = lobby.getGameBoard("FieldUser");
 
     // Ensure the field is selected after the checkField call
     assertTrue(board.inSelectedField(board.getFieldById("purple1")), "Field should be selected");

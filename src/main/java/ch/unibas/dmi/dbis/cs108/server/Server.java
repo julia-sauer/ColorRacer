@@ -27,7 +27,6 @@ public class Server {
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
     public static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
-    public static String[] colors;
     public static int port;
     public static List<Lobby> lobbies = new ArrayList<>();
     public static Map<OutputStream, ProtocolWriterServer> protocolWriters = new HashMap<>();
@@ -262,10 +261,12 @@ public class Server {
             return;
         }
         Dice dice = new Dice();
-        colors = dice.roll();
+        String[] roll = dice.roll();
+        GameBoard board = userlobby.getGameBoard(user.getNickname());
+        board.setLastRoll(roll);
         user.setHasRolled(true);
-        //String[] colors to String
-        String colorText = Arrays.toString(colors);
+        String colorText = Arrays.toString(roll);
+
         try {
             protocolWriterServer.sendCommandAndString(Command.ROLL, colorText);
         } catch (IOException e) {
@@ -326,7 +327,8 @@ public class Server {
             Field selectedField = gameBoard.getFieldById(fieldId);
             gameBoard.addSelectedField(selectedField);
             // build a list of all non-null colors left in Server.colors
-            String newColors = Arrays.stream(Server.colors)
+            String[] colors = gameBoard.peekLastRoll();
+            String newColors = Arrays.stream(colors)
                     // turn each null into the string "null", otherwise keep the color name
                     .map(c -> c == null ? "null" : c)
                     // join into a single comma-separated string
@@ -437,6 +439,7 @@ public class Server {
             return;
         }
         board.moveToLastSelected();
+        board.consumeLastRoll();
         Field newField = board.getCurrentField();
         for (String playerName : userLobby.getPlayers()) {
             User otherUser = UserList.getUserByName(playerName);

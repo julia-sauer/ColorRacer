@@ -38,8 +38,6 @@ public class MoveToSelectedFieldTest {
     Server.lobbies.clear();
     UserList.clear();
 
-    Server.colors = new String[]{"purple", "yellow", "blue"};
-
     // Add a new user to the UserList and get the corresponding User object
     int userId = UserList.addUser("testPlayer", mockOut);
     user = UserList.getUser(userId);
@@ -51,6 +49,8 @@ public class MoveToSelectedFieldTest {
     Server.lobbies.add(lobby);
 
     board = lobby.getGameBoard("testPlayer");
+
+    board.setLastRoll(new String[]{"purple", "yellow", "blue"});
 
     // Select a field in the game board for the user to move to later
     Field field = board.getFieldById("purple1");

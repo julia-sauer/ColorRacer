@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.gui;
 
 import ch.unibas.dmi.dbis.cs108.client.Client;
+import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -85,6 +86,7 @@ public class GUI extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
+        client.getProtocolWriter().sendCommandAndString(Command.QCNF, "YES");
         client.disconnect();
     }
 

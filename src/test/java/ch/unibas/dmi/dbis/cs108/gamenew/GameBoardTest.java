@@ -2,7 +2,6 @@ package ch.unibas.dmi.dbis.cs108.gamenew;
 
 import ch.unibas.dmi.dbis.cs108.game.Field;
 import ch.unibas.dmi.dbis.cs108.game.GameBoard;
-import ch.unibas.dmi.dbis.cs108.server.Server;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,7 @@ class GameBoardTest {
   @BeforeEach
   void setUp() {
     board = new GameBoard();
-    Server.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", "purple"};
+    board.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", "purple"};
   }
 
   /**
@@ -74,7 +73,7 @@ class GameBoardTest {
    */
   @Test
   void testIsValidFieldReturnsFalseIfColorNotAvailable() {
-    Server.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", null};
+    board.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", null};
     boolean valid = board.isValidField("purple1");
     assertFalse(valid);
   }
@@ -86,7 +85,7 @@ class GameBoardTest {
   void testDeselectFieldsRestoresColors() {
     Field f1 = board.getFieldById("purple1");
     board.addSelectedField(f1);
-    Server.colors = new String[]{null, "orange", "pink", "yellow", "green", "red", "blue"};
+    board.colors = new String[]{null, "orange", "pink", "yellow", "green", "red", "blue"};
     String newColors = board.deselectFields(f1);
     assertTrue(newColors.contains("purple"));
     assertTrue(board.selectedFieldsEmpty());
@@ -99,7 +98,7 @@ class GameBoardTest {
   void testIsValidFieldReturnsTrueForNeighborOfSelectedField() {
     Field selected = board.getFieldById("purple1");
     board.addSelectedField(selected);
-    Server.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", "purple"};
+    board.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", "purple"};
     boolean valid = board.isValidField("red1");
     assertTrue(valid);
   }
@@ -138,7 +137,7 @@ class GameBoardTest {
   void testIsValidFieldReturnsFalseIfColorNotAvailableButConnectedNeighbor() {
     Field selected = board.getFieldById("purple1");
     board.addSelectedField(selected);
-    Server.colors = new String[]{"blue", "orange", "pink", "yellow", "green", null, "purple"};
+    board.colors = new String[]{"blue", "orange", "pink", "yellow", "green", null, "purple"};
     boolean valid = board.isValidField("red1");
     assertFalse(valid);
   }
@@ -150,7 +149,7 @@ class GameBoardTest {
   void testIsValidFieldTriggersReturnTrueInElseBranch() {
     Field selected = board.getFieldById("purple1");
     board.addSelectedField(selected);
-    Server.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", "purple"};
+    board.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", "purple"};
     boolean valid = board.isValidField("red1");
     assertTrue(valid);
   }
@@ -161,7 +160,7 @@ class GameBoardTest {
   @Test
   void testIsValidFieldReturnsFalseIfNotConnectedAtAll() {
     Field distant = board.getFieldById("blue10");
-    Server.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", "purple"};
+    board.colors = new String[]{"blue", "orange", "pink", "yellow", "green", "red", "purple"};
     boolean valid = board.isValidField("blue10");
     assertFalse(valid);
   }
@@ -199,7 +198,7 @@ class GameBoardTest {
   void testDeselectFieldsWhenFieldNotFound() {
     Field unselectedField = new Field("nonexistent1", "yellow");
 
-    String beforeColors = Arrays.toString(Server.colors);
+    String beforeColors = Arrays.toString(board.colors);
 
     String afterColors = board.deselectFields(unselectedField);
 
@@ -248,7 +247,7 @@ class GameBoardTest {
     board.addSelectedField(purple1);
 
     // Mocking color restoration
-    Server.colors = new String[]{null, "orange", "pink", "yellow", "green", "red", "purple"};
+    board.colors = new String[]{null, "orange", "pink", "yellow", "green", "red", "purple"};
 
     // Call deselectFields to remove the selected field
     String result = board.deselectFields(purple1);
@@ -270,7 +269,7 @@ class GameBoardTest {
     board.addSelectedField(red1);
 
     // Set the colors in the server for restoration
-    Server.colors = new String[]{null, null, "pink", "yellow", "green", "blue", "orange"};
+    board.colors = new String[]{null, null, "pink", "yellow", "green", "blue", "orange"};
 
     // Call deselectFields to clear the selection
     String result = board.deselectFields(purple1);
@@ -297,7 +296,7 @@ class GameBoardTest {
     board.addSelectedField(red1);
 
     // Set the colors in the server
-    Server.colors = new String[]{null, null, "pink", "yellow", "green", "blue", "orange"};
+    board.colors = new String[]{null, null, "pink", "yellow", "green", "blue", "orange"};
 
     // Call deselectFields on purple1
     board.deselectFields(purple1);
@@ -325,7 +324,7 @@ class GameBoardTest {
     board.addSelectedField(f3);
 
     // Set the colors in the server
-    Server.colors = new String[]{null, null, null, null, null, null, null};
+    board.colors = new String[]{null, null, null, null, null, null, null};
 
     // Call deselectFields on the first selected field
     String result = board.deselectFields(f1);
