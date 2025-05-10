@@ -8,8 +8,6 @@ import javafx.application.Platform;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -146,7 +144,6 @@ public class ProtocolReaderClient {
                     break;
 
                 case PING:
-                    //System.out.println("PING received from Server");
                     protocolWriterClient.sendCommand(Command.PONG);
                     break;
 
@@ -203,8 +200,15 @@ public class ProtocolReaderClient {
                         Platform.runLater(() ->
                                 GameLobbyController.getInstance().showTurnNotification(msg)
                         );
-                    } else if (parts[1].startsWith("The game has stopped.")) {
+                    } else if (parts[1].startsWith("The game has stopped")) {
                         gameLobbyController.readyButton.setVisible(true);
+                        gameLobbyController.finishButton.setDisable(true);
+                        gameLobbyController.restartButton.setDisable(false);
+                        display(msg);
+                    } else if (parts[1].startsWith("+LFT ") && gameLobby) {
+                        String[] leaveMessage = parts[1].split(" ");
+                        String nameLeaving = leaveMessage[1];
+                        GameLobbyController.getInstance().removePlayerBike(nameLeaving);
                         display(msg);
                     } else {
                         display(msg);
@@ -298,6 +302,11 @@ public class ProtocolReaderClient {
                     if (!gameLobby) {
                         welcomeLobbyController.displayChat(brodMsg);
                         break;
+                    }
+                    if (parts[1].startsWith("+LFT ")) {
+                        String[] leaveMessage = parts[1].split(" ");
+                        String nameLeaving = leaveMessage[1];
+                        GameLobbyController.getInstance().removePlayerBike(nameLeaving);
                     }
                     gameLobbyController.displayChat(brodMsg);
                     break;
@@ -401,6 +410,16 @@ public class ProtocolReaderClient {
                     Platform.runLater(() ->
                             GameLobbyController.getInstance().displayWinners(podium)
                     );
+                    break;
+
+                case QCNF:
+                    protocolWriterClient.sendCommandAndString(Command.QCNF, "YES");
+                    if (gameLobby) {
+                        gameLobbyController.leaveServer();
+                    } else {
+                        welcomeLobbyController.leaveServer();
+                    }
+                    break;
 
                 default:
                     System.out.println("Unknown command from Server: " + line);

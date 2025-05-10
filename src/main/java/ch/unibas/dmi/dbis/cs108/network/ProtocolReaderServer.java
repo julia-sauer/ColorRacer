@@ -224,7 +224,6 @@ public class ProtocolReaderServer {
                     if ("YES".equals(confirmation)) {
                         protocolWriterServer.sendInfo("Disconnecting...");
 
-                        // 🗣️ 1. Alle informieren, bevor die Verbindung geschlossen wird
                         Server.broadcastToAll("+LFT " + nickname + " has left the game");
                         UserList.removeUser(userId);
                         Lobby userLobby = null;
@@ -233,8 +232,28 @@ public class ProtocolReaderServer {
                                 userLobby = lobby;
                             }
                         }
-                        if (userLobby != null) {
+                        if (userLobby != null && nickname != null) {
                             userLobby.removePlayer(nickname);
+                            if (userLobby.getGameState() == 2) {
+                                if (userLobby.players.size() < 2) {
+                                    userLobby.changeGameState(3);
+                                    userLobby.readyStatus.clear();
+                                    for (String player : userLobby.players) {
+                                        userLobby.readyStatus.put(player, false);
+                                    }
+                                    for (String player : userLobby.getPlayers()) {
+                                        User u = UserList.getUserByName(player);
+                                        if (u != null) {
+                                            ProtocolWriterServer writer = Server.getOrCreateWriter(u);
+                                            try {
+                                                writer.sendInfo("The game has stopped due to too few players!");
+                                            } catch (IOException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         clientHandler.disconnectClient();
 
@@ -277,12 +296,11 @@ public class ProtocolReaderServer {
                     }
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR No FieldId from Client " + userId);
-                        break;
                     } else {
                         String fieldId = parts[1].trim();
                         Server.checkField(userId, fieldId);
-                        break;
                     }
+                    break;
 
                 case MOVE:
                     String nick = UserList.getUserName(userId);
@@ -293,7 +311,6 @@ public class ProtocolReaderServer {
                             protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
                             break;
                         }
-
                         if (!isMyTurn(protocolWriterServer)) {
                             break;
                         }
@@ -315,11 +332,10 @@ public class ProtocolReaderServer {
                         }
                         userLobby.advanceTurn();  // next player
 
-                        break;
                     } else {
                         protocolWriterServer.sendInfo("-ERR You are not in a valid lobby.");
-                        break;
                     }
+                    break;
                 }
 
                 case DEOS:
@@ -328,12 +344,11 @@ public class ProtocolReaderServer {
                     }
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR No FieldId from Client " + userId);
-                        break;
                     } else {
                         String fieldId = parts[1].trim();
                         Server.deselectField(userId, fieldId);
-                        break;
                     }
+                    break;
 
                 case VELO: {
                     //checks if user is in a game lobby
@@ -557,7 +572,6 @@ public class ProtocolReaderServer {
                             default -> "unknown";
                         };
                     }
-
                     break;
                 }
                 case RADY: {

@@ -254,11 +254,19 @@ public class WelcomeLobbyController {
             dialogStage.showAndWait();
 
             if (controller.isLeaving) {
-                client.disconnect();
+                protocolWriter.sendCommandAndString(Command.QCNF, "YES");
+                leaveServer();
             }
         } catch (IOException e) {
             showError("Failed to open leave lobby dialog", e.getMessage());
         }
+    }
+
+    /**
+     * This method disconnects the client from the server.
+     */
+    public void leaveServer(){
+        client.disconnect();
     }
 
     /**

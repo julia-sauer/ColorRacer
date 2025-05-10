@@ -32,7 +32,7 @@ public class Client {
     /**
      * The username chosen by the client
      */
-    private final String username;
+    public final String username;
 
     /**
      * Responsible for reading protocol messages sent from the server
@@ -90,8 +90,8 @@ public class Client {
         try {
             // Verbindung zum Server herstellen
             this.sock = new Socket(host, port);
-            this.in   = sock.getInputStream();
-            this.out  = sock.getOutputStream();
+            this.in = sock.getInputStream();
+            this.out = sock.getOutputStream();
 
             this.protocolWriterClient = new ProtocolWriterClient(out);
 
@@ -315,7 +315,6 @@ public class Client {
     /**
      * Disconnects the client from the server.
      * This method performs the following steps:
-     * Sends a {@code QCNF YES} command to inform the server of the client's intention to leave the server.
      * Closes the input and output streams as well as the socket connection.
      * Terminates the JavaFX application via {@link javafx.application.Platform#exit()}.
      * Terminates the Java Virtual Machine with {@code System.exit(0)}.
@@ -324,9 +323,6 @@ public class Client {
      */
     public void disconnect() {
         try {
-            if (protocolWriterClient != null) {
-                protocolWriterClient.sendCommandAndString(Command.QCNF, "YES");
-            }
             in.close();
             out.close();
             sock.close();

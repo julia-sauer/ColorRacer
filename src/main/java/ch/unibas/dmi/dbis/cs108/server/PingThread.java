@@ -68,7 +68,8 @@ public class PingThread extends Thread {
                 if (pong == null) {
                     // no PONG in time ⇒ timeout
                     System.out.println("Connection timed out for Client " + clientNumber);
-                    clientSocket.close();
+                    protocolWriterServer.sendCommand(Command.QCNF);
+//                    clientSocket.close();
                     break;
                 }
                 // 3) we got a PONG—now *pause* before sending the next PING

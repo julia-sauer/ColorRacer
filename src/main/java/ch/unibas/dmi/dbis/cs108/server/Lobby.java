@@ -200,12 +200,16 @@ public class Lobby implements Runnable {
     /**
      * Removes a player from the lobby by their nickname.
      * <p>
-     * This method is thread-safe and ensures that the internal player list is updated safely. It
-     * prevents the host from being removed.
+     * This method is thread-safe and ensures that the internal player list is updated safely. If the host leaves
+     * his title will be moved to the next player in line that joined. If a player is removed that is currently
+     * on his turn, the turn will be advanced to the next player.
      *
      * @param playerName The nickname of the player to remove.
      */
     public synchronized void removePlayer(String playerName) {
+        boolean wasCurrent = playerName.equals(getCurrentPlayer());
+        int removedIndex = playerOrder.indexOf(playerName);
+
         players.remove(playerName);
         playerOrder.remove(playerName); // Player removed from sequence too
         playerGameBoards.remove(playerName);
@@ -218,6 +222,14 @@ public class Lobby implements Runnable {
             } else {
                 hostName = null;
             }
+        }
+
+        if (gamestate == 2 && wasCurrent && !playerOrder.isEmpty()) {
+            currentPlayerIndex = removedIndex - 1;
+            if (currentPlayerIndex < 0) {
+                currentPlayerIndex = playerOrder.size() - 1;
+            }
+            advanceTurn();
         }
     }
 
@@ -452,9 +464,6 @@ public class Lobby implements Runnable {
                 return; // beende advanceTurn(), kein gültiger Spieler mehr da
             }
         } while (winners.contains(currentPlayer));
-
-        GameBoard board = getGameBoard(currentPlayer);
-        Field currentField = board.getCurrentField();
 
         User currentUser = UserList.getUserByName(currentPlayer);
         if (currentUser != null) {

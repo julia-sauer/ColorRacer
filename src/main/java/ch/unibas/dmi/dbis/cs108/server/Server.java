@@ -85,7 +85,6 @@ public class Server {
      * @return the unique user-ID.
      */
     public static int addNewUser(String userName, OutputStream ClientOut) {
-
         return UserList.addUser(userName, ClientOut);
     }
 
@@ -333,7 +332,6 @@ public class Server {
                     // join into a single comma-separated string
                     .collect(Collectors.joining(","));
             try {
-//        protocolWriterServer.sendCommandAndString(Command.CHOS, fieldId);
                 protocolWriterServer.sendCommandAndString(Command.CHOS, fieldId + Command.SEPARATOR + newColors);
             } catch (IOException e) {
                 System.err.println("Error sending " + Command.CHOS + fieldId);
@@ -528,10 +526,7 @@ public class Server {
         if (user == null) {
             return;
         }
-
-        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters,
-                user.getOut());
-
+        ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, user.getOut());
         boolean lobbyFound = false;
 
         for (Lobby lobby : lobbies) {
@@ -542,8 +537,38 @@ public class Server {
                 for (Lobby otherLobby : lobbies) {
                     if (otherLobby.getPlayers().contains(userName)) {
                         otherLobby.removePlayer(userName);
-                        System.out.println(
-                                "User '" + userName + "' removed from lobby: " + otherLobby.getLobbyName());
+                        System.out.println("User '" + userName + "' removed from lobby: " + otherLobby.getLobbyName());
+                        for (String player : otherLobby.getPlayers()) {
+                            User users = UserList.getUserByName(player);
+                            if (users != null && !otherLobby.getLobbyName().equals("Welcome")) {
+                                ProtocolWriterServer writer = Server.getOrCreateWriter(users);
+                                try {
+                                    writer.sendInfo("+LFT " + userName + " has left the lobby.");
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+                        if (otherLobby.getGameState() == 2) {
+                            if (otherLobby.players.size() < 2) {
+                                otherLobby.changeGameState(3);
+                                otherLobby.readyStatus.clear();
+                                for (String player : otherLobby.players) {
+                                    otherLobby.readyStatus.put(player, false);
+                                }
+                                for (String player : otherLobby.getPlayers()) {
+                                    User u = UserList.getUserByName(player);
+                                    if (u != null) {
+                                        ProtocolWriterServer writer = Server.getOrCreateWriter(u);
+                                        try {
+                                            writer.sendInfo("The game has stopped due to too few players!");
+                                        } catch (IOException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 

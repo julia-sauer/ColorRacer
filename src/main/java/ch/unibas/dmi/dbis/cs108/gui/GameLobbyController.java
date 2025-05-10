@@ -656,6 +656,9 @@ public class GameLobbyController {
      *                         where X is the player's name (e.g., "It’s Alice’s turn!").
      */
     public void showTurnNotification(String turnNotification) {
+        if (this.nickname == null) {
+            this.nickname = client.username;
+        }
         Platform.runLater(() -> {
             Label turnLabel = new Label();
             String[] separate = turnNotification.split(" ");
@@ -709,11 +712,19 @@ public class GameLobbyController {
             dialogStage.showAndWait();
 
             if (controller.isLeaving) {
-                client.disconnect();
+                protocolWriter.sendCommandAndString(Command.QCNF, "YES");
+                leaveServer();
             }
         } catch (IOException e) {
             showError("Failed to open leave lobby dialog", e.getMessage());
         }
+    }
+
+    /**
+     * This method disconnects the client from the server.
+     */
+    public void leaveServer(){
+        client.disconnect();
     }
 
     /**
@@ -908,6 +919,24 @@ public class GameLobbyController {
             zoomGroup.getChildren().addAll(iv, lbl);
             // place at starting field:
             updatePlayerPosition(player, "white1");
+        });
+    }
+
+    /**
+     * Removes the bike and label of a player from the game board when they leave.
+     *
+     * @param player The nickname of the player whose bike should be removed.
+     */
+    public void removePlayerBike(String player) {
+        Platform.runLater(() -> {
+            ImageView iv = playerBikes.remove(player);
+            Label lbl = playerLabels.remove(player);
+            if (iv != null) {
+                zoomGroup.getChildren().remove(iv);
+            }
+            if (lbl != null) {
+                zoomGroup.getChildren().remove(lbl);
+            }
         });
     }
 
