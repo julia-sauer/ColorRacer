@@ -69,5 +69,20 @@ test {
     useJUnitPlatform()
 }
 
+/*
+The following block adds both compile and runtime dependencies to the jar
+ */
+jar {
 
+    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
 
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+    from {
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
