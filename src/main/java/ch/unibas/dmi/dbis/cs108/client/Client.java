@@ -6,6 +6,8 @@ import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
@@ -18,7 +20,7 @@ import java.net.Socket;
  * or joining lobbies, chatting, selecting game options, and controlling gameplay flow.
  */
 public class Client {
-
+    private static final Logger LOGGER = LogManager.getLogger(Client.class);
     /**
      * The username chosen by the client
      */
@@ -114,31 +116,31 @@ public class Client {
                 e.printStackTrace();
             }
 
-            System.out.println("Available commands:");
-            System.out.println("- nicknamechange <newnickname>" + "   -> to change your nickname");
-            System.out.println(
+            LOGGER.info("Available commands:");
+            LOGGER.info("- nicknamechange <newnickname>" + "   -> to change your nickname");
+            LOGGER.info(
                     "- message <your message>" + "   -> to send a message to others in your lobby");
-            System.out.println("- whisper <receiver> <your message>"
+            LOGGER.info("- whisper <receiver> <your message>"
                     + "   -> to send a private message to another player");
-            System.out.println(
+            LOGGER.info(
                     "- broadcast <your broadcast>" + "   -> to send a message to all users on the server");
-            System.out.println("- createlobby <lobbyname>" + "   -> to create a lobby");
-            System.out.println("- connect <lobbyname>" + "   -> to connect to an existing lobby");
-            System.out.println("- list" + "   -> to list all players on the server");
-            System.out.println("- lobbymembers" + "   -> to list all players in your lobby");
-            System.out.println(
+            LOGGER.info("- createlobby <lobbyname>" + "   -> to create a lobby");
+            LOGGER.info("- connect <lobbyname>" + "   -> to connect to an existing lobby");
+            LOGGER.info("- list" + "   -> to list all players on the server");
+            LOGGER.info("- lobbymembers" + "   -> to list all players in your lobby");
+            LOGGER.info(
                     "- gamelist" + "   -> to list all ongoing games and lobbies on the server");
-            System.out.println(
+            LOGGER.info(
                     "- selectbike <black/magenta/green/darkblue> " + "   -> to select a bike color");
-            System.out.println("- ready" + "   -> to signal that you are ready to play");
-            System.out.println("- start" + "   -> to start a game");
-            System.out.println("- throwdice" + "   -> to throw a dice");
-            System.out.println("- fieldchoice <fieldid>" + "   -> to select a field");
-            System.out.println("- movetofield" + "   -> to move to the selected field");
-            System.out.println("- next" + "   -> to skip your turn");
-            System.out.println("- finish" + "   -> to end the game (if you are the host)");
-            System.out.println("- leave" + "   -> to quit the server");
-            System.out.println("- restart" + "   -> to start a new game");
+            LOGGER.info("- ready" + "   -> to signal that you are ready to play");
+            LOGGER.info("- start" + "   -> to start a game");
+            LOGGER.info("- throwdice" + "   -> to throw a dice");
+            LOGGER.info("- fieldchoice <fieldid>" + "   -> to select a field");
+            LOGGER.info("- movetofield" + "   -> to move to the selected field");
+            LOGGER.info("- next" + "   -> to skip your turn");
+            LOGGER.info("- finish" + "   -> to end the game (if you are the host)");
+            LOGGER.info("- leave" + "   -> to quit the server");
+            LOGGER.info("- restart" + "   -> to start a new game");
 
             // reading input
             BufferedReader conin = new BufferedReader(new InputStreamReader(System.in));
