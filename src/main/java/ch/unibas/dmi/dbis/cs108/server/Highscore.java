@@ -1,9 +1,9 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.nio.file.Paths;
 
 /**
  * This class writes in to the highscore file when the winner order is determined.
@@ -122,6 +122,7 @@ public class Highscore {
 
     /**
      * This method returns the saved highscore list in form of a {@link List}.
+     *
      * @return The string list of the saved highscore list.
      */
     public List<String> getHighscoreList() {

@@ -1,6 +1,9 @@
 package ch.unibas.dmi.dbis.cs108.network;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -44,7 +47,7 @@ public class ProtocolWriterServer {
      */
     public void sendChat(String message, String sender) {
         String formatted = Command.CHAT + Command.SEPARATOR + sender + Command.SEPARATOR + message;
-        writer.println(formatted);   //  Use the class-level writer
+        writer.println(formatted);
         writer.flush();
     }
 
@@ -118,5 +121,4 @@ public class ProtocolWriterServer {
     public void sendData(String data) {
         sendToClient(Command.HIGH + Command.SEPARATOR + data);
     }
-
 }

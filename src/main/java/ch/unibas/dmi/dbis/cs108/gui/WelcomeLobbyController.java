@@ -2,8 +2,8 @@ package ch.unibas.dmi.dbis.cs108.gui;
 
 import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.Command;
-import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
+import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -14,15 +14,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class is the controller for the Welcome Lobby view. Manages display and interaction for
@@ -133,7 +135,6 @@ public class WelcomeLobbyController {
             e.printStackTrace();
         }
     }
-
 
     /**
      * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
@@ -418,7 +419,6 @@ public class WelcomeLobbyController {
     private List<String> getAvailableLobbyNames() {
         Map<String, Integer> playerCountMap = new HashMap<>();
 
-        // Build map of lobby name → player count from lobbylist
         for (String entry : lobbylist.getItems()) {
             try {
                 String lobbyName = entry.split("]")[0].replace("[Lobby: ", "").trim();
@@ -435,7 +435,6 @@ public class WelcomeLobbyController {
             }
         }
 
-        // Now filter gameList entries by open status and player count < 4
         return gameList.getItems().stream()
                 .map(String::trim)
                 .filter(entry -> entry.contains("open") || entry.contains("finished")) // only non-running
@@ -575,11 +574,9 @@ public class WelcomeLobbyController {
                     bgmPlayer.stop();
                     bgmPlayer.dispose();
                 }
-                //primaryStage.setMaximized(true);
                 Scene scene = new Scene(gameLobbyRoot);
                 primaryStage.setScene(scene);
 
-                // Show the window
                 primaryStage.show();
             } catch (IOException e) {
                 showError("Failed to load the GameLobby" + lobbyName, e.getMessage());

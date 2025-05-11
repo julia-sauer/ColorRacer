@@ -4,8 +4,11 @@ package ch.unibas.dmi.dbis.cs108.server;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderServer;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -90,11 +93,9 @@ public class ClientHandler implements Runnable {
             out = clientSocket.getOutputStream();
             ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
 
-            // Starts a PingThread
             pingThread = new PingThread(clientSocket, clientNumber, in, out, this::disconnectClient);
             pingThread.start();
 
-            // Generates a Thread for reading messages
             ProtocolReaderServer protocolReader = new ProtocolReaderServer(in, userId, out, pingThread, this); // Pass disconnect callback
 
             Thread readerThread = new Thread(() -> {
@@ -107,7 +108,7 @@ public class ClientHandler implements Runnable {
             });
             readerThread.start();
 
-            String welcomeMsg = "Welcome to the Server!\n"; //Welcome message
+            String welcomeMsg = "Welcome to the Server!\n";
             protocolWriterServer.sendInfo(welcomeMsg);
 
             while (running) {
@@ -145,7 +146,7 @@ public class ClientHandler implements Runnable {
             if (pingThread != null) {
                 pingThread.stopPinging();
             }
-            removeUser(clientNumber); // the invocation of the method removeUser
+            removeUser(clientNumber);
             Server.updateAllClients();
             Server.ClientDisconnected();
         } catch (IOException e) {

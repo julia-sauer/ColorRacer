@@ -3,7 +3,10 @@ package ch.unibas.dmi.dbis.cs108.server;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,10 +71,10 @@ public class PingThread extends Thread {
     /**
      * Creates a new {@code PingThread} for a specific client.
      *
-     * @param clientSocket The client's socket.
-     * @param clientNumber The unique number of the client.
-     * @param in           The InputStream for messages.
-     * @param out          The OutputStream for messages.
+     * @param clientSocket       The client's socket.
+     * @param clientNumber       The unique number of the client.
+     * @param in                 The InputStream for messages.
+     * @param out                The OutputStream for messages.
      * @param disconnectCallback The runnable that activates the clean disconnection of the client when the connection is lost.
      */
 

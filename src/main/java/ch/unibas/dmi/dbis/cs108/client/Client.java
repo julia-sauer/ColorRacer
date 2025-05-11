@@ -7,8 +7,8 @@ import ch.unibas.dmi.dbis.cs108.network.ProtocolReaderClient;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
 import javafx.application.Platform;
 
-import java.net.*;
 import java.io.*;
+import java.net.Socket;
 
 /**
  * The {@code Client} class establishes a connection to a server and enables communication via a

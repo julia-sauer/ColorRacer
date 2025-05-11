@@ -2,20 +2,21 @@ package ch.unibas.dmi.dbis.cs108.server;
 
 import ch.unibas.dmi.dbis.cs108.game.Dice;
 import ch.unibas.dmi.dbis.cs108.game.Field;
-import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
-import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.game.GameBoard;
+import ch.unibas.dmi.dbis.cs108.network.Command;
+import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.*;
-import java.nio.charset.StandardCharsets;
-import java.net.*;
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static java.lang.System.out;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * The class {@code Server} provides a simple multi-user chat server. It manages client connections,
@@ -110,7 +111,7 @@ public class Server {
     /**
      * Adds a new user to the user list.
      *
-     * @param userName The name of the new user.
+     * @param userName  The name of the new user.
      * @param clientOut The output stream of the new client.
      * @return The unique user-ID.
      */
@@ -372,7 +373,7 @@ public class Server {
             try {
                 protocolWriterServer.sendCommandAndString(Command.INFO, "Field is invalid.");
             } catch (IOException e) {
-                LOGGER.error("Error sending error message.", e  );
+                LOGGER.error("Error sending error message.", e);
             }
         }
     }
@@ -512,7 +513,7 @@ public class Server {
      * Creates a new lobby with the given name and adds it to the global list of lobbies if the name does not already exist.
      *
      * @param lobbyName The name of the lobby to create.
-     * @param userId The user's ID that wants to create the lobby.
+     * @param userId    The user's ID that wants to create the lobby.
      */
     public static void createLobby(String lobbyName, Integer userId) {
         for (Lobby lobby : lobbies) {
@@ -930,15 +931,12 @@ public class Server {
     /**
      * This method calls the addHighscoreEntry-method in the Highscore-class. This is need so the players and
      * there rollCount gets written in the Highscorelist.
-     * @param nickname The nickname of the player
+     *
+     * @param nickname  The nickname of the player
      * @param rollCount The number of rolls the player needed to get to the finishline.
      */
     public static void setHighscore(String nickname, int rollCount) {
         Highscore highscore = new Highscore();
         highscore.addHighscoreEntry(nickname, rollCount);
     }
-
 }
-
-
-

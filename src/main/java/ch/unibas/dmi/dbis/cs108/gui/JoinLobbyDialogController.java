@@ -83,12 +83,9 @@ public class JoinLobbyDialogController {
     private void handleCancel() {
         playClickThen();
         selectedLobby = null;
-        dialogStage.close(); // Closes the dialog without joining
+        dialogStage.close();
     }
 
-    /**
-     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
-     */
     /**
      * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
      */
@@ -102,5 +99,4 @@ public class JoinLobbyDialogController {
             System.err.println("[WARNING] Failed to play click sound: " + e.getMessage());
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package ch.unibas.dmi.dbis.cs108.game;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class specifies the fields of our game with the fieldId the color (-> part of the fieldId)
@@ -10,8 +11,19 @@ import java.util.*;
  */
 public class Field {
 
+    /**
+     * The ID of the field as a string.
+     */
     String fieldId;
+
+    /**
+     * The color of the field.
+     */
     String color;
+
+    /**
+     * The neighbouring fields of the field.
+     */
     Set<Field> neighbors;
 
     /**
@@ -36,7 +48,6 @@ public class Field {
             this.neighbors.add(neighbor);
         }
     }
-
 
     /**
      * Method to get the identification of a field

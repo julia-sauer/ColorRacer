@@ -80,9 +80,6 @@ public class LeaveLobbyDialogController {
     /**
      * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
      */
-    /**
-     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
-     */
     private void playClickThen() {
         try {
             MediaPlayer p = new MediaPlayer(clickMedia);

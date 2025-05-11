@@ -59,10 +59,10 @@ public class ProtocolReaderServer {
     /**
      * Creates a new {@code ProtocolReaderServer}.
      *
-     * @param in     The InputStream from which the messages are to be read.
-     * @param userId The unique ID of the user.
-     * @param out    The OutputStream to which replies are written.
-     * @param pingThread The PingThread handling heartbeat messages for this client.
+     * @param in            The InputStream from which the messages are to be read.
+     * @param userId        The unique ID of the user.
+     * @param out           The OutputStream to which replies are written.
+     * @param pingThread    The PingThread handling heartbeat messages for this client.
      * @param clientHandler the ClientHandler managing this client's connection.
      * @throws IOException If an error occurs when creating the BufferedReader.
      */
@@ -128,10 +128,8 @@ public class ProtocolReaderServer {
                 System.err.println("Unknown command from user ID " + userId + ": " + line);
                 continue;
             }
-            // Processes the command with switch-case
 
             switch (command) {
-                // Handels the JOIN-command from the client
                 case JOIN: {
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         protocolWriterServer.sendInfo("-ERR lobbyName missing");
@@ -160,7 +158,6 @@ public class ProtocolReaderServer {
                     Server.updateAllClients();
                     break;
                 }
-                // Ruft die changeNickname-Methode des Servers auf, wenn NICK erkannt wird.
                 case NICK:
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         protocolWriterServer.sendInfo("-ERR Nickname missing");
@@ -170,7 +167,6 @@ public class ProtocolReaderServer {
                     Server.changeNickname(userId, newNick);
                     Server.updateAllClients();
                     break;
-                // Aufruf der chatToAll methode für das Senden von einer Chatnachricht an alle Clients
                 case CHAT: {
                     if (parts.length < 2 || parts[1].trim().isEmpty()) {
                         System.err.println("-ERR Empty chat message from user ID " + userId);
@@ -220,18 +216,14 @@ public class ProtocolReaderServer {
 
                 case PONG:
                     System.out.println("PONG received from Client " + userId);
-                    // Connection is active, no timeout necessary
                     if (pingThread != null) {
-                        pingThread.notifyPong();  // notify the ping thread that the PONG was received
+                        pingThread.notifyPong();
                         Server.updateAllClients();
                     }
-                    //protocolWriterServer.sendInfo("OK PONG received");
                     break;
 
                 case QUIT:
-                    protocolWriterServer.sendInfo(" Quit request received. Please confirm [YES/NO]");
-                    // Removes user
-
+                    protocolWriterServer.sendInfo("Quit request received. Please confirm [YES/NO]");
                     break;
 
                 case QCNF:
@@ -278,7 +270,6 @@ public class ProtocolReaderServer {
                         clientHandler.disconnectClient();
 
                     } else if ("NO".equals(confirmation)) {
-                        // do nothing, just notify user
                         protocolWriterServer.sendInfo("You are still in the game.");
                     } else {
                         System.err.println("-ERR Invalid QCNF response from user ID " + userId);
@@ -350,7 +341,7 @@ public class ProtocolReaderServer {
                         if (!isMyTurn(protocolWriterServer)) {
                             break;
                         }
-                        userLobby.advanceTurn();  // next player
+                        userLobby.advanceTurn();
 
                     } else {
                         protocolWriterServer.sendInfo("-ERR You are not in a valid lobby.");
@@ -371,7 +362,6 @@ public class ProtocolReaderServer {
                     break;
 
                 case VELO: {
-                    //checks if user is in a game lobby
                     String sender = UserList.getUserName(userId);
                     Lobby userLobby = null;
                     for (Lobby lobby : Server.lobbies) {
@@ -408,8 +398,7 @@ public class ProtocolReaderServer {
 
                     User user = UserList.getUser(userId);
                     if (user != null) {
-                        user.setBikeColor(color); // save in User
-                        // protocolWriterServer.sendInfo("+OK " + color + " bike is selected");
+                        user.setBikeColor(color);
                         Lobby lobby = Server.getLobbyOfPlayer(sender);
                         assert lobby != null;
                         for (String member : lobby.getPlayers()) {
@@ -452,8 +441,6 @@ public class ProtocolReaderServer {
                                 "You aren't part of a gameLobby. Please create a lobby or join an existing lobby to start a game.");
                         break;
                     }
-
-                    // Prüfen ob ALLE Lobbys "Welcome" heißen
                     boolean onlyInWelcome = playerLobbies.stream()
                             .allMatch(l -> l.getLobbyName().equalsIgnoreCase("Welcome"));
 
@@ -462,8 +449,6 @@ public class ProtocolReaderServer {
                                 "You aren't part of a gameLobby. Please create a lobby or join an existing lobby to start a game.");
                         break;
                     }
-
-                    // Jetzt starte das Spiel in der ersten echten Lobby (≠ Welcome)
                     if (allPlayersReady()) {
                         for (Lobby lobby : playerLobbies) {
                             if (!lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
@@ -493,13 +478,11 @@ public class ProtocolReaderServer {
                             break;
                         }
                     }
-
                     if (playerLobbies.isEmpty()) {
                         protocolWriterServer.sendInfo("You aren't part of a gameLobby.");
                         break;
                     }
 
-                    // check if ALL Lobbys are called "Welcome"
                     boolean onlyInWelcome = playerLobbies.stream()
                             .allMatch(l -> l.getLobbyName().equalsIgnoreCase("Welcome"));
 
@@ -528,8 +511,6 @@ public class ProtocolReaderServer {
                         System.err.println("-ERR No user found for ID " + userId);
                         break;
                     }
-
-                    // Show players in each lobby (excluding Welcome)
                     for (Lobby lobby : Server.lobbies) {
                         if (lobby.getLobbyName().equalsIgnoreCase("Welcome")) {
                             break;
@@ -548,7 +529,6 @@ public class ProtocolReaderServer {
                             user.getOut());
                     String username = user.getNickname();
 
-                    // Find lobby the user is in
                     Lobby userLobby = null;
                     for (Lobby lobby : Server.lobbies) {
                         if (lobby.getPlayers().contains(username)) {
@@ -556,7 +536,6 @@ public class ProtocolReaderServer {
                             break;
                         }
                     }
-
                     if (userLobby == null || userLobby.getLobbyName().equalsIgnoreCase("Welcome")) {
                         try {
                             writer.sendInfo("You are not currently in a real lobby.");
@@ -573,7 +552,6 @@ public class ProtocolReaderServer {
                         System.err.println("-ERR No user found for ID " + userId);
                         break;
                     }
-                    // Count "real" Lobbys (≠ Welcome)
                     List<Lobby> realLobbies = Server.lobbies.stream()
                             .filter(l -> !l.getLobbyName().equalsIgnoreCase("Welcome"))
                             .toList();
@@ -581,7 +559,6 @@ public class ProtocolReaderServer {
                     if (realLobbies.isEmpty()) {
                         break;
                     }
-
                     for (Lobby lobby : realLobbies) {
                         List<String> players = lobby.getPlayers();
                         int state = lobby.getGameState();
@@ -595,7 +572,6 @@ public class ProtocolReaderServer {
                     break;
                 }
                 case RADY: {
-                    //checks if user is in a game lobby
                     String userName = UserList.getUserName(userId);
                     Lobby userLobby = null;
                     for (Lobby lobby : Server.lobbies) {
@@ -609,7 +585,6 @@ public class ProtocolReaderServer {
                                 "You are not currently in a lobby or in the Welcome lobby and therefore can't write ready.");
                         break;
                     }
-
                     if (userLobby.getGameState() == 2) {
                         protocolWriterServer.sendInfo("The game already started.");
                         break;
@@ -690,6 +665,3 @@ public class ProtocolReaderServer {
         return false;
     }
 }
-    
-
-
