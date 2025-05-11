@@ -1,4 +1,6 @@
 package ch.unibas.dmi.dbis.cs108.network;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The {@code Command} enum defines all supported protocol commands exchanged between clients and
@@ -160,187 +162,180 @@ public enum Command {
      * Example usage: {@code Command.CHAT + Command.SEPARATOR + "Hello everyone!"}
      * </p>
      */
-    public static final String SEPARATOR = "%"; // blank space als Separator
 
+    public static final String SEPARATOR = "%"; // blank space als Separator
+    private static final Logger LOGGER = LogManager.getLogger(Command.class);
     /**
      * Prints the command "INFO"
      */
     public static void INFO() {
-        System.out.println("INFO");
+        LOGGER.info("INFO");
     }
 
     /**
      * Prints the command "JOIN"
      */
     public static void JOIN() {
-        System.out.println("JOIN");
+        LOGGER.info("JOIN");
     }
 
     /**
      * Prints the command "VELO"
      */
     public static void VELO() {
-        System.out.println("VELO");
+        LOGGER.info("VELO");
     }
 
     /**
      * Prints the command "RADY"
      */
     public static void RADY() {
-        System.out.println("RADY");
+        LOGGER.info("RADY");
     }
 
     /**
      * Prints the command "STRT"
      */
     public static void STRT() {
-        System.out.println("STRT");
+        LOGGER.info("STRT");
     }
 
     /**
      * Prints the command "RSTT"
      */
     public static void RSTT() {
-        System.out.println("RSTT");
+        LOGGER.info("RSTT");
     }
 
     /**
      * Prints the command "QUIT"
      */
     public static void QUIT() {
-        System.out.println("QUIT");
+        LOGGER.info("QUIT");
     }
 
     /**
      * Prints the command "QCNF"
      */
     public static void QCNF() {
-        System.out.println("QCNF");
+        LOGGER.info("QCNF");
     }
 
     /**
      * Prints the command "ROLL"
      */
     public static void ROLL() {
-        System.out.println("ROLL");
+        LOGGER.info("ROLL");
     }
 
     /**
      * Prints the command "CHOS"
      */
     public static void CHOS() {
-        System.out.println("CHOS");
+        LOGGER.info("CHOS");
     }
 
     /**
      * Prints the command "MOVE"
      */
     public static void MOVE() {
-        System.out.println("MOVE");
+        LOGGER.info("MOVE");
     }
 
     /**
      * Prints the command "CHAT"
      */
     public static void CHAT() {
-        System.out.println("CHAT");
+        LOGGER.info("CHAT");
     }
 
     /**
      * Prints the command "NICK"
      */
-    public static void NICK() {
-        System.out.println("NICK");
-    }
+    public static void NICK() { LOGGER.info("NICK"); }
 
     /**
      * Prints the command "PING"
      */
-    public static void PING() {
-        System.out.println("PING");
-    }
+    public static void PING() { LOGGER.info("PING"); }
 
     /**
      * Prints the command "PONG"
      */
     public static void PONG() {
-        System.out.println("PONG");
+        LOGGER.info("PONG");
     }
 
     /**
      * Prints the command "WISP"
      */
     public static void WISP() {
-        System.out.println("WISP");
+        LOGGER.info("WISP");
     }
 
     /**
      * Prints the command "DEOS"
      */
     public static void DEOS() {
-        System.out.println("DEOS");
+        LOGGER.info("DEOS");
     }
 
     /**
      * Prints the command "BROD"
      */
     public static void BROD() {
-        System.out.println("BROD");
+        LOGGER.info("BROD");
     }
 
     /**
      * Prints the command "LIST"
      */
-    public static void LIST() {
-        System.out.println("LIST");
-    }
+    public static void LIST() { LOGGER.info("LIST"); }
 
     /**
      * Prints the command "CRLO"
      */
     public static void CRLO() {
-        System.out.println("CRLO");
+        LOGGER.info("CRLO");
     }
 
     /**
      * Prints the command "LOME"
      */
-    public static void LOME() {
-        System.out.println("LOME");
-    }
+    public static void LOME() { LOGGER.info("LOME"); }
 
     /**
      * Prints the command "GLST"
      */
     public static void GLST() {
-        System.out.println("GLST");
+        LOGGER.info("GLST");
     }
 
     /**
      * Prints the command "NEXT"
      */
     public static void NEXT() {
-        System.out.println("NEXT");
+        LOGGER.info("NEXT");
     }
 
     /**
      * Prints the command "FNSH"
      */
     public static void FNSH() {
-        System.out.println("FNSH");
+        LOGGER.info("FNSH");
     }
 
     /**
      * Prints the Command "HIGH"
      */
     public static void HIGH() {
-        System.out.println("HIGH");
+        LOGGER.info("HIGH");
     }
 
     /**
      * Prints the Command "WINN"
      */
     public static void WINN() {
-        System.out.println("WINN");
+        LOGGER.info("WINN");
     }
 }
