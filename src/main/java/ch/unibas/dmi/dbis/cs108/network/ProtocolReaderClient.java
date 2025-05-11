@@ -413,11 +413,10 @@ public class ProtocolReaderClient {
                     break;
 
                 case QCNF:
-                    protocolWriterClient.sendCommandAndString(Command.QCNF, "YES");
                     if (gameLobby) {
-                        gameLobbyController.leaveServer();
+                        gameLobbyController.connectionError();
                     } else {
-                        welcomeLobbyController.leaveServer();
+                        welcomeLobbyController.connectionError();
                     }
                     break;
 

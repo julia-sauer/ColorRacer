@@ -19,18 +19,50 @@ import java.util.concurrent.TimeUnit;
  */
 public class PingThread extends Thread {
 
-    private final Socket clientSocket;
-    private final int clientNumber;
-    private boolean running = true;
-    private final InputStream in;
-    private final OutputStream out;
-    private static final long PING_INTERVAL = 10000;
-    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(
-            new ArrayList<>());
     /**
-     * A hand‑off queue from ProtocolReaderServer.notifyPong() to here.
+     * The socket through which to communicate with the client.
+     */
+    private final Socket clientSocket;
+
+    /**
+     * A unique identifier for this client, used in logging and cleanup.
+     */
+    private final int clientNumber;
+
+    /**
+     * Flag used to control the thread's main loop; set false to stop pinging.
+     */
+    private boolean running = true;
+
+    /**
+     * Stream from which incoming protocol messages (PONG) are read.
+     */
+    private final InputStream in;
+
+    /**
+     * Stream to which outgoing protocol messages (PING or QCNF) are written.
+     */
+    private final OutputStream out;
+
+    /**
+     * Interval between consecutive PING messages, in milliseconds.
+     */
+    private static final long PING_INTERVAL = 10000;
+
+    /**
+     * Shared list of all client writers for broadcasting, kept in sync.
+     */
+    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+
+    /**
+     * A one-slot hand‑off queue to receive PONG notifications from the reader.
      */
     private final ArrayBlockingQueue<Boolean> pongQueue = new ArrayBlockingQueue<>(1);
+
+    /**
+     * Callback to invoke when a timeout or {@link IOException} error requires a clean disconnect.
+     */
+    private final Runnable disconnectCallback;
 
 
     /**
@@ -42,11 +74,12 @@ public class PingThread extends Thread {
      * @param out          The OutputStream for messages.
      */
 
-    public PingThread(Socket clientSocket, int clientNumber, InputStream in, OutputStream out) {
+    public PingThread(Socket clientSocket, int clientNumber, InputStream in, OutputStream out, Runnable disconnectCallback) {
         this.clientSocket = clientSocket;
         this.clientNumber = clientNumber;
         this.in = in;
         this.out = out;
+        this.disconnectCallback = disconnectCallback;
     }
 
     /**
@@ -58,21 +91,16 @@ public class PingThread extends Thread {
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(clientWriters, out);
         while (running && !clientSocket.isClosed()) {
             try {
-                // 1) send the PING
                 protocolWriterServer.sendCommand(Command.PING);
                 System.out.println("PING sent");
 
-                // 2) wait up to PING_INTERVAL_MS for a notifyPong() call
                 Boolean pong = pongQueue.poll(PING_INTERVAL, TimeUnit.MILLISECONDS);
-
                 if (pong == null) {
-                    // no PONG in time ⇒ timeout
                     System.out.println("Connection timed out for Client " + clientNumber);
                     protocolWriterServer.sendCommand(Command.QCNF);
-//                    clientSocket.close();
+                    disconnectCallback.run();
                     break;
                 }
-                // 3) we got a PONG—now *pause* before sending the next PING
                 Thread.sleep(PING_INTERVAL);
 
             } catch (InterruptedException e) {
@@ -80,6 +108,7 @@ public class PingThread extends Thread {
                 break;
             } catch (IOException e) {
                 System.err.println("Error sending PING to Client " + clientNumber + ": " + e.getMessage());
+                disconnectCallback.run();
                 break;
             }
         }

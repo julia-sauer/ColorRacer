@@ -255,18 +255,11 @@ public class WelcomeLobbyController {
 
             if (controller.isLeaving) {
                 protocolWriter.sendCommandAndString(Command.QCNF, "YES");
-                leaveServer();
+                client.disconnect();
             }
         } catch (IOException e) {
             showError("Failed to open leave lobby dialog", e.getMessage());
         }
-    }
-
-    /**
-     * This method disconnects the client from the server.
-     */
-    public void leaveServer(){
-        client.disconnect();
     }
 
     /**
@@ -451,13 +444,29 @@ public class WelcomeLobbyController {
      * @param header  The header text.
      * @param content The content text.
      */
-    private void showError(String header, String content) {
+    public void showError(String header, String content) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(header);
             alert.setContentText(content);
             alert.showAndWait();
+        });
+    }
+
+    /**
+     * This method shows an alert and lets the client know his connection to the server has been lost. After
+     * closing the alert dialog the client gets disconnected.
+     */
+    public void connectionError() {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error with Connection");
+            alert.setHeaderText("Connection failed");
+            alert.setContentText("Connection timed out for this Client.");
+            alert.showAndWait();
+
+            client.disconnect();
         });
     }
 

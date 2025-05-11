@@ -96,7 +96,7 @@ public class Server {
         activeClients.decrementAndGet();
         out.println("Remaining Clients: " + activeClients.get());
 
-        if (activeClients.get() == 0) {
+        if (activeClients.get() <= 0) {
             out.println("Wait 2 min for new clients...");
             new Thread(() -> {
                 try {
