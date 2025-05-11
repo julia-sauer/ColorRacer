@@ -80,9 +80,6 @@ public class SelectBikeDialogController {
     /**
      * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
      */
-    /**
-     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
-     */
     private void playClickThen() {
         try {
             MediaPlayer p = new MediaPlayer(clickMedia);
@@ -93,5 +90,4 @@ public class SelectBikeDialogController {
             System.err.println("[WARNING] Failed to play click sound: " + e.getMessage());
         }
     }
-
 }

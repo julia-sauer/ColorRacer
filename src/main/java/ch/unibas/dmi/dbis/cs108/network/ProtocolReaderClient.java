@@ -24,7 +24,7 @@ public class ProtocolReaderClient {
     /**
      * Reader for incoming UTF-8 text lines from the server.
      */
-    private final BufferedReader reader; // reads character lines from client.
+    private final BufferedReader reader;
 
     /**
      * Underlying input stream from the server.
@@ -87,7 +87,7 @@ public class ProtocolReaderClient {
                 continue;
             }
 
-            String[] parts = line.split(Command.SEPARATOR, 3); //did limit from 2 to 3
+            String[] parts = line.split(Command.SEPARATOR, 3);
             String rawCommand = parts[0];
             Command command;
 
@@ -97,7 +97,6 @@ public class ProtocolReaderClient {
                 System.err.println("Unknown command from server " + line);
                 continue;
             }
-            // Processing the command with switch-case
 
             switch (command) {
                 case JOIN:
@@ -132,9 +131,7 @@ public class ProtocolReaderClient {
                         System.out.println("CHAT received: [empty]");
                         break;
                     }
-                    //System.out.println(Arrays.toString(parts)); // Überprüfung über das Terminal
                     if (parts.length == 3) {
-                        //System.out.println("CHAT received: " + parts[2]); // Überprüfung über das Terminal
                         String sender = parts[1];
                         String message = parts[2];
                         displayChat(message, sender);
@@ -170,7 +167,6 @@ public class ProtocolReaderClient {
                     String msg = parts[1].trim();
                     System.out.println(msg);
                     if (parts[1].startsWith("+POS ")) {
-                        // parse "+POS Alice moved to the Field red3"
                         String[] tok = parts[1].split(" ");
                         String whoMoved = tok[1];
                         String fieldId = tok[tok.length - 1];
@@ -302,7 +298,6 @@ public class ProtocolReaderClient {
                         break;
                     }
                     String brodMsg = parts[1].trim();
-                    //System.out.println(brodMsg); // Überprüfung über das Terminal
                     if (!gameLobby) {
                         welcomeLobbyController.displayChat(brodMsg);
                         break;
@@ -397,7 +392,6 @@ public class ProtocolReaderClient {
                             }
                     );
                     System.out.println(data.replace("|", "\n"));
-                    //display(data.replace("|", "\n"));
                     saveHighscoreLocally(dataList);
                     break;
 
@@ -442,7 +436,6 @@ public class ProtocolReaderClient {
      */
     private void displayChat(String message, String sender) {
         String formattedMessage = sender + ": " + message;
-        //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
         if (!gameLobby) {
             welcomeLobbyController.displayChat(formattedMessage);
         } else {
@@ -462,7 +455,6 @@ public class ProtocolReaderClient {
      */
     private void displayWhisp(String message, String sender) {
         String formattedMessage = "Whisper from " + sender + ": " + message;
-        //System.out.println("+CHT " + formattedMessage); // Überprüfung über das Terminal
         if (!gameLobby) {
             welcomeLobbyController.displayChat(formattedMessage);
         } else {
@@ -543,7 +535,6 @@ public class ProtocolReaderClient {
      */
     private List<String> parseListFromString(String listStr) {
         listStr = listStr.trim();
-        // Remove leading and trailing brackets if they exist
         if (listStr.startsWith("[") && listStr.endsWith("]")) {
             listStr = listStr.substring(1, listStr.length() - 1);
         }
@@ -567,7 +558,6 @@ public class ProtocolReaderClient {
      */
     private void waitForControllerAndUpdate(Runnable updateAction) {
         new Thread(() -> {
-            // Wait up to 500ms for the controller to be ready
             int attempts = 0;
             while (WelcomeLobbyController.getInstance() == null && attempts < 5) {
                 try {
@@ -584,6 +574,7 @@ public class ProtocolReaderClient {
     /**
      * This method writes the data that it received from the server into the own Highscore file.
      * This ensures, that all players have the same highscorelist.
+     *
      * @param dataList The data that is received from the server as a list of Strings.
      */
     private void saveHighscoreLocally(List<String> dataList) {

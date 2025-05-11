@@ -5,11 +5,11 @@ import ch.unibas.dmi.dbis.cs108.gui.WelcomeLobbyController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.nio.charset.StandardCharsets;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The {@code ProtocolWriterClient} class handles the client's outgoing communication. It formats
@@ -22,14 +22,14 @@ public class ProtocolWriterClient {
      * The {@link PrintWriter} for sending messages via the network connection. This Writer writes
      * protocol commands (e.g. {@code CHAT}) in UTF-8 to the server.
      */
-    private final PrintWriter writer; //Der Writer ist "final", weil er nach der Initialisierung nicht mehr verändert wird.
+    private final PrintWriter writer;
 
     /**
      * Logger for logging errors or debugging information.
      */
     private static final Logger LOGGER = LogManager.getLogger(ProtocolWriterClient.class);
 
-    private WelcomeLobbyController welcomeLobbyController; // Reference to the GUI welcomeLobbyController
+    private WelcomeLobbyController welcomeLobbyController;
     private GameLobbyController gameLobbyController;
 
     /**
@@ -64,11 +64,11 @@ public class ProtocolWriterClient {
             System.out.println("Message is too long");
             return;
         }
-        if (message.startsWith("whisper")) { // checks if the message is private
+        if (message.startsWith("whisper")) {
             sendWhisper(message);
             return;
         }
-        if (message.startsWith("broadcast")) { // checks if the message is a broadcast
+        if (message.startsWith("broadcast")) {
             String[] parts = message.split(" ", 2);
             String actualMessage = parts[1].trim();
             sendToServer(Command.BROD + Command.SEPARATOR + actualMessage);
@@ -85,7 +85,6 @@ public class ProtocolWriterClient {
      */
     public void sendCommand(Command command) throws IOException {
         sendToServer(command + Command.SEPARATOR);
-        //System.out.println(command + Command.SEPARATOR + "sent");
     }
 
     /**
@@ -98,7 +97,6 @@ public class ProtocolWriterClient {
      */
     public void sendCommandAndString(Command command, String text) throws IOException {
         sendToServer(command + Command.SEPARATOR + text);
-        //System.out.println(command + Command.SEPARATOR + text + " sent");
     }
 
     /**
@@ -143,7 +141,6 @@ public class ProtocolWriterClient {
             System.out.println("lobbyName must be 3–50 characters, only letters, digits, or _");
             return;
         }
-        // Sends: JOIN <nickname>
         sendToServer(Command.JOIN + Command.SEPARATOR + lobbyName);
     }
 
@@ -156,7 +153,6 @@ public class ProtocolWriterClient {
         //LOGGER.error("client: {}", message);
         writer.println(message);
         writer.flush();
-        //System.exit(1);
     }
 
     /**
@@ -195,7 +191,6 @@ public class ProtocolWriterClient {
         }
         sendToServer(Command.WISP + Command.SEPARATOR + receiverNickname + Command.SEPARATOR + message);
 
-        // Display whisper in sender's GUI
         if (welcomeLobbyController != null) {
             welcomeLobbyController.displayChat("Whisper sent to " + receiverNickname + ": " + message);
             if (gameLobbyController != null) {
@@ -203,8 +198,6 @@ public class ProtocolWriterClient {
             }
         }
     }
-    // Create a whisper message with recipientId and message content
-    // Send this message to the server
 
     /**
      * Sends a field selection command with a specified {@code fieldId}.
@@ -256,5 +249,3 @@ public class ProtocolWriterClient {
         this.gameLobbyController = controller;
     }
 }
-
-

@@ -1,15 +1,13 @@
 package ch.unibas.dmi.dbis.cs108.server;
 
-
-import ch.unibas.dmi.dbis.cs108.game.Field;
+import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterServer;
-import ch.unibas.dmi.dbis.cs108.game.GameBoard;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -211,7 +209,7 @@ public class Lobby implements Runnable {
         int removedIndex = playerOrder.indexOf(playerName);
 
         players.remove(playerName);
-        playerOrder.remove(playerName); // Player removed from sequence too
+        playerOrder.remove(playerName);
         playerGameBoards.remove(playerName);
         readyStatus.remove(playerName);
         winners.remove(playerName);
@@ -244,7 +242,6 @@ public class Lobby implements Runnable {
      * @param userId the ID of the user who requested to start the game
      */
     public synchronized void startGame(int userId) {
-        // Verify that the requesting user is the host.
         String requester = UserList.getUserName(userId);
         if (!isHost(requester)) {
             User user = UserList.getUser(userId);
@@ -268,7 +265,6 @@ public class Lobby implements Runnable {
         ProtocolWriterServer protocolWriterServer = new ProtocolWriterServer(Server.clientWriters,
                 user.getOut());
 
-        // Game already started or finished
         if (gamestate == 2) {
             try {
                 protocolWriterServer.sendInfo("Game has already started or is finished.");
@@ -580,5 +576,4 @@ public class Lobby implements Runnable {
     public void incrementPodestPlace() {
         this.podestPlace++;
     }
-
 }

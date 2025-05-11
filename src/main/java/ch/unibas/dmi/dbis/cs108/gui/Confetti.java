@@ -1,6 +1,9 @@
 package ch.unibas.dmi.dbis.cs108.gui;
 
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

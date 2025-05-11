@@ -110,5 +110,4 @@ public class HighscoreListDialogController {
             System.err.println("[WARNING] Failed to play click sound in HighscoreListDialogController: " + e.getMessage());
         }
     }
-
 }

@@ -13,9 +13,9 @@ import java.io.OutputStream;
 
 public class User {
 
-    private final int id; // clear user-ID
-    private String nickname; // current nickname of users
-    private final OutputStream out; // OutputStream for communication with client
+    private final int id;
+    private String nickname;
+    private final OutputStream out;
     private String bikeColor;
     private boolean hasRolled;
     private int rollCount;
@@ -117,6 +117,7 @@ public class User {
 
     /**
      * This method returns the rollCount of the user.
+     *
      * @return How often the user rolled the dice.
      */
     public int getRollCount() {
@@ -129,5 +130,4 @@ public class User {
     public void setBackRollCount() {
         rollCount = 0;
     }
-
 }
