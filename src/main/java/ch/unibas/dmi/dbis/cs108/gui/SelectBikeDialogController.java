@@ -19,26 +19,23 @@ import java.util.Objects;
 public class SelectBikeDialogController {
 
     /**
-     * The {@link Button}s for selecting a bike color.
-     */
-    @FXML
-    private Button blackBike, magentaBike, greenBike, darkblueBike;
-
-    /**
-     * The dialog stage in which this controller is used.
-     */
-    private Stage dialogStage;
-
-    /**
-     * The selected bike color.
-     */
-    private String selectedBike;
-
-    /**
      * The {@link Media} of the click sound that we created.
      */
     private final Media clickMedia =
             new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
+    /**
+     * The {@link Button}s for selecting a bike color.
+     */
+    @FXML
+    private Button blackBike, magentaBike, greenBike, darkblueBike;
+    /**
+     * The dialog stage in which this controller is used.
+     */
+    private Stage dialogStage;
+    /**
+     * The selected bike color.
+     */
+    private String selectedBike;
 
     /**
      * Sets the dialog stage associated with this controller.

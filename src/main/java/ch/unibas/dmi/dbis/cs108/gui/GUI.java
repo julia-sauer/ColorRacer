@@ -39,6 +39,15 @@ public class GUI extends Application {
     }
 
     /**
+     * Sets the {@code Client} instance that will be used by the GUI.
+     *
+     * @param clientInstance The client instance to set.
+     */
+    public static void setClient(Client clientInstance) {
+        client = clientInstance;
+    }
+
+    /**
      * This method loads the FXML layout for the lobby interface,retrieves the
      * {@link WelcomeLobbyController}, injects the
      * {@link ProtocolWriterClient} and {@link WelcomeLobbyController} references from the client,
@@ -88,14 +97,5 @@ public class GUI extends Application {
         super.stop();
         client.getProtocolWriter().sendCommandAndString(Command.QCNF, "YES");
         client.disconnect();
-    }
-
-    /**
-     * Sets the {@code Client} instance that will be used by the GUI.
-     *
-     * @param clientInstance The client instance to set.
-     */
-    public static void setClient(Client clientInstance) {
-        client = clientInstance;
     }
 }

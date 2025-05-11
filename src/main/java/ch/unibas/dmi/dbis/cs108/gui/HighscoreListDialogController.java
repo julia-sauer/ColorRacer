@@ -23,26 +23,30 @@ import java.util.Objects;
 public class HighscoreListDialogController {
 
     /**
-     * The stage representing the dialog window.
+     * The instance of this controller. Stored so other parts of the client can update the view.
      */
-    private Stage dialogStage;
-
+    private static HighscoreListDialogController instance;
+    /**
+     * The {@link Media} of the click sound that we created.
+     */
+    private final Media clickMedia = new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
     /**
      * The {@link ListView} that displays the highscore entries.
      */
     @FXML
     public ListView<String> highscoreListView;
+    /**
+     * The stage representing the dialog window.
+     */
+    private Stage dialogStage;
 
     /**
-     * The instance of this controller. Stored so other parts of the client can update the view.
+     * Constructor called by FXMLLoader when creating the controller.
+     * Stores the created instance for later retrieval.
      */
-    private static HighscoreListDialogController instance;
-
-    /**
-     * The {@link Media} of the click sound that we created.
-     */
-    private final Media clickMedia =
-            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
+    public HighscoreListDialogController() {
+        instance = this;
+    }
 
     /**
      * Returns the instance of this controller.
@@ -51,14 +55,6 @@ public class HighscoreListDialogController {
      */
     public static HighscoreListDialogController getInstance() {
         return instance;
-    }
-
-    /**
-     * Constructor called by FXMLLoader when creating the controller.
-     * Stores the created instance for later retrieval.
-     */
-    public HighscoreListDialogController() {
-        instance = this;
     }
 
     /**

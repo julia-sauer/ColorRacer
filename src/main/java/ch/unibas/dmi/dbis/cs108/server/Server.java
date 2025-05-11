@@ -275,7 +275,6 @@ public class Server {
         user.setRollCount();
     }
 
-
     /**
      * Calls the send-method from the ProtocolWriterServer if the chosen field is valid.
      *
@@ -346,7 +345,6 @@ public class Server {
             }
         }
     }
-
 
     /**
      * This method removes a field from selectedfields and ensures that the color is back in the

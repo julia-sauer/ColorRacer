@@ -25,14 +25,35 @@ import java.util.*;
  */
 public class ProtocolReaderServer {
 
-    private final BufferedReader reader; // Liest Zeichenzeilen vom Client.
-    private final int userId; // Die ID des Clients, der aktuell mit dem Server verbunden ist.
-    private final OutputStream out;
-    private final PingThread pingThread;// added reference
-    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(
-            new ArrayList<>());
+    /**
+     * Shared list of PrintWriters for broadcasting messages to all clients.
+     * Wrapped in a synchronized list for thread safety.
+     */
+    private static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+    /**
+     * Logger instance for recording server-side events and errors.
+     */
     private static final Logger LOGGER = LogManager.getLogger(ProtocolReaderServer.class);
-    private final Runnable disconnectCallback;
+    /**
+     * Reader for incoming character lines from the client socket.
+     */
+    private final BufferedReader reader;
+    /**
+     * Unique identifier for the connected client.
+     */
+    private final int userId;
+    /**
+     * Output stream to send raw bytes back to the client.
+     */
+    private final OutputStream out;
+    /**
+     * Thread responsible for sending periodic ping messages to the client
+     * to detect and close dead connections.
+     */
+    private final PingThread pingThread;
+    /**
+     * Reference to the {@link ClientHandler} that manages this client's socket lifecycle.
+     */
     private final ClientHandler clientHandler;
 
     /**
@@ -43,15 +64,12 @@ public class ProtocolReaderServer {
      * @param userId The unique ID of the user.
      * @throws IOException If an error occurs when creating the BufferedReader.
      */
-    public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread,
-                                ClientHandler clientHandler, Runnable disconnectCallback) throws IOException {
-        // Initialisierung des BufferedReaders
+    public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread, ClientHandler clientHandler) throws IOException {
         this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         this.userId = userId;
         this.out = out;
         this.pingThread = pingThread;
         this.clientHandler = clientHandler;
-        this.disconnectCallback = disconnectCallback;
     }
 
     /**

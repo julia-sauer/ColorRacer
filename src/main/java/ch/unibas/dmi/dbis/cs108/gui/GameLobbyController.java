@@ -51,152 +51,145 @@ public class GameLobbyController {
      * The static instance that can be accessed from anywhere.
      */
     private static GameLobbyController instance;
-
+    /**
+     * Tracks all field buttons that have been selected by the user but not yet confirmed.
+     */
+    private final List<Button> selectedFieldButtons = new ArrayList<>();
+    /**
+     * Maps each player's nickname to their corresponding {@link ImageView} bike icon.
+     */
+    private final Map<String, ImageView> playerBikes = new HashMap<>();
+    /**
+     * Maps each player's nickname to their corresponding {@link Label} that displays their name on the board above
+     * their bike image.
+     */
+    private final Map<String, Label> playerLabels = new HashMap<>();
+    /**
+     * Maps each selectable bike color to its corresponding {@link Image} graphic.
+     */
+    private final Map<String, Image> bikeImages = new HashMap<>();
+    /**
+     * The {@link Media} of the click sound that we created.
+     */
+    private final Media clickMedia =
+            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
     /**
      * The {@link Label} for displaying the lobbyname.
      */
     @FXML
     public Label lobbyNameDisplay;
-
     /**
      * The {@link TextArea} for displaying chat messages.
      */
     @FXML
     public TextArea chatArea;
-
     /**
      * The {@link TextField} where the user types a message.
      */
     @FXML
     public TextField txtUsermsg;
-
     /**
      * The {@link ListView} that displays a list of all players on the server.
      */
     @FXML
     public ListView<String> listList;
-
     /**
      * The {@link ListView} that displays a list of all games with the status and the players.
      */
     @FXML
     public ListView<String> gameList;
-
     /**
      * The {@link ListView} that displays a list of all lobbies and its players.
      */
     @FXML
     public ListView<String> lobbylist;
-
     /**
      * The {@link Button} where a user can show they are ready to play.
      */
     @FXML
     public Button readyButton;
-
     /**
      * The {@link MenuItem} only for the host to start the game.
      */
     @FXML
     public MenuItem startButton;
-
     /**
      * The {@link MenuItem} only for the host to finish the game earlier.
      */
     @FXML
     public MenuItem finishButton;
-
     /**
      * The {@link MenuItem} for restarting a game.
      */
     @FXML
     public MenuItem restartButton;
-
     /**
      * The {@link Menu} for the buttons only the host is allowed to use (to start, finish or restart a game).
      */
     @FXML
     public Menu hostButtons;
-
     /**
      * The {@link Menu} for the bike selection dialog.
      */
     @FXML
     public Menu bikeOption;
-
     /**
      * The {@link StackPane} that is used for displaying whose turn it is.
      */
     @FXML
     public StackPane overlayPane;
-
     /**
      * The root {@link BorderPane} of the scene.  Used to manage the overall layout regions.
      */
     @FXML
     public BorderPane borderRoot;
-
     /**
      * A {@link Group} node that wraps the game board content (field-buttons, image of the board) and receives a scale transform
      * to implement a responsive zooming of the game field.
      */
     @FXML
     public Group zoomGroup;
-
     /**
      * The {@link ImageView} displaying the game board background.  Used to determine aspect ratio and
      * to bind pane sizing so the board image remains centered and proportionally scaled for bigger screens.
      */
     @FXML
     public ImageView boardImage;
-
     /**
      * The {@link VBox} in the center region of the BorderPane.  Hosts the gameBoard {@link AnchorPane} (via {@code zoomGroup})
      * and provides vertical growth behavior.
      */
     @FXML
     private VBox centerVBox;
-
     /**
      * The {@link Button} that lets the player roll the dice.
      */
     @FXML
     private Button throwDiceButton;
-
     /**
      * The {@link Button} to move to the chosen field.
      */
     @FXML
     private Button moveButton;
-
     /**
      * The {@link Button} to skip a turn.
      */
     @FXML
     private Button skipButton;
-
     /**
      * The {@link ImageView}s used to show the six dice rolled.
      */
     @FXML
     private ImageView dice1, dice2, dice3, dice4, dice5, dice6;
-
     /**
      * A map that stores the preloaded dice images by color name.
      */
     private Map<String, Image> diceImages;
-
     /**
      * The game board pane where the field buttons and bike icons are displayed.
      */
     @FXML
     private AnchorPane gameBoard;
-
-    /**
-     * Tracks all field buttons that have been selected by the user but not yet confirmed.
-     */
-    private final List<Button> selectedFieldButtons = new ArrayList<>();
-
     /**
      * The colored field {@link Button}s grouped by color.
      */
@@ -218,77 +211,55 @@ public class GameLobbyController {
     @FXML
     @SuppressWarnings("unused")
     private Button orange1, orange2, orange3, orange4, orange5, orange6, orange7, orange8, orange9, orange10;
-
     /**
      * The white starting field button for all players.
      */
     @FXML
     @SuppressWarnings("unused")
     private Button white1;
-
     /**
      * The {@link ProtocolWriterClient} instance to send commands to the server.
      */
     private ProtocolWriterClient protocolWriter;
-
     /**
      * The {@link ProtocolReaderClient} used to read incoming data from the server.
      */
     private ProtocolReaderClient protocolReader;
-
     /**
      * The nickname of the local player using this controller.
      */
     private String nickname;
-
     /**
      * The name of the lobby this player is currently in.
      */
     private String lobbyname;
-
     /**
      * The client that uses this Lobby.
      */
     private Client client;
-
-    /**
-     * Maps each player's nickname to their corresponding {@link ImageView} bike icon.
-     */
-    private final Map<String, ImageView> playerBikes = new HashMap<>();
-
-    /**
-     * Maps each player's nickname to their corresponding {@link Label} that displays their name on the board above
-     * their bike image.
-     */
-    private final Map<String, Label> playerLabels = new HashMap<>();
-
-    /**
-     * Maps each selectable bike color to its corresponding {@link Image} graphic.
-     */
-    private final Map<String, Image> bikeImages = new HashMap<>();
-
     /**
      * The primary stage for the scene setup.
      */
     @FXML
     private Stage primaryStage;
-
     /**
      * The {@link MediaPlayer} that plays the background music on a loop.
      */
     private MediaPlayer bgmPlayer;
-
-    /**
-     * The {@link Media} of the click sound that we created.
-     */
-    private final Media clickMedia =
-            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
-
     /**
      * The “Fullscreen Mode” {@link MenuItem} in the {@link MenuBar}.
      */
     @FXML
     private CheckMenuItem fullscreenMode;
+
+    /**
+     * Returns the static instance of this controller.
+     *
+     * @return The {@link GameLobbyController} instance.
+     */
+    public static GameLobbyController getInstance() {
+        return instance;
+    }
 
     /**
      * Initializes the controller instance and the lists, and opens the bike selection dialog
@@ -419,15 +390,6 @@ public class GameLobbyController {
         this.client = client;
         this.protocolWriter = client.getProtocolWriter();
         this.protocolReader = client.getProtocolReader();
-    }
-
-    /**
-     * Returns the static instance of this controller.
-     *
-     * @return The {@link GameLobbyController} instance.
-     */
-    public static GameLobbyController getInstance() {
-        return instance;
     }
 
     /**

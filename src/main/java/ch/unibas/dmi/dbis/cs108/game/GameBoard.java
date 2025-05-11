@@ -11,10 +11,10 @@ import java.util.*;
 public class GameBoard {
 
     private final Map<String, Field> fields;
-    private Field currentField;
     private final Set<Field> selectedFields;
     private final List<Field> selectedFieldList = new ArrayList<>();
     public String[] colors;
+    private Field currentField;
 
     /**
      * Constructor of the class GameBoard. Defines the Map over the fields. Defines the Set over the
@@ -154,11 +154,7 @@ public class GameBoard {
                     break;
                 }
             }
-            if (!colormatches) {
-                return false;
-            } else {
-                return true;
-            }
+            return colormatches;
         }
         return false;
     }
@@ -257,11 +253,7 @@ public class GameBoard {
      * @return true or false
      */
     public boolean selectedFieldsEmpty() {
-        if (selectedFieldList.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return selectedFieldList.isEmpty();
     }
 
     /**
@@ -291,8 +283,7 @@ public class GameBoard {
             }
         }
 
-        String newColors = Arrays.toString(colors);
-        return newColors;
+        return Arrays.toString(colors);
     }
 
     /**

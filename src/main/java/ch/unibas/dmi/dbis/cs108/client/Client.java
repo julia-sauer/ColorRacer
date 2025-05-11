@@ -20,20 +20,17 @@ import java.io.*;
 public class Client {
 
     /**
+     * The username chosen by the client
+     */
+    public final String username;
+    /**
      * The IP address or hostname of the server
      */
     private final String host;
-
     /**
      * The port number on which the server is listening
      */
     private final int port;
-
-    /**
-     * The username chosen by the client
-     */
-    public final String username;
-
     /**
      * Responsible for reading protocol messages sent from the server
      */

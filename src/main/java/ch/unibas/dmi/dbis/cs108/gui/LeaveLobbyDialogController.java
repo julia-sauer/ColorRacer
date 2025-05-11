@@ -18,27 +18,24 @@ import java.util.Objects;
 public class LeaveLobbyDialogController {
 
     /**
-     * The stage representing the dialog window.
+     * The {@link Media} of the click sound that we created.
      */
-    private Stage dialogStage;
-
-    /**
-     * The text that asks if the user wants to leave the lobby, respectively the server.
-     */
-    @FXML
-    private Text leaveStatement;
-
+    private final Media clickMedia =
+            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
     /**
      * A flag indicating whether the user confirmed leaving the lobby/server. Defaults to {@code false},
      * becomes {@code true} when "Leave" is clicked.
      */
     protected boolean isLeaving = false;
-
     /**
-     * The {@link Media} of the click sound that we created.
+     * The stage representing the dialog window.
      */
-    private final Media clickMedia =
-            new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
+    private Stage dialogStage;
+    /**
+     * The text that asks if the user wants to leave the lobby, respectively the server.
+     */
+    @FXML
+    private Text leaveStatement;
 
     /**
      * Sets the {@link Stage} for the dialog.

@@ -348,7 +348,6 @@ public class ProtocolReaderClient {
                     break;
 
                 case LIST:
-                    // Expect the format: PLST::[player1, player2, ...]
                     String playersStr = parts[1];
                     List<String> players = parseListFromString(playersStr);
                     if (!gameLobby) {
@@ -372,7 +371,6 @@ public class ProtocolReaderClient {
                     break;
 
                 case LOME:
-                    // Expect: LOME::lobbyName::[member1, member2, ...]
                     String lobbyMembersStr = parts[1];
                     List<String> members = parseListFromString(lobbyMembersStr);
                     if (!gameLobby) {

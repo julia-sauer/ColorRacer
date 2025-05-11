@@ -20,26 +20,23 @@ import java.util.Objects;
 public class JoinLobbyDialogController {
 
     /**
-     * The {@link ListView} showing the names of available lobbies.
-     */
-    @FXML
-    private ListView<String> availableLobbies;
-
-    /**
-     * The stage representing the dialog window.
-     */
-    private Stage dialogStage;
-
-    /**
-     * The lobby name selected by the user to join.
-     */
-    private String selectedLobby;
-
-    /**
      * The {@link Media} of the click sound that we created.
      */
     private final Media clickMedia =
             new Media(Objects.requireNonNull(getClass().getResource("/audio/Click.mp3")).toExternalForm());
+    /**
+     * The {@link ListView} showing the names of available lobbies.
+     */
+    @FXML
+    private ListView<String> availableLobbies;
+    /**
+     * The stage representing the dialog window.
+     */
+    private Stage dialogStage;
+    /**
+     * The lobby name selected by the user to join.
+     */
+    private String selectedLobby;
 
     /**
      * Sets the dialog stage used for this controller.
