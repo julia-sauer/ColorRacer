@@ -499,7 +499,7 @@ public class ProtocolReaderServer {
                         break;
                     }
 
-                    // Prüfen ob ALLE Lobbys "Welcome" heißen
+                    // check if ALL Lobbys are called "Welcome"
                     boolean onlyInWelcome = playerLobbies.stream()
                             .allMatch(l -> l.getLobbyName().equalsIgnoreCase("Welcome"));
 
@@ -573,7 +573,7 @@ public class ProtocolReaderServer {
                         System.err.println("-ERR No user found for ID " + userId);
                         break;
                     }
-                    // Zähle "echte" Lobbys (≠ Welcome)
+                    // Count "real" Lobbys (≠ Welcome)
                     List<Lobby> realLobbies = Server.lobbies.stream()
                             .filter(l -> !l.getLobbyName().equalsIgnoreCase("Welcome"))
                             .toList();

@@ -581,6 +581,11 @@ public class ProtocolReaderClient {
         }).start();
     }
 
+    /**
+     * This method writes the data that it received from the server into the own Highscore file.
+     * This ensures, that all players have the same highscorelist.
+     * @param dataList The data that is received from the server as a list of Strings.
+     */
     private void saveHighscoreLocally(List<String> dataList) {
         Highscore highscore = new Highscore();
         String path = highscore.getHighscoreFilePath();

@@ -896,6 +896,12 @@ public class Server {
         return writer;
     }
 
+    /**
+     * This method calls the addHighscoreEntry-method in the Highscore-class. This is need so the players and
+     * there rollCount gets written in the Highscorelist.
+     * @param nickname The nickname of the player
+     * @param rollCount The number of rolls the player needed to get to the finishline.
+     */
     public static void setHighscore(String nickname, int rollCount) {
         Highscore highscore = new Highscore();
         highscore.addHighscoreEntry(nickname, rollCount);
