@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Programmierprojekt" company="AnaFloJanaJulia" webLink="http://" view-date="2025-01-06" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.3.3316" locale="de_DE">
+<?xml version="1.0" encoding="UTF-8"?><project name="Programmierprojekt" company="AnaFloJanaJulia" webLink="http://" view-date="2025-02-17" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.3.3316" locale="de_DE">
     <description><![CDATA[FS25 Programmierprojekt
 
 Ana
@@ -14,12 +14,12 @@ Julia]]></description>
         <option id="filter.dueTodayTasks" value="false"/>
         <option id="filter.overdueTasks" value="false"/>
         <option id="filter.inProgressTodayTasks" value="false"/>
-        <timeline><![CDATA[10,9]]></timeline>
+        <timeline><![CDATA[9,10]]></timeline>
         <option id="color.recent"><![CDATA[#33ffff #006666 #ffff00]]></option>
     </view>
     <view id="resource-table">
-        <field id="0" name="Ressource" width="199" order="0"/>
-        <field id="1" name="Rolle" width="82" order="1"/>
+        <field id="0" name="Ressource" width="206" order="0"/>
+        <field id="1" name="Rolle" width="90" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -57,8 +57,9 @@ Mockup]]></notes>
         </task>
         <task id="13" uid="10c7d14c6b8a42daa2327b60e4ad591a" name="Powerpoint 1" meeting="false" start="2025-03-01" duration="4" complete="100" expand="true"/>
         <task id="10" uid="e395478dd0514d0ca7a53c3e87834c7e" name="Meilenstein 5" meeting="true" start="2025-05-12" duration="0" complete="0" priority="4" expand="true"/>
-        <task id="57" uid="58f05d9d93254864a0cc5665659e2e5b" name="Finishing GUIs design" meeting="false" start="2025-05-01" duration="1" complete="0" expand="true"/>
-        <task id="58" uid="274939ff1e4f478ba2287602d0f90fed" name="Pixelart" meeting="false" start="2025-04-14" duration="17" complete="0" expand="true">
+        <task id="59" uid="ca5a5f67480e44e9915e2186dd3fed93" name="finale Präsentation" meeting="false" start="2025-05-12" duration="3" complete="0" expand="true"/>
+        <task id="57" uid="58f05d9d93254864a0cc5665659e2e5b" name="Finishing GUIs design" meeting="false" start="2025-05-01" duration="1" complete="100" expand="true"/>
+        <task id="58" uid="274939ff1e4f478ba2287602d0f90fed" name="Pixelart" meeting="false" start="2025-04-14" duration="17" complete="100" expand="true">
             <depend id="57" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="8" uid="3e31520b8c8e4c27ad9fab2ba74783f6" name="Meilenstein 3" meeting="true" start="2025-04-07" duration="0" complete="0" priority="4" expand="true"/>
@@ -132,7 +133,7 @@ Mockup]]></notes>
             <depend id="57" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="54" uid="f20ce4c9c9bd41bfb631cd12a2a82b80" name="Fixing last bugs" meeting="false" start="2025-04-21" duration="5" complete="100" expand="true"/>
-        <task id="55" uid="10096bb7830b4bb6af95fd60cf781f92" name="Handling errors accordingly" meeting="false" start="2025-04-29" duration="6" complete="0" expand="true"/>
+        <task id="55" uid="10096bb7830b4bb6af95fd60cf781f92" name="Handling errors accordingly" meeting="false" start="2025-04-29" duration="6" complete="100" expand="true"/>
         <task id="49" uid="f0a607768b8a48cb9213d1d354b735b1" name="Mainlobby GUI" meeting="false" start="2025-04-10" duration="9" complete="100" priority="2" expand="true">
             <depend id="27" type="2" difference="0" hardness="Strong"/>
         </task>
@@ -142,25 +143,25 @@ Mockup]]></notes>
         <task id="28" uid="9195c31ba1d942fbad3c04bb03729c20" name="highscore list" meeting="false" start="2025-04-14" duration="6" complete="100" expand="true"/>
         <task id="29" uid="8475b49dd6da4e259a6c2e7fd0d4dc1a" name="unit-tests" meeting="false" start="2025-04-09" duration="22" complete="90" expand="true"/>
         <task id="48" uid="27b0f7cb00c544ebbaf26dad38c09e42" name="winner/loser-implementation" meeting="false" start="2025-04-23" duration="4" complete="100" expand="true"/>
-        <task id="30" uid="b39038629b86437485d99c6dbb0d1258" name="Logo design" meeting="false" start="2025-05-02" duration="6" complete="0" expand="true">
+        <task id="30" uid="b39038629b86437485d99c6dbb0d1258" name="Logo design" meeting="false" start="2025-05-02" duration="6" complete="100" expand="true">
             <depend id="51" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="31" uid="cf92745715194a838e1f03ef28279c28" name="presentation" meeting="false" start="2025-05-05" duration="7" complete="0" expand="true"/>
-        <task id="32" uid="66e02acc7016459db90cf900619b3549" name="finishing of the manual" meeting="false" start="2025-04-29" duration="5" complete="0" expand="true">
+        <task id="31" uid="cf92745715194a838e1f03ef28279c28" name="presentation" meeting="false" start="2025-05-05" duration="7" complete="100" expand="true"/>
+        <task id="32" uid="66e02acc7016459db90cf900619b3549" name="finishing of the manual" meeting="false" start="2025-04-29" duration="5" complete="100" expand="true">
             <depend id="51" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="33" uid="d877a6eba8ca4750b01c2bab5602c1f6" name="final version of human-readable network" meeting="false" start="2025-04-29" duration="5" complete="0" expand="true">
+        <task id="33" uid="d877a6eba8ca4750b01c2bab5602c1f6" name="final version of human-readable network" meeting="false" start="2025-04-29" duration="5" complete="100" expand="true">
             <depend id="51" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="34" uid="9f8e555d9fa145dd85635c447593b8f5" name="video/screenshot/trailer" meeting="false" start="2025-05-07" duration="3" complete="0" expand="true">
+        <task id="34" uid="9f8e555d9fa145dd85635c447593b8f5" name="video/screenshot/trailer" meeting="false" start="2025-05-07" duration="3" complete="100" expand="true">
             <notes><![CDATA[between 20 sec and 2 min]]></notes>
             <depend id="51" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="35" uid="2fceeec7907647d5880bd4c3f968384c" name="unit-tests work" meeting="false" start="2025-05-03" duration="6" complete="0" expand="true"/>
-        <task id="51" uid="30aec566b094405c93ce23d29c7c0fae" name="clean-up repository" meeting="false" start="2025-05-10" duration="3" complete="0" expand="true"/>
-        <task id="52" uid="8c19421fc5a74d2089af270dc57e5b88" name="clean-up the code" meeting="false" start="2025-05-05" duration="3" complete="0" expand="true"/>
-        <task id="53" uid="d805c1f8cdf04c6c9a8622c9c546946e" name="last fixes of implementation if necessary" shape="1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0" meeting="false" start="2025-04-28" duration="14" complete="0" expand="true"/>
-        <task id="56" uid="d25a38b2def644b1a9f69d0ed6a3cc85" name="Loggers einbauen" meeting="false" start="2025-04-28" duration="6" complete="0" expand="true"/>
+        <task id="35" uid="2fceeec7907647d5880bd4c3f968384c" name="unit-tests work" meeting="false" start="2025-05-03" duration="6" complete="100" expand="true"/>
+        <task id="51" uid="30aec566b094405c93ce23d29c7c0fae" name="clean-up repository" meeting="false" start="2025-05-10" duration="3" complete="100" expand="true"/>
+        <task id="52" uid="8c19421fc5a74d2089af270dc57e5b88" name="clean-up the code" meeting="false" start="2025-05-05" duration="3" complete="100" expand="true"/>
+        <task id="53" uid="d805c1f8cdf04c6c9a8622c9c546946e" name="last fixes of implementation if necessary" shape="1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0" meeting="false" start="2025-04-28" duration="14" complete="100" expand="true"/>
+        <task id="56" uid="d25a38b2def644b1a9f69d0ed6a3cc85" name="Loggers einbauen" meeting="false" start="2025-05-10" duration="2" complete="100" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="Ana" function="Default:0" contacts="ana.svalina@stud.unibas.ch" phone=""/>
