@@ -105,11 +105,19 @@ public class WinnersListController {
     /**
      * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
      */
+    /**
+     * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
+     */
     private void playClickThen() {
-        MediaPlayer p = new MediaPlayer(clickMedia);
-        p.setOnEndOfMedia(p::dispose);
-        p.setVolume(0.5);
-        p.play();
+        try {
+            MediaPlayer p = new MediaPlayer(clickMedia);
+            p.setOnEndOfMedia(p::dispose);
+            p.setVolume(0.5);
+            p.play();
+        } catch (Exception e) {
+            System.err.println("[WARNING] Failed to play click sound: " + e.getMessage());
+        }
     }
+
 
 }

@@ -115,22 +115,38 @@ public class WelcomeLobbyController {
         lobbylist.setItems(FXCollections.observableArrayList());
         instance = this;
 
-        Media bgm = new Media(Objects.requireNonNull(getClass().getResource("/audio/WelcomeLobbyMusic.mp3")).toExternalForm());
+        try {
+            // Try loading and playing background music
+            var mediaUrl = getClass().getResource("/audio/WelcomeLobbyMusic.mp3");
+            if (mediaUrl == null) {
+                throw new IllegalStateException("Missing audio file: /audio/WelcomeLobbyMusic.mp3");
+            }
 
-        bgmPlayer = new MediaPlayer(bgm);
-        bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        bgmPlayer.setVolume(0.5);
-        bgmPlayer.play();
+            Media bgm = new Media(mediaUrl.toExternalForm());
+            bgmPlayer = new MediaPlayer(bgm);
+            bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            bgmPlayer.setVolume(0.5);
+            bgmPlayer.play();
+
+        } catch (Exception e) {
+            System.err.println("[WARNING] Failed to play background music:");
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
      */
     private void playClickThen() {
-        MediaPlayer p = new MediaPlayer(clickMedia);
-        p.setOnEndOfMedia(p::dispose);
-        p.setVolume(0.5);
-        p.play();
+        try {
+            MediaPlayer p = new MediaPlayer(clickMedia);
+            p.setOnEndOfMedia(p::dispose);
+            p.setVolume(0.5);
+            p.play();
+        } catch (Exception e) {
+            System.err.println("[WARNING] Failed to play click sound: " + e.getMessage());
+        }
     }
 
     /**

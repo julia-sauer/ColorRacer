@@ -330,12 +330,16 @@ public class GameLobbyController {
         moveButton.setDisable(true);
         overlayPane.setMouseTransparent(true);
 
-        Media bgm = new Media(Objects.requireNonNull(getClass().getResource("/audio/GameLobbyMusic.mp3")).toExternalForm());
+        try {
+            Media bgm = new Media(Objects.requireNonNull(getClass().getResource("/audio/GameLobbyMusic.mp3")).toExternalForm());
+            bgmPlayer = new MediaPlayer(bgm);
+            bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            bgmPlayer.setVolume(0.5);
+            bgmPlayer.play();
+        } catch (Exception e) {
+            System.err.println("[WARNING] Failed to play background music in GameLobbyController: " + e);
+        }
 
-        bgmPlayer = new MediaPlayer(bgm);
-        bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        bgmPlayer.setVolume(0.5);
-        bgmPlayer.play();
 
         Platform.runLater(this::handleBikeSelection); //starts bike selection right at joining
     }
@@ -344,10 +348,14 @@ public class GameLobbyController {
      * This method plays the sound that we created for a mouse-click or another {@link javafx.event.ActionEvent}.
      */
     private void playClickThen() {
-        MediaPlayer p = new MediaPlayer(clickMedia);
-        p.setOnEndOfMedia(p::dispose);
-        p.setVolume(0.5);
-        p.play();
+        try {
+            MediaPlayer p = new MediaPlayer(clickMedia);
+            p.setOnEndOfMedia(p::dispose);
+            p.setVolume(0.5);
+            p.play();
+        } catch (Exception e) {
+            System.err.println("[WARNING] Failed to play click sound: " + e.getMessage());
+        }
     }
 
     /**

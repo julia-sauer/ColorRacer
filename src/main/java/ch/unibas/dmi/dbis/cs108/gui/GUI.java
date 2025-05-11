@@ -3,6 +3,8 @@ package ch.unibas.dmi.dbis.cs108.gui;
 import ch.unibas.dmi.dbis.cs108.client.Client;
 import ch.unibas.dmi.dbis.cs108.network.Command;
 import ch.unibas.dmi.dbis.cs108.network.ProtocolWriterClient;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -60,38 +62,54 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Load the FXML file (ensure the correct resource path is used)
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/WelcomeLobbyTemplate.fxml"));
-        BorderPane root = loader.load();
+            try {
+                System.out.println("[DEBUG] Loading FXML: /layout/WelcomeLobbyTemplate.fxml");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/WelcomeLobbyTemplate.fxml"));
+                BorderPane root = loader.load();
+                System.out.println("[DEBUG] FXML loaded successfully.");
 
-        // Get the controller instance from the FXML loader
-        WelcomeLobbyController welcomeController = loader.getController();
-        welcomeController.setClient(client);
-        welcomeController.setPrimaryStage(primaryStage);
-        // Inject the ProtocolWriterClient into the ChatController.
-        welcomeController.setProtocolWriter(client.getProtocolWriter());
-        client.setWelcomeController(welcomeController);
-        client.getProtocolReader().setWelcomeController(welcomeController);
+                System.out.println("[DEBUG] Getting controller");
+                WelcomeLobbyController welcomeController = loader.getController();
+                System.out.println("[DEBUG] Injecting client into controller");
+                welcomeController.setClient(client);
+                welcomeController.setPrimaryStage(primaryStage);
+                welcomeController.setProtocolWriter(client.getProtocolWriter());
 
-        Image icon = new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/images/logo.jpg"))
-        );
-        primaryStage.getIcons().add(icon);
+                System.out.println("[DEBUG] Registering controller with client");
+                client.setWelcomeController(welcomeController);
+                client.getProtocolReader().setWelcomeController(welcomeController);
 
-        // Setup and show the GUI
-        primaryStage.setMaximized(true);
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setTitle("Welcome Lobby");
-        primaryStage.show();
-    }
+                System.out.println("[DEBUG] Loading window icon: /images/logo.jpg");
+                InputStream iconStream = getClass().getResourceAsStream("/images/logo.jpg");
+                if (iconStream == null) {
+                    throw new FileNotFoundException("Icon not found: /images/logo.jpg");
+                }
+                Image icon = new Image(iconStream);
+                primaryStage.getIcons().add(icon);
 
-    /**
-     * Called when the JavaFX application is stopping for example when closing the window with the x in the top right corner of the window.
-     * <p>
-     * Ensures that the client is properly disconnected before the application exits,
-     * preventing potential resource leaks or hanging network connections.
-     *
-     * @throws Exception if an error occurs during shutdown.
-     */
+                System.out.println("[DEBUG] Setting up and showing GUI");
+                primaryStage.setMaximized(true);
+                primaryStage.setScene(new Scene(root));
+                primaryStage.setTitle("Welcome Lobby");
+                primaryStage.show();
+                System.out.println("[DEBUG] GUI launched successfully");
+
+            } catch (Exception e) {
+                System.err.println("[ERROR] Failed to launch GUI: " + e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException("Application start failed", e);
+            }
+        }
+
+
+        /**
+         * Called when the JavaFX application is stopping for example when closing the window with the x in the top right corner of the window.
+         * <p>
+         * Ensures that the client is properly disconnected before the application exits,
+         * preventing potential resource leaks or hanging network connections.
+         *
+         * @throws Exception if an error occurs during shutdown.
+         */
     @Override
     public void stop() throws Exception {
         super.stop();
