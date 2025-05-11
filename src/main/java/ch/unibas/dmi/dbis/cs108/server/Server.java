@@ -25,18 +25,46 @@ import org.apache.logging.log4j.Logger;
  * @author Jana
  */
 public class Server {
+
+    /**
+     * Logger for recording server startup, errors, and runtime events.
+     */
     private static final Logger LOGGER = LogManager.getLogger(Server.class);
+
+    /**
+     * Counter for active connected clients, used to assign unique client numbers.
+     */
     private static final AtomicInteger activeClients = new AtomicInteger(0);
+
+    /**
+     * The ServerSocket instance that listens for incoming client connections.
+     */
     private static ServerSocket echod;
+
+    /**
+     * Thread-safe list of all PrintWriters for broadcasting text messages to all clients.
+     */
     public static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
+
+    /**
+     * TCP port number on which this server listens for new client connections.
+     */
     public static int port;
+
+    /**
+     * List of all active game lobbies, including the default "Welcome" lobby.
+     */
     public static List<Lobby> lobbies = new ArrayList<>();
+
+    /**
+     * Maps each client's OutputStream to its ProtocolWriterServer for directed messaging.
+     */
     public static Map<OutputStream, ProtocolWriterServer> protocolWriters = new HashMap<>();
 
     /**
      * Constructor of the server class
      *
-     * @param port the port number
+     * @param port The port number.
      */
     public Server(int port) {
         this.port = port;

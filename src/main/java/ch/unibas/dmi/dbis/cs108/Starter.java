@@ -12,7 +12,9 @@ public class Starter {
     //public static final Logger LOGGER = LogManager.getLogger();
 
     /**
-     * This method starts either the Server or the Client
+     * This method starts either the Server or the Client.
+     *
+     * @param args The arguments that are needed (port, IP) to start a server/client.
      */
     public static void main(String[] args) {
         try {
