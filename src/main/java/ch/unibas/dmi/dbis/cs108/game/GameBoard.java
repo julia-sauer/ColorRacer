@@ -10,10 +10,30 @@ import java.util.*;
  */
 public class GameBoard {
 
+    /**
+     * Mapping from field ID (e.g., "blue3") to the corresponding Field object.
+     */
     private final Map<String, Field> fields;
+
+    /**
+     * Set of fields currently selected by the player (for move planning).
+     */
     private final Set<Field> selectedFields;
+
+    /**
+     * Ordered list of selected fields, preserving the sequence of selections for {@code MOVE} operations.
+     */
     private final List<Field> selectedFieldList = new ArrayList<>();
+
+    /**
+     * Array of color names representing the result of the player's last dice roll.
+     * Cleared after a {@code MOVE} or roll consumption.
+     */
     public String[] colors;
+
+    /**
+     * The current field on which the player currently resides.
+     */
     private Field currentField;
 
     /**
