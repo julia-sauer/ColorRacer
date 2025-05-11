@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static java.lang.System.out;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The class {@code Server} provides a simple multi-user chat server. It manages client connections,
@@ -23,7 +25,7 @@ import static java.lang.System.out;
  * @author Jana
  */
 public class Server {
-
+    private static final Logger LOGGER = LogManager.getLogger(Server.class);
     private static final AtomicInteger activeClients = new AtomicInteger(0);
     private static ServerSocket echod;
     public static final List<PrintWriter> clientWriters = Collections.synchronizedList(new ArrayList<>());
@@ -72,7 +74,7 @@ public class Server {
             }
 
         } catch (IOException e) {
-            System.err.println("Could not start!");
+            LOGGER.error("Could not start server", e);
             System.exit(1);
         }
     }
@@ -120,7 +122,7 @@ public class Server {
             echod.close();
             System.exit(0);
         } catch (IOException e) {
-            System.err.println("Error when closing the Server: " + e.getMessage());
+            LOGGER.error("Error when closing the Server: {}", e.getMessage(), e);
         }
     }
 
@@ -147,7 +149,7 @@ public class Server {
                 protocolWriterServer.sendInfo(
                         "Invalid nickname! Must be 3–15 characters, using only letters, numbers, or underscores.");
             } catch (IOException e) {
-                System.err.println("Error sending nickname validation message to user " + userId);
+                LOGGER.error("Error sending nickname validation message to user {}", userId, e);
             }
             return;
         }
@@ -174,7 +176,7 @@ public class Server {
                     try {
                         writer.sendInfo("Player " + oldNickname + " changed their nickname to: " + finalNick);
                     } catch (IOException e) {
-                        System.err.println("Error sending nickname info to " + player);
+                        LOGGER.error("Error sending nickname info to {}", player, e);
                     }
                 }
             }
@@ -185,7 +187,7 @@ public class Server {
         try {
             protocolWriterServer.sendCommandAndString(Command.NICK, finalNick);
         } catch (IOException e) {
-            System.err.println("Error while sending NICK " + finalNick + " to user " + userId);
+            LOGGER.error("Error while sending NICK {} to user {}", finalNick, userId);
         }
     }
 
@@ -232,7 +234,7 @@ public class Server {
             try {
                 protocolWriterServer.sendInfo("You are not in a game. You are in the Welcomelobby.");
             } catch (IOException e) {
-                System.err.println("Error sending Info that player is not in a correct lobby");
+                LOGGER.error("Error sending info: player is not in a correct lobby");
             }
             return;
         }
@@ -240,7 +242,7 @@ public class Server {
             try {
                 protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
             } catch (IOException e) {
-                System.err.println("Error sending info");
+                LOGGER.error("Error sending info", e);
             }
             return;
         }
@@ -248,7 +250,7 @@ public class Server {
             try {
                 protocolWriterServer.sendInfo("It's not your turn!");
             } catch (IOException e) {
-                System.err.println("Error sending Info that it's not this players turn.");
+                LOGGER.error("Error sending Info that it's not this players turn.", e);
             }
             return;
         }
@@ -257,7 +259,7 @@ public class Server {
             try {
                 protocolWriterServer.sendInfo("You already rolled.");
             } catch (IOException e) {
-                System.err.println("Error while sending Rolled Message to user " + userId);
+                LOGGER.error("Error while sending rolled message to user {}", userId, e);
             }
             return;
         }
@@ -271,7 +273,7 @@ public class Server {
         try {
             protocolWriterServer.sendCommandAndString(Command.ROLL, colorText);
         } catch (IOException e) {
-            System.err.println("Error sending rolled colors");
+            LOGGER.error("Error sending rolled colors", e);
         }
         user.setRollCount();
     }
@@ -298,7 +300,7 @@ public class Server {
             try {
                 protocolWriterServer.sendInfo("The game has not started yet or is already finished.");
             } catch (IOException e) {
-                System.err.println("Error sending info");
+                LOGGER.error("Error sending info", e);
             }
             return;
         }
@@ -307,7 +309,7 @@ public class Server {
             try {
                 protocolWriterServer.sendInfo("You need to roll first.");
             } catch (IOException e) {
-                System.err.println("Error while sending Rolled Message to user " + userId);
+                LOGGER.error("Error while sending rolled message to user {}", userId, e);
             }
             return;
         }
@@ -342,7 +344,7 @@ public class Server {
             try {
                 protocolWriterServer.sendCommandAndString(Command.INFO, "Field is invalid.");
             } catch (IOException e) {
-                System.err.println("Error sending error message.");
+                LOGGER.error("Error sending error message.", e  );
             }
         }
     }
@@ -379,7 +381,7 @@ public class Server {
             try {
                 protocolWriterServer.sendInfo("You need to select a field first.");
             } catch (IOException e) {
-                System.err.println("Error sending Info message for empty selectedFields.");
+                LOGGER.error("Error sending info message for empty selectedFields", e);
             }
             return;
         }
@@ -388,7 +390,7 @@ public class Server {
             try {
                 protocolWriterServer.sendInfo("You have not chosen this field.");
             } catch (IOException e) {
-                System.err.println("Error sending Info message for deselectedField not in selectedFields");
+                LOGGER.error("Error sending Info message for deselectedField not in selectedFields", e);
             }
             return;
         }
@@ -398,7 +400,7 @@ public class Server {
             protocolWriterServer.sendCommandAndString(Command.DEOS,
                     fieldId + Command.SEPARATOR + newColors);
         } catch (IOException e) {
-            System.err.println("Error sending DEOS + fieldId");
+            LOGGER.error("Error sending DEOS + fieldId", e);
         }
     }
 
@@ -433,7 +435,7 @@ public class Server {
                 protocolWriterServer.sendInfo(
                         "You need to select at least one field first. If you dont want or cant move use 'next'.");
             } catch (IOException e) {
-                System.err.println("Error sending Info that no field is selected.");
+                LOGGER.error("Error sending Info that no field is selected.", e);
             }
             return;
         }
@@ -450,7 +452,7 @@ public class Server {
             try {
                 writer.sendCommandAndString(Command.INFO, "+POS " + nickname + " moved to the Field " + newField.getFieldId());
             } catch (IOException e) {
-                System.err.println("Error sending move info to " + playerName);
+                LOGGER.error("Error sending move info to {}", playerName, e);
             }
         }
 
@@ -508,7 +510,7 @@ public class Server {
             try {
                 protocolWriterServer.sendCommandAndString(Command.CRLO, lobbyName);
             } catch (IOException e) {
-                System.err.println("Error sending CRLO");
+                LOGGER.error("Error sending CRLO", e);
             }
         }
         printAllLobbyStates();
@@ -651,7 +653,8 @@ public class Server {
                 default -> "unknown";
             };
 
-            System.out.println("[Lobby: " + lobby.getLobbyName() + "] Game state: " + stateText);
+            LOGGER.info("[Lobby: {}] Game state: {}", lobby.getLobbyName(), stateText);
+
         }
     }
 
@@ -698,7 +701,7 @@ public class Server {
                         setHigh = true;
                     }
                 } catch (IOException e) {
-                    System.err.println("Could not send Info.");
+                    LOGGER.error("Could not send Info.", e);
                 }
             }
         }
@@ -720,7 +723,7 @@ public class Server {
                                 String winnersList = String.join(", ", userlobby.winners);
                                 protocolWriterServer.sendCommandAndString(Command.WINN, winnersList);
                             } catch (IOException e) {
-                                System.err.println("Could not send Info.");
+                                LOGGER.error("Could not send Info.", e);
                             }
                         }
                     }
@@ -737,7 +740,7 @@ public class Server {
                         protocolWriterServer.sendCommand(Command.FNSH);
                         fnshSent = true;
                     } catch (IOException e) {
-                        System.err.println("Could not send Command.");
+                        LOGGER.error("Could not send Command.", e);
                     }
                 }
             }
@@ -823,7 +826,7 @@ public class Server {
                     try {
                         writer.sendInfo(message);
                     } catch (IOException e) {
-                        System.err.println("Error sending turn info to " + player);
+                        LOGGER.error("Error sending turn info to {}", player, e);
                     }
                 }
             }
@@ -874,9 +877,9 @@ public class Server {
             broadcast(Command.HIGH + Command.SEPARATOR + highscoreList.toString());
 
         } catch (FileNotFoundException e) {
-            System.err.println("Highscore file not found.");
+            LOGGER.error("Highscore file not found.", e);
         } catch (IOException e) {
-            System.err.println("Error sending Highscore file.");
+            LOGGER.error("Error sending Highscore file.", e);
         }
     }
 
