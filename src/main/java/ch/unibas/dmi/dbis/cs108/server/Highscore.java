@@ -120,6 +120,10 @@ public class Highscore {
         throw new IllegalArgumentException("Invalid highscore entry format: " + entry);
     }
 
+    /**
+     * This method returns the saved highscore list in form of a {@link List}.
+     * @return The string list of the saved highscore list.
+     */
     public List<String> getHighscoreList() {
         return highscoreList;
     }

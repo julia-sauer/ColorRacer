@@ -80,11 +80,12 @@ public class Server {
     /**
      * Adds a new user to the user list.
      *
-     * @param userName is the name of the new user.
-     * @return the unique user-ID.
+     * @param userName The name of the new user.
+     * @param clientOut The output stream of the new client.
+     * @return The unique user-ID.
      */
-    public static int addNewUser(String userName, OutputStream ClientOut) {
-        return UserList.addUser(userName, ClientOut);
+    public static int addNewUser(String userName, OutputStream clientOut) {
+        return UserList.addUser(userName, clientOut);
     }
 
     /**
@@ -467,7 +468,7 @@ public class Server {
      * and a separator to the given message. It then iterates over all client writers and sends the
      * formatted message to each client.
      *
-     * @param message the message to be broadcast to all clients.
+     * @param message The message to be broadcast to all clients.
      */
     public static void broadcastToAll(String message) {
         String broadcastMessage = Command.BROD.name() + Command.SEPARATOR + message;
@@ -480,7 +481,8 @@ public class Server {
     /**
      * Creates a new lobby with the given name and adds it to the global list of lobbies if the name does not already exist.
      *
-     * @param lobbyName the name of the lobby to create
+     * @param lobbyName The name of the lobby to create.
+     * @param userId The user's ID that wants to create the lobby.
      */
     public static void createLobby(String lobbyName, Integer userId) {
         for (Lobby lobby : lobbies) {

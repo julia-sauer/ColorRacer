@@ -72,6 +72,7 @@ public class PingThread extends Thread {
      * @param clientNumber The unique number of the client.
      * @param in           The InputStream for messages.
      * @param out          The OutputStream for messages.
+     * @param disconnectCallback The runnable that activates the clean disconnection of the client when the connection is lost.
      */
 
     public PingThread(Socket clientSocket, int clientNumber, InputStream in, OutputStream out, Runnable disconnectCallback) {

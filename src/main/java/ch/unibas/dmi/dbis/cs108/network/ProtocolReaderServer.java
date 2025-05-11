@@ -60,8 +60,10 @@ public class ProtocolReaderServer {
      * Creates a new {@code ProtocolReaderServer}.
      *
      * @param in     The InputStream from which the messages are to be read.
-     * @param out    The OutputStream to which replies are written.
      * @param userId The unique ID of the user.
+     * @param out    The OutputStream to which replies are written.
+     * @param pingThread The PingThread handling heartbeat messages for this client.
+     * @param clientHandler the ClientHandler managing this client's connection.
      * @throws IOException If an error occurs when creating the BufferedReader.
      */
     public ProtocolReaderServer(InputStream in, int userId, OutputStream out, PingThread pingThread, ClientHandler clientHandler) throws IOException {
