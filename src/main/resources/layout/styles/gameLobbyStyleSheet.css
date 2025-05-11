@@ -205,6 +205,17 @@
     -fx-background-radius: 4;
 }
 
+.own-nickname-label {
+    -fx-font-family: 'VT323';
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #84ff84;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 0.4, 0, 1);
+    -fx-padding: 2 4;
+    -fx-background-color: rgba(0, 0, 0, 0.13);
+    -fx-background-radius: 4;
+}
+
 /* Label for the turn notification*/
 .turn-notification {
     -fx-font-size: 24px;

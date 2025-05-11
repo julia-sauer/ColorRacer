@@ -900,12 +900,17 @@ public class GameLobbyController {
                 return;
             }
             ImageView iv = new ImageView(img);
+            iv.setMouseTransparent(true);
             iv.setFitWidth(46);
             iv.setFitHeight(32);
 
             Label lbl = new Label(player);
             lbl.setMouseTransparent(true);
-            lbl.getStyleClass().add("nickname-label");
+            if (player.equals(this.nickname)) {
+                lbl.getStyleClass().add("own-nickname-label");
+            } else {
+                lbl.getStyleClass().add("nickname-label");
+            }
 
             playerBikes.put(player, iv);
             playerLabels.put(player, lbl);

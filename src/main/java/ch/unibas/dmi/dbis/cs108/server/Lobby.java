@@ -269,7 +269,7 @@ public class Lobby implements Runnable {
                 user.getOut());
 
         // Game already started or finished
-        if (gamestate != 1) {
+        if (gamestate == 2) {
             try {
                 protocolWriterServer.sendInfo("Game has already started or is finished.");
             } catch (IOException e) {

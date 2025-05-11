@@ -196,7 +196,7 @@ public class ProtocolReaderClient {
                         Platform.runLater(() ->
                                 GameLobbyController.getInstance().showTurnNotification(msg)
                         );
-                    } else if (parts[1].startsWith("You need to roll first.")) {
+                    } else if (parts[1].startsWith("You need to roll first.") || parts[1].startsWith("You already rolled.")) {
                         Platform.runLater(() ->
                                 GameLobbyController.getInstance().showTurnNotification(msg)
                         );
@@ -204,12 +204,16 @@ public class ProtocolReaderClient {
                         gameLobbyController.readyButton.setVisible(true);
                         gameLobbyController.finishButton.setDisable(true);
                         gameLobbyController.restartButton.setDisable(false);
-                        display(msg);
+                        Platform.runLater(() ->
+                                GameLobbyController.getInstance().showTurnNotification(msg)
+                        );
                     } else if (parts[1].startsWith("+LFT ") && gameLobby) {
                         String[] leaveMessage = parts[1].split(" ");
                         String nameLeaving = leaveMessage[1];
                         GameLobbyController.getInstance().removePlayerBike(nameLeaving);
                         display(msg);
+                    } else if (parts[1].startsWith("The game has not started yet or is already finished.")) {
+                        protocolWriterClient.sendCommand(Command.RSTT);
                     } else {
                         display(msg);
                     }
@@ -320,6 +324,7 @@ public class ProtocolReaderClient {
 
                 case RSTT:
                     System.out.println("The game restarts!");
+                    gameLobbyController.startButton.setDisable(true);
                     gameLobbyController.finishButton.setDisable(false);
                     gameLobbyController.restartButton.setDisable(true);
                     gameLobbyController.resetPlayerPositions();
