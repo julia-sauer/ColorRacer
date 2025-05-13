@@ -7,7 +7,7 @@ Euer Repository muss bei Meilenstein 5 im root den `outreach/` Ordner haben, wel
 * Trailer / Gameplay Video im .mp4-Format (`video.mp4`)
 * Screenshot im .png-Format (`screenshot.png`)
 * index.html-File zu Archivierungszwecken(`index.html`)
-* Manual als pdf
+* Manual als pdf!
 
 ## Properties File: 
 
