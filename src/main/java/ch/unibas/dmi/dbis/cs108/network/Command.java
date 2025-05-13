@@ -1,4 +1,5 @@
 package ch.unibas.dmi.dbis.cs108.network;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -165,6 +166,7 @@ public enum Command {
 
     public static final String SEPARATOR = "%"; // blank space als Separator
     private static final Logger LOGGER = LogManager.getLogger(Command.class);
+
     /**
      * Prints the command "INFO"
      */
